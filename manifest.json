@@ -24,14 +24,18 @@
   },
   "content_scripts": [
     {
+      "matches": ["https://ceac.state.gov/*"],
+      "js": ["content/modules/ds160-content.js"],
+      "run_at": "document_idle"
+    },
+    {
       "matches": [
-        "https://ceac.state.gov/*",
         "https://www.usvisascheduling.com/*",
         "https://ais.usvisa-info.com/*",
         "https://ayobaspremium.jp/*",
         "https://atlasauth.b2clogin.com/*"
       ],
-      "js": ["content/content-router.js"],
+      "js": ["content/modules/visa-content.js"],
       "run_at": "document_idle"
     }
   ],

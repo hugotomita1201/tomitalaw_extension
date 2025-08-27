@@ -11,26 +11,26 @@ class VisaSchedulingFiller {
   }
 
   init() {
-    // Listen for messages from content router
-    window.addEventListener('message', (event) => {
-      if (event.data.source === 'tomitalaw-router' && event.data.action === 'fillForm' && event.data.module === 'visa') {
+    // Listen for messages from extension (sidebar/background)
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request.action === 'fillForm' && request.module === 'visa') {
         console.log('Visa module received fill command');
         try {
-          this.fillForm(event.data.data);
-          // Send success message back through router
-          window.postMessage({
-            source: 'tomitalaw-module',
+          this.fillForm(request.data);
+          // Send success response
+          chrome.runtime.sendMessage({
             action: 'fillComplete',
             module: 'visa'
-          }, '*');
+          });
+          sendResponse({ success: true });
         } catch (error) {
-          // Send error message back through router
-          window.postMessage({
-            source: 'tomitalaw-module',
+          // Send error response
+          chrome.runtime.sendMessage({
             action: 'fillError',
             module: 'visa',
             error: error.message
-          }, '*');
+          });
+          sendResponse({ success: false, error: error.message });
         }
       }
     });
@@ -502,11 +502,18 @@ class VisaSchedulingFiller {
   fillField(identifier, value) {
     if (!value || this.filledFields.has(identifier)) return;
     
+    console.log(`Trying to fill field: ${identifier} with value: ${value}`);
+    
     // Try multiple ways to find the field
     let element = document.getElementById(identifier);
     if (!element) element = document.querySelector(`[name="${identifier}"]`);
     if (!element) element = document.querySelector(`[name*="${identifier}"]`);
     if (!element) element = document.querySelector(`[id*="${identifier}"]`);
+    
+    if (!element) {
+      console.log(`Field not found: ${identifier}`);
+      return;
+    }
     
     if (element && element.offsetParent) {
       if (element.type === 'select-one') {

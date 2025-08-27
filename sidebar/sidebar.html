@@ -171,25 +171,65 @@
     <template id="visa-template">
       <div class="module-content">
         <div class="module-header">
-          <h2>Visa Scheduling Auto-Filler</h2>
-          <p>Auto-fill US Visa Scheduling forms with dependent support</p>
+          <h2>🗽 US Visa Scheduling Auto-Filler</h2>
+          <p>Fill your visa appointment forms instantly</p>
         </div>
         
-        <div class="input-section">
-          <label for="visa-data">Paste your visa scheduling data (JSON format):</label>
-          <textarea id="visa-data" class="data-input" placeholder="Paste your visa scheduling JSON data here..." rows="10"></textarea>
+        <!-- Person Selection Area (hidden until data is loaded) -->
+        <div id="personSelectionArea" class="card" style="display: none;">
+          <div class="card-title">
+            <span class="icon">👤</span>
+            Select Person to Fill
+          </div>
+          <div id="personRadioList" style="font-size: 13px; line-height: 1.8; margin-bottom: 15px; max-height: 200px; overflow-y: auto;">
+            <!-- Radio buttons will be inserted here dynamically -->
+          </div>
+          <div class="button-group">
+            <button id="fillSelectedPersonBtn" class="btn btn-primary" disabled>
+              🚀 Auto-Fill Selected Person
+            </button>
+            <button id="editDataBtn" class="btn btn-secondary">
+              ✏️ Edit Data
+            </button>
+          </div>
         </div>
 
-        <div class="button-group">
-          <button class="btn btn-primary" id="visa-fill">
-            Fill Current Page
-          </button>
-          <button class="btn btn-secondary" id="visa-test">
-            Test with Sample Data
-          </button>
-          <button class="btn btn-secondary" id="visa-clear">
-            Clear Data
-          </button>
+        <!-- Data Input Area -->
+        <div id="dataInputArea" class="input-section">
+          <label for="visa-data">
+            <span class="icon">📋</span>
+            Paste Your Data (JSON Format)
+          </label>
+          <textarea id="visa-data" class="data-input" placeholder='{
+  "applicant": {
+    "atlas_first_name": "John",
+    "atlas_last_name": "Doe",
+    "atlas_email": "john@example.com"
+  },
+  "dependents": [
+    {
+      "id": "dep_1",
+      "displayName": "Jane Doe (Spouse)",
+      "atlas_first_name": "Jane",
+      "atlas_last_name": "Doe"
+    }
+  ]
+}' rows="10"></textarea>
+          <div class="field-count" id="fieldCount"></div>
+          
+          <div class="button-group">
+            <button id="visa-load" class="btn btn-success">
+              Load Data
+            </button>
+            <button id="visa-clear" class="btn btn-danger">
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <div id="loadingSpinner" style="display: none;">
+          <div class="spinner"></div>
+          <p style="margin-top: 10px; font-size: 13px;">Filling form...</p>
         </div>
 
         <div class="info-section">
@@ -199,15 +239,8 @@
             <li>Payment Information</li>
             <li>Personal Information</li>
             <li>Dependent Management</li>
+            <li>Application Details</li>
           </ul>
-          
-          <h3>Instructions:</h3>
-          <ol>
-            <li>Navigate to the visa scheduling page</li>
-            <li>Paste your JSON data above</li>
-            <li>Click "Fill Current Page"</li>
-            <li>The extension will auto-detect and fill the appropriate page</li>
-          </ol>
         </div>
       </div>
     </template>

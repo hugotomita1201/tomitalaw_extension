@@ -135,59 +135,300 @@ function setupDS160Handlers() {
 
 // Visa Scheduling specific handlers
 function setupVisaHandlers() {
-  const fillBtn = document.getElementById('visa-fill');
-  const testBtn = document.getElementById('visa-test');
+  let currentData = null;
+  
+  const loadBtn = document.getElementById('visa-load');
   const clearBtn = document.getElementById('visa-clear');
   const dataInput = document.getElementById('visa-data');
+  const fillSelectedBtn = document.getElementById('fillSelectedPersonBtn');
+  const editDataBtn = document.getElementById('editDataBtn');
   
-  if (fillBtn) {
-    fillBtn.addEventListener('click', async () => {
-      const data = dataInput.value.trim();
-      if (!data) {
-        showStatus('Please paste your visa scheduling data first', 'error');
+  // Load saved data on module load
+  chrome.storage.local.get(['visaData'], (result) => {
+    if (result.visaData) {
+      currentData = result.visaData;
+      dataInput.value = typeof result.visaData === 'string' 
+        ? result.visaData 
+        : JSON.stringify(result.visaData, null, 2);
+      updateFieldCount();
+      updatePersonSelector();
+      
+      if (hasPersonData()) {
+        showPersonSelector();
+        showStatus('Ready to fill form', 'success');
+      }
+    }
+  });
+  
+  // Load Data button
+  if (loadBtn) {
+    loadBtn.addEventListener('click', () => {
+      const input = dataInput.value.trim();
+      
+      if (!input) {
+        showStatus('Please paste your data first', 'error');
         return;
       }
       
       try {
-        const jsonData = JSON.parse(data);
-        await fillForm('visa', jsonData);
-        showStatus('Visa scheduling form filling initiated', 'success');
+        currentData = JSON.parse(input);
+        
+        // Save to storage
+        chrome.storage.local.set({ visaData: currentData }, () => {
+          showStatus('Data loaded and saved successfully!', 'success');
+          updateFieldCount();
+          updatePersonSelector();
+          
+          // Show person selector if data has person info
+          if (hasPersonData()) {
+            showPersonSelector();
+          }
+        });
       } catch (e) {
         showStatus('Invalid JSON format. Please check your data.', 'error');
+        console.error('JSON parse error:', e);
       }
     });
   }
   
-  if (testBtn) {
-    testBtn.addEventListener('click', async () => {
-      // Load sample data
-      const sampleData = getSampleVisaData();
-      dataInput.value = JSON.stringify(sampleData, null, 2);
-      showStatus('Sample data loaded', 'info');
-    });
-  }
-  
+  // Clear button
   if (clearBtn) {
     clearBtn.addEventListener('click', () => {
       dataInput.value = '';
-      chrome.storage.local.remove(['visaData']);
+      currentData = null;
+      
+      chrome.storage.local.remove(['visaData', 'selectedPersonId']);
       showStatus('Data cleared', 'info');
+      updateFieldCount();
+      hidePersonSelector();
     });
   }
   
-  // Auto-save data on input
-  if (dataInput) {
-    dataInput.addEventListener('input', debounce(() => {
-      const data = dataInput.value.trim();
-      if (data) {
-        try {
-          JSON.parse(data);
-          chrome.storage.local.set({ visaData: data });
-        } catch (e) {
-          // Invalid JSON, don't save
+  // Fill Selected Person button
+  if (fillSelectedBtn) {
+    fillSelectedBtn.addEventListener('click', async () => {
+      const selectedRadio = document.querySelector('input[name="personRadio"]:checked');
+      
+      if (!selectedRadio) {
+        showStatus('Please select a person first', 'error');
+        return;
+      }
+      
+      const personId = selectedRadio.value;
+      let personData = null;
+      
+      if (personId === 'main_applicant') {
+        // Get main applicant data
+        personData = currentData.applicant || currentData;
+      } else {
+        // Get dependent data
+        if (currentData.dependents) {
+          personData = currentData.dependents.find(d => d.id === personId);
         }
       }
-    }, 1000));
+      
+      if (!personData) {
+        showStatus('Person data not found', 'error');
+        return;
+      }
+      
+      // Get current tab
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      
+      // Check if we're on the right domain
+      const module = MODULES.find(m => m.id === 'visa');
+      const isCorrectDomain = module.domains.some(domain => {
+        const pattern = domain.replace(/\*/g, '.*');
+        return new RegExp(pattern).test(tab.url);
+      });
+      
+      if (!isCorrectDomain) {
+        showStatus('Please navigate to the US Visa Scheduling site first', 'error');
+        return;
+      }
+      
+      // Show loading
+      document.getElementById('loadingSpinner').style.display = 'block';
+      fillSelectedBtn.disabled = true;
+      
+      // Send message to content script with just the person data
+      chrome.tabs.sendMessage(tab.id, {
+        action: 'fillForm',
+        module: 'visa',
+        data: personData  // Send only the selected person's data
+      }, (response) => {
+        // Hide loading
+        document.getElementById('loadingSpinner').style.display = 'none';
+        fillSelectedBtn.disabled = false;
+        
+        if (chrome.runtime.lastError) {
+          console.error('Error:', chrome.runtime.lastError);
+          showStatus('Error: ' + chrome.runtime.lastError.message, 'error');
+        } else {
+          const personName = personId === 'main_applicant' ? 'Main Applicant' : 
+                            (personData.displayName || `${personData.firstname || ''} ${personData.lastname || ''}`);
+          showStatus(`Filled form with ${personName}`, 'success');
+        }
+      });
+    });
+  }
+  
+  // Edit Data button - go back to data input
+  if (editDataBtn) {
+    editDataBtn.addEventListener('click', () => {
+      hidePersonSelector();
+      showStatus('Edit your data and click Load Data again', 'info');
+    });
+  }
+  
+  // Helper functions specific to visa module
+  function hasPersonData() {
+    return currentData && (currentData.applicant || currentData.dependents || 
+           currentData.atlas_first_name || currentData.firstName);
+  }
+  
+  function showPersonSelector() {
+    document.getElementById('personSelectionArea').style.display = 'block';
+    document.getElementById('dataInputArea').style.display = 'none';
+    updatePersonSelector();
+  }
+  
+  function hidePersonSelector() {
+    document.getElementById('personSelectionArea').style.display = 'none';
+    document.getElementById('dataInputArea').style.display = 'block';
+  }
+  
+  function updateFieldCount() {
+    const countDiv = document.getElementById('fieldCount');
+    if (!countDiv) return;
+    
+    if (currentData) {
+      let personCount = 0;
+      let fieldCount = 0;
+      
+      // Count main applicant
+      if (currentData.applicant || currentData.atlas_first_name || currentData.firstName) {
+        personCount = 1;
+        const applicantData = currentData.applicant || currentData;
+        fieldCount = countFields(applicantData);
+      }
+      
+      // Count dependents
+      if (currentData.dependents && Array.isArray(currentData.dependents)) {
+        personCount += currentData.dependents.length;
+      }
+      
+      if (personCount > 1) {
+        countDiv.textContent = `${personCount} people loaded • ${fieldCount} fields ready`;
+      } else if (personCount === 1) {
+        countDiv.textContent = `${fieldCount} fields ready to fill`;
+      } else {
+        countDiv.textContent = 'Data contains ' + Object.keys(currentData).length + ' fields';
+      }
+    } else {
+      countDiv.textContent = '';
+    }
+  }
+  
+  function countFields(obj) {
+    let count = 0;
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key) && obj[key] !== null && obj[key] !== '') {
+        if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
+          count += countFields(obj[key]);
+        } else if (!Array.isArray(obj[key])) {
+          count++;
+        }
+      }
+    }
+    return count;
+  }
+  
+  function updatePersonSelector() {
+    const radioList = document.getElementById('personRadioList');
+    if (!radioList || !currentData) return;
+    
+    radioList.innerHTML = '';
+    
+    // Add main applicant if exists
+    if (currentData.applicant || currentData.atlas_first_name || currentData.firstName) {
+      const applicantData = currentData.applicant || currentData;
+      const radioItem = createPersonRadioItem('main_applicant', 'Main Applicant', applicantData);
+      radioList.appendChild(radioItem);
+    }
+    
+    // Add dependents
+    if (currentData.dependents && Array.isArray(currentData.dependents)) {
+      currentData.dependents.forEach((dep, index) => {
+        const name = dep.displayName || `${dep.firstname || dep.atlas_first_name || ''} ${dep.lastname || dep.atlas_last_name || ''}`.trim() || `Dependent ${index + 1}`;
+        const radioItem = createPersonRadioItem(dep.id || `dep_${index}`, name, dep);
+        radioList.appendChild(radioItem);
+      });
+    }
+    
+    // Enable fill button if there's at least one person
+    const fillBtn = document.getElementById('fillSelectedPersonBtn');
+    if (fillBtn) {
+      fillBtn.disabled = radioList.children.length === 0;
+    }
+  }
+  
+  function createPersonRadioItem(id, name, data) {
+    const div = document.createElement('div');
+    div.className = 'person-radio-item';
+    
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = 'personRadio';
+    radio.value = id;
+    radio.id = `person_${id}`;
+    
+    const label = document.createElement('label');
+    label.htmlFor = `person_${id}`;
+    label.style.cursor = 'pointer';
+    label.style.flex = '1';
+    
+    const personInfo = document.createElement('div');
+    personInfo.className = 'person-info';
+    
+    const personName = document.createElement('div');
+    personName.className = 'person-name';
+    personName.textContent = name;
+    
+    const personDetails = document.createElement('div');
+    personDetails.className = 'person-details';
+    
+    // Add some key details
+    const details = [];
+    if (data.atlas_relation_to_applicant) details.push(data.atlas_relation_to_applicant);
+    if (data.atlas_email || data.email) details.push(data.atlas_email || data.email);
+    if (data.atlas_passport_number || data.passport_number) details.push(`Passport: ${data.atlas_passport_number || data.passport_number}`);
+    
+    personDetails.textContent = details.join(' • ');
+    
+    personInfo.appendChild(personName);
+    if (details.length > 0) {
+      personInfo.appendChild(personDetails);
+    }
+    
+    label.appendChild(personInfo);
+    
+    div.appendChild(radio);
+    div.appendChild(label);
+    
+    // Add click handler to select radio
+    div.addEventListener('click', (e) => {
+      if (e.target.type !== 'radio') {
+        radio.checked = true;
+      }
+      // Update selected styling
+      document.querySelectorAll('.person-radio-item').forEach(item => {
+        item.classList.remove('selected');
+      });
+      div.classList.add('selected');
+    });
+    
+    return div;
   }
 }
 
