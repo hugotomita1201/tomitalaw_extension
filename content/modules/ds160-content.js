@@ -4592,10 +4592,26 @@ class DS160Extension {
       return;
     }
 
-    // Listen for messages from content router
+    // Listen for direct messages from sidebar (chrome.runtime)
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request.action === 'fillForm' && request.module === 'ds160') {
+        console.log('DS-160 module received direct fill command from sidebar');
+        this.data = request.data;
+        this.startFilling().then(result => {
+          sendResponse({ success: true, filledCount: result });
+        }).catch(error => {
+          console.error('DS-160 fill error:', error);
+          sendResponse({ success: false, error: error.message });
+        });
+        // Return true to indicate async response
+        return true;
+      }
+    });
+    
+    // Also listen for messages from content router (backwards compatibility)
     window.addEventListener('message', (event) => {
       if (event.data.source === 'tomitalaw-router' && event.data.action === 'fillForm' && event.data.module === 'ds160') {
-        console.log('DS-160 module received fill command');
+        console.log('DS-160 module received fill command from router');
         this.data = event.data.data;
         this.startFilling().then(result => {
           // Send success message back through router
@@ -4621,7 +4637,8 @@ class DS160Extension {
       if (result && result.ds160Data) {
         console.log('Found stored DS-160 data');
         this.data = result.ds160Data;
-        this.addFloatingButton();
+        // Disabled floating button - using sidebar instead
+        // this.addFloatingButton();
         this.monitorPageChanges();
       }
     });
@@ -4637,11 +4654,11 @@ class DS160Extension {
         console.log(`Page changed from ${lastPage} to ${currentPage}`);
         lastPage = currentPage;
         
-        // Update the floating button page info
-        const pageInfo = document.querySelector('#ds160-autofill-container div[style*="color: #999"]');
-        if (pageInfo) {
-          pageInfo.textContent = `Page: ${currentPage}`;
-        }
+        // Floating button disabled - using sidebar instead
+        // const pageInfo = document.querySelector('#ds160-autofill-container div[style*="color: #999"]');
+        // if (pageInfo) {
+        //   pageInfo.textContent = `Page: ${currentPage}`;
+        // }
         
         // Show notification if on previous work/education page
         if (currentPage === 'workEducationPrevious' && this.data) {

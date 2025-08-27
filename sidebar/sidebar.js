@@ -87,49 +87,195 @@ function setupModuleHandlers(module) {
 
 // DS-160 specific handlers
 function setupDS160Handlers() {
-  const fillBtn = document.getElementById('ds160-fill');
-  const clearBtn = document.getElementById('ds160-clear');
-  const dataInput = document.getElementById('ds160-data');
+  let currentData = null;
   
-  if (fillBtn) {
-    fillBtn.addEventListener('click', async () => {
-      const data = dataInput.value.trim();
-      if (!data) {
-        showStatus('Please paste your DS-160 data first', 'error');
+  const loadBtn = document.getElementById('ds160-load');
+  const clearInputBtn = document.getElementById('ds160-clear-input');
+  const fillBtn = document.getElementById('ds160-fill');
+  const editBtn = document.getElementById('ds160-edit');
+  const dataInput = document.getElementById('ds160-data');
+  const dataInputSection = document.getElementById('ds160DataInputSection');
+  const dataSection = document.getElementById('ds160DataSection');
+  const dataPreview = document.getElementById('ds160DataPreview');
+  
+  // Helper function to display extracted data
+  function displayData(data) {
+    if (!data) return;
+    
+    const preview = [];
+    
+    if (data.personal) {
+      preview.push('=== PERSONAL ===' );
+      preview.push(`Name: ${data.personal.givenName || ''} ${data.personal.surname || ''}`.trim());
+      if (data.personal.dateOfBirth) {
+        preview.push(`DOB: ${data.personal.dateOfBirth}`);
+      }
+      if (data.personal.nationality) {
+        preview.push(`Nationality: ${data.personal.nationality}`);
+      }
+    }
+    
+    if (data.passport) {
+      preview.push('');
+      preview.push('=== PASSPORT ===' );
+      if (data.passport.passportNumber) {
+        preview.push(`Passport #: ${data.passport.passportNumber}`);
+      }
+      if (data.passport.issuingCountry) {
+        preview.push(`Issuing Country: ${data.passport.issuingCountry}`);
+      }
+    }
+    
+    if (data.travel) {
+      preview.push('');
+      preview.push('=== TRAVEL ===' );
+      if (data.travel.purposeOfTrip) {
+        preview.push(`Purpose: ${data.travel.purposeOfTrip}`);
+      }
+      if (data.travel.arrivalDate) {
+        preview.push(`Arrival: ${data.travel.arrivalDate}`);
+      }
+    }
+    
+    if (data.contact) {
+      preview.push('');
+      preview.push('=== CONTACT ===' );
+      if (data.contact.email) {
+        preview.push(`Email: ${data.contact.email}`);
+      }
+      if (data.contact.phone) {
+        preview.push(`Phone: ${data.contact.phone}`);
+      }
+    }
+    
+    dataPreview.textContent = preview.join('\n') || 'Data loaded (no preview available)';
+    dataSection.style.display = 'block';
+    dataInputSection.style.display = 'none';
+  }
+  
+  // Load saved data on module load
+  chrome.storage.local.get(['ds160Data', 'lastDS160Data'], (result) => {
+    if (result.lastDS160Data) {
+      // Auto-load last used data
+      dataInput.value = result.lastDS160Data;
+      // Trigger load automatically
+      if (loadBtn) {
+        loadBtn.click();
+      }
+    } else if (result.ds160Data) {
+      // Load any saved data
+      dataInput.value = typeof result.ds160Data === 'string' 
+        ? result.ds160Data 
+        : JSON.stringify(result.ds160Data, null, 2);
+    }
+  });
+  
+  // Load Data button
+  if (loadBtn) {
+    loadBtn.addEventListener('click', () => {
+      const pastedData = dataInput.value.trim();
+      
+      if (!pastedData) {
+        showStatus('Please paste the extracted data from the web app', 'error');
         return;
       }
       
       try {
-        const jsonData = JSON.parse(data);
-        await fillForm('ds160', jsonData);
-        showStatus('DS-160 form filling initiated', 'success');
-      } catch (e) {
-        showStatus('Invalid JSON format. Please check your data.', 'error');
+        // Parse the JSON data
+        currentData = JSON.parse(pastedData);
+        displayData(currentData);
+        showStatus('Data loaded successfully!', 'success');
+        
+        // Save the data for next time
+        chrome.storage.local.set({ 
+          ds160Data: currentData,
+          lastDS160Data: pastedData 
+        });
+        
+      } catch (error) {
+        console.error('Error parsing data:', error);
+        showStatus('Error: Invalid JSON data. Please copy the complete data from the web app.', 'error');
       }
     });
   }
   
-  if (clearBtn) {
-    clearBtn.addEventListener('click', () => {
+  // Clear input button
+  if (clearInputBtn) {
+    clearInputBtn.addEventListener('click', () => {
       dataInput.value = '';
-      chrome.storage.local.remove(['ds160Data']);
+      currentData = null;
+      chrome.storage.local.remove(['ds160Data', 'lastDS160Data']);
       showStatus('Data cleared', 'info');
     });
   }
   
-  // Auto-save data on input
-  if (dataInput) {
-    dataInput.addEventListener('input', debounce(() => {
-      const data = dataInput.value.trim();
-      if (data) {
-        try {
-          JSON.parse(data);
-          chrome.storage.local.set({ ds160Data: data });
-        } catch (e) {
-          // Invalid JSON, don't save
-        }
+  // Auto-Fill DS-160 Form button
+  if (fillBtn) {
+    fillBtn.addEventListener('click', async () => {
+      if (!currentData) {
+        showStatus('No data loaded', 'error');
+        return;
       }
-    }, 1000));
+      
+      try {
+        // Get current tab
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        
+        if (!tab.url || !tab.url.includes('ceac.state.gov')) {
+          showStatus('Please navigate to the DS-160 form first', 'error');
+          return;
+        }
+        
+        // Store data in chrome storage
+        await chrome.storage.local.set({ ds160Data: currentData });
+        
+        // Try to inject content script
+        try {
+          await chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            files: ['content/modules/ds160-content.js']
+          });
+          console.log('DS-160 content script injected');
+        } catch (e) {
+          console.log('DS-160 content script might already be injected:', e);
+        }
+        
+        showStatus('Auto-filling form...', 'info');
+        
+        // Send message to content script
+        setTimeout(() => {
+          chrome.tabs.sendMessage(tab.id, { 
+            action: 'fillForm', 
+            module: 'ds160',
+            data: currentData 
+          }, (response) => {
+            if (chrome.runtime.lastError) {
+              console.error('Error sending message:', chrome.runtime.lastError);
+              showStatus('Error: Could not communicate with the page. Try refreshing.', 'error');
+            } else if (response && response.success) {
+              showStatus('Form filled successfully!', 'success');
+              // Don't close sidebar - let user continue working
+            } else {
+              showStatus('Form filling completed. Check the page.', 'info');
+              // Don't close sidebar - let user continue working
+            }
+          });
+        }, 100);
+        
+      } catch (error) {
+        console.error('Error filling form:', error);
+        showStatus('Error: ' + error.message, 'error');
+      }
+    });
+  }
+  
+  // Edit Data button - go back to input
+  if (editBtn) {
+    editBtn.addEventListener('click', () => {
+      dataSection.style.display = 'none';
+      dataInputSection.style.display = 'block';
+      showStatus('Edit your data and click Load Data again', 'info');
+    });
   }
 }
 

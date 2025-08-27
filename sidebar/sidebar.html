@@ -35,30 +35,62 @@
     <template id="ds160-template">
       <div class="module-content">
         <div class="module-header">
-          <h2>DS-160 Form Auto-Filler</h2>
+          <h2>📋 DS-160 Form Auto-Filler</h2>
           <p>Auto-fill DS-160 visa application forms</p>
         </div>
         
-        <div class="input-section">
-          <label for="ds160-data">Paste your DS-160 data (JSON format):</label>
-          <textarea id="ds160-data" class="data-input" placeholder="Paste your DS-160 JSON data here..." rows="10"></textarea>
+        <!-- Data Input Section -->
+        <div id="ds160DataInputSection" class="input-section">
+          <label for="ds160-data">Paste Extracted Data (JSON format):</label>
+          <textarea id="ds160-data" class="data-input" placeholder='Paste the JSON data from the web app here...
+
+Example format:
+{
+  "personal": {
+    "givenName": "John",
+    "surname": "Smith",
+    "dateOfBirth": "1990-01-15"
+  },
+  "passport": {
+    "passportNumber": "AB123456"
+  }
+}' rows="10"></textarea>
+          
+          <div class="button-group">
+            <button class="btn btn-success" id="ds160-load">
+              Load Data
+            </button>
+            <button class="btn btn-danger" id="ds160-clear-input">
+              Clear
+            </button>
+          </div>
         </div>
 
-        <div class="button-group">
-          <button class="btn btn-primary" id="ds160-fill">
-            Fill Current Page
-          </button>
-          <button class="btn btn-secondary" id="ds160-clear">
-            Clear Data
-          </button>
+        <!-- Data Preview Section (hidden until data is loaded) -->
+        <div id="ds160DataSection" class="card" style="display: none;">
+          <div class="card-title">
+            <span class="icon">📄</span>
+            Extracted Data
+          </div>
+          <div id="ds160DataPreview" class="data-preview" style="background: #f8f9fa; border-radius: 6px; padding: 12px; font-family: 'Monaco', 'Menlo', monospace; font-size: 12px; max-height: 200px; overflow-y: auto; white-space: pre-wrap; margin-bottom: 15px;"></div>
+          
+          <div class="button-group">
+            <button class="btn btn-primary" id="ds160-fill" style="grid-column: span 2;">
+              🚀 Auto-Fill DS-160 Form
+            </button>
+            <button class="btn btn-secondary" id="ds160-edit" style="grid-column: span 2;">
+              ✏️ Edit Data
+            </button>
+          </div>
         </div>
 
         <div class="info-section">
           <h3>Instructions:</h3>
           <ol>
-            <li>Navigate to the DS-160 form page</li>
-            <li>Paste your JSON data above</li>
-            <li>Click "Fill Current Page"</li>
+            <li>Navigate to the DS-160 form page (ceac.state.gov)</li>
+            <li>Paste your extracted JSON data above</li>
+            <li>Click "Load Data" to validate and preview</li>
+            <li>Click "Auto-Fill DS-160 Form" to fill the form</li>
             <li>Review and complete any remaining fields</li>
           </ol>
         </div>
