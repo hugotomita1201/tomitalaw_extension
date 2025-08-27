@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>TomitaLaw AI Extension</title>
+  <link rel="stylesheet" href="sidebar.css">
+</head>
+<body>
+  <div class="sidebar-container">
+    <!-- Header with Logo -->
+    <div class="header">
+      <h1>TomitaLaw AI Extension</h1>
+      <p class="subtitle">Immigration Form Assistant</p>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tab-navigation">
+      <!-- Tabs will be dynamically generated here -->
+    </div>
+
+    <!-- Tab Content Area -->
+    <div class="tab-content">
+      <!-- Content will be dynamically loaded here -->
+    </div>
+
+    <!-- Status/Notification Area -->
+    <div class="status-bar">
+      <div id="status-message" class="status-message"></div>
+    </div>
+  </div>
+
+  <!-- Module-specific UI templates will be loaded dynamically -->
+  <div id="module-templates" style="display: none;">
+    <!-- DS-160 Template -->
+    <template id="ds160-template">
+      <div class="module-content">
+        <div class="module-header">
+          <h2>DS-160 Form Auto-Filler</h2>
+          <p>Auto-fill DS-160 visa application forms</p>
+        </div>
+        
+        <div class="input-section">
+          <label for="ds160-data">Paste your DS-160 data (JSON format):</label>
+          <textarea id="ds160-data" class="data-input" placeholder="Paste your DS-160 JSON data here..." rows="10"></textarea>
+        </div>
+
+        <div class="button-group">
+          <button class="btn btn-primary" id="ds160-fill">
+            Fill Current Page
+          </button>
+          <button class="btn btn-secondary" id="ds160-clear">
+            Clear Data
+          </button>
+        </div>
+
+        <div class="info-section">
+          <h3>Instructions:</h3>
+          <ol>
+            <li>Navigate to the DS-160 form page</li>
+            <li>Paste your JSON data above</li>
+            <li>Click "Fill Current Page"</li>
+            <li>Review and complete any remaining fields</li>
+          </ol>
+        </div>
+      </div>
+    </template>
+
+    <!-- Visa Scheduling Template -->
+    <template id="visa-template">
+      <div class="module-content">
+        <div class="module-header">
+          <h2>Visa Scheduling Auto-Filler</h2>
+          <p>Auto-fill US Visa Scheduling forms with dependent support</p>
+        </div>
+        
+        <div class="input-section">
+          <label for="visa-data">Paste your visa scheduling data (JSON format):</label>
+          <textarea id="visa-data" class="data-input" placeholder="Paste your visa scheduling JSON data here..." rows="10"></textarea>
+        </div>
+
+        <div class="button-group">
+          <button class="btn btn-primary" id="visa-fill">
+            Fill Current Page
+          </button>
+          <button class="btn btn-secondary" id="visa-test">
+            Test with Sample Data
+          </button>
+          <button class="btn btn-secondary" id="visa-clear">
+            Clear Data
+          </button>
+        </div>
+
+        <div class="info-section">
+          <h3>Supported Pages:</h3>
+          <ul>
+            <li>Signup/Registration</li>
+            <li>Payment Information</li>
+            <li>Personal Information</li>
+            <li>Dependent Management</li>
+          </ul>
+          
+          <h3>Instructions:</h3>
+          <ol>
+            <li>Navigate to the visa scheduling page</li>
+            <li>Paste your JSON data above</li>
+            <li>Click "Fill Current Page"</li>
+            <li>The extension will auto-detect and fill the appropriate page</li>
+          </ol>
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <script type="module" src="sidebar.js"></script>
+</body>
+</html>

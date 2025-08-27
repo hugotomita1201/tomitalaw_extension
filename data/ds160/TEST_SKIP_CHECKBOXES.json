@@ -1,0 +1,28 @@
+{
+  "_testMode": true,
+  "_fieldsToSkip": ["ddl", "DropDownList", "rbl", "cbx"],
+  "_comment": "This skips ALL dropdowns, radio buttons, AND checkboxes",
+  "workEducation": {
+    "previousEmployers": [{
+      "employerName": "Test Company Inc",
+      "employerStreetAddress1": "123 Test Street",
+      "employerStreetAddress2": "Suite 100",
+      "employerCity": "Test City",
+      "employerState": "CA",
+      "employerPostalCode": "12345",
+      "employerCountry": "USA",
+      "employerPhone": "555-1234",
+      "jobTitle": "Test Engineer",
+      "supervisorSurname": "Smith",
+      "supervisorGivenName": "John",
+      "empDateFromDay": "01",
+      "empDateFromMonth": "01",
+      "empDateFromYear": "2020",
+      "empDateToDay": "31",
+      "empDateToMonth": "12",
+      "empDateToYear": "2022",
+      "describeDuties": "Testing software applications"
+    }],
+    "previousEducation": []
+  }
+}

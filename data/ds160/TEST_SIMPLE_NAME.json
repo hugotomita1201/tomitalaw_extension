@@ -1,0 +1,23 @@
+{
+  "_testMode": true,
+  "_fieldsToSkip": ["cbx", "ddl", "rbl"],
+  "_comment": "Test with simple company name",
+  "workEducation": {
+    "previousEmployers": [
+      {
+        "employerName": "ABC Company",
+        "employerStreetAddress1": "123 Main Street",
+        "employerCity": "OLONGAPO",
+        "employerState": "ZAMBALES",
+        "employerPostalCode": "2222",
+        "employerPhone": "1234567890",
+        "jobTitle": "ENGINEER",
+        "supervisorSurname": "SMITH",
+        "supervisorGivenName": "JOHN",
+        "empDateFromYear": "1999",
+        "empDateToYear": "2000",
+        "describeDuties": "Engineering work"
+      }
+    ]
+  }
+}

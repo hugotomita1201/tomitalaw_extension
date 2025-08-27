@@ -1,0 +1,77 @@
+{
+  "_testMode": true,
+  "_fieldsToSkip": ["cbx"],
+  "_comment": "Skip checkboxes + sanitized employer names (no periods)",
+  "workEducation": {
+    "previousEmployers": [
+      {
+        "employerName": "HOKEI SUBIC PHILS INC",
+        "employerStreetAddress1": "NO 40 GOLDEN FUTURE STREET AIM HIGH AVENUE SUBIC BAY FREEPORT ZONE",
+        "employerStreetAddress2": "",
+        "employerCity": "OLONGAPO",
+        "employerState": "ZAMBALES",
+        "employerStateNA": false,
+        "employerPostalCode": "2222",
+        "employerPostalCodeNA": false,
+        "employerCountry": "PHIL",
+        "employerPhone": "63472525395",
+        "jobTitle": "PRODUCTION SUPERVISOR",
+        "supervisorSurname": "CABALES",
+        "supervisorSurnameNA": false,
+        "supervisorGivenName": "RONALD",
+        "supervisorGivenNameNA": false,
+        "empDateFromDay": "15",
+        "empDateFromMonth": "04",
+        "empDateFromYear": "1999",
+        "empDateToDay": "23",
+        "empDateToMonth": "02",
+        "empDateToYear": "2000",
+        "describeDuties": "Production supervision and quality control"
+      },
+      {
+        "employerName": "MARUMAN PHILS INC",
+        "employerStreetAddress1": "CARMELRAY INDUSTRIAL PARK 1",
+        "employerStreetAddress2": "",
+        "employerCity": "CALAMBA",
+        "employerState": "LAGUNA",
+        "employerStateNA": false,
+        "employerPostalCode": "4027",
+        "employerPostalCodeNA": false,
+        "employerCountry": "PHIL",
+        "employerPhone": "63472521111",
+        "jobTitle": "PRODUCTION SUPERVISOR",
+        "supervisorSurname": "MORI",
+        "supervisorSurnameNA": false,
+        "supervisorGivenName": "TERUO",
+        "supervisorGivenNameNA": false,
+        "empDateFromDay": "10",
+        "empDateFromMonth": "11",
+        "empDateFromYear": "1996",
+        "empDateToDay": "23",
+        "empDateToMonth": "03",
+        "empDateToYear": "1998",
+        "describeDuties": "Production supervision and quality control"
+      }
+    ],
+    "previousEducation": [
+      {
+        "schoolName": "UNIVERSITY OF NUEVA CACERES",
+        "schoolAddr1": "J HERNANDEZ AVENUE",
+        "schoolAddr2": "",
+        "schoolCity": "NAGA",
+        "educInstAddrState": "CAMARINES SUR",
+        "educInstAddrStateNA": false,
+        "educInstPostalCode": "4400",
+        "educInstPostalCodeNA": false,
+        "schoolCountry": "PHIL",
+        "schoolCourseOfStudy": "INDUSTRIAL ENGINEERING",
+        "schoolFromDay": "15",
+        "schoolFromMonth": "07",
+        "schoolFromYear": "1991",
+        "schoolToDay": "09",
+        "schoolToMonth": "03",
+        "schoolToYear": "1996"
+      }
+    ]
+  }
+}

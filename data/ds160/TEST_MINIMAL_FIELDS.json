@@ -1,0 +1,13 @@
+{
+  "_testMode": true,
+  "_fieldsToSkip": ["cbx", "ddl", "rbl"],
+  "_fieldsToFill": ["tbEmployerName"],
+  "_comment": "ONLY fill employer name field",
+  "workEducation": {
+    "previousEmployers": [
+      {
+        "employerName": "HOKEI SUBIC PHILS INC"
+      }
+    ]
+  }
+}

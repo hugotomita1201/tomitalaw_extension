@@ -1,0 +1,43 @@
+{
+  "_testMode": true,
+  "_fieldsToSkip": ["cbx"],
+  "_comment": "Skip ONLY checkboxes, allow radio buttons and text fields",
+  "workEducation": {
+    "previousEmployers": [{
+      "employerName": "Sanyo Denki Philippines Inc",
+      "employerStreetAddress1": "Subic Techno Park",
+      "employerStreetAddress2": "Building 2",
+      "employerCity": "Subic Bay",
+      "employerState": "Zambales",
+      "employerPostalCode": "2222",
+      "employerCountry": "PHIL",
+      "employerPhone": "047-252-1234",
+      "jobTitle": "Quality Engineer",
+      "supervisorSurname": "Tanaka",
+      "supervisorGivenName": "Hiroshi",
+      "empDateFromDay": "01",
+      "empDateFromMonth": "06",
+      "empDateFromYear": "2018",
+      "empDateToDay": "31",
+      "empDateToMonth": "12",
+      "empDateToYear": "2023",
+      "describeDuties": "Quality control and testing of electrical components"
+    }],
+    "previousEducation": [{
+      "educInstitutionName": "University of the Philippines",
+      "educInstAddrStreet1": "Diliman Campus",
+      "educInstAddrStreet2": "",
+      "educInstAddrCity": "Quezon City",
+      "educInstAddrState": "Metro Manila",
+      "educInstPostalCode": "1101",
+      "educInstCountry": "PHIL",
+      "educCourseOfStudy": "Electrical Engineering",
+      "educFromDay": "01",
+      "educFromMonth": "06",
+      "educFromYear": "2014",
+      "educToDay": "31",
+      "educToMonth": "03",
+      "educToYear": "2018"
+    }]
+  }
+}

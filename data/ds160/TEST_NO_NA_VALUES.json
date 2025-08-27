@@ -1,0 +1,24 @@
+{
+  "_testMode": true,
+  "_fieldsToSkip": ["cbx", "ddl", "rbl"],
+  "_comment": "Replace all N/A with empty strings",
+  "workEducation": {
+    "previousEmployers": [
+      {
+        "employerName": "HOKEI SUBIC PHILS INC",
+        "employerStreetAddress1": "40 GOLDEN FUTURE STREET",
+        "employerStreetAddress2": "",
+        "employerCity": "OLONGAPO",
+        "employerState": "ZAMBALES",
+        "employerPostalCode": "2222",
+        "employerPhone": "63472525395",
+        "jobTitle": "PRODUCTION SUPERVISOR",
+        "supervisorSurname": "CABALES",
+        "supervisorGivenName": "RONALD",
+        "empDateFromYear": "1999",
+        "empDateToYear": "2000",
+        "describeDuties": ""
+      }
+    ]
+  }
+}

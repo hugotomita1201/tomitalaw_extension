@@ -1,0 +1,266 @@
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "middleName": "Robert",
+  "nativeFirstName": "ジョン",
+  "nativeLastName": "スミス",
+  
+  "dateOfBirth": "1990-03-15",
+  "birth_day": "15",
+  "birth_month": "03",
+  "birth_year": "1990",
+  
+  "birthCountry": "United Kingdom",
+  "country_of_birth": "United Kingdom",
+  "nationality": "United Kingdom",
+  "countryOfResidence": "United Kingdom",
+  "country_of_residence": "United Kingdom",
+  
+  "gender": "M",
+  "maritalStatus": "Single",
+  "marital_status": "Single",
+  
+  "nationalId": "AB123456789",
+  "national_id": "AB123456789",
+  "ssn": "123-45-6789",
+  "taxId": "987654321",
+  "tax_id": "987654321",
+  
+  "passport": {
+    "number": "987654321",
+    "passportNumber": "987654321",
+    "issuingCountry": "United Kingdom",
+    "issueDate": "2020-06-01",
+    "expiryDate": "2030-06-01",
+    "expirationDate": "2030-06-01",
+    "issueCity": "London",
+    "issuanceLocation": "London"
+  },
+  
+  "passport_number": "987654321",
+  "passport_country": "United Kingdom",
+  "passport_issue_date": "2020-06-01",
+  "passport_expiry_date": "2030-06-01",
+  "passport_issue_city": "London",
+  
+  "homeAddress": {
+    "street1": "123 Main Street",
+    "street2": "Apartment 4B",
+    "city": "London",
+    "state": "England",
+    "postalCode": "SW1A 1AA",
+    "country": "United Kingdom"
+  },
+  
+  "address_line_1": "123 Main Street",
+  "address_line_2": "Apartment 4B",
+  "city": "London",
+  "state": "England",
+  "postal_code": "SW1A 1AA",
+  "country": "United Kingdom",
+  
+  "mailingAddress": {
+    "sameAsHome": true,
+    "street1": "123 Main Street",
+    "street2": "Apartment 4B",
+    "city": "London",
+    "state": "England",
+    "postalCode": "SW1A 1AA",
+    "country": "United Kingdom"
+  },
+  
+  "usAddress": {
+    "street1": "456 Oak Avenue",
+    "street2": "Suite 200",
+    "city": "New York",
+    "state": "New York",
+    "zipCode": "10001"
+  },
+  
+  "us_address_line_1": "456 Oak Avenue",
+  "us_address_line_2": "Suite 200",
+  "us_city": "New York",
+  "us_state": "New York",
+  "us_zip_code": "10001",
+  
+  "email": "john.smith@email.com",
+  "emailAddress": "john.smith@email.com",
+  "confirmEmail": "john.smith@email.com",
+  
+  "phone": "+44 20 1234 5678",
+  "homePhone": "+44 20 1234 5678",
+  "mobile": "+44 7700 900123",
+  "mobilePhone": "+44 7700 900123",
+  "workPhone": "+44 20 9876 5432",
+  "work_phone": "+44 20 9876 5432",
+  
+  "emergencyContact": {
+    "name": "Jane Smith",
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "relationship": "Sister",
+    "phone": "+44 7700 900456",
+    "email": "jane.smith@email.com",
+    "address": "789 Park Lane, London, UK"
+  },
+  
+  "emergency_name": "Jane Smith",
+  "emergency_phone": "+44 7700 900456",
+  "emergency_email": "jane.smith@email.com",
+  "emergency_relationship": "Sister",
+  
+  "father": {
+    "firstName": "Robert",
+    "lastName": "Smith",
+    "dateOfBirth": "1960-05-20",
+    "nationality": "United Kingdom",
+    "birthCountry": "United Kingdom"
+  },
+  
+  "father_first_name": "Robert",
+  "father_last_name": "Smith",
+  "father_nationality": "United Kingdom",
+  "father_date_of_birth": "1960-05-20",
+  
+  "mother": {
+    "firstName": "Mary",
+    "lastName": "Smith",
+    "maidenName": "Johnson",
+    "dateOfBirth": "1962-08-15",
+    "nationality": "United Kingdom",
+    "birthCountry": "United Kingdom"
+  },
+  
+  "mother_first_name": "Mary",
+  "mother_last_name": "Smith",
+  "mother_maiden_name": "Johnson",
+  "mother_nationality": "United Kingdom",
+  "mother_date_of_birth": "1962-08-15",
+  
+  "spouse": {
+    "firstName": "",
+    "lastName": "",
+    "nationality": "",
+    "dateOfBirth": ""
+  },
+  
+  "purposeOfTrip": "Business",
+  "purpose_of_trip": "Business",
+  "travelPurpose": "Business Meeting",
+  
+  "arrivalDate": "2024-06-01",
+  "intendedArrivalDate": "2024-06-01",
+  "intended_arrival_date": "2024-06-01",
+  
+  "departureDate": "2024-06-15",
+  "intendedDepartureDate": "2024-06-15",
+  "intended_departure_date": "2024-06-15",
+  
+  "lengthOfStay": "14 days",
+  "length_of_stay": "14",
+  
+  "previousUSTravel": true,
+  "previous_us_travel": "yes",
+  "hasBeenToUS": true,
+  
+  "previousVisaNumber": "123ABC456DEF",
+  "previous_visa_number": "123ABC456DEF",
+  
+  "previousVisaIssueDate": "2019-05-01",
+  "previous_visa_issue_date": "2019-05-01",
+  
+  "previousVisaExpiryDate": "2024-05-01",
+  "previousVisaType": "B1/B2",
+  
+  "lastUSVisit": {
+    "arrivalDate": "2023-03-10",
+    "departureDate": "2023-03-25",
+    "purpose": "Tourism"
+  },
+  
+  "usDriversLicense": false,
+  "usDriversLicenseNumber": "",
+  "usDriversLicenseState": "",
+  
+  "socialMedia": {
+    "hasAccounts": true,
+    "facebook": "john.smith.uk",
+    "twitter": "@johnsmith",
+    "instagram": "johnsmith_uk",
+    "linkedin": "john-smith-london"
+  },
+  
+  "currentEmployer": {
+    "name": "Tech Solutions Ltd",
+    "address": "100 Tech Park, London, UK",
+    "phone": "+44 20 5555 1234",
+    "position": "Software Engineer",
+    "startDate": "2018-09-01",
+    "monthlyIncome": "5000",
+    "duties": "Software development and system design"
+  },
+  
+  "employer_name": "Tech Solutions Ltd",
+  "employer_address": "100 Tech Park, London, UK",
+  "employer_phone": "+44 20 5555 1234",
+  "job_title": "Software Engineer",
+  "employment_start_date": "2018-09-01",
+  "monthly_income": "5000",
+  
+  "education": {
+    "highestLevel": "Bachelor's Degree",
+    "schoolName": "University of London",
+    "graduationDate": "2012-06-01",
+    "fieldOfStudy": "Computer Science"
+  },
+  
+  "school_name": "University of London",
+  "graduation_date": "2012-06-01",
+  "field_of_study": "Computer Science",
+  
+  "militaryService": false,
+  "military_service": "no",
+  
+  "languages": ["English", "Spanish"],
+  "languages_spoken": "English, Spanish",
+  
+  "countriesVisited": ["France", "Germany", "Spain", "Italy", "Japan"],
+  "countries_visited_last_5_years": "France, Germany, Spain, Italy, Japan",
+  
+  "securityQuestions": {
+    "hasDisease": false,
+    "hasArrest": false,
+    "hasViolation": false,
+    "hasDrugUse": false,
+    "hasTerrorism": false,
+    "hasProstitution": false,
+    "hasMoneyLaundering": false,
+    "hasHumanTrafficking": false,
+    "hasAssistTrafficking": false,
+    "hasSpouse": false,
+    "hasChildren": false
+  },
+  
+  "petitionerInfo": {
+    "name": "Tech Solutions Ltd",
+    "relationship": "Employer",
+    "address": "100 Tech Park, London, UK",
+    "phone": "+44 20 5555 1234"
+  },
+  
+  "usContactPerson": {
+    "name": "Michael Johnson",
+    "organization": "US Tech Partners Inc",
+    "relationship": "Business Associate",
+    "address": "789 Business Ave, New York, NY 10001",
+    "phone": "+1 212 555 0123",
+    "email": "mjohnson@ustechpartners.com"
+  },
+  
+  "us_contact_name": "Michael Johnson",
+  "us_contact_organization": "US Tech Partners Inc",
+  "us_contact_relationship": "Business Associate",
+  "us_contact_address": "789 Business Ave, New York, NY 10001",
+  "us_contact_phone": "+1 212 555 0123",
+  "us_contact_email": "mjohnson@ustechpartners.com"
+}
