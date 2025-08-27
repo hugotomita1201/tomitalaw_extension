@@ -78,6 +78,9 @@ function setupModuleHandlers(module) {
     case 'visa':
       setupVisaHandlers();
       break;
+    case 'postal':
+      setupPostalHandlers();
+      break;
     // Add more cases as modules are added
   }
 }
@@ -185,6 +188,131 @@ function setupVisaHandlers() {
         }
       }
     }, 1000));
+  }
+}
+
+// Postal Code specific handlers
+async function setupPostalHandlers() {
+  const { PostalCodeService } = await import('./modules/postal/postal-service.js');
+  const postalService = new PostalCodeService();
+  
+  const lookupBtn = document.getElementById('postal-lookup');
+  const postalInput = document.getElementById('postal-code-input');
+  const resultsDiv = document.getElementById('postal-results');
+  const errorDiv = document.getElementById('postal-error');
+  
+  // Lookup button handler
+  if (lookupBtn) {
+    lookupBtn.addEventListener('click', async () => {
+      const postalCode = postalInput.value.trim();
+      
+      if (!postalCode) {
+        showPostalError('Please enter a postal code');
+        return;
+      }
+      
+      // Show loading state
+      lookupBtn.disabled = true;
+      lookupBtn.textContent = 'Looking up...';
+      hidePostalError();
+      hidePostalResults();
+      
+      try {
+        const result = await postalService.lookup(postalCode);
+        
+        if (result.success) {
+          displayPostalResults(result.data);
+          showStatus('Address found successfully', 'success');
+        } else {
+          showPostalError(result.error);
+        }
+      } catch (error) {
+        showPostalError('An unexpected error occurred. Please try again.');
+        console.error('Postal lookup error:', error);
+      } finally {
+        lookupBtn.disabled = false;
+        lookupBtn.textContent = 'Lookup';
+      }
+    });
+  }
+  
+  // Enter key handler for input
+  if (postalInput) {
+    postalInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        lookupBtn.click();
+      }
+    });
+  }
+  
+  // Copy button handlers
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('copy-btn')) {
+      const fieldId = e.target.dataset.copy;
+      const fieldElement = document.getElementById(fieldId);
+      
+      if (fieldElement && fieldElement.textContent) {
+        copyToClipboard(fieldElement.textContent);
+        
+        // Show copied feedback
+        const originalText = e.target.textContent;
+        e.target.textContent = '✓';
+        e.target.style.color = '#4CAF50';
+        
+        setTimeout(() => {
+          e.target.textContent = originalText;
+          e.target.style.color = '';
+        }, 1500);
+      }
+    }
+  });
+  
+  // Helper function to display results
+  function displayPostalResults(data) {
+    document.getElementById('full-address').textContent = data.fullAddress;
+    document.getElementById('prefecture').textContent = data.prefecture;
+    document.getElementById('city').textContent = data.city;
+    document.getElementById('street').textContent = data.street;
+    document.getElementById('formatted-postal').textContent = data.postalCode;
+    document.getElementById('address-line1').textContent = data.addressLine1;
+    document.getElementById('address-line2').textContent = data.addressLine2;
+    
+    resultsDiv.classList.remove('hidden');
+  }
+  
+  // Helper function to hide results
+  function hidePostalResults() {
+    resultsDiv.classList.add('hidden');
+  }
+  
+  // Helper function to show error
+  function showPostalError(message) {
+    errorDiv.textContent = message;
+    errorDiv.classList.remove('hidden');
+  }
+  
+  // Helper function to hide error
+  function hidePostalError() {
+    errorDiv.classList.add('hidden');
+  }
+  
+  // Copy to clipboard function
+  async function copyToClipboard(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      showStatus('Copied to clipboard!', 'success');
+    } catch (err) {
+      // Fallback for older browsers
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      showStatus('Copied to clipboard!', 'success');
+    }
   }
 }
 

@@ -26,6 +26,16 @@ export const MODULES = [
     ],
     dataKey: 'visaData',
     active: true
+  },
+  {
+    id: 'postal',
+    name: 'Postal Lookup',
+    icon: '📮',
+    description: 'Japanese postal code to address lookup',
+    contentScript: null, // No content script needed - utility tool
+    domains: [], // Works on any site
+    dataKey: 'postalData',
+    active: true
   }
   // To add a new tool in the future:
   // 1. Add a new module object here

@@ -65,6 +65,108 @@
       </div>
     </template>
 
+    <!-- Postal Code Lookup Template -->
+    <template id="postal-template">
+      <div class="module-content">
+        <div class="module-header">
+          <h2>Japanese Postal Code Lookup</h2>
+          <p>Convert postal codes to full addresses</p>
+        </div>
+        
+        <div class="input-section">
+          <label for="postal-code-input">Enter Japanese Postal Code:</label>
+          <div class="postal-input-group">
+            <input 
+              type="text" 
+              id="postal-code-input" 
+              class="postal-input" 
+              placeholder="e.g., 150-0002 or 1500002"
+              maxlength="10"
+            />
+            <button class="btn btn-primary" id="postal-lookup">
+              Lookup
+            </button>
+          </div>
+          <small class="input-hint">Accepts formats: 1234567, 123-4567, 〒123-4567</small>
+        </div>
+
+        <div id="postal-results" class="postal-results hidden">
+          <h3>Address Information:</h3>
+          
+          <div class="address-field">
+            <label>Full Address:</label>
+            <div class="field-value">
+              <span id="full-address"></span>
+              <button class="copy-btn" data-copy="full-address" title="Copy to clipboard">📋</button>
+            </div>
+          </div>
+
+          <div class="address-field">
+            <label>Prefecture (State):</label>
+            <div class="field-value">
+              <span id="prefecture"></span>
+              <button class="copy-btn" data-copy="prefecture" title="Copy to clipboard">📋</button>
+            </div>
+          </div>
+
+          <div class="address-field">
+            <label>City/Ward:</label>
+            <div class="field-value">
+              <span id="city"></span>
+              <button class="copy-btn" data-copy="city" title="Copy to clipboard">📋</button>
+            </div>
+          </div>
+
+          <div class="address-field">
+            <label>Area/Street:</label>
+            <div class="field-value">
+              <span id="street"></span>
+              <button class="copy-btn" data-copy="street" title="Copy to clipboard">📋</button>
+            </div>
+          </div>
+
+          <div class="address-field">
+            <label>Postal Code:</label>
+            <div class="field-value">
+              <span id="formatted-postal"></span>
+              <button class="copy-btn" data-copy="formatted-postal" title="Copy to clipboard">📋</button>
+            </div>
+          </div>
+
+          <div class="address-field">
+            <label>Address Line 1:</label>
+            <div class="field-value">
+              <span id="address-line1"></span>
+              <button class="copy-btn" data-copy="address-line1" title="Copy to clipboard">📋</button>
+            </div>
+          </div>
+
+          <div class="address-field">
+            <label>Address Line 2:</label>
+            <div class="field-value">
+              <span id="address-line2"></span>
+              <button class="copy-btn" data-copy="address-line2" title="Copy to clipboard">📋</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="postal-error" class="error-message hidden"></div>
+
+        <div class="info-section">
+          <h3>How to Use:</h3>
+          <ol>
+            <li>Enter a Japanese postal code (7 digits)</li>
+            <li>Click "Lookup" to fetch address</li>
+            <li>Click 📋 to copy any field to clipboard</li>
+            <li>Use copied values in your forms</li>
+          </ol>
+          
+          <h3>Data Source:</h3>
+          <p>Powered by ZipCloud API - Official Japanese postal code database</p>
+        </div>
+      </div>
+    </template>
+
     <!-- Visa Scheduling Template -->
     <template id="visa-template">
       <div class="module-content">
