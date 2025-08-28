@@ -81,6 +81,9 @@ function setupModuleHandlers(module) {
     case 'postal':
       setupPostalHandlers();
       break;
+    case 'photo':
+      setupPhotoHandlers();
+      break;
     // Add more cases as modules are added
   }
 }
@@ -700,6 +703,206 @@ async function setupPostalHandlers() {
       document.body.removeChild(textarea);
       showStatus('Copied to clipboard!', 'success');
     }
+  }
+}
+
+// Photo Checker specific handlers
+async function setupPhotoHandlers() {
+  const { PhotoValidationService } = await import('./modules/photo/photo-service.js');
+  const service = new PhotoValidationService();
+  let currentFile = null;
+
+  // Get DOM elements
+  const uploadArea = document.getElementById('photo-upload-area');
+  const fileInput = document.getElementById('photo-input');
+  const validateBtn = document.getElementById('photo-validate');
+  const clearBtn = document.getElementById('photo-clear');
+  const previewDiv = document.getElementById('photo-preview');
+  const previewImg = document.getElementById('preview-image');
+  const metadataDisplay = document.getElementById('metadata-display');
+  const loadingDiv = document.getElementById('validation-loading');
+  const resultsDiv = document.getElementById('validation-results');
+
+  // File upload handlers
+  if (uploadArea) {
+    uploadArea.addEventListener('click', () => fileInput.click());
+    
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('drag-over');
+    });
+
+    uploadArea.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('drag-over');
+    });
+
+    uploadArea.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('drag-over');
+      
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        await handleFileSelect(file);
+      }
+    });
+  }
+
+  if (fileInput) {
+    fileInput.addEventListener('change', async (e) => {
+      if (e.target.files[0]) {
+        await handleFileSelect(e.target.files[0]);
+      }
+    });
+  }
+
+  async function handleFileSelect(file) {
+    // Validate file type
+    if (!file.type.match(/image\/(jpeg|jpg)/)) {
+      showStatus('Please select a JPEG image', 'error');
+      return;
+    }
+
+    // Warn if file too large
+    if (file.size > 240 * 1024) {
+      showStatus('Warning: File exceeds 240KB limit', 'warning');
+    }
+
+    currentFile = file;
+    
+    // Display preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      previewImg.src = e.target.result;
+      previewDiv.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+    
+    // Extract and display metadata
+    try {
+      const metadata = await service.extractMetadata(file);
+      metadataDisplay.innerHTML = `
+        <small>
+          Size: ${metadata.fileSizeKB} KB | 
+          Dimensions: ${metadata.dimensions.width}×${metadata.dimensions.height}px | 
+          Ratio: ${metadata.dimensions.ratio}
+        </small>
+      `;
+    } catch (error) {
+      console.error('Error extracting metadata:', error);
+    }
+    
+    validateBtn.disabled = false;
+  }
+
+  // Validate button handler
+  if (validateBtn) {
+    validateBtn.addEventListener('click', async () => {
+      if (!currentFile) return;
+      
+      // Show loading
+      loadingDiv.style.display = 'block';
+      resultsDiv.style.display = 'none';
+      validateBtn.disabled = true;
+      
+      try {
+        const results = await service.validatePhoto(currentFile);
+        displayResults(results);
+        showStatus('Photo validation completed', 'success');
+      } catch (error) {
+        console.error('Validation error:', error);
+        if (error.message.includes('API key not configured')) {
+          showStatus('API key not configured. Please contact support.', 'error');
+        } else {
+          showStatus(`Validation error: ${error.message}`, 'error');
+        }
+      } finally {
+        loadingDiv.style.display = 'none';
+        validateBtn.disabled = false;
+      }
+    });
+  }
+
+  function displayResults(results) {
+    const colors = {
+      'PASS': '#28a745',
+      'FAIL': '#dc3545', 
+      'WARNING': '#ffc107'
+    };
+    
+    const icon = {
+      'PASS': '✅',
+      'FAIL': '❌',
+      'WARNING': '⚠️'
+    };
+    
+    let html = `
+      <div class="result-header" style="background: ${colors[results.overall_result]}20; 
+           border-left: 4px solid ${colors[results.overall_result]}; padding: 10px; margin-bottom: 15px;">
+        <h3 style="color: ${colors[results.overall_result]}; margin: 0;">
+          ${icon[results.overall_result]} ${results.overall_result}
+        </h3>
+        ${results.confidence_score ? `<small>Confidence: ${(results.confidence_score * 100).toFixed(0)}%</small>` : ''}
+      </div>
+    `;
+    
+    // Add check sections
+    if (results.technical_checks) {
+      html += renderCheckSection('⚙️ Technical Requirements', results.technical_checks, colors, icon);
+    }
+    if (results.composition_checks) {
+      html += renderCheckSection('📐 Composition', results.composition_checks, colors, icon);
+    }
+    if (results.quality_checks) {
+      html += renderCheckSection('✨ Quality', results.quality_checks, colors, icon);
+    }
+    
+    // Add recommendations if any
+    if (results.recommendations && results.recommendations.length > 0) {
+      html += `
+        <div class="recommendations" style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+          <h4 style="margin: 0 0 10px 0;">📋 Recommendations:</h4>
+          <ul style="margin: 5px 0; padding-left: 20px;">
+            ${results.recommendations.map(r => `<li>${r}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+    }
+    
+    resultsDiv.innerHTML = html;
+    resultsDiv.style.display = 'block';
+  }
+
+  function renderCheckSection(title, checks, colors, icons) {
+    let html = `<div class="check-section" style="margin: 15px 0;">
+      <h4 style="margin: 10px 0 5px 0;">${title}</h4>`;
+    
+    for (const [key, value] of Object.entries(checks)) {
+      const color = colors[value.status] || '#666';
+      const icon = icons[value.status] || '•';
+      const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      html += `
+        <div class="check-item" style="padding: 5px 0; margin-left: 10px;">
+          <span style="color: ${color}; margin-right: 8px;">${icon}</span>
+          <span>${value.detail || label}</span>
+        </div>
+      `;
+    }
+    
+    html += '</div>';
+    return html;
+  }
+
+  // Clear button handler
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      currentFile = null;
+      previewDiv.style.display = 'none';
+      resultsDiv.style.display = 'none';
+      validateBtn.disabled = true;
+      fileInput.value = '';
+      metadataDisplay.innerHTML = '';
+    });
   }
 }
 

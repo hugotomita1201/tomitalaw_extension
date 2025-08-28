@@ -16,7 +16,8 @@
     "https://ayobaspremium.jp/*",
     "https://atlasauth.b2clogin.com/*",
     "https://i129-pdf-filler.vercel.app/*",
-    "https://i129-backend-452425445497.us-central1.run.app/*"
+    "https://i129-backend-452425445497.us-central1.run.app/*",
+    "https://api.openai.com/*"
   ],
   "background": {
     "service_worker": "background.js",
@@ -60,5 +61,14 @@
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["data/photo/requirements.json"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://api.openai.com"
   }
 }

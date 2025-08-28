@@ -199,6 +199,65 @@ Example format:
       </div>
     </template>
 
+    <!-- Photo Checker Template -->
+    <template id="photo-template">
+      <div class="module-content">
+        <div class="module-header">
+          <h2>📸 DS-160 Photo Checker</h2>
+          <p>AI-powered passport photo validation</p>
+        </div>
+        
+        <!-- Upload Area -->
+        <div class="upload-section">
+          <div class="upload-area" id="photo-upload-area">
+            <input type="file" id="photo-input" accept="image/jpeg,image/jpg" hidden>
+            <div class="upload-placeholder">
+              <span class="upload-icon">📷</span>
+              <p>Click to upload or drag & drop</p>
+              <small>JPEG only, max 240KB</small>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Preview -->
+        <div id="photo-preview" class="photo-preview" style="display: none;">
+          <img id="preview-image" />
+          <div id="metadata-display" class="metadata-info"></div>
+        </div>
+        
+        <!-- Loading -->
+        <div id="validation-loading" class="loading" style="display: none;">
+          <div class="spinner"></div>
+          <p>Analyzing photo with AI...</p>
+        </div>
+        
+        <!-- Results -->
+        <div id="validation-results" class="validation-results" style="display: none;">
+          <!-- Results populated dynamically -->
+        </div>
+        
+        <!-- Actions -->
+        <div class="button-group">
+          <button id="photo-validate" class="btn btn-primary" disabled>
+            🔍 Validate Photo
+          </button>
+          <button id="photo-clear" class="btn btn-secondary">
+            🗑️ Clear
+          </button>
+        </div>
+
+        <div class="info-section">
+          <h3>Instructions:</h3>
+          <ol>
+            <li>Upload a passport photo (JPEG format)</li>
+            <li>Photo will be checked against DS-160 requirements</li>
+            <li>AI will analyze composition, quality, and compliance</li>
+            <li>Get instant feedback and recommendations</li>
+          </ol>
+        </div>
+      </div>
+    </template>
+
     <!-- Visa Scheduling Template -->
     <template id="visa-template">
       <div class="module-content">

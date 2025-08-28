@@ -1,0 +1,101 @@
+{
+  "digital_technical_requirements": {
+    "file_format": "JPEG only",
+    "file_size": {
+      "maximum": "240 KB",
+      "unit": "kilobytes"
+    },
+    "color_specifications": {
+      "color_depth": "24 bits per pixel",
+      "color_space": "sRGB",
+      "type": "full color"
+    },
+    "compression": {
+      "maximum_ratio": "20:1"
+    }
+  },
+  "image_dimensions": {
+    "aspect_ratio": "square (height equals width)",
+    "pixel_dimensions": {
+      "minimum": "600 x 600 pixels",
+      "maximum": "1200 x 1200 pixels"
+    },
+    "printed_equivalent": {
+      "inches": "2 x 2 inches",
+      "millimeters": "50 x 50 mm"
+    }
+  },
+  "head_positioning_requirements": {
+    "head_height_percentage": {
+      "minimum": "50% of total image height",
+      "maximum": "70% of total image height"
+    },
+    "head_measurement": {
+      "chin_to_top_inches": "1 to 1⅜ inches",
+      "chin_to_top_mm": "25 to 35 mm"
+    },
+    "eye_level_positioning": {
+      "percentage_from_bottom": "55% to 70%",
+      "measurement_from_bottom_inches": "1⅛ to 1⅜ inches",
+      "measurement_from_bottom_mm": "28 to 35 mm"
+    }
+  },
+  "photo_content_standards": {
+    "recency": "taken within the last 6 months",
+    "background": {
+      "color": "plain white or off-white",
+      "requirements": "no shadows on background"
+    },
+    "pose_requirements": {
+      "view": "full-face view",
+      "direction": "directly facing camera",
+      "head_position": "centered in frame",
+      "face_visibility": "full face visible"
+    },
+    "facial_expression": {
+      "type": "neutral expression",
+      "eyes": "both eyes open"
+    },
+    "lighting": {
+      "shadows": "no shadows on face",
+      "quality": "even lighting"
+    }
+  },
+  "restrictions": {
+    "eyeglasses": {
+      "allowed": false,
+      "effective_date": "November 1, 2016",
+      "exceptions": "rare medical circumstances only"
+    },
+    "head_coverings": {
+      "allowed": false,
+      "exceptions": "religious purposes only (worn daily)"
+    },
+    "digital_enhancement": {
+      "allowed": false,
+      "description": "no alteration of appearance"
+    }
+  },
+  "upload_process": {
+    "ds160_requirement": "must upload digital photo during DS-160 completion",
+    "upload_timing": "form will instruct when to upload during application",
+    "backup_requirement": {
+      "if_upload_fails": "bring one printed photo to interview",
+      "additional_documents": "submit with DS-160 confirmation page"
+    },
+    "interview_requirement": "bring printed photo even if upload succeeded"
+  },
+  "acceptance_disclaimers": {
+    "system_acceptance": "DS-160 system acceptance does not guarantee embassy approval",
+    "final_decision": "Department of State employee makes final photo acceptability decision",
+    "potential_rejection": "may be required to submit new photo even if system accepted"
+  },
+  "official_sources": {
+    "primary_source": "travel.state.gov",
+    "specific_pages": [
+      "visa photo requirements section",
+      "digital image requirements page",
+      "DS-160 FAQ page"
+    ]
+  }
+}

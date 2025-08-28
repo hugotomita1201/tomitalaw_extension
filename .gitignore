@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment and credentials
+.env
+.env.local
+*.key
+
+# Temporary files
+*.tmp
+temp/
+
+# OS files
+Thumbs.db

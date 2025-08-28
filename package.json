@@ -1,0 +1,15 @@
+{
+  "name": "tomitalaw-extension",
+  "version": "1.0.0",
+  "description": "TomitaLaw AI Chrome Extension for form automation",
+  "type": "module",
+  "dependencies": {
+    "openai": "^4.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "encrypt-key": "node setup/encrypt-api-key.js"
+  },
+  "author": "TomitaLaw",
+  "license": "Proprietary"
+}

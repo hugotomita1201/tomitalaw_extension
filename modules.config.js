@@ -36,6 +36,16 @@ export const MODULES = [
     domains: [], // Works on any site
     dataKey: 'postalData',
     active: true
+  },
+  {
+    id: 'photo',
+    name: 'Photo Checker',
+    icon: '📸',
+    description: 'AI-powered passport photo validation',
+    contentScript: null, // No content script needed - utility tool
+    domains: [], // Works on any site
+    dataKey: 'photoData',
+    active: true
   }
   // To add a new tool in the future:
   // 1. Add a new module object here
