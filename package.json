@@ -4,9 +4,11 @@
   "description": "TomitaLaw AI Chrome Extension for form automation",
   "type": "module",
   "dependencies": {
+    "csv-parse": "^6.1.0",
+    "iconv-lite": "^0.7.0",
+    "node-fetch": "^3.3.2",
     "openai": "^4.0.0"
   },
-  "devDependencies": {},
   "scripts": {
     "encrypt-key": "node setup/encrypt-api-key.js"
   },

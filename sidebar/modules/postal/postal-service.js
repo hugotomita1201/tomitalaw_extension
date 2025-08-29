@@ -1,17 +1,14 @@
 // Japanese Postal Code Service
-// Primary: Backend proxy (Japan Post API + ZipCloud fallback)
-// Fallback: Direct ZipCloud API call
+// Primary: ZipCloud API for regular postal codes
+// Fallback: Local business codes database
 
 export class PostalCodeService {
   constructor() {
-    // Backend API endpoint (uses Japan Post API)
-    this.backendUrl = 'https://i129-backend-452425445497.us-central1.run.app/api/postal-lookup';
-    
-    // Direct ZipCloud API (fallback if backend unavailable)
+    // ZipCloud API for regular postal codes
     this.zipCloudUrl = 'https://zipcloud.ibsnet.co.jp/api/search';
     
-    // For local development, uncomment this:
-    // this.backendUrl = 'http://localhost:3000/api/postal-lookup';
+    // Local business codes cache
+    this.businessCodes = null;
   }
 
   /**
@@ -30,107 +27,95 @@ export class PostalCodeService {
         };
       }
 
-      // Try backend API first (has Japan Post + ZipCloud)
+      // 1. Try ZipCloud API first (works for most regular postal codes)
       try {
-        console.log('Trying backend API for:', normalized);
-        const response = await fetch(`${this.backendUrl}?code=${normalized}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data.success) {
-            console.log(`✓ Found via backend (${data.source})`);
-            return data;
-          } else if (data.notFound) {
-            // Backend checked both APIs and found nothing
-            return data;
-          }
-        }
-      } catch (backendError) {
-        console.warn('Backend API unavailable, trying direct ZipCloud:', backendError.message);
-      }
-
-      // Fallback to direct ZipCloud API if backend is unavailable
-      try {
-        console.log('Trying direct ZipCloud API for:', normalized);
+        console.log('Trying ZipCloud API for:', normalized);
         const response = await fetch(`${this.zipCloudUrl}?zipcode=${normalized}`);
         const data = await response.json();
 
         // Check for valid response
         if (data.status === 200 && data.results?.length > 0) {
-          console.log('✓ Found via direct ZipCloud');
+          console.log('✓ Found via ZipCloud');
           return this.formatZipCloudResponse(data.results[0], normalized);
-        } else if (data.status === 200 && !data.results) {
-          // Postal code not found
-          return {
-            success: false,
-            error: `Postal code ${this.formatPostalCode(normalized)} not found. Please enter the address manually.`,
-            notFound: true
-          };
         }
       } catch (zipCloudError) {
-        console.warn('Direct ZipCloud also failed:', zipCloudError.message);
+        console.warn('ZipCloud API failed:', zipCloudError.message);
       }
 
-      // All methods failed
+      // 2. Try local business codes database (corporate postal codes)
+      console.log('Checking local business codes for:', normalized);
+      const businessResult = await this.lookupBusinessCode(normalized);
+      if (businessResult.success) {
+        console.log('✓ Found in business codes database');
+        return businessResult;
+      }
+
+      // 3. Not found anywhere
       return {
         success: false,
-        error: 'Failed to lookup postal code. Please try again or enter the address manually.'
+        error: `Postal code ${this.formatPostalCode(normalized)} not found. Please enter the address manually.`,
+        notFound: true
       };
 
     } catch (error) {
       console.error('Postal code lookup error:', error);
       return {
         success: false,
-        error: 'Network error. Please check your connection and try again.'
+        error: 'Failed to lookup postal code. Please try again or enter the address manually.'
       };
     }
   }
 
   /**
-   * Lookup by digital address (7-character code)
-   * Only available via backend (Japan Post API)
-   * @param {string} digitalAddress - Digital address code
-   * @returns {Object} Address data or error
+   * Load business codes database
+   * @returns {Object} Business codes indexed by postal code
    */
-  async lookupDigitalAddress(digitalAddress) {
-    try {
-      if (!digitalAddress || digitalAddress.length !== 7) {
-        return {
-          success: false,
-          error: 'Digital address must be exactly 7 characters (e.g., A7E2FK2)'
-        };
+  async loadBusinessCodes() {
+    if (!this.businessCodes) {
+      try {
+        const response = await fetch(chrome.runtime.getURL('data/postal/business-codes.json'));
+        this.businessCodes = await response.json();
+        console.log(`Loaded ${Object.keys(this.businessCodes).length} business postal codes`);
+      } catch (error) {
+        console.error('Failed to load business codes:', error);
+        this.businessCodes = {};
       }
+    }
+    return this.businessCodes;
+  }
 
-      // Digital address only works via backend
-      const response = await fetch(`${this.backendUrl}?code=${digitalAddress}&type=digital`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
+  /**
+   * Lookup postal code in local business codes database
+   * @param {string} postalCode - Normalized 7-digit postal code
+   * @returns {Object} Address data or not found
+   */
+  async lookupBusinessCode(postalCode) {
+    const codes = await this.loadBusinessCodes();
+    const businessData = codes[postalCode];
+    
+    if (businessData) {
+      return {
+        success: true,
+        source: 'BusinessCodes',
+        data: {
+          fullAddress: `${businessData.prefecture}${businessData.city}${businessData.street}`,
+          prefecture: businessData.prefecture,
+          city: businessData.city,
+          street: businessData.street,
+          business: businessData.business,
+          postalCode: this.formatPostalCode(postalCode),
+          addressLine1: businessData.prefecture + businessData.city,
+          addressLine2: businessData.street,
+          isCorporate: true,
+          raw: businessData
         }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        return data;
-      }
-
-      return {
-        success: false,
-        error: 'Failed to lookup digital address. Backend service may be unavailable.',
-        notFound: true
-      };
-    } catch (error) {
-      console.error('Digital address lookup error:', error);
-      return {
-        success: false,
-        error: 'Failed to lookup digital address. Please try again.'
       };
     }
+    
+    return {
+      success: false,
+      notFound: true
+    };
   }
 
   /**

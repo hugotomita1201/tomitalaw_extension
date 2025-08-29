@@ -64,11 +64,14 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["data/photo/requirements.json"],
+      "resources": [
+        "data/photo/requirements.json",
+        "data/postal/business-codes.json"
+      ],
       "matches": ["<all_urls>"]
     }
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://api.openai.com https://zipcloud.ibsnet.co.jp https://i129-backend-452425445497.us-central1.run.app"
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://api.openai.com https://zipcloud.ibsnet.co.jp"
   }
 }
