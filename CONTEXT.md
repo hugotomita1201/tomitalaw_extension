@@ -1,14 +1,18 @@
 # Project Context: TomitaLaw AI Chrome Extension
 
 ## Quick Overview
-A modular Chrome extension that automates form filling for US visa applications (DS-160 and visa scheduling forms) with a persistent sidebar interface. Built using Manifest V3, it features intelligent field mapping, multi-pass filling strategies, and support for dependent management.
+A comprehensive Chrome extension that automates form filling for US visa applications (DS-160 and visa scheduling forms) with AI-powered features and a persistent sidebar interface. Built using Manifest V3, it features intelligent field mapping, multi-pass filling strategies, dependent management, passport photo validation using GPT-4 Vision, and Japanese postal code lookup with dual data sources.
 
 ## Technology Stack
 - **Runtime**: Chrome Extension (Manifest V3)
 - **Languages**: JavaScript (ES6+), HTML5, CSS3
 - **APIs**: Chrome Extension APIs (storage, tabs, scripting, sidePanel, runtime)
-- **External Services**: ZipCloud API (Japanese postal code lookup)
+- **External Services**: 
+  - OpenAI GPT-4 Vision API (passport photo validation)
+  - ZipCloud API (regular Japanese postal code lookup)
+- **Local Databases**: Business postal codes (22,209 entries, 3.25MB)
 - **Architecture**: Modular content script system with background service worker
+- **Security**: Multi-layer API key encryption (XOR + Base64 + chunking)
 
 ## Project Structure
 ```
@@ -23,16 +27,24 @@ A modular Chrome extension that automates form filling for US visa applications 
 │   └── modules/                # Module-specific implementations
 │       ├── ds160/              # DS-160 module UI components
 │       ├── visa/               # Visa scheduling UI components
+│       ├── photo/              # Photo validation service
+│       │   └── photo-service.js # GPT-4 Vision integration
 │       └── postal/             # Postal code lookup service
-│           └── postal-service.js
+│           └── postal-service.js # ZipCloud + local business codes
 ├── content/                     # Content scripts injected into target sites
 │   ├── content-router.js       # Routes messages to appropriate modules
 │   └── modules/
 │       ├── ds160-content.js    # DS-160 form filling logic (2500+ lines)
 │       └── visa-content.js     # Visa scheduling form filling (900+ lines)
-├── data/                        # Test data and samples
+├── data/                        # Test data and databases
 │   ├── ds160/                  # DS-160 test JSON files
-│   └── visa/                   # Visa scheduling test JSON files
+│   ├── visa/                   # Visa scheduling test JSON files
+│   ├── photo/                  # Photo validation requirements
+│   └── postal/                 # Postal code databases
+│       └── business-codes.json # 22,209 business postal codes
+├── setup/                       # Setup and utility scripts
+│   ├── encrypt-api-key.js      # Encrypt OpenAI API key
+│   └── process-business-codes.js # Convert JIGYOSYO.CSV to JSON
 └── icons/                       # Extension icons (16x16, 48x48, 128x128)
 ```
 
@@ -111,23 +123,51 @@ A modular Chrome extension that automates form filling for US visa applications 
 - **Dependencies**: Module templates from `sidebar.html`
 
 ### Postal Service (`postal-service.js`)
-- **Purpose**: Japanese postal code to address conversion
+- **Purpose**: Japanese postal code to address conversion with dual data sources
 - **Location**: `/Users/hugo/tomitalaw_extension/sidebar/modules/postal/postal-service.js`
-- **API**: ZipCloud (https://zipcloud.ibsnet.co.jp/api/search)
+- **Data Sources**:
+  - Primary: ZipCloud API for regular postal codes (https://zipcloud.ibsnet.co.jp/api/search)
+  - Fallback: Local business codes database (22,209 corporate codes)
 - **Key Methods**:
-  - `lookup()`: Main postal code lookup
-  - `normalizePostalCode()`: Format validation
-  - `getBasePostalCode()`: Corporate code handling
-  - `formatResponse()`: Structure address components
+  - `lookup()`: Main lookup with ZipCloud → business codes → failed flow
+  - `loadBusinessCodes()`: Lazy load local database
+  - `lookupBusinessCode()`: Search local business codes
+  - `normalizePostalCode()`: Convert to 7-digit format
+  - `formatPostalCode()`: Format as XXX-XXXX
+  - `formatZipCloudResponse()`: Structure API response
+- **Business Code Detection**: 4th digit = 8 or 9 indicates corporate postal code
+
+### Photo Validation Service (`photo-service.js`)
+- **Purpose**: AI-powered passport photo validation for DS-160 requirements
+- **Location**: `/Users/hugo/tomitalaw_extension/sidebar/modules/photo/photo-service.js`
+- **API**: OpenAI GPT-4 Vision (gpt-4-vision-preview model)
+- **Key Methods**:
+  - `initialize()`: Decrypt and load API key
+  - `decrypt()`: Multi-layer decryption of API key
+  - `validatePhoto()`: Send photo to GPT-4 for analysis
+  - `convertToBase64()`: Prepare image for API
+- **Validation Checks**:
+  - Technical specs (2x2 inches, 600x600 pixels minimum)
+  - Composition (head size 50-69% of height, centered)
+  - Background (plain white/off-white)
+  - Quality (lighting, shadows, focus, red-eye)
+- **Security**: API key encrypted with XOR + Base64 + reverse + chunking
 
 ## Critical Patterns
 
 ### Module Registration Pattern
-All modules are registered in `modules.config.js`. To add a new module:
-1. Add configuration object to `MODULES` array
-2. Create content script in `content/modules/`
+All modules are registered in `modules.config.js`. Current modules:
+- **ds160**: DS-160 form filling for ceac.state.gov
+- **visa**: Visa scheduling for multiple sites
+- **postal**: Japanese postal code lookup
+- **photo**: Passport photo validation
+
+To add a new module:
+1. Add configuration object to `MODULES` array in `modules.config.js`
+2. Create content script in `content/modules/` (if needed)
 3. Add UI template to `sidebar.html`
-4. System automatically handles routing and initialization
+4. Add module handler in `sidebar.js`
+5. System automatically handles routing and initialization
 
 ### Message Passing Architecture
 ```javascript
@@ -216,6 +256,17 @@ chrome.tabs.sendMessage(tabId, { action: 'fillForm', module: 'ds160', data: {...
 { action: 'storeData', dataType: 'ds160', data: {...} }
 ```
 
+### External API Endpoints
+```javascript
+// ZipCloud postal code API
+GET https://zipcloud.ibsnet.co.jp/api/search?zipcode={7-digit-code}
+
+// OpenAI GPT-4 Vision API
+POST https://api.openai.com/v1/chat/completions
+Headers: { 'Authorization': 'Bearer {encrypted-api-key}' }
+Body: { model: 'gpt-4-vision-preview', messages: [...], max_tokens: 1000 }
+```
+
 ## Database/Data Structure
 
 ### DS-160 Data Format
@@ -284,6 +335,14 @@ chrome.tabs.sendMessage(tabId, { action: 'fillForm', module: 'ds160', data: {...
 - `/data/ds160/TEST_ACTUAL_DATA_SANITIZED.json`: Real data with sanitized values
 - `/data/ds160/TEST_SKIP_CHECKBOXES.json`: Tests checkbox skipping
 - `/data/visa/sample_data_4_dependents.json`: Multi-person visa data
+- `/data/photo/requirements.json`: DS-160 photo requirements for validation
+- `/data/postal/business-codes.json`: 22,209 business postal codes database
+
+### Test Scripts
+- `/test-postal-lookup.js`: Tests postal code lookup with both data sources
+- `/test-final-100-codes.js`: Comprehensive test with 100 postal codes
+- `/setup/encrypt-api-key.js`: Interactive script to encrypt OpenAI API key
+- `/setup/process-business-codes.js`: Convert JIGYOSYO.CSV to JSON database
 
 ### Debug Features
 - DS-160 crash recovery logs: `localStorage.getItem('ds160_debug_logs')`
@@ -314,25 +373,62 @@ chrome.tabs.sendMessage(tabId, { action: 'fillForm', module: 'ds160', data: {...
 - External messaging limited to specified domains in manifest
 
 ### Security Considerations
-- External messages only accepted from TomitaLaw domains
-- Data cleaned after 7 days automatically
+- External messages only accepted from whitelisted TomitaLaw domains
+- API keys encrypted using multi-layer obfuscation:
+  - XOR with salt string
+  - Base64 encoding
+  - String reversal
+  - Chunking into 4 parts
+- Data automatically cleaned after 7 days
 - No sensitive data logged to console in production
 - Password fields never auto-filled
+- Content Security Policy restricts network access to approved APIs
+- Photo validation API key never exposed in plain text
+
+## Recent Changes & Updates
+
+### Latest Updates (v1.2.0)
+- **Replaced Japan Post API**: Migrated from backend API (404 errors) to local business codes database
+- **Added Photo Validation**: Integrated OpenAI GPT-4 Vision for passport photo checks
+- **Postal Code System Overhaul**: 
+  - Primary: ZipCloud API for regular codes
+  - Fallback: Local database with 22,209 business codes
+  - Processing script converts JIGYOSYO.CSV (Shift-JIS) to JSON
+- **Security Enhancements**: Multi-layer API key encryption system
+- **Testing Infrastructure**: Added comprehensive postal code test scripts
+
+### Previous Updates (v1.1.0)
+- Fixed DS-160 two-pass filling system
+- Restored dependent selection functionality
+- Improved Atlas field support for new visa forms
+- Enhanced sidebar responsive design
 
 ## How to Use This Context
 
 For AI agents working with this codebase:
 
 1. **Adding New Forms**: Create module in `modules.config.js`, add content script with field mappings
-2. **Debugging Issues**: Check localStorage logs for DS-160, console for visa scheduling
+2. **Debugging Issues**: 
+   - DS-160: Check `localStorage.getItem('ds160_debug_logs')` for crash recovery
+   - Visa: Console logs with field-level detail
+   - Photo: Check API response for validation errors
+   - Postal: Verify data source (ZipCloud vs business codes)
 3. **Field Mapping**: Use browser DevTools to inspect field IDs, add to `findMatchingValue()`
-4. **Testing**: Use sample data files, modify `_testMode` flag for specific scenarios
-5. **Extending**: Follow module pattern - config → content script → sidebar template
+4. **Testing**: 
+   - Use sample data files in `/data/`
+   - Run test scripts: `node test-postal-lookup.js`
+   - Modify `_testMode` flag for specific scenarios
+5. **API Setup**:
+   - OpenAI: Run `npm run encrypt-key` to set up photo validation
+   - Postal: No setup needed (ZipCloud is free, business codes bundled)
+6. **Extending**: Follow module pattern - config → content script → sidebar template
 
 Key files to modify for common tasks:
 - New form support: `modules.config.js` + new content script
 - Field mapping fixes: `ds160-content.js` lines 900-1800 or `visa-content.js` lines 238-500
 - UI changes: `sidebar.html` templates + `sidebar.js` handlers
 - Data format changes: Update field mappings in respective content scripts
+- API integrations: Add service in `sidebar/modules/` following photo/postal pattern
+- Database updates: Process new data with scripts in `/setup/`
 
-This extension is actively maintained and designed for extensibility. The modular architecture allows easy addition of new visa forms or tools without affecting existing functionality.
+This extension is actively maintained and designed for extensibility. The modular architecture allows easy addition of new visa forms or tools without affecting existing functionality. The recent addition of AI-powered features and local databases demonstrates the flexibility of the architecture.
