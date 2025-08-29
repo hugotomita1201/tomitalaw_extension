@@ -1,10 +1,17 @@
 // Japanese Postal Code Service
-// Uses ZipCloud API for address lookup
+// Primary: Backend proxy (Japan Post API + ZipCloud fallback)
+// Fallback: Direct ZipCloud API call
 
 export class PostalCodeService {
   constructor() {
-    // ZipCloud API - Free, no authentication required
-    this.apiUrl = 'https://zipcloud.ibsnet.co.jp/api/search';
+    // Backend API endpoint (uses Japan Post API)
+    this.backendUrl = 'https://i129-backend-452425445497.us-central1.run.app/api/postal-lookup';
+    
+    // Direct ZipCloud API (fallback if backend unavailable)
+    this.zipCloudUrl = 'https://zipcloud.ibsnet.co.jp/api/search';
+    
+    // For local development, uncomment this:
+    // this.backendUrl = 'http://localhost:3000/api/postal-lookup';
   }
 
   /**
@@ -23,43 +30,105 @@ export class PostalCodeService {
         };
       }
 
-      // Call ZipCloud API
-      const response = await fetch(`${this.apiUrl}?zipcode=${normalized}`);
-      const data = await response.json();
+      // Try backend API first (has Japan Post + ZipCloud)
+      try {
+        console.log('Trying backend API for:', normalized);
+        const response = await fetch(`${this.backendUrl}?code=${normalized}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
 
-      // Handle corporate postal codes (4th digit is 8 or 9)
-      if ((!data.results || data.results.length === 0) && 
-          (normalized[3] === '8' || normalized[3] === '9')) {
-        // Try base postal code for corporate addresses
-        const baseCode = this.getBasePostalCode(normalized);
-        const baseResponse = await fetch(`${this.apiUrl}?zipcode=${baseCode}`);
-        const baseData = await baseResponse.json();
-        
-        if (baseData.status === 200 && baseData.results?.length > 0) {
-          return this.formatResponse(baseData.results[0], normalized, true);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            console.log(`✓ Found via backend (${data.source})`);
+            return data;
+          } else if (data.notFound) {
+            // Backend checked both APIs and found nothing
+            return data;
+          }
         }
+      } catch (backendError) {
+        console.warn('Backend API unavailable, trying direct ZipCloud:', backendError.message);
       }
 
-      // Check for valid response
-      if (data.status === 200 && data.results?.length > 0) {
-        return this.formatResponse(data.results[0], normalized, false);
-      } else if (data.status === 200 && !data.results) {
-        return {
-          success: false,
-          error: `Postal code ${this.formatPostalCode(normalized)} not found in database.`
-        };
-      } else {
-        return {
-          success: false,
-          error: 'Failed to lookup postal code. Please try again.'
-        };
+      // Fallback to direct ZipCloud API if backend is unavailable
+      try {
+        console.log('Trying direct ZipCloud API for:', normalized);
+        const response = await fetch(`${this.zipCloudUrl}?zipcode=${normalized}`);
+        const data = await response.json();
+
+        // Check for valid response
+        if (data.status === 200 && data.results?.length > 0) {
+          console.log('✓ Found via direct ZipCloud');
+          return this.formatZipCloudResponse(data.results[0], normalized);
+        } else if (data.status === 200 && !data.results) {
+          // Postal code not found
+          return {
+            success: false,
+            error: `Postal code ${this.formatPostalCode(normalized)} not found. Please enter the address manually.`,
+            notFound: true
+          };
+        }
+      } catch (zipCloudError) {
+        console.warn('Direct ZipCloud also failed:', zipCloudError.message);
       }
+
+      // All methods failed
+      return {
+        success: false,
+        error: 'Failed to lookup postal code. Please try again or enter the address manually.'
+      };
 
     } catch (error) {
       console.error('Postal code lookup error:', error);
       return {
         success: false,
         error: 'Network error. Please check your connection and try again.'
+      };
+    }
+  }
+
+  /**
+   * Lookup by digital address (7-character code)
+   * Only available via backend (Japan Post API)
+   * @param {string} digitalAddress - Digital address code
+   * @returns {Object} Address data or error
+   */
+  async lookupDigitalAddress(digitalAddress) {
+    try {
+      if (!digitalAddress || digitalAddress.length !== 7) {
+        return {
+          success: false,
+          error: 'Digital address must be exactly 7 characters (e.g., A7E2FK2)'
+        };
+      }
+
+      // Digital address only works via backend
+      const response = await fetch(`${this.backendUrl}?code=${digitalAddress}&type=digital`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      }
+
+      return {
+        success: false,
+        error: 'Failed to lookup digital address. Backend service may be unavailable.',
+        notFound: true
+      };
+    } catch (error) {
+      console.error('Digital address lookup error:', error);
+      return {
+        success: false,
+        error: 'Failed to lookup digital address. Please try again.'
       };
     }
   }
@@ -90,33 +159,17 @@ export class PostalCodeService {
   }
 
   /**
-   * Get base postal code for corporate addresses
-   * @param {string} postalCode - Corporate postal code
-   * @returns {string} Base area postal code
-   */
-  getBasePostalCode(postalCode) {
-    // Special handling for known corporate areas
-    if (postalCode.startsWith('2208')) {
-      // Minatomirai corporate codes
-      return '2200012';
-    }
-    // Generic fallback: XXX-8XXX → XXX-0001
-    return postalCode.slice(0, 3) + '0001';
-  }
-
-  /**
-   * Format API response into structured address data
+   * Format ZipCloud API response into structured address data
    * @param {Object} result - API result object
    * @param {string} postalCode - Original postal code
-   * @param {boolean} isCorporate - Whether this is a corporate code
    * @returns {Object} Formatted address data
    */
-  formatResponse(result, postalCode, isCorporate) {
+  formatZipCloudResponse(result, postalCode) {
     const formatted = this.formatPostalCode(postalCode);
     
     return {
       success: true,
-      isCorporate: isCorporate,
+      source: 'ZipCloud',
       data: {
         // Full formatted address
         fullAddress: `${result.address1}${result.address2}${result.address3}`,
