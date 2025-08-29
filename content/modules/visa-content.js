@@ -467,7 +467,16 @@ class VisaSchedulingFiller {
     const pageType = this.detectPageType();
     const isSignupPage = pageType === 'signup';
     
+    // Fields to skip - these are metadata, not form fields
+    const skipFields = ['id', 'displayName'];
+    
     Object.keys(data).forEach(key => {
+      // Skip metadata fields
+      if (skipFields.includes(key)) {
+        console.log(`Skipping ${key} - metadata field, not a form field`);
+        return;
+      }
+      
       // Skip signup email fields only - these are for account creation
       if (key === 'email' || key === 'reemail') {
         console.log(`Skipping ${key} - signup email field, user enters manually`);
