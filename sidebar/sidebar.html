@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>TomitaLaw AI Extension</title>
   <link rel="stylesheet" href="sidebar.css">
+  <link rel="stylesheet" href="components.css">
 </head>
 <body>
   <div class="sidebar-container">
@@ -34,15 +35,20 @@
     <!-- DS-160 Template -->
     <template id="ds160-template">
       <div class="module-content">
-        <div class="module-header">
-          <h2>📋 DS-160 Form Auto-Filler</h2>
-          <p>Auto-fill DS-160 visa application forms</p>
-        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="icon" id="ds160-icon"></span>
+              DS-160 Form Auto-Filler
+            </h2>
+            <p class="card-description">Auto-fill DS-160 visa application forms</p>
+          </div>
         
-        <!-- Data Input Section -->
-        <div id="ds160DataInputSection" class="input-section">
-          <label for="ds160-data">Paste Extracted Data (JSON format):</label>
-          <textarea id="ds160-data" class="data-input" placeholder='Paste the JSON data from the web app here...
+          <div class="card-content">
+            <!-- Data Input Section -->
+            <div id="ds160DataInputSection">
+              <label for="ds160-data" class="label">Paste Extracted Data (JSON format):</label>
+              <textarea id="ds160-data" class="textarea" placeholder='Paste the JSON data from the web app here...
 
 Example format:
 {
@@ -56,45 +62,50 @@ Example format:
   }
 }' rows="10"></textarea>
           
-          <div class="button-group">
-            <button class="btn btn-success" id="ds160-load">
-              Load Data
-            </button>
-            <button class="btn btn-danger" id="ds160-clear-input">
-              Clear
-            </button>
-          </div>
-        </div>
+              <div class="flex gap-2 mt-4">
+                <button class="btn btn-primary" id="ds160-load">
+                  <span class="icon-sm" id="ds160-load-icon"></span>
+                  Load Data
+                </button>
+                <button class="btn btn-outline" id="ds160-clear-input">
+                  Clear
+                </button>
+              </div>
+            </div>
 
-        <!-- Data Preview Section (hidden until data is loaded) -->
-        <div id="ds160DataSection" class="card" style="display: none;">
-          <div class="card-title">
-            <span class="icon">📄</span>
-            Extracted Data
-          </div>
+            <!-- Data Preview Section (hidden until data is loaded) -->
+            <div id="ds160DataSection" style="display: none;">
+              <div class="separator-horizontal"></div>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="icon" id="ds160-data-icon"></span>
+                <h3 class="font-semibold">Extracted Data</h3>
+              </div>
           <div id="ds160DataPreview" class="data-preview" style="background: #f8f9fa; border-radius: 6px; padding: 12px; font-family: 'Monaco', 'Menlo', monospace; font-size: 12px; max-height: 200px; overflow-y: auto; white-space: pre-wrap; margin-bottom: 15px;"></div>
           
-          <div class="button-group">
-            <button class="btn btn-primary" id="ds160-fill" style="grid-column: span 2;">
-              🚀 Auto-Fill DS-160 Form
-            </button>
-            <button class="btn btn-secondary" id="ds160-edit" style="grid-column: span 2;">
-              ✏️ Edit Data
-            </button>
-          </div>
-        </div>
+              <div class="flex flex-col gap-2 mt-4">
+                <button class="btn btn-primary w-full" id="ds160-fill">
+                  <span class="icon-sm" id="ds160-fill-icon"></span>
+                  Auto-Fill DS-160 Form
+                </button>
+                <button class="btn btn-secondary w-full" id="ds160-edit">
+                  ✏️ Edit Data
+                </button>
+              </div>
+            </div>
 
-        <div class="info-section">
-          <h3>Instructions:</h3>
-          <ol>
-            <li>Navigate to the DS-160 form page (ceac.state.gov)</li>
-            <li>Paste your extracted JSON data above</li>
-            <li>Click "Load Data" to validate and preview</li>
-            <li>Click "Auto-Fill DS-160 Form" to fill the form</li>
-            <li>Review and complete any remaining fields</li>
-          </ol>
-        </div>
-      </div>
+            <div class="info-section mt-4">
+              <h3 class="font-semibold mb-2">Instructions:</h3>
+              <ol class="text-sm text-muted">
+                <li>Navigate to the DS-160 form page (ceac.state.gov)</li>
+                <li>Paste your extracted JSON data above</li>
+                <li>Click "Load Data" to validate and preview</li>
+                <li>Click "Auto-Fill DS-160 Form" to fill the form</li>
+                <li>Review and complete any remaining fields</li>
+              </ol>
+            </div>
+          </div> <!-- End card-content -->
+        </div> <!-- End card -->
+      </div> <!-- End module-content -->
     </template>
 
     <!-- Postal Code Lookup Template -->
@@ -197,6 +208,78 @@ Example format:
           <p>Powered by ZipCloud API - Official Japanese postal code database</p>
         </div>
       </div>
+    </template>
+
+    <!-- Text Extractor Template -->
+    <template id="text-extractor-template">
+      <div class="module-content">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="icon" id="text-extractor-icon"></span>
+              Text Extractor
+            </h2>
+            <p class="card-description">Extract text from documents and images using AI</p>
+          </div>
+        
+          <div class="card-content">
+            <!-- File Upload Section -->
+            <div id="text-extractor-drop-zone" class="drop-zone">
+              <input type="file" id="text-extractor-file-input" accept="image/*,.pdf" multiple hidden />
+              <span class="drop-zone-icon" id="text-extractor-upload-icon"></span>
+              <p class="drop-zone-text">Drop files here or click to browse</p>
+              <p class="drop-zone-hint">Supports: JPG, PNG, GIF, WebP, PDF<br/>Extract text from passports, IDs, handwritten forms, and documents</p>
+            </div>
+          
+            <!-- File List -->
+            <div id="text-extractor-file-list" class="mt-4"></div>
+            
+            <!-- Action Buttons -->
+            <div class="flex gap-2 mt-4">
+              <button id="text-extractor-process-btn" class="btn btn-primary" disabled>
+                <span class="icon-sm" id="text-extractor-process-icon"></span>
+                Process Files
+              </button>
+              <button id="text-extractor-clear-btn" class="btn btn-outline">
+                Clear
+              </button>
+            </div>
+        
+            <!-- Processing Indicator -->
+            <div id="text-extractor-processing" class="alert alert-info mt-4" style="display: none;">
+              <span class="spinner"></span>
+              <div>
+                <p class="alert-title">Processing</p>
+                <p class="alert-description">Extracting text with AI...</p>
+              </div>
+            </div>
+        
+            <!-- Status Messages -->
+            <div id="text-extractor-status" style="display: none;"></div>
+        
+            <!-- Results Section -->
+            <div class="mt-4">
+              <div class="flex justify-between items-center mb-2">
+                <h3 class="font-semibold">Extracted Data</h3>
+                <button id="text-extractor-export-all" class="btn btn-sm btn-secondary" style="display: none;">
+                  <span class="icon-sm" id="text-extractor-export-icon"></span>
+                  Export All
+                </button>
+              </div>
+              <div id="text-extractor-results"></div>
+            </div>
+        
+            <!-- History Section -->
+            <div class="mt-4">
+              <div class="flex justify-between items-center mb-2">
+                <h3 class="font-semibold">Recent Extractions</h3>
+                <button id="text-extractor-clear-history" class="btn btn-sm btn-ghost">Clear History</button>
+              </div>
+              <div id="text-extractor-history" class="history-list"></div>
+            </div>
+          </div> <!-- End card-content -->
+        </div> <!-- End card -->
+      </div> <!-- End module-content -->
     </template>
 
     <!-- Photo Checker Template -->
@@ -337,6 +420,16 @@ Example format:
     </template>
   </div>
 
+  <script src="icons/icons.js"></script>
+  <script src="libs/pdf.min.js"></script>
+  <script>
+    // Configure PDF.js worker
+    if (typeof pdfjsLib !== 'undefined') {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'libs/pdf.worker.min.js';
+    }
+  </script>
+  <script src="modules/text-extractor/text-extractor-service.js"></script>
+  <script src="modules/text-extractor/text-extractor-ui.js"></script>
   <script type="module" src="sidebar.js"></script>
 </body>
 </html>

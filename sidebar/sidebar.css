@@ -11,7 +11,7 @@ body {
   background: #f5f5f5;
   color: #333;
   width: 100%;
-  min-width: 320px;
+  min-width: 380px; /* Increased from 320px to accommodate all tabs */
   max-width: 600px;
   min-height: 600px;
   margin: 0;
@@ -71,6 +71,7 @@ body {
   width: 100%;
   overflow-x: auto;
   scrollbar-width: thin;
+  padding-right: 8px; /* Extra padding to prevent last tab cutoff */
 }
 
 .tab-navigation::-webkit-scrollbar {
@@ -87,28 +88,41 @@ body {
 }
 
 .tab-button {
-  flex: 1;
-  min-width: 80px;
+  flex: 1; /* Distribute space evenly */
+  min-width: 72px; /* Minimum width for readability */
+  max-width: 100px; /* Prevent over-stretching */
   flex-shrink: 0;
-  padding: 15px 10px;
+  padding: 12px 8px; /* Optimized padding */
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px; /* Slightly smaller font */
   font-weight: 500;
   color: #666;
   transition: all 0.3s ease;
   position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
 .tab-button:hover {
-  background: #f8f8f8;
-  color: #333;
+  background: rgba(255, 255, 255, 0.5);
+  color: hsl(222 47% 11%);
 }
 
 .tab-button.active {
-  color: #4A90E2;
-  background: #fff;
+  background: white;
+  color: hsl(222 47% 11%);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  font-weight: 500;
+}
+
+.tab-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px hsl(219 79% 58% / 0.5);
 }
 
 .tab-button.active::after {
@@ -122,8 +136,20 @@ body {
 }
 
 .tab-icon {
-  margin-right: 8px;
-  font-size: 16px;
+  width: 18px;
+  height: 18px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.tab-label {
+  font-size: 11px;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60px;
+  margin-top: 2px;
 }
 
 /* Tab Content */
@@ -403,6 +429,250 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Text Extractor Module Styles */
+.drop-zone {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #fafafa;
+  margin: 20px 0;
+}
+
+.drop-zone.drag-over {
+  border-color: #4A90E2;
+  background: #f0f7ff;
+}
+
+.drop-zone:hover {
+  border-color: #999;
+  background: #f5f5f5;
+}
+
+.drop-zone-content {
+  pointer-events: none;
+}
+
+.drop-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.file-list {
+  margin: 15px 0;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.file-icon {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+.file-name {
+  flex: 1;
+  font-size: 14px;
+  color: #333;
+}
+
+.file-size {
+  font-size: 12px;
+  color: #666;
+}
+
+.processing-indicator {
+  text-align: center;
+  padding: 30px;
+}
+
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #4A90E2;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
+}
+
+.result-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+
+.result-card.success {
+  border-color: #4CAF50;
+}
+
+.result-card.error {
+  border-color: #f44336;
+}
+
+.result-header {
+  padding: 15px;
+  background: #f8f9fa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.result-header h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.result-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.result-actions button {
+  padding: 5px 10px;
+  font-size: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+}
+
+.result-actions button:hover {
+  background: #f0f0f0;
+}
+
+.result-content {
+  padding: 15px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.result-content.collapsed {
+  display: none;
+}
+
+.document-type {
+  padding: 10px;
+  background: #e3f2fd;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.field-list {
+  margin: 15px 0;
+}
+
+.field-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.field-label {
+  font-weight: 600;
+  margin-right: 10px;
+  min-width: 150px;
+  color: #555;
+}
+
+.field-value {
+  flex: 1;
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 13px;
+  color: #333;
+}
+
+.copy-field-btn {
+  padding: 4px 8px;
+  font-size: 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.copy-field-btn:hover {
+  opacity: 1;
+}
+
+.json-view {
+  margin-top: 20px;
+}
+
+.json-view h4 {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #666;
+}
+
+.json-view pre {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 15px;
+  font-size: 12px;
+  overflow-x: auto;
+  font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.history-list {
+  margin-top: 10px;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.history-filename {
+  font-weight: 500;
+  color: #333;
+}
+
+.history-date {
+  font-size: 12px;
+  color: #666;
+}
+
+.history-load-btn {
+  padding: 4px 10px;
+  font-size: 12px;
+  border: 1px solid #4A90E2;
+  color: #4A90E2;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.history-load-btn:hover {
+  background: #4A90E2;
+  color: white;
+}
+
+.no-history {
+  text-align: center;
+  color: #999;
+  padding: 20px;
+  font-style: italic;
 }
 
 /* Postal Code Module Styles */

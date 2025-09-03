@@ -186,16 +186,25 @@ class VisaSchedulingFiller {
     
     console.log('Starting form fill with data:', data);
     
+    // Detect page type first
+    const pageType = this.detectPageType();
+    
+    // Force payment page to use specialized function
+    if (pageType === 'payment') {
+      console.log('Payment page detected - using fillPaymentPage');
+      this.fillPaymentPage(data);
+      return;  // Exit early
+    }
+    
     // Check if data has atlas_ fields (new format)
     const hasAtlasFields = Object.keys(data).some(key => key.startsWith('atlas_'));
     
     if (hasAtlasFields) {
-      // Direct filling with atlas_ fields
+      // Direct filling with atlas_ fields for non-payment pages
       console.log('Using atlas_ field format');
       this.fillGenericFields(data);
     } else {
       // Legacy format - use page-specific functions
-      const pageType = this.detectPageType();
       
       switch(pageType) {
         case 'payment':
@@ -375,6 +384,40 @@ class VisaSchedulingFiller {
     this.showNotification('Signup form filled successfully!');
   }
   
+  // Extract apartment/floor/unit info from address for street2 field
+  extractAddressLine2(fullAddress) {
+    if (!fullAddress) return { street: '', unit: '' };
+    
+    // Common patterns for apartment/floor/unit
+    const patterns = [
+      // Japanese
+      /(\d+階)$/,                    // Floor: 6階
+      /(\d+[FＦ])$/,                  // Floor: 3F
+      /(\d+号室)$/,                  // Room: 101号室
+      /(\d+号)$/,                    // Number: 5号
+      // English
+      /(Apt\.?\s*\S+)$/i,            // Apt 4B
+      /(Suite\s*\S+)$/i,             // Suite 200
+      /(Unit\s*\S+)$/i,              // Unit 5A
+      /(Room\s*\S+)$/i,              // Room 305
+      /(#\s*\S+)$/,                  // #204
+      // With comma or space separation
+      /[,\s]+(\d+[階FＦ号室号])$/,    // , 6階
+      /[,\s]+((Apt|Suite|Unit|Room)\.?\s*\S+)$/i
+    ];
+    
+    for (const pattern of patterns) {
+      const match = fullAddress.match(pattern);
+      if (match) {
+        const unit = match[1].trim();
+        const street = fullAddress.substring(0, match.index).trim();
+        return { street, unit };
+      }
+    }
+    
+    return { street: fullAddress, unit: '' };
+  }
+  
   // Fill payment page (Ayobas Premium)
   fillPaymentPage(data) {
     // DO NOT FILL amount or receipt fields - user will enter manually
@@ -391,8 +434,23 @@ class VisaSchedulingFiller {
     this.fillField('postal_code', data.postal_code || data.atlas_mailing_postal_code);
     this.fillField('region', data.region || data.atlas_mailing_state);
     this.fillField('city', data.city || data.atlas_mailing_city);
-    this.fillField('street', data.street || data.atlas_mailing_street);
-    this.fillField('street2', data.street2 || ''); // Apartment/unit if extracted
+    
+    // Handle street address with smart extraction
+    let streetAddress = data.street || data.atlas_mailing_street;
+    let apartmentUnit = data.street2 || '';
+    
+    // If street2 is empty but we have a street address, try to extract
+    if (!apartmentUnit && streetAddress) {
+      const extracted = this.extractAddressLine2(streetAddress);
+      streetAddress = extracted.street;
+      apartmentUnit = extracted.unit;
+      if (extracted.unit) {
+        console.log(`Extracted unit/floor "${extracted.unit}" from address`);
+      }
+    }
+    
+    this.fillField('street', streetAddress);
+    this.fillField('street2', apartmentUnit);
     
     // Phone number - use payment-specific phone or fall back to atlas mobile/home
     const phone = data.phone || data.atlas_mobile_phone || data.atlas_home_phone;

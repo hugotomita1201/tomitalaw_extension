@@ -1,14 +1,22 @@
 // TomitaLaw AI Extension - Sidebar Controller
 import { MODULES, getActiveModules } from '../modules.config.js';
+// Icons are loaded globally from icons.js
 
 // Current active module
 let currentModule = null;
 
 // Initialize sidebar when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  initializeTabs();
-  setupEventListeners();
-  loadFirstModule();
+  console.log('Sidebar initializing...');
+  try {
+    initializeTabs();
+    setupEventListeners();
+    loadFirstModule();
+  } catch (error) {
+    console.error('Error initializing sidebar:', error);
+    // Fallback to show something if initialization fails
+    document.querySelector('.tab-content').innerHTML = '<div class="card"><div class="card-content"><p>Error loading extension. Please reload.</p></div></div>';
+  }
 });
 
 // Initialize tab navigation
@@ -16,14 +24,38 @@ function initializeTabs() {
   const tabNav = document.querySelector('.tab-navigation');
   const activeModules = getActiveModules();
   
+  // Map module IDs to icon names
+  const moduleIcons = {
+    'ds160': 'fileText',
+    'visa': 'calendar',
+    'postal': 'mapPin',
+    'photo': 'camera',
+    'text-extractor': 'fileSearch'
+  };
+  
   activeModules.forEach((module, index) => {
     const tabButton = document.createElement('button');
     tabButton.className = 'tab-button';
     tabButton.dataset.moduleId = module.id;
-    tabButton.innerHTML = `
-      <span class="tab-icon">${module.icon}</span>
-      <span class="tab-label">${module.name}</span>
-    `;
+    
+    // Create icon element
+    const iconSpan = document.createElement('span');
+    iconSpan.className = 'tab-icon';
+    const iconName = moduleIcons[module.id] || 'file';
+    // Check if Icons is available, fallback to empty if not
+    if (typeof Icons !== 'undefined' && Icons[iconName]) {
+      iconSpan.innerHTML = Icons[iconName];
+    } else {
+      iconSpan.innerHTML = ''; // Empty icon if Icons not loaded
+    }
+    
+    // Create label element
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'tab-label';
+    labelSpan.textContent = module.name;
+    
+    tabButton.appendChild(iconSpan);
+    tabButton.appendChild(labelSpan);
     
     tabButton.addEventListener('click', () => switchToModule(module.id));
     tabNav.appendChild(tabButton);
@@ -59,6 +91,9 @@ function loadModuleContent(module) {
     const content = template.content.cloneNode(true);
     contentArea.appendChild(content);
     
+    // Add icons to the module content
+    injectModuleIcons(module);
+    
     // Setup module-specific event handlers
     setupModuleHandlers(module);
     
@@ -67,6 +102,34 @@ function loadModuleContent(module) {
   } else {
     contentArea.innerHTML = `<p>Module template not found for ${module.name}</p>`;
   }
+}
+
+// Inject icons into module content
+function injectModuleIcons(module) {
+  // Map of element IDs to icon names
+  const iconMappings = {
+    // DS-160 icons
+    'ds160-icon': 'fileText',
+    'ds160-load-icon': 'upload',
+    'ds160-data-icon': 'file',
+    'ds160-fill-icon': 'rocket',
+    
+    // Text Extractor icons
+    'text-extractor-icon': 'fileSearch',
+    'text-extractor-upload-icon': 'upload',
+    'text-extractor-process-icon': 'loader',
+    'text-extractor-export-icon': 'download',
+    
+    // Add more mappings as needed
+  };
+  
+  // Inject icons
+  Object.entries(iconMappings).forEach(([elementId, iconName]) => {
+    const element = document.getElementById(elementId);
+    if (element && Icons[iconName]) {
+      element.innerHTML = Icons[iconName];
+    }
+  });
 }
 
 // Setup event handlers for the current module
@@ -83,6 +146,9 @@ function setupModuleHandlers(module) {
       break;
     case 'photo':
       setupPhotoHandlers();
+      break;
+    case 'text-extractor':
+      setupTextExtractorHandlers();
       break;
     // Add more cases as modules are added
   }
@@ -906,6 +972,25 @@ async function setupPhotoHandlers() {
   }
 }
 
+// Text Extractor specific handlers
+function setupTextExtractorHandlers() {
+  try {
+    // Initialize the Text Extractor UI directly
+    // The scripts are now loaded in sidebar.html
+    if (typeof TextExtractorUI !== 'undefined') {
+      const textExtractorUI = new TextExtractorUI();
+      textExtractorUI.init();
+      console.log('[TextExtractor] Module initialized');
+    } else {
+      console.error('[TextExtractor] TextExtractorUI class not found');
+      showStatus('Failed to load Text Extractor module', 'error');
+    }
+  } catch (error) {
+    console.error('[TextExtractor] Failed to initialize module:', error);
+    showStatus('Failed to load Text Extractor module', 'error');
+  }
+}
+
 // Fill form by sending message to content script
 async function fillForm(moduleId, data) {
   try {
@@ -981,17 +1066,20 @@ function setupEventListeners() {
 
 // Show status message
 function showStatus(message, type = 'info') {
-  const statusEl = document.getElementById('status-message');
-  if (statusEl) {
-    statusEl.textContent = message;
-    statusEl.className = `status-message show ${type}`;
+  const statusBar = document.querySelector('.status-bar');
+  const statusMessage = document.getElementById('status-message');
+  
+  if (statusMessage) {
+    statusMessage.textContent = message;
+    statusMessage.className = `status-message alert-${type}`;
     
     // Auto-hide after 5 seconds
     setTimeout(() => {
-      statusEl.classList.remove('show');
+      statusMessage.textContent = '';
     }, 5000);
   }
 }
+
 
 // Utility: Debounce function
 function debounce(func, wait) {

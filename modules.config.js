@@ -3,7 +3,6 @@ export const MODULES = [
   {
     id: 'ds160',
     name: 'DS-160',
-    icon: '📋',
     description: 'Auto-fill DS-160 visa application forms',
     contentScript: 'ds160-content.js',
     domains: [
@@ -15,7 +14,6 @@ export const MODULES = [
   {
     id: 'visa',
     name: 'Visa Scheduling',
-    icon: '📅',
     description: 'Auto-fill US Visa Scheduling forms',
     contentScript: 'visa-content.js',
     domains: [
@@ -30,7 +28,6 @@ export const MODULES = [
   {
     id: 'postal',
     name: 'Postal Lookup',
-    icon: '📮',
     description: 'Japanese postal code to address lookup',
     contentScript: null, // No content script needed - utility tool
     domains: [], // Works on any site
@@ -40,11 +37,19 @@ export const MODULES = [
   {
     id: 'photo',
     name: 'Photo Checker',
-    icon: '📸',
     description: 'AI-powered passport photo validation',
     contentScript: null, // No content script needed - utility tool
     domains: [], // Works on any site
     dataKey: 'photoData',
+    active: true
+  },
+  {
+    id: 'text-extractor',
+    name: 'Text Extractor',
+    description: 'Extract text from documents and images using AI',
+    contentScript: null, // No content script needed - utility tool
+    domains: [], // Works on any site
+    dataKey: 'textExtractorData',
     active: true
   }
   // To add a new tool in the future:
