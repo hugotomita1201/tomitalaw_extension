@@ -115,7 +115,7 @@ class TwoPassFiller {
       ],
       'addressPhone': [
         'tbxAPP_ADDR_LN1', 'tbxAPP_ADDR_LN2', 'tbxAPP_ADDR_CITY',
-        'ddlAPP_ADDR_STATE', 'tbxAPP_ADDR_POSTAL_CD', 'ddlAPP_ADDR_CNTRY',
+        'ddlAPP_ADDR_STATE', 'tbxAPP_ADDR_POSTAL_CD', 'ddlAPP_ADDR_CNTRY', 'ddlCountry',
         'tbxAPP_HOME_TEL', 'tbxAPP_MOBILE_TEL', 'tbxAPP_BUS_TEL',
         'tbxAPP_EMAIL', 'tbxAPP_HOME_ADDR'
       ],
@@ -173,6 +173,120 @@ class TwoPassFiller {
         'rblTerroristOrg', 'rblGenocide', 'rblTorture', 'rblExViolence',
         'rblChildSoldier', 'rblReligiousFreedom', 'rblPopulationControls',
         'rblTransplant'
+      ],
+      'evisaBusiness': [
+        'tbxBusinessName', 'ddlBusinessType', 
+        'dllBusinessStartDateDay', 'ddlBusinessStartMonth', 'tbxBusinessStartDateYear',
+        'tbxBusinessStartCity', 'ddlBusinessStartState',
+        'ddlEVISA_OFFICE_TYPE', 'tbxEVISA_OFFICE_NAME',
+        'tbxEVISA_OFFICE_ST_LN1', 'tbxEVISA_OFFICE_ST_LN2',
+        'tbxEVISA_OFFICE_CITY', 'tbxEVISA_OFFICE_STATE',
+        'cbxEVISA_OFFICE_STATE_NA', 'tbxEVISA_OFFICE_POSTAL_CD',
+        'cbxEVISA_OFFICE_POSTAL_CD_NA', 'ddlEVISA_OFFICE_CNTRY',
+        'tbxEVISA_OFFICE_TEL', 'tbxEVISA_OFFICE_FAX',
+        'cbxEVISA_BUS_NATURE_GEN_IND', 'cbxEVISA_BUS_NATURE_EXP_IND', 
+        'cbxEVISA_BUS_NATURE_RET_IND', 'cbxEVISA_BUS_NATURE_IMP_IND',
+        'cbxEVISA_BUS_NATURE_MAN_IND', 'cbxEVISA_BUS_NATURE_SVC_IND',
+        'cbxEVISA_BUS_NATURE_OTH_IND', 'tbxBusinessNatureDescription'
+      ],
+      'evisaInvestment': [
+        // Investment type
+        'rblEVISA_BUS_TYPE_IND', 'cbxEVISA_BUS_TYPE_NA',
+        // Financial year
+        'tbxEVISA_BUS_FI_YR', 'rblEVISA_BUS_FI_YR_TYPE',
+        // Investment amounts
+        'tbxEVISA_BUS_CI_INITIAL', 'tbxEVISA_BUS_CI_TOTAL',
+        'tbxEVISA_BUS_II_INITIAL', 'tbxEVISA_BUS_II_TOTAL', 
+        'tbxEVISA_BUS_EI_INITIAL', 'tbxEVISA_BUS_EI_TOTAL',
+        'tbxEVISA_BUS_PI_INITIAL', 'tbxEVISA_BUS_PI_TOTAL',
+        'tbxEVISA_BUS_OI_INITIAL', 'tbxEVISA_BUS_OI_TOTAL',
+        // Source of funds
+        'ddlInvestmentCaptial', 'ddlFundsFrom', 'tbxEVISA_BUS_INV_FUNDS_AMT',
+        // Documentation
+        'cbxEVISA_BUS_INV_DOC_WIRE_IND', 'cbxEVISA_BUS_INV_DOC_BANK_IND',
+        'cbxEVISA_BUS_INV_DOC_NOTE_IND', 'cbxEVISA_BUS_INV_DOC_OTH_IND'
+      ],
+      'evisaForeignBusiness': [
+        // Radio button questions
+        'rblForeignBusinessQuestion', 'rblForeignEntityQuestion',
+        'rblForeignIndividualOwnerQuestion',
+        // Parent business fields (appear when Foreign Business = Yes)
+        'tbxEVISA_BUS_PARENT', 'tbxEVISA_BUS_PARENT_LN1', 
+        'tbxEVISA_BUS_PARENT_LN2', 'tbxEVISA_BUS_PARENT_CITY',
+        'tbxEVISA_BUS_PARENT_STATE', 'cbexEVISA_BUS_PARENT_STATE_NA',
+        'tbxEVISA_BUS_PARENT_POSTAL_CD', 'cbexEVISA_BUS_PARENT_POSTAL_CD_NA',
+        'ddlEVISA_BUS_PARENT_CNTRY', 'tbxEVISA_BUS_PARENT_TEL',
+        'tbxEVISA_BUS_PARENT_FAX',
+        // Foreign entity fields (appear when Foreign Entity = Yes)
+        'dtlForeignEntity_ctl00_tbxBUS_ENT_NAME',
+        'dtlForeignEntity_ctl00_ddlBUS_ENT_NATL',
+        'dtlForeignEntity_ctl00_tbxOWNERSHIP_PCT',
+        // Foreign individual owner fields (appear when Individual Owner = Yes)
+        'dtlForeignOwner_ctl00_tbxIND_OWNER_SURNAME',
+        'dtlForeignOwner_ctl00_tbxIND_OWNER_GIVEN_NAME',
+        'dtlForeignOwner_ctl00_tbxIND_OWNER_STATUS',
+        'dtlForeignOwner_ctl00_ddlIND_OWNER_RES_CNTRY',
+        'dtlForeignOwner_ctl00_ddlIND_OWNER_NATL',
+        'dtlForeignOwner_ctl00_tbxIND_OWNERSHIP_PCT'
+      ],
+      'evisaFinanceTrade': [
+        // Radio buttons for year/asset types
+        'rblYearType', 'rblAssetsType',
+        // Financial statement fields
+        'tbxEVISA_BUS_CASH', 'tbxEVISA_BUS_RECEIVABLES', 
+        'tbxEVISA_BUS_INVENTORY', 'tbxEVISA_BUS_OTHR_CURR_ASSTS',
+        'tbxEVISA_BUS_LAND', 'tbxEVISA_BUS_BUILDING', 
+        'tbxEVISA_BUS_MACHINERY', 'tbxEVISA_BUS_OTHR_PROP_ASSTS',
+        'tbxEVISA_BUS_LIABILITIES', 'tbxEVISA_BUS_DEBT',
+        'tbxEVISA_BUS_REVENUES', 'tbxEVISA_BUS_COSTS', 
+        'tbxEVISA_BUS_INCOME', 'tbxEVISA_BUS_TAX',
+        'tbxEVISA_GOODS_SOLD_VALUE', 'tbxEVISA_EXPORTED_VALUE',
+        'tbxEVISA_PRINCIPAL_TRADE_SERVICE', 'tbxEVISA_SERVICES_USA',
+        'tbxEVISA_BUS_IMP_US', 'tbxEVISA_BUS_IMP_OTHR',
+        'tbxEVISA_BUS_EXP_US', 'tbxEVISA_BUS_EXP_OTHR',
+        'tbxEVISA_BUS_MANUF_TRANS'
+      ],
+      'evisaUSPersonnel': [
+        // US Personnel fields (dynamic entries)
+        'dtlUSBusPers_ctl00_tbxEVISA_PSNL_SURNAME',
+        'dtlUSBusPers_ctl00_tbxEVISA_PSNL_GIVEN_NAME',
+        'dtlUSBusPers_ctl00_tbxEVISA_PSNL_POSITION',
+        'dtlUSBusPers_ctl00_tbxEVISA_PSNL_DIVISION',
+        'dtlUSBusPers_ctl00_ddlEVISA_PSNL_NATL',
+        'dtlUSBusPers_ctl00_ddlEVISA_PSNL_STATUS_IND',
+        'dtlUSBusPers_ctl00_tbxEVISA_PSNL_STATUS_OTH',
+        'dtlUSBusPers_ctl00_ddlEVISA_PSNL_VISA_TYPE',
+        'dtlUSBusPers_ctl00_ddlEVISA_PSNL_VISA_DTE_DY',
+        'dtlUSBusPers_ctl00_ddlEVISA_PSNL_VISA_DTE_MO',
+        'dtlUSBusPers_ctl00_tbxEVISA_PSNL_VISA_DTE_YR',
+        'dtlUSBusPers_ctl00_ddlEVISA_PSNL_VISA_PLACE',
+        'dtlUSBusPers_ctl00_tbxEVISA_PSNL_A_NUM',
+        'dtlUSBusPers_ctl00_cbxEVISA_PSNL_A_NUM_DNK'
+      ],
+      'evisaApplicantPosition': [
+        // Applicant Present Position fields
+        'ddlApplicantType', 'tbxPresentPosition',
+        'tbxEmployerName', 'tbxYearsWithEmployer',
+        // Employer Address
+        'tbxEmpStreetAddress1', 'tbxEmpStreetAddress2',
+        'tbxEmpCity', 'tbxEVISA_APP_EMP_STATE',
+        'cbexEVISA_APP_EMP_STATE_NA', 'tbxEVISA_APP_EMP_POSTAL_CD',
+        'cbexEVISA_APP_EMP_POSTAL_CD_NA', 'ddlEmpCountry',
+        // Education
+        'tbxSchool', 'tbxDegree', 'tbxMajor', 'tbxYear',
+        'rblOtherEducation'
+      ],
+      'evisaApplicantUSPosition': [
+        // Applicant Position in U.S. fields
+        'tbxTitle', 'tbxDuties', 'tbxSalary', 'tbxBenefits'
+      ],
+      
+      'evisaApplicationContact': [
+        // Application Contact Information fields
+        'tbxOfficerSurname', 'tbxOfficerGivenName', 'tbxOfficerPosition',
+        'tbxContactSurname', 'tbxContactGivenName', 'tbxAddress1', 'tbxAddress2',
+        'tbxCity', 'tbxEVISA_APP_POC_STATE', 'tbxEVISA_APP_POC_POSTAL_CD',
+        'ddlCountry', 'tbxPhoneNum', 'tbxEVISA_APP_POC_FAX', 'tbxEVISA_APP_POC_EMAIL'
       ]
     };
 
@@ -217,7 +331,15 @@ class TwoPassFiller {
       'passport': 'ddlPPT_TYPE',
       'family': 'tbxFATHER_SURNAME',
       'workEducation': 'ddlPresentOccupation',
-      'security': 'rblDisease'
+      'security': 'rblDisease',
+      'evisaBusiness': 'tbxBusinessName', // E-visa business profile page
+      'evisaForeignBusiness': 'rblForeignBusinessQuestion', // E-visa foreign parent business page
+      'evisaInvestment': 'rblEVISA_BUS_TYPE_IND', // E-visa investment information page
+      'evisaFinanceTrade': 'tbxEVISA_BUS_CASH', // E-visa finance and trade page
+      'evisaUSPersonnel': 'dtlUSBusPers', // E-visa US personnel information page
+      'evisaApplicantPosition': 'ddlApplicantType', // E-visa applicant present position page
+      'evisaApplicantUSPosition': 'tbxTitle', // E-visa applicant position in U.S. page
+      'evisaApplicationContact': 'tbxOfficerSurname' // E-visa application contact page
     };
 
     for (const [page, indicator] of Object.entries(pageIndicators)) {
@@ -249,12 +371,30 @@ class TwoPassFiller {
           return;
         }
         
-        // Skip already filled text inputs and selects (but not radio/checkboxes)
-        if ((element.type === 'text' || element.type === 'select-one') && element.value && element.value.trim() !== '') {
+        // Skip already filled text inputs (but not selects, radio/checkboxes)
+        // For dropdowns, we want to allow overwriting default values
+        if (element.type === 'text' && element.value && element.value.trim() !== '') {
           // Mark as filled so we don't try again
           this.filledFields.add(element.id);
           console.log(`[SKIP] Field ${element.id} already has value: ${element.value}`);
           return;
+        }
+        
+        // For dropdowns, only skip if it has a meaningful value (not default placeholders)
+        if (element.type === 'select-one' && element.value && element.value.trim() !== '') {
+          // List of default/placeholder values that should be overwritten
+          const defaultValues = ['', 'NONE', 'SONE', '- Select One -', '--'];
+          const isDefault = defaultValues.includes(element.value) || 
+                          element.selectedIndex === 0; // First option is usually default
+          
+          if (!isDefault) {
+            // Only skip if it's a meaningful value
+            this.filledFields.add(element.id);
+            console.log(`[SKIP] Dropdown ${element.id} already has meaningful value: ${element.value}`);
+            return;
+          }
+          // Allow overwriting default values
+          console.log(`[OVERRIDE] Dropdown ${element.id} has default value: ${element.value}, will fill`);
         }
         
         fields.push({
@@ -306,7 +446,16 @@ class TwoPassFiller {
       // Don't log every field fill attempt
       
       
-      if (field.type === 'text' || field.type === 'textarea' || field.type === 'tel' || field.type === 'email') {
+      // Check if this field should use script injection
+      const needsInjection = fieldId.includes('dtlPrevEmpl') && 
+                            (fieldId.includes('ddlEmpDateFrom') || fieldId.includes('ddlEmpDateTo'));
+      
+      if (needsInjection) {
+        // Use script injection for previous employer date dropdowns
+        console.log(`Using script injection for field: ${fieldId}`);
+        this.injectScript([{ id: fieldId, value: value }]);
+        
+      } else if (field.type === 'text' || field.type === 'textarea' || field.type === 'tel' || field.type === 'email') {
         // CRITICAL: Convert "N/A" to empty string to prevent crashes
         if (value === 'N/A' || value === 'n/a' || value === 'N/a') {
           value = '';  // Replace N/A with empty string
@@ -314,134 +463,19 @@ class TwoPassFiller {
         
         // Don't log every field operation
         
-        // Detect if we're on the previous travel page
-        const currentPage = this.detectCurrentPage();
-        const isOnPreviousTravelPage = currentPage === 'previousTravel';
+        // Simple filling - just set the value
+        element.value = value;
         
-        // Special handling for TEXT fields that get cleared by the form's JavaScript
-        // Only apply to text fields on Previous Travel page, not radio/checkboxes
-        const needsAggressiveFilling = (isOnPreviousTravelPage && !fieldId.includes('rbl')) ||  // Text fields on previous travel page
-            fieldId.includes('PETITION_NUM') || 
-            fieldId.includes('PPT_NUM') || 
-            fieldId.includes('Spouse') || 
-            fieldId.includes('SPOUSE') ||
-            fieldId.includes('PRIN_APP_PETITION_NUM') || 
-            fieldId === 'ctl00_SiteContentPlaceHolder_FormView1_tbxPETITION_NUM' ||
-            fieldId.includes('tbxSocialMediaIdent');
-            
-        if (needsAggressiveFilling) {
-          
-          // Method 1: Set value multiple times with delays
-          element.value = value;
-          element.dispatchEvent(new Event('input', { bubbles: true }));
-          element.dispatchEvent(new Event('change', { bubbles: true }));
-          
-          // Method 2: Monitor and re-fill if cleared
-          let refillAttempts = 0;
-          const maxRefillAttempts = 5;
-          const checkInterval = setInterval(() => {
-            if (element.value !== value && refillAttempts < maxRefillAttempts) {
-              console.log(`Re-filling ${fieldId} (attempt ${refillAttempts + 1})`);
-              element.value = value;
-              element.dispatchEvent(new Event('input', { bubbles: true }));
-              element.dispatchEvent(new Event('change', { bubbles: true }));
-              refillAttempts++;
-            } else if (element.value === value || refillAttempts >= maxRefillAttempts) {
-              clearInterval(checkInterval);
-              if (element.value === value) {
-                console.log(`Successfully kept ${fieldId} filled with value: ${value}`);
-              } else {
-                console.warn(`Failed to keep ${fieldId} filled after ${maxRefillAttempts} attempts`);
-              }
-            }
-          }, 200); // Check every 200ms
-          
-          // Method 3: Set value after a longer delay as backup
-          setTimeout(() => {
-            if (element.value !== value) {
-              console.log(`Final attempt to set ${fieldId}`);
-              element.value = value;
-              element.dispatchEvent(new Event('input', { bubbles: true }));
-              element.dispatchEvent(new Event('change', { bubbles: true }));
-            }
-          }, 2000);
-          
-          // Method 4: Extra aggressive for social media fields
-          if (fieldId.includes('tbxSocialMediaIdent') || fieldId.includes('dtlSocial')) {
-            console.log(`Extra aggressive filling for social media field: ${fieldId}`);
-            // First ensure the social media question is answered "Yes"
-            const socialYesRadio = document.getElementById('ctl00_SiteContentPlaceHolder_FormView1_rblAddSocial_0');
-            if (socialYesRadio && !socialYesRadio.checked) {
-              console.log('Clicking Yes on social media question first');
-              socialYesRadio.click();
-              socialYesRadio.dispatchEvent(new Event('change', { bubbles: true }));
-            }
-            
-            // Try multiple times with increasing delays
-            [100, 500, 1000, 1500, 3000, 5000].forEach(delay => {
-              setTimeout(() => {
-                if (element.value !== value) {
-                  console.log(`Social media refill attempt at ${delay}ms for ${fieldId}`);
-                  element.focus();
-                  element.value = value;
-                  element.dispatchEvent(new Event('input', { bubbles: true }));
-                  element.dispatchEvent(new Event('change', { bubbles: true }));
-                  element.dispatchEvent(new Event('blur', { bubbles: true }));
-                }
-              }, delay);
-            });
-          }
-        } else {
-          // Check if we're on work/education page and should be careful with events
-          const currentPage = this.detectCurrentPage();
-          const isWorkEducationPage = currentPage === 'workEducationPrevious' || currentPage === 'workEducation';
-          
-          element.value = value;
-          element.dispatchEvent(new Event('input', { bubbles: true }));
-          
-          // On work/education pages, skip change event for certain fields that might trigger postbacks
-          const skipChangeEvent = isWorkEducationPage && (
-            fieldId.includes('Country') || 
-            fieldId.includes('ddl') ||  // dropdowns
-            fieldId.includes('rbl')      // radio buttons
-          );
-          
-          if (!skipChangeEvent) {
-            element.dispatchEvent(new Event('change', { bubbles: true }));
-          } else {
-            this.log(`Skipping change event to avoid postback`, { fieldId });
-          }
-        }
+        // Trigger change event for form validation
+        element.dispatchEvent(new Event('change', { bubbles: true }));
+        
+        // Add simple retry mechanism for fields that might get cleared
+        // Retry up to 3 times with 4-second delays (like Lollylaw)
+        this.scheduleRetry(element, value, fieldId, 1);
       } else if (field.type === 'select' || field.type === 'select-one') {
-        // Now that we fixed the address issue, we can fill dropdowns normally!
-        // For dropdowns, try to match the value
-        this.log(`Processing dropdown field`, { fieldId, value, optionsCount: element.options.length });
+        // Simple dropdown filling
         const options = Array.from(element.options);
         let matched = false;
-        
-        // Debug country dropdowns
-        if (fieldId.includes('Country') || fieldId.includes('DropDownList2')) {
-          console.log(`[COUNTRY DROPDOWN] Field: ${fieldId}, Value to set: "${value}"`);
-          console.log(`[COUNTRY DROPDOWN] First 10 options:`, options.slice(0, 10).map(o => ({
-            value: o.value,
-            text: o.text
-          })));
-        }
-        
-        // Special debugging for Primary Occupation
-        if (fieldId.includes('ddlPresentOccupation')) {
-          console.log(`[PRIMARY OCCUPATION] Attempting to fill`);
-          console.log(`Field ID: ${fieldId}`);
-          console.log(`Value trying to set: "${value}"`);
-          console.log(`Current dropdown value: "${element.value}"`);
-          console.log(`Available options:`, options.slice(0, 5).map(o => ({ value: o.value, text: o.text })));
-        }
-        
-        // Debug logging for date dropdowns
-        if (fieldId.includes('Month') || fieldId.includes('Day')) {
-          console.log(`[DATE DROPDOWN] Setting ${fieldId} with value: "${value}"`);
-          console.log('[DATE DROPDOWN] First 15 options:', options.slice(0, 15).map(o => ({ value: o.value, text: o.text })));
-        }
         
         // Try exact match first
         for (const option of options) {
@@ -555,24 +589,11 @@ class TwoPassFiller {
         }
         
         if (matched) {
-          // Check if this is a problematic dropdown on present work page that causes reload
-          const currentPage = this.detectCurrentPage();
-          const isPresentWorkPage = currentPage === 'workEducation';
+          // Fire change event for dropdowns
+          element.dispatchEvent(new Event('change', { bubbles: true }));
           
-          // These specific dropdowns cause page reloads on present work page
-          const problematicPresentWorkDropdowns = isPresentWorkPage && (
-            fieldId.includes('ddlPresentOccupation') ||  // Primary Occupation causes reload
-            fieldId.includes('ddlEmpSchCountry')         // Country sometimes causes reload
-          );
-          
-          if (problematicPresentWorkDropdowns) {
-            console.log(`[RELOAD PREVENTION] Skipping change event for ${fieldId} to prevent page reload`);
-            this.log(`Skipping change event to prevent reload`, { fieldId });
-            // Value is set but change event not fired - form will validate on Next button
-          } else {
-            // Fire change event normally for other dropdowns
-            element.dispatchEvent(new Event('change', { bubbles: true }));
-          }
+          // Add retry mechanism for dropdowns too
+          this.scheduleRetry(element, element.value, fieldId, 1);
         } else {
           console.warn(`Could not find matching option for ${fieldId}: ${value}`);
           return false;
@@ -600,6 +621,334 @@ class TwoPassFiller {
       console.error(`Error filling ${fieldId}:`, error);
       return false;
     }
+  }
+
+  // Simple retry mechanism - inspired by Lollylaw's approach
+  scheduleRetry(element, expectedValue, fieldId, attemptNumber) {
+    // Max 3 attempts with 4-second delays
+    if (attemptNumber > 3) return;
+    
+    setTimeout(() => {
+      // Check if the value was cleared or changed
+      if (element.value !== expectedValue) {
+        console.log(`Retry ${attemptNumber}/3 for field ${fieldId}`);
+        element.value = expectedValue;
+        element.dispatchEvent(new Event('change', { bubbles: true }));
+        
+        // Schedule next retry if needed
+        this.scheduleRetry(element, expectedValue, fieldId, attemptNumber + 1);
+      }
+    }, 4000); // 4-second delay like Lollylaw
+  }
+
+  // Script injection for fields that need to run in page context
+  injectScript(fields, addButtonId = null) {
+    const script = document.createElement('script');
+    script.src = chrome.runtime.getURL('scripts/injected.js');
+    script.dataset.params = JSON.stringify({ 
+      fields: fields,
+      addButtonId: addButtonId 
+    });
+    document.body.appendChild(script);
+    script.onload = () => script.remove();
+  }
+
+  // Batch process all previous employers with Add Another functionality
+  fillPreviousEmployers(data) {
+    console.log('Starting batch processing for previous employers');
+    
+    // Find the Add Another button for employers - look for enabled buttons only
+    const addButtons = document.querySelectorAll('a[id*="InsertButtonPrevEmpl"]');
+    let employerAddButton = null;
+    
+    // Find the first enabled button (should be ctl00's button)
+    for (const btn of addButtons) {
+      if (!btn.disabled && !btn.hasAttribute('disabled')) {
+        employerAddButton = btn;
+        console.log('Found enabled Add Another button:', btn.id);
+        break;
+      }
+    }
+    
+    if (!employerAddButton) {
+      console.log('No enabled Add Another button found for employers');
+      // Log all buttons for debugging
+      console.log('Available buttons:', Array.from(addButtons).map(b => ({
+        id: b.id,
+        disabled: b.disabled || b.hasAttribute('disabled')
+      })));
+      return false;
+    }
+    
+    console.log(`Found Add Another button: ${employerAddButton.id}`);
+    
+    const allFields = [];
+    
+    // Process each employer
+    data.workEducation?.previousEmployers?.forEach((employer, index) => {
+      if (!employer) return;
+      
+      const ctl = `ctl${index.toString().padStart(2, '0')}`;
+      console.log(`Processing employer ${index}: ${employer.name}`);
+      
+      // Add all fields for this employer
+      // Basic information
+      if (employer.name) {
+        allFields.push({
+          id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_tbEmployerName`, 
+          value: this.sanitizeEmployerName(employer.name)
+        });
+      }
+      
+      // Address fields
+      if (employer.address?.street1) {
+        allFields.push({
+          id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_tbEmployerStreetAddress1`, 
+          value: this.truncateAddress(employer.address.street1)
+        });
+      }
+      if (employer.address?.street2) {
+        allFields.push({
+          id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_tbEmployerStreetAddress2`, 
+          value: employer.address.street2
+        });
+      }
+      if (employer.address?.city) {
+        allFields.push({
+          id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_tbEmployerCity`, 
+          value: employer.address.city
+        });
+      }
+      if (employer.address?.state) {
+        allFields.push({
+          id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_tbxPREV_EMPL_ADDR_STATE`, 
+          value: employer.address.state
+        });
+      }
+      if (employer.address?.postalCode) {
+        allFields.push({
+          id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_tbxPREV_EMPL_ADDR_POSTAL_CD`, 
+          value: employer.address.postalCode
+        });
+      }
+      if (employer.address?.country) {
+        allFields.push({
+          id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_ddlPREV_EMPL_ADDR_CNTRY`, 
+          value: this.mapCountry(employer.address.country)
+        });
+      }
+      
+      // Phone
+      if (employer.phone) {
+        allFields.push({
+          id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_tbEmployerPhone`, 
+          value: employer.phone
+        });
+      }
+      
+      // Job title
+      if (employer.jobTitle) {
+        allFields.push({
+          id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_tbJobTitle`, 
+          value: employer.jobTitle
+        });
+      }
+      
+      // Supervisor
+      if (employer.supervisorSurname) {
+        allFields.push({
+          id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_tbSupervisorSurname`, 
+          value: employer.supervisorSurname
+        });
+      }
+      if (employer.supervisorGivenName) {
+        allFields.push({
+          id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_tbSupervisorGivenName`, 
+          value: employer.supervisorGivenName
+        });
+      }
+      
+      // Start date fields
+      if (employer.startDate) {
+        const startDay = this.getDayFromDate(employer.startDate);
+        const startMonth = this.getMonthNumber(employer.startDate);
+        const startYear = this.getYearFromDate(employer.startDate);
+        
+        if (startDay) {
+          allFields.push({
+            id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_ddlEmpDateFromDay`, 
+            value: startDay
+          });
+        }
+        if (startMonth) {
+          allFields.push({
+            id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_ddlEmpDateFromMonth`, 
+            value: startMonth
+          });
+        }
+        if (startYear) {
+          allFields.push({
+            id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_tbxEmpDateFromYear`, 
+            value: startYear
+          });
+        }
+      }
+      
+      // End date fields
+      if (employer.endDate) {
+        const endDay = this.getDayFromDate(employer.endDate);
+        const endMonth = this.getMonthNumber(employer.endDate);
+        const endYear = this.getYearFromDate(employer.endDate);
+        
+        if (endDay) {
+          allFields.push({
+            id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_ddlEmpDateToDay`, 
+            value: endDay
+          });
+        }
+        if (endMonth) {
+          allFields.push({
+            id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_ddlEmpDateToMonth`, 
+            value: endMonth
+          });
+        }
+        if (endYear) {
+          allFields.push({
+            id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_tbxEmpDateToYear`, 
+            value: endYear
+          });
+        }
+      }
+      
+      // Duties
+      if (employer.duties) {
+        allFields.push({
+          id: `ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_${ctl}_tbDescribeDuties`, 
+          value: employer.duties
+        });
+      }
+    });
+    
+    // Filter out null/undefined values
+    const validFields = allFields.filter(f => f.value != null && f.value !== '' && f.value !== 'N/A');
+    
+    console.log(`Injecting ${validFields.length} fields for ${data.workEducation?.previousEmployers?.length} employers`);
+    
+    // Inject script with all fields and the add button
+    if (validFields.length > 0) {
+      this.injectScript(validFields, employerAddButton.id);
+      return true;
+    }
+    
+    return false;
+  }
+
+  // Batch process all immediate subordinates with Add Another functionality
+  fillImmediateSubordinates(data) {
+    console.log('Starting batch processing for immediate subordinates');
+    
+    // Find the Add Another button for subordinates - look for enabled buttons only
+    const addButtons = document.querySelectorAll('a[id*="InsertButtonImmSubor"], a[id*="InsertButton"][id*="Subor"], a[href*="InsertImmSubor"]');
+    let subordinateAddButton = null;
+    
+    // Find the first enabled button (should be ctl00's button)
+    for (const btn of addButtons) {
+      if (!btn.disabled && !btn.hasAttribute('disabled')) {
+        subordinateAddButton = btn;
+        console.log('Found enabled Add Another button for subordinates:', btn.id);
+        break;
+      }
+    }
+    
+    // If not found by ID pattern, try finding by proximity to subordinate fields
+    if (!subordinateAddButton) {
+      const subordinateSection = document.querySelector('input[id*="dtlImmSubor"]');
+      if (subordinateSection) {
+        // Look for "Add Another" link near the subordinate fields
+        const container = subordinateSection.closest('table, div, fieldset');
+        if (container) {
+          const links = container.querySelectorAll('a');
+          for (const link of links) {
+            if (link.textContent.includes('Add Another') || link.textContent.includes('Add') || 
+                link.getAttribute('href')?.includes('Insert')) {
+              subordinateAddButton = link;
+              console.log('Found Add Another button by proximity:', link.id || link.outerHTML.substring(0, 100));
+              break;
+            }
+          }
+        }
+      }
+    }
+    
+    if (!subordinateAddButton) {
+      console.log('No enabled Add Another button found for subordinates');
+      // Log all potential buttons for debugging
+      const allLinks = document.querySelectorAll('a[href*="Insert"], a:contains("Add")');
+      console.log('Available Insert links:', Array.from(allLinks).map(b => ({
+        id: b.id,
+        href: b.href,
+        text: b.textContent.trim(),
+        disabled: b.disabled || b.hasAttribute('disabled')
+      })));
+      return false;
+    }
+    
+    console.log(`Found Add Another button for subordinates: ${subordinateAddButton.id || 'no-id'}`);
+    
+    const allFields = [];
+    
+    // Process each subordinate
+    data.evisaApplicantUSPosition?.immediateSubordinates?.forEach((subordinate, index) => {
+      if (!subordinate) return;
+      
+      const ctl = `ctl${index.toString().padStart(2, '0')}`;
+      console.log(`Processing subordinate ${index}: ${subordinate.surname}, ${subordinate.givenName}`);
+      
+      // Add surname field
+      if (subordinate.surname) {
+        allFields.push({
+          id: `ctl00_SiteContentPlaceHolder_FormView1_dtlImmSubor_${ctl}_tbxEVISA_SUB_SURNAME`, 
+          value: subordinate.surname.toUpperCase()
+        });
+      }
+      
+      // Add given name field
+      if (subordinate.givenName) {
+        allFields.push({
+          id: `ctl00_SiteContentPlaceHolder_FormView1_dtlImmSubor_${ctl}_tbxEVISA_SUB_GIVEN_NAME`, 
+          value: subordinate.givenName.toUpperCase()
+        });
+      }
+    });
+    
+    const validFields = allFields.filter(field => field.value && field.value !== 'N/A');
+    
+    if (validFields.length === 0) {
+      console.log('No valid subordinate fields to fill');
+      return false;
+    }
+    
+    console.log(`Injecting ${validFields.length} fields for ${data.evisaApplicantUSPosition?.immediateSubordinates?.length} subordinates`);
+    
+    // Inject script with all fields and the add button
+    if (validFields.length > 0) {
+      this.injectSubordinateScript(validFields, subordinateAddButton.id || subordinateAddButton.getAttribute('href'));
+      return true;
+    }
+    
+    return false;
+  }
+
+  // Script injection specifically for subordinate fields
+  injectSubordinateScript(fields, addButtonId = null) {
+    const script = document.createElement('script');
+    script.src = chrome.runtime.getURL('scripts/injected-subordinates.js');
+    script.dataset.params = JSON.stringify({ 
+      fields: fields,
+      addButtonId: addButtonId 
+    });
+    document.body.appendChild(script);
+    script.onload = () => script.remove();
   }
 
   // Country code mapping for dropdowns
@@ -637,8 +986,163 @@ class TwoPassFiller {
     };
   }
 
+  // Map US state names to codes
+  mapUSState(state) {
+    if (!state) return null;
+    
+    // If already a 2-letter code, return it
+    if (state.length === 2) {
+      return state.toUpperCase();
+    }
+    
+    const stateUpper = state.toUpperCase();
+    
+    const stateMap = {
+      'ALABAMA': 'AL', 'ALASKA': 'AK', 'ARIZONA': 'AZ', 'ARKANSAS': 'AR',
+      'CALIFORNIA': 'CA', 'COLORADO': 'CO', 'CONNECTICUT': 'CT', 'DELAWARE': 'DE',
+      'FLORIDA': 'FL', 'GEORGIA': 'GA', 'HAWAII': 'HI', 'IDAHO': 'ID',
+      'ILLINOIS': 'IL', 'INDIANA': 'IN', 'IOWA': 'IA', 'KANSAS': 'KS',
+      'KENTUCKY': 'KY', 'LOUISIANA': 'LA', 'MAINE': 'ME', 'MARYLAND': 'MD',
+      'MASSACHUSETTS': 'MA', 'MICHIGAN': 'MI', 'MINNESOTA': 'MN', 'MISSISSIPPI': 'MS',
+      'MISSOURI': 'MO', 'MONTANA': 'MT', 'NEBRASKA': 'NE', 'NEVADA': 'NV',
+      'NEW HAMPSHIRE': 'NH', 'NEW JERSEY': 'NJ', 'NEW MEXICO': 'NM', 'NEW YORK': 'NY',
+      'NORTH CAROLINA': 'NC', 'NORTH DAKOTA': 'ND', 'OHIO': 'OH', 'OKLAHOMA': 'OK',
+      'OREGON': 'OR', 'PENNSYLVANIA': 'PA', 'RHODE ISLAND': 'RI', 'SOUTH CAROLINA': 'SC',
+      'SOUTH DAKOTA': 'SD', 'TENNESSEE': 'TN', 'TEXAS': 'TX', 'UTAH': 'UT',
+      'VERMONT': 'VT', 'VIRGINIA': 'VA', 'WASHINGTON': 'WA', 'WEST VIRGINIA': 'WV',
+      'WISCONSIN': 'WI', 'WYOMING': 'WY', 'DISTRICT OF COLUMBIA': 'DC',
+      'WASHINGTON DC': 'DC', 'WASHINGTON D.C.': 'DC', 'D.C.': 'DC'
+    };
+    
+    return stateMap[stateUpper] || state;
+  }
+
+  // Map business type descriptions to DS-160 codes
+  mapBusinessType(businessType) {
+    if (!businessType) return null;
+    
+    const typeUpper = businessType.toUpperCase();
+    
+    // Check for specific patterns in the business type string
+    if (typeUpper.includes('CORPORATION')) return 'C';
+    if (typeUpper.includes('PARTNERSHIP')) return 'P';
+    if (typeUpper.includes('BRANCH') || typeUpper.includes('LIAISON')) return 'B';
+    if (typeUpper.includes('PRIVATELY OWNED') || typeUpper.includes('PRIVATE')) return 'R';
+    if (typeUpper.includes('JOINT VENTURE')) return 'J';
+    if (typeUpper.includes('SUBSIDIARY')) return 'S';
+    if (typeUpper.includes('OTHER')) return 'O';
+    
+    // Direct mapping for codes
+    const mappings = {
+      'C': 'C',
+      'P': 'P',
+      'B': 'B',
+      'R': 'R',
+      'J': 'J',
+      'S': 'S',
+      'O': 'O'
+    };
+    
+    return mappings[businessType] || null;
+  }
+
+  // Parse business nature string into array of checkbox values
+  parseBusinessNature(natureString) {
+    if (!natureString) return [];
+    
+    const nature = [];
+    const upperString = natureString.toUpperCase();
+    
+    if (upperString.includes('GENERAL TRADE') || upperString.includes('TRADE')) {
+      nature.push('General Trade');
+    }
+    if (upperString.includes('EXPORT')) {
+      nature.push('Exports from U.S.');
+    }
+    if (upperString.includes('RETAIL')) {
+      nature.push('Retail Sales');
+    }
+    if (upperString.includes('IMPORT')) {
+      nature.push('Imports to U.S.');
+    }
+    if (upperString.includes('MANUFACTUR')) {
+      nature.push('Manufacturing');
+    }
+    if (upperString.includes('SERVICE') || upperString.includes('TECHNOLOGY') || upperString.includes('TECH')) {
+      nature.push('Services/Technology');
+    }
+    if (upperString.includes('RESEARCH') || upperString.includes('MANAGEMENT') || upperString.includes('CONSULTING')) {
+      if (!nature.includes('Services/Technology')) {
+        nature.push('Services/Technology');
+      }
+    }
+    
+    return nature;
+  }
+
+  // Transform evisaBusiness data structure for compatibility
+  transformEvisaBusinessData(data) {
+    if (!data.evisaBusiness) return data;
+    
+    const transformed = { ...data };
+    const evisa = data.evisaBusiness;
+    
+    // Parse business type
+    if (evisa.businessType && !evisa.businessTypeCode) {
+      transformed.evisaBusiness.businessTypeCode = this.mapBusinessType(evisa.businessType);
+      // Extract description after dash if present
+      const dashIndex = evisa.businessType.indexOf('–');
+      if (dashIndex > -1) {
+        transformed.evisaBusiness.businessActivities = evisa.businessType.substring(dashIndex + 1).trim();
+      }
+    }
+    
+    // Parse incorporation date
+    if (evisa.establishedDate && !evisa.incorporationDate) {
+      transformed.evisaBusiness.incorporationDate = evisa.establishedDate;
+    }
+    
+    // Parse incorporation place
+    if (evisa.establishedPlace && !evisa.incorporationCity && !evisa.incorporationState) {
+      const parts = evisa.establishedPlace.split(',').map(p => p.trim());
+      if (parts.length >= 2) {
+        transformed.evisaBusiness.incorporationCity = parts[0];
+        // Map state name to code
+        const statePart = parts[1].replace('USA', '').trim();
+        transformed.evisaBusiness.incorporationState = this.mapUSState(statePart);
+      }
+    }
+    
+    // Create office structure if not present
+    if (!evisa.offices && evisa.businessName) {
+      transformed.evisaBusiness.offices = [{
+        type: 'H', // Headquarters
+        name: evisa.businessName,
+        address: {
+          street1: data.travel?.usStreetAddress || data.travel?.companyInfo?.address1,
+          street2: data.travel?.usStreetAddress2 || data.travel?.companyInfo?.address2,
+          city: data.travel?.usCity || data.travel?.companyInfo?.city,
+          state: data.travel?.usState || data.travel?.companyInfo?.state,
+          postalCode: data.travel?.usZipCode || data.travel?.companyInfo?.zipCode,
+          country: 'USA'
+        },
+        phone: data.contact?.workPhone || data.workEducation?.presentEmployer?.phone
+      }];
+    }
+    
+    // Parse business nature
+    if (evisa.businessType && !evisa.natureOfBusiness) {
+      transformed.evisaBusiness.natureOfBusiness = this.parseBusinessNature(evisa.businessType);
+    }
+    
+    return transformed;
+  }
+
   // Find matching value in data for a field ID
   findMatchingValue(fieldId, data) {
+    // Transform evisaBusiness data if needed
+    data = this.transformEvisaBusinessData(data);
+    
     // CRITICAL: Prevent accessing previous employer/education fields when not on the right page
     const currentPage = this.detectCurrentPage();
     const isPreviousWorkField = fieldId.includes('dtlPrevEmpl') || fieldId.includes('dtlPrevEduc');
@@ -682,7 +1186,7 @@ class TwoPassFiller {
       const indexMatch = fieldId.match(/ctl(\d+)/);
       if (indexMatch) {
         const index = parseInt(indexMatch[1]);
-        const school = data.workEducation?.previousEducation?.[index];
+        const school = data.workEducation?.education?.institutions?.[index];
         if (school) {
           const addr1 = school.schoolAddr1;
           const addr2 = school.schoolAddr2;
@@ -740,7 +1244,7 @@ class TwoPassFiller {
         
         // Check if this is an education field
         if (fieldId.includes('dtlPrevEduc')) {
-          const educationCount = data.workEducation?.previousEducation?.length || 0;
+          const educationCount = data.workEducation?.education?.institutions?.length || 0;
           if (index >= educationCount) {
             this.log(`[SAFETY] Skipping education field - index out of bounds`, { 
               fieldId, 
@@ -810,7 +1314,7 @@ class TwoPassFiller {
     
     // Handle travel date months
     if (fieldId === 'ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEMonth') {
-      return this.getMonthNumber(data.travel?.intendedTravelDate);
+      return this.getMonthNumber(data.travel?.intendedArrivalDate);
     }
     if (fieldId === 'ctl00_SiteContentPlaceHolder_FormView1_ddlARRIVAL_US_DTEMonth') {
       return this.getMonthNumber(data.travel?.intendedArrivalDate);
@@ -842,7 +1346,8 @@ class TwoPassFiller {
       const match = fieldId.match(/ctl(\d+)/);
       if (match) {
         const index = parseInt(match[1]);
-        return this.getMonthNumber(data.previousTravel?.visits?.[index]?.arrivalDate);
+        const visit = data.previousTravel?.visits?.[index];
+        return this.getMonthNumber(visit?.arrivalDate || visit?.entryDate);
       }
     }
     
@@ -897,6 +1402,28 @@ class TwoPassFiller {
     //   currentPage: currentPageCheck 
     // });
     
+    // Special handling for City field based on current page
+    // The same field ID is used on multiple pages for different purposes
+    if (fieldId === 'ctl00_SiteContentPlaceHolder_FormView1_tbxCity') {
+      const currentPage = this.detectCurrentPage();
+      
+      if (currentPage === 'evisaApplicationContact') {
+        // On E-visa Application Contact page - contact's city
+        return data.evisaApplicationContact?.address?.city || 
+               data.evisa_application_contact?.address?.city ||
+               data.evisaApplicationContact?.city ||
+               data.evisa_application_contact?.city;
+      }
+      // For travel and other pages, fall through to fieldMappings
+      // which will use data.travel?.usCity
+    }
+    
+    // Helper function to handle missing security fields - defaults to false
+    // This allows the JSON to omit the entire security section if all values are false
+    const getSecurityValue = (value) => {
+      return value === true || value === 'YES' || value === 'yes';
+    };
+    
     // Direct field mappings
     const fieldMappings = {
       // Personal Information Page 1
@@ -919,32 +1446,18 @@ class TwoPassFiller {
       // Birth Location - These are on Page 1, NOT Page 2!
       'ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_POB_CITY': data.personal?.birthCity,
       'ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_POB_ST_PROVINCE': data.personal?.birthState,
-      'ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_POB_CNTRY': data.personal?.birthCountry,
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_POB_CNTRY': this.mapCountry(data.personal?.birthCountry),
       
-      // Other names (dynamic) - Split the name if it contains both given and surname
+      // Other names - Using structured format {surname: "", givenName: ""}
       'ctl00_SiteContentPlaceHolder_FormView1_DListAlias_ctl00_tbxSURNAME': (() => {
         const otherName = data.personal?.otherNames?.[0];
         if (!otherName) return '';
-        // If the name contains a space, split it (e.g., "BRYAN LI" -> surname: "LI")
-        const parts = otherName.trim().split(/\s+/);
-        if (parts.length > 1) {
-          // Last part is surname
-          return parts[parts.length - 1];
-        }
-        // If no space, it's likely just a surname variation
-        return otherName;
+        return otherName.surname || '';
       })(),
       'ctl00_SiteContentPlaceHolder_FormView1_DListAlias_ctl00_tbxGIVEN_NAME': (() => {
         const otherName = data.personal?.otherNames?.[0];
         if (!otherName) return '';
-        // If the name contains a space, split it (e.g., "BRYAN LI" -> given: "BRYAN")
-        const parts = otherName.trim().split(/\s+/);
-        if (parts.length > 1) {
-          // Everything except last part is given name
-          return parts.slice(0, -1).join(' ');
-        }
-        // If no space, leave given name empty
-        return '';
+        return otherName.givenName || '';
       })(),
       
       // Additional other names (if more than one)
@@ -966,16 +1479,16 @@ class TwoPassFiller {
       'ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_TelecodeGIVEN_NAME': data.personal?.telecodeGivenName,
       
       // Personal Information Page 2 - CRITICAL FIELDS
-      'ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_NATL': data.personal?.nationality,
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_NATL': this.mapCountry(data.personal?.nationality),
       
       // Dynamic fields for other nationalities (conditional - appear when "Yes" selected)
-      'ctl00_SiteContentPlaceHolder_FormView1_dtlOTHER_NATL_ctl00_ddlOTHER_NATL': data.personal?.otherNationalities?.[0],
-      'ctl00_SiteContentPlaceHolder_FormView1_dtlOTHER_NATL_ctl01_ddlOTHER_NATL': data.personal?.otherNationalities?.[1],
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlOTHER_NATL_ctl00_ddlOTHER_NATL': this.mapCountry(data.personal?.otherNationalities?.[0]),
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlOTHER_NATL_ctl01_ddlOTHER_NATL': this.mapCountry(data.personal?.otherNationalities?.[1]),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlOTHER_NATL_ctl00_tbxOTHER_PPT_NUM': data.personal?.otherPassportNumbers?.[0],
       'ctl00_SiteContentPlaceHolder_FormView1_dtlOTHER_NATL_ctl01_tbxOTHER_PPT_NUM': data.personal?.otherPassportNumbers?.[1],
       
       // Permanent resident country (conditional - appears when permanent resident = "Yes")
-      'ctl00_SiteContentPlaceHolder_FormView1_dtlOthPermResCntry_ctl00_ddlOthPermResCntry': data.personal?.permanentResidentCountry,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlOthPermResCntry_ctl00_ddlOthPermResCntry': this.mapCountry(data.personal?.permanentResidentCountry),
       
       // National ID - only fill if not N/A
       'ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_NATIONAL_ID': 
@@ -1009,10 +1522,33 @@ class TwoPassFiller {
       'ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_tbxPrincipleAppGivenName': data.travel?.principalApplicant?.givenName,
       'ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_tbxPRIN_APP_PETITION_NUM': data.travel?.principalApplicant?.petitionNumber,
       
-      // Intended Travel Date
-      'ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEDay': this.parseDate(data.travel?.intendedTravelDate)?.day,
-      'ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEMonth': this.getMonthNumber(data.travel?.intendedTravelDate),
-      'ctl00_SiteContentPlaceHolder_FormView1_tbxTRAVEL_DTEYear': this.parseDate(data.travel?.intendedTravelDate)?.year,
+      // E-visa specific fields for EXECUTIVE/MGR/ESSENTIAL EMP (E1/E2)
+      // Radio button: Has the principal Treaty Trader/Investor already been issued a visa?
+      'ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_rblEvisaEX_0': 
+        data.travel?.principalVisaIssued === true,
+      'ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_rblEvisaEX_1': 
+        data.travel?.principalVisaIssued === false || !data.travel?.principalVisaIssued,
+      
+      // If principal visa already issued (for E2-EX, E1-EX types)
+      'ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_tbxEVPrincipleAppSurname': 
+        data.travel?.evisaPrincipal?.surname,
+      'ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_tbxEVPrincipleAppGivenName': 
+        data.travel?.evisaPrincipal?.givenName,
+      'ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlDOBDay': 
+        this.parseDate(data.travel?.evisaPrincipal?.dateOfBirth)?.day,
+      'ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlDOBMonth': 
+        this.parseDate(data.travel?.evisaPrincipal?.dateOfBirth)?.month,
+      'ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_tbxDOBYear': 
+        this.parseDate(data.travel?.evisaPrincipal?.dateOfBirth)?.year,
+      
+      // Principal's company (for E2-SP, E2-CH, E1-SP, E1-CH types)
+      'ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_tbxPrincipalAppCompany': 
+        data.travel?.principalApplicant?.companyName,
+      
+      // Intended Travel Date - Use intendedArrivalDate since intendedTravelDate doesn't exist
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEDay': this.parseDate(data.travel?.intendedArrivalDate)?.day,
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEMonth': this.getMonthNumber(data.travel?.intendedArrivalDate),
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxTRAVEL_DTEYear': this.parseDate(data.travel?.intendedArrivalDate)?.year,
       
       // Length of Stay - handle both separate and combined formats
       'ctl00_SiteContentPlaceHolder_FormView1_tbxTRAVEL_LOS': 
@@ -1077,15 +1613,15 @@ class TwoPassFiller {
       
       // Previous US Visit Information (dynamic fields - ctl00 for first visit, ctl01 for second, etc.)
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_ddlPREV_US_VISIT_DTEDay': 
-        this.parseDate(data.previousTravel?.visits?.[0]?.arrivalDate)?.day,
+        this.parseDate(data.previousTravel?.visits?.[0]?.arrivalDate || data.previousTravel?.visits?.[0]?.entryDate)?.day,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_ddlPREV_US_VISIT_DTEMonth': 
-        this.getMonthNumber(data.previousTravel?.visits?.[0]?.arrivalDate),
+        this.getMonthNumber(data.previousTravel?.visits?.[0]?.arrivalDate || data.previousTravel?.visits?.[0]?.entryDate),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_tbxPREV_US_VISIT_DTEYear': 
-        this.parseDate(data.previousTravel?.visits?.[0]?.arrivalDate)?.year,
+        this.parseDate(data.previousTravel?.visits?.[0]?.arrivalDate || data.previousTravel?.visits?.[0]?.entryDate)?.year,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_tbxPREV_US_VISIT_LOS': 
-        data.previousTravel?.visits?.[0]?.lengthOfStayNumber,
+        data.previousTravel?.visits?.[0]?.lengthOfStayNumber || this.parseLengthOfStay(data.previousTravel?.visits?.[0]?.lengthOfStay)?.number,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_ddlPREV_US_VISIT_LOS_CD': 
-        this.mapStayUnit(data.previousTravel?.visits?.[0]?.lengthOfStayUnit),
+        this.mapStayUnit(data.previousTravel?.visits?.[0]?.lengthOfStayUnit || this.parseLengthOfStay(data.previousTravel?.visits?.[0]?.lengthOfStay)?.unit),
       
       // Additional visits - Only fill if the visit data exists
       // Visit 2 (ctl01)
@@ -1094,15 +1630,15 @@ class TwoPassFiller {
         if (visit2) {
           return {
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_ddlPREV_US_VISIT_DTEDay': 
-              this.parseDate(visit2.arrivalDate)?.day,
+              this.parseDate(visit2.arrivalDate || visit2.entryDate)?.day,
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_ddlPREV_US_VISIT_DTEMonth': 
-              this.getMonthNumber(visit2.arrivalDate),
+              this.getMonthNumber(visit2.arrivalDate || visit2.entryDate),
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_tbxPREV_US_VISIT_DTEYear': 
-              this.parseDate(visit2.arrivalDate)?.year,
+              this.parseDate(visit2.arrivalDate || visit2.entryDate)?.year,
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_tbxPREV_US_VISIT_LOS': 
-              visit2.lengthOfStayNumber,
+              visit2.lengthOfStayNumber || this.parseLengthOfStay(visit2.lengthOfStay)?.number,
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_ddlPREV_US_VISIT_LOS_CD': 
-              this.mapStayUnit(visit2.lengthOfStayUnit)
+              this.mapStayUnit(visit2.lengthOfStayUnit || this.parseLengthOfStay(visit2.lengthOfStay)?.unit)
           };
         }
         return {};
@@ -1114,15 +1650,15 @@ class TwoPassFiller {
         if (visit3) {
           return {
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl02_ddlPREV_US_VISIT_DTEDay': 
-              this.parseDate(visit3.arrivalDate)?.day,
+              this.parseDate(visit3.arrivalDate || visit3.entryDate)?.day,
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl02_ddlPREV_US_VISIT_DTEMonth': 
-              this.getMonthNumber(visit3.arrivalDate),
+              this.getMonthNumber(visit3.arrivalDate || visit3.entryDate),
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl02_tbxPREV_US_VISIT_DTEYear': 
-              this.parseDate(visit3.arrivalDate)?.year,
+              this.parseDate(visit3.arrivalDate || visit3.entryDate)?.year,
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl02_tbxPREV_US_VISIT_LOS': 
-              visit3.lengthOfStayNumber,
+              visit3.lengthOfStayNumber || this.parseLengthOfStay(visit3.lengthOfStay)?.number,
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl02_ddlPREV_US_VISIT_LOS_CD': 
-              this.mapStayUnit(visit3.lengthOfStayUnit)
+              this.mapStayUnit(visit3.lengthOfStayUnit || this.parseLengthOfStay(visit3.lengthOfStay)?.unit)
           };
         }
         return {};
@@ -1134,15 +1670,15 @@ class TwoPassFiller {
         if (visit4) {
           return {
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl03_ddlPREV_US_VISIT_DTEDay': 
-              this.parseDate(visit4.arrivalDate)?.day,
+              this.parseDate(visit4.arrivalDate || visit4.entryDate)?.day,
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl03_ddlPREV_US_VISIT_DTEMonth': 
-              this.getMonthNumber(visit4.arrivalDate),
+              this.getMonthNumber(visit4.arrivalDate || visit4.entryDate),
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl03_tbxPREV_US_VISIT_DTEYear': 
-              this.parseDate(visit4.arrivalDate)?.year,
+              this.parseDate(visit4.arrivalDate || visit4.entryDate)?.year,
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl03_tbxPREV_US_VISIT_LOS': 
-              visit4.lengthOfStayNumber,
+              visit4.lengthOfStayNumber || this.parseLengthOfStay(visit4.lengthOfStay)?.number,
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl03_ddlPREV_US_VISIT_LOS_CD': 
-              this.mapStayUnit(visit4.lengthOfStayUnit)
+              this.mapStayUnit(visit4.lengthOfStayUnit || this.parseLengthOfStay(visit4.lengthOfStay)?.unit)
           };
         }
         return {};
@@ -1154,27 +1690,29 @@ class TwoPassFiller {
         if (visit5) {
           return {
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl04_ddlPREV_US_VISIT_DTEDay': 
-              this.parseDate(visit5.arrivalDate)?.day,
+              this.parseDate(visit5.arrivalDate || visit5.entryDate)?.day,
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl04_ddlPREV_US_VISIT_DTEMonth': 
-              this.getMonthNumber(visit5.arrivalDate),
+              this.getMonthNumber(visit5.arrivalDate || visit5.entryDate),
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl04_tbxPREV_US_VISIT_DTEYear': 
-              this.parseDate(visit5.arrivalDate)?.year,
+              this.parseDate(visit5.arrivalDate || visit5.entryDate)?.year,
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl04_tbxPREV_US_VISIT_LOS': 
-              visit5.lengthOfStayNumber,
+              visit5.lengthOfStayNumber || this.parseLengthOfStay(visit5.lengthOfStay)?.number,
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl04_ddlPREV_US_VISIT_LOS_CD': 
-              this.mapStayUnit(visit5.lengthOfStayUnit)
+              this.mapStayUnit(visit5.lengthOfStayUnit || this.parseLengthOfStay(visit5.lengthOfStay)?.unit)
           };
         }
         return {};
       })(),
       
-      // US Driver's License
+      // US Driver's License - Support both array and single format
       'ctl00_SiteContentPlaceHolder_FormView1_dtlUS_DRIVER_LICENSE_ctl00_tbxUS_DRIVER_LICENSE': (() => {
         // Only fill if has license is true
         if (data.previousTravel?.driverLicense?.hasLicense !== true) {
           return null; // Don't fill if they don't have a license
         }
-        const licenseNumber = data.previousTravel?.driverLicense?.number;
+        // Check for array format first (licenses), then fall back to single format (number)
+        const licenseNumber = data.previousTravel?.driverLicense?.licenses?.[0]?.number || 
+                             data.previousTravel?.driverLicense?.number;
         console.log('[DRIVER LICENSE] Number field mapping:', licenseNumber);
         return licenseNumber;
       })(),
@@ -1183,7 +1721,9 @@ class TwoPassFiller {
         if (data.previousTravel?.driverLicense?.hasLicense !== true) {
           return null; // Don't fill if they don't have a license
         }
-        const state = data.previousTravel?.driverLicense?.state;
+        // Check for array format first (licenses), then fall back to single format (state)
+        const state = data.previousTravel?.driverLicense?.licenses?.[0]?.state || 
+                     data.previousTravel?.driverLicense?.state;
         console.log('[DRIVER LICENSE] State field mapping:', state);
         return state;
       })(),
@@ -1290,30 +1830,47 @@ class TwoPassFiller {
         true,  // Always select "No"
       
       // Travel companions - Are there other persons traveling with you?
-      // Always select "No" for work visa applicants
       'ctl00_SiteContentPlaceHolder_FormView1_rblOtherPersonsTravelingWithYou_0': 
-        false,  // Never select "Yes"
+        data.travelCompanions && data.travelCompanions.length > 0,
       'ctl00_SiteContentPlaceHolder_FormView1_rblOtherPersonsTravelingWithYou_1': 
-        true,  // Always select "No"
+        !data.travelCompanions || data.travelCompanions.length === 0,
       
       // Are you traveling as part of a group or organization?
-      // Always select "No" for work visa applicants
       'ctl00_SiteContentPlaceHolder_FormView1_rblGroupTravel_0': 
-        false,  // Never select "Yes"
+        data.travelGroup?.traveling === true,
       'ctl00_SiteContentPlaceHolder_FormView1_rblGroupTravel_1': 
-        true,  // Always select "No"
+        data.travelGroup?.traveling !== true,
       
       // Group name (if traveling as group - but we always select No)
       'ctl00_SiteContentPlaceHolder_FormView1_tbxGroupName': 
         data.travelGroup?.name || '',
       
-      // Travel companion details (if traveling with others - but we always select No)
-      'ctl00_SiteContentPlaceHolder_FormView1_dtlTravelCompanions_ctl00_tbxSurname': 
-        data.travelCompanions?.[0]?.surname || '',
-      'ctl00_SiteContentPlaceHolder_FormView1_dtlTravelCompanions_ctl00_tbxGivenName': 
-        data.travelCompanions?.[0]?.givenName || '',
-      'ctl00_SiteContentPlaceHolder_FormView1_dtlTravelCompanions_ctl00_ddlRelationship': 
-        data.travelCompanions?.[0]?.relationship || '',
+      // Travel companion details (if traveling with others)
+      'ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl00_tbxSurname': 
+        data.travelCompanions?.[0]?.surname,
+      'ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl00_tbxGivenName': 
+        data.travelCompanions?.[0]?.givenName,
+      'ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl00_ddlTCRelationship': 
+        this.mapRelationship(data.travelCompanions?.[0]?.relationship),
+      
+      // Additional travel companions (if more than one)
+      'ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl01_tbxSurname': 
+        data.travelCompanions?.[1]?.surname,
+      'ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl01_tbxGivenName': 
+        data.travelCompanions?.[1]?.givenName,
+      'ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl01_ddlTCRelationship': 
+        this.mapRelationship(data.travelCompanions?.[1]?.relationship),
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl02_tbxSurname': 
+        data.travelCompanions?.[2]?.surname,
+      'ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl02_tbxGivenName': 
+        data.travelCompanions?.[2]?.givenName,
+      'ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl02_ddlTCRelationship': 
+        this.mapRelationship(data.travelCompanions?.[2]?.relationship),
+      
+      // Group travel name (if traveling as part of a group)
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxGroupName': 
+        data.travelGroup?.name,
       
       // Payer address same as applicant
       'ctl00_SiteContentPlaceHolder_FormView1_rblPayerAddrSameAsInd_0': 
@@ -1353,7 +1910,19 @@ class TwoPassFiller {
       'ctl00_SiteContentPlaceHolder_FormView1_rblIV_PETITION_IND_1': 
         data.previousTravel?.immigrantPetition === false || !data.previousTravel?.immigrantPetition,
       
-      // US Driver's License
+      // Have you been to US before radio buttons
+      'ctl00_SiteContentPlaceHolder_FormView1_rblPREV_US_VISIT_IND_0': 
+        data.previousTravel?.hasBeenToUS === true,
+      'ctl00_SiteContentPlaceHolder_FormView1_rblPREV_US_VISIT_IND_1': 
+        data.previousTravel?.hasBeenToUS === false || !data.previousTravel?.hasBeenToUS,
+      
+      // US Driver's License radio buttons (using correct field names from the form)
+      'ctl00_SiteContentPlaceHolder_FormView1_rblUS_DRIVER_LICENSE_IND_0': 
+        data.previousTravel?.driverLicense?.hasLicense === true,
+      'ctl00_SiteContentPlaceHolder_FormView1_rblUS_DRIVER_LICENSE_IND_1': 
+        data.previousTravel?.driverLicense?.hasLicense === false || !data.previousTravel?.driverLicense?.hasLicense,
+      
+      // Also keeping old field names for backward compatibility
       'ctl00_SiteContentPlaceHolder_FormView1_rblPREV_US_DRIVER_LIC_IND_0': (() => {
         const hasLicense = data.previousTravel?.driverLicense?.hasLicense;
         console.log('[DRIVER LICENSE RADIO] YES option - hasLicense:', hasLicense, 'Will check:', hasLicense === true);
@@ -1368,9 +1937,10 @@ class TwoPassFiller {
       
       // Previous visa questions
       'ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_SAME_TYPE_IND_0': 
-        data.previousTravel?.previousVisa?.sameType === true,
+        data.previousTravel?.previousVisa?.sameType === true || data.previousTravel?.previousVisa?.sameVisaType === true,
       'ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_SAME_TYPE_IND_1': 
-        data.previousTravel?.previousVisa?.sameType === false || !data.previousTravel?.previousVisa?.sameType,
+        (data.previousTravel?.previousVisa?.sameType === false || data.previousTravel?.previousVisa?.sameVisaType === false) || 
+        (!data.previousTravel?.previousVisa?.sameType && !data.previousTravel?.previousVisa?.sameVisaType),
       
       'ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_SAME_CNTRY_IND_0': 
         data.previousTravel?.previousVisa?.sameCountry === true,
@@ -1397,7 +1967,7 @@ class TwoPassFiller {
       // === ADDRESS AND PHONE PAGE ===
       // Home Address
       'ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_LN1': data.contact?.homeStreet,
-      'ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_LN2': data.contact?.homeStreet2,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_LN2': data.contact?.homeStreet2 || data.contact?.homeApt,
       'ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_CITY': data.contact?.homeCity,
       'ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_STATE': data.contact?.homeState,
       'ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_ADDR_STATE_NA': 
@@ -1405,13 +1975,20 @@ class TwoPassFiller {
       'ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_POSTAL_CD': data.contact?.homePostalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_ADDR_POSTAL_CD_NA': 
         !data.contact?.homePostalCode || data.contact?.homePostalCode === 'N/A',
-      'ctl00_SiteContentPlaceHolder_FormView1_ddlCountry': this.mapCountry(data.contact?.homeCountry),
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlCountry': (() => {
+        const country = data.contact?.homeCountry;
+        const mapped = this.mapCountry(country);
+        console.log('[HOME COUNTRY] Input:', country, '→ Mapped:', mapped);
+        return mapped;
+      })(),
       
       // Mailing Address Same as Home
       'ctl00_SiteContentPlaceHolder_FormView1_rblMailingAddrSame_0': 
-        data.contact?.mailingSameAsHome === true || data.contact?.mailingSameAsHome === 'YES',
+        data.contact?.mailingSameAsHome === true || data.contact?.mailingAddressSameAsHome === true || 
+        data.contact?.mailingSameAsHome === 'YES' || data.contact?.mailingAddressSameAsHome === 'YES',
       'ctl00_SiteContentPlaceHolder_FormView1_rblMailingAddrSame_1': 
-        data.contact?.mailingSameAsHome === false || data.contact?.mailingSameAsHome === 'NO',
+        data.contact?.mailingSameAsHome === false || data.contact?.mailingAddressSameAsHome === false || 
+        data.contact?.mailingSameAsHome === 'NO' || data.contact?.mailingAddressSameAsHome === 'NO',
       
       // Phone Numbers
       'ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_HOME_TEL': data.contact?.primaryPhone || data.contact?.homePhone,
@@ -1472,9 +2049,9 @@ class TwoPassFiller {
       // The form goes directly to the dropdown and text field
       
       // "Do you wish to provide information about your presence on any other websites..." Question
-      // This is the rblAddSocial field - should default to NO
-      'ctl00_SiteContentPlaceHolder_FormView1_rblAddSocial_0': false,  // Yes radio button
-      'ctl00_SiteContentPlaceHolder_FormView1_rblAddSocial_1': true,   // No radio button - default to NO
+      // Always default to NO - this information is not needed
+      'ctl00_SiteContentPlaceHolder_FormView1_rblAddSocial_0': false,  // Yes radio button - always false
+      'ctl00_SiteContentPlaceHolder_FormView1_rblAddSocial_1': true,   // No radio button - always true
       
       // Other Websites/Applications Question - Default to NO unless additional platforms specified
       'ctl00_SiteContentPlaceHolder_FormView1_rblOtherWebsites_0': false,  // Yes radio button
@@ -1488,7 +2065,10 @@ class TwoPassFiller {
         return mapped;
       })(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl00_tbxSocialMediaIdent': (() => {
-        const handle = data.contact?.socialMediaAccounts?.[0]?.handle || data.contact?.socialMedia?.[0]?.handle || data.contact?.socialMedia?.[0]?.identifier;
+        const handle = data.contact?.socialMediaAccounts?.[0]?.handle || 
+                      data.contact?.socialMedia?.[0]?.handle || 
+                      data.contact?.socialMedia?.[0]?.username ||  // Support username field
+                      data.contact?.socialMedia?.[0]?.identifier;
         console.log('[SOCIAL MEDIA] Handle 0:', handle);
         return handle;
       })(),
@@ -1499,27 +2079,29 @@ class TwoPassFiller {
         return mapped;
       })(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl01_tbxSocialMediaIdent': (() => {
-        const handle = data.contact?.socialMediaAccounts?.[1]?.handle || data.contact?.socialMedia?.[1]?.handle;
+        const handle = data.contact?.socialMediaAccounts?.[1]?.handle || 
+                      data.contact?.socialMedia?.[1]?.handle ||
+                      data.contact?.socialMedia?.[1]?.username;  // Support username field
         console.log('[SOCIAL MEDIA] Handle 1:', handle);
         return handle;
       })(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl02_ddlSocialMedia': 
         this.mapSocialMediaPlatform(data.contact?.socialMediaAccounts?.[2]?.platform || data.contact?.socialMedia?.[2]?.platform),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl02_tbxSocialMediaIdent': 
-        data.contact?.socialMediaAccounts?.[2]?.handle || data.contact?.socialMedia?.[2]?.handle,
+        data.contact?.socialMediaAccounts?.[2]?.handle || data.contact?.socialMedia?.[2]?.handle || data.contact?.socialMedia?.[2]?.username,
       // Additional social media fields (up to 10 total)
       'ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl03_ddlSocialMedia': 
         this.mapSocialMediaPlatform(data.contact?.socialMediaAccounts?.[3]?.platform || data.contact?.socialMedia?.[3]?.platform),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl03_tbxSocialMediaIdent': 
-        data.contact?.socialMediaAccounts?.[3]?.handle || data.contact?.socialMedia?.[3]?.handle,
+        data.contact?.socialMediaAccounts?.[3]?.handle || data.contact?.socialMedia?.[3]?.handle || data.contact?.socialMedia?.[3]?.username,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl04_ddlSocialMedia': 
         this.mapSocialMediaPlatform(data.contact?.socialMediaAccounts?.[4]?.platform || data.contact?.socialMedia?.[4]?.platform),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl04_tbxSocialMediaIdent': 
-        data.contact?.socialMediaAccounts?.[4]?.handle || data.contact?.socialMedia?.[4]?.handle,
+        data.contact?.socialMediaAccounts?.[4]?.handle || data.contact?.socialMedia?.[4]?.handle || data.contact?.socialMedia?.[4]?.username,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl05_ddlSocialMedia': 
         this.mapSocialMediaPlatform(data.contact?.socialMediaAccounts?.[5]?.platform || data.contact?.socialMedia?.[5]?.platform),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl05_tbxSocialMediaIdent': 
-        data.contact?.socialMediaAccounts?.[5]?.handle || data.contact?.socialMedia?.[5]?.handle,
+        data.contact?.socialMediaAccounts?.[5]?.handle || data.contact?.socialMedia?.[5]?.handle || data.contact?.socialMedia?.[5]?.username,
       
       // === PASSPORT INFORMATION PAGE ===
       // Passport Type and Number
@@ -1534,10 +2116,12 @@ class TwoPassFiller {
         !data.passport?.bookNumber || data.passport?.bookNumber === 'N/A',
       
       // Passport Issuance
+      // PPT_ISSUED_CNTRY = The government/country that issued the passport
       'ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_CNTRY': 
-        this.mapCountry(data.passport?.issuingAuthority || data.passport?.issueCountry),
+        this.mapCountry(data.passport?.issuingAuthority),
+      // PPT_ISSUED_IN_CNTRY = Physical location country where passport was issued  
       'ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_IN_CNTRY': 
-        this.mapCountry(data.passport?.issueCountry || data.passport?.countryOfIssuance),
+        this.mapCountry(data.passport?.issueCountry),
       'ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_ISSUED_IN_CITY': data.passport?.issueCity,
       'ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_ISSUED_IN_STATE': data.passport?.issueState,
       
@@ -1728,7 +2312,7 @@ class TwoPassFiller {
       
       // Spouse's Address Type (new dropdown for address selection)
       'ctl00_SiteContentPlaceHolder_FormView1_ddlSpouseAddressType': 
-        this.mapSpouseAddressType(data.family?.spouse?.address || data.family?.spouseAddress),
+        this.mapSpouseAddressType(data.family?.spouse?.addressType || data.family?.spouse?.address || data.family?.spouseAddress),
       
       // Spouse's Address fields (when "Other" is selected - actual field IDs from HTML)
       'ctl00_SiteContentPlaceHolder_FormView1_tbxSPOUSE_ADDR_LN1': 
@@ -1751,20 +2335,20 @@ class TwoPassFiller {
       // === U.S. POINT OF CONTACT INFORMATION PAGE ===
       // Contact Person
       'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_SURNAME': 
-        data.usPointOfContact?.contactName?.split(' ').slice(-1)[0] || data.usPointOfContact?.contactSurname,
+        data.usContact?.contactPerson?.surname,
       'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_GIVEN_NAME': 
-        data.usPointOfContact?.contactName?.split(' ').slice(0, -1).join(' ') || data.usPointOfContact?.contactGivenName,
+        data.usContact?.contactPerson?.givenName,
       'ctl00_SiteContentPlaceHolder_FormView1_cbxUS_POC_NAME_NA': 
-        !data.usPointOfContact?.contactName && !data.usPointOfContact?.contactSurname,
+        !data.usContact?.contactPerson?.surname,
       
       // Organization
       'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ORGANIZATION': (() => {
-        const org = data.usPointOfContact?.contactOrganization || data.usPointOfContact?.organization;
+        const org = data.usContact?.organizationName;
         // Don't fill the text field if it's N/A - the checkbox will be checked instead
         return (org && org !== 'N/A') ? org : null;
       })(),
       'ctl00_SiteContentPlaceHolder_FormView1_cbxUS_POC_ORG_NA_IND': (() => {
-        const org = data.usPointOfContact?.contactOrganization || data.usPointOfContact?.organization;
+        const org = data.usContact?.organizationName;
         // Check the "Do Not Know" checkbox if organization is N/A or missing
         console.log('[US CONTACT] Organization value:', org, 'Will check Do Not Know:', !org || org === 'N/A');
         return !org || org === 'N/A';
@@ -1772,32 +2356,36 @@ class TwoPassFiller {
       
       // Relationship
       'ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_REL_TO_APP': 
-        this.mapRelationship(data.usPointOfContact?.contactRelationship || data.usPointOfContact?.relationship),
+        this.mapRelationship(data.usContact?.relationship),
       
       // Contact Address
       'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_LN1': 
-        data.usPointOfContact?.contactAddress1 || data.usPointOfContact?.address?.street1,
+        data.usContact?.address?.street1,
       'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_LN2': 
-        data.usPointOfContact?.contactAddress2 || data.usPointOfContact?.address?.street2,
+        data.usContact?.address?.street2,
       'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_CITY': 
-        data.usPointOfContact?.contactCity || data.usPointOfContact?.address?.city,
+        data.usContact?.address?.city,
       'ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_ADDR_STATE': 
-        data.usPointOfContact?.contactState || data.usPointOfContact?.address?.state,
+        data.usContact?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_POSTAL_CD': 
-        data.usPointOfContact?.contactZipCode || data.usPointOfContact?.address?.zipCode,
+        data.usContact?.address?.zipCode,
       
       // Contact Information
       'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_HOME_TEL': 
-        data.usPointOfContact?.contactPhone || data.usPointOfContact?.phone,
+        data.usContact?.phone,
       'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_EMAIL_ADDR': 
-        data.usPointOfContact?.contactEmail || data.usPointOfContact?.email,
+        data.usContact?.email,
       'ctl00_SiteContentPlaceHolder_FormView1_cbexUS_POC_EMAIL_ADDR_NA': 
-        !data.usPointOfContact?.contactEmail && !data.usPointOfContact?.email,
+        !data.usContact?.email,
       
       // === PRESENT WORK/EDUCATION/TRAINING INFORMATION PAGE ===
       // Primary Occupation
       'ctl00_SiteContentPlaceHolder_FormView1_ddlPresentOccupation': 
         this.mapOccupation(data.workEducation?.primaryOccupation),
+      
+      // Specify Other (when Primary Occupation is OTHER)
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxExplainOtherPresentOccupation': 
+        data.workEducation?.primaryOccupationOther || data.workEducation?.occupationOther,
       
       // Employer/School Information
       'ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSchName': 
@@ -1846,441 +2434,411 @@ class TwoPassFiller {
       'ctl00_SiteContentPlaceHolder_FormView1_rblPreviouslyEmployed_1': 
         !data.workEducation?.previousEmployers || data.workEducation?.previousEmployers.length === 0,
       'ctl00_SiteContentPlaceHolder_FormView1_rblOtherEduc_0': 
-        data.workEducation?.previousEducation && data.workEducation?.previousEducation.length > 0,
+        data.workEducation?.education?.institutions && data.workEducation?.education?.institutions.length > 0,
       'ctl00_SiteContentPlaceHolder_FormView1_rblOtherEduc_1': 
-        !data.workEducation?.previousEducation || data.workEducation?.previousEducation.length === 0,
+        !data.workEducation?.education?.institutions || data.workEducation?.education?.institutions.length === 0,
       
       // Dynamic Previous Employers (up to 5 entries typically)
       // First Employer (ctl00)
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbEmployerName': 
-        this.sanitizeEmployerName(data.workEducation?.previousEmployers?.[0]?.employerName),
+        this.sanitizeEmployerName(data.workEducation?.previousEmployers?.[0]?.name),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbEmployerStreetAddress1': 
-        this.truncateAddress(data.workEducation?.previousEmployers?.[0]?.employerStreetAddress1),
+        this.truncateAddress(data.workEducation?.previousEmployers?.[0]?.address?.street1),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbEmployerStreetAddress2': 
-        data.workEducation?.previousEmployers?.[0]?.employerStreetAddress2,
+        data.workEducation?.previousEmployers?.[0]?.address?.street2,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbEmployerCity': 
-        data.workEducation?.previousEmployers?.[0]?.employerCity,
+        data.workEducation?.previousEmployers?.[0]?.address?.city,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbxPREV_EMPL_ADDR_STATE': 
-        data.workEducation?.previousEmployers?.[0]?.employerState,
+        data.workEducation?.previousEmployers?.[0]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_cbxPREV_EMPL_ADDR_STATE_NA': 
-        !data.workEducation?.previousEmployers?.[0]?.employerState || 
-        data.workEducation?.previousEmployers?.[0]?.employerStateNA === true,
+        !data.workEducation?.previousEmployers?.[0]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbxPREV_EMPL_ADDR_POSTAL_CD': 
-        data.workEducation?.previousEmployers?.[0]?.employerPostalCode,
+        data.workEducation?.previousEmployers?.[0]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_cbxPREV_EMPL_ADDR_POSTAL_CD_NA': 
-        !data.workEducation?.previousEmployers?.[0]?.employerPostalCode || 
-        data.workEducation?.previousEmployers?.[0]?.employerPostalCodeNA === true,
+        !data.workEducation?.previousEmployers?.[0]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_DropDownList2': 
-        this.mapCountry(data.workEducation?.previousEmployers?.[0]?.employerCountry),
+        this.mapCountry(data.workEducation?.previousEmployers?.[0]?.address?.country),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbEmployerPhone': 
-        data.workEducation?.previousEmployers?.[0]?.employerPhone,
+        data.workEducation?.previousEmployers?.[0]?.phone,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbJobTitle': 
-        data.workEducation?.previousEmployers?.[0]?.jobTitle,
+        data.workEducation?.previousEmployers?.[0]?.duties,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbSupervisorSurname': 
         data.workEducation?.previousEmployers?.[0]?.supervisorSurname,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_cbxSupervisorSurname_NA': 
-        !data.workEducation?.previousEmployers?.[0]?.supervisorSurname || 
-        data.workEducation?.previousEmployers?.[0]?.supervisorSurnameNA === true,
+        !data.workEducation?.previousEmployers?.[0]?.supervisorSurname,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbSupervisorGivenName': 
         data.workEducation?.previousEmployers?.[0]?.supervisorGivenName,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_cbxSupervisorGivenName_NA': 
-        !data.workEducation?.previousEmployers?.[0]?.supervisorGivenName || 
-        data.workEducation?.previousEmployers?.[0]?.supervisorGivenNameNA === true,
+        !data.workEducation?.previousEmployers?.[0]?.supervisorGivenName,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_ddlEmpDateFromDay': 
-        data.workEducation?.previousEmployers?.[0]?.empDateFromDay,
+        (() => this.getDayFromDate(data.workEducation?.previousEmployers?.[0]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_ddlEmpDateFromMonth': 
-        data.workEducation?.previousEmployers?.[0]?.empDateFromMonth,
+        (() => this.getMonthNumber(data.workEducation?.previousEmployers?.[0]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbxEmpDateFromYear': 
-        data.workEducation?.previousEmployers?.[0]?.empDateFromYear,
+        (() => this.getYearFromDate(data.workEducation?.previousEmployers?.[0]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_ddlEmpDateToDay': 
-        data.workEducation?.previousEmployers?.[0]?.empDateToDay,
+        (() => this.getDayFromDate(data.workEducation?.previousEmployers?.[0]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_ddlEmpDateToMonth': 
-        data.workEducation?.previousEmployers?.[0]?.empDateToMonth,
+        (() => this.getMonthNumber(data.workEducation?.previousEmployers?.[0]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbxEmpDateToYear': 
-        data.workEducation?.previousEmployers?.[0]?.empDateToYear,
+        (() => this.getYearFromDate(data.workEducation?.previousEmployers?.[0]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbDescribeDuties': 
-        data.workEducation?.previousEmployers?.[0]?.describeDuties,
+        data.workEducation?.previousEmployers?.[0]?.duties,
       
       // Second Employer (ctl01) - if exists
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbEmployerName': 
-        this.sanitizeEmployerName(data.workEducation?.previousEmployers?.[1]?.employerName),
+        this.sanitizeEmployerName(data.workEducation?.previousEmployers?.[1]?.name),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbEmployerStreetAddress1': 
-        this.truncateAddress(data.workEducation?.previousEmployers?.[1]?.employerStreetAddress1),
+        this.truncateAddress(data.workEducation?.previousEmployers?.[1]?.address?.street1),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbEmployerStreetAddress2': 
-        data.workEducation?.previousEmployers?.[1]?.employerStreetAddress2,
+        data.workEducation?.previousEmployers?.[1]?.address?.street2,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbEmployerCity': 
-        data.workEducation?.previousEmployers?.[1]?.employerCity,
+        data.workEducation?.previousEmployers?.[1]?.address?.city,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbxPREV_EMPL_ADDR_STATE': 
-        data.workEducation?.previousEmployers?.[1]?.employerState,
+        data.workEducation?.previousEmployers?.[1]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_cbxPREV_EMPL_ADDR_STATE_NA': 
-        !data.workEducation?.previousEmployers?.[1]?.employerState || 
-        data.workEducation?.previousEmployers?.[1]?.employerStateNA === true,
+        !data.workEducation?.previousEmployers?.[1]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbxPREV_EMPL_ADDR_POSTAL_CD': 
-        data.workEducation?.previousEmployers?.[1]?.employerPostalCode,
+        data.workEducation?.previousEmployers?.[1]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_cbxPREV_EMPL_ADDR_POSTAL_CD_NA': 
-        !data.workEducation?.previousEmployers?.[1]?.employerPostalCode || 
-        data.workEducation?.previousEmployers?.[1]?.employerPostalCodeNA === true,
+        !data.workEducation?.previousEmployers?.[1]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_DropDownList2': 
-        this.mapCountry(data.workEducation?.previousEmployers?.[1]?.employerCountry),
+        this.mapCountry(data.workEducation?.previousEmployers?.[1]?.address?.country),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbEmployerPhone': 
-        data.workEducation?.previousEmployers?.[1]?.employerPhone,
+        data.workEducation?.previousEmployers?.[1]?.phone,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbJobTitle': 
-        data.workEducation?.previousEmployers?.[1]?.jobTitle,
+        data.workEducation?.previousEmployers?.[1]?.duties,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbSupervisorSurname': 
         data.workEducation?.previousEmployers?.[1]?.supervisorSurname,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_cbxSupervisorSurname_NA': 
-        !data.workEducation?.previousEmployers?.[1]?.supervisorSurname || 
-        data.workEducation?.previousEmployers?.[1]?.supervisorSurnameNA === true,
+        !data.workEducation?.previousEmployers?.[1]?.supervisorSurname,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbSupervisorGivenName': 
         data.workEducation?.previousEmployers?.[1]?.supervisorGivenName,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_cbxSupervisorGivenName_NA': 
-        !data.workEducation?.previousEmployers?.[1]?.supervisorGivenName || 
-        data.workEducation?.previousEmployers?.[1]?.supervisorGivenNameNA === true,
+        !data.workEducation?.previousEmployers?.[1]?.supervisorGivenName,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_ddlEmpDateFromDay': 
-        data.workEducation?.previousEmployers?.[1]?.empDateFromDay,
+        (() => this.getDayFromDate(data.workEducation?.previousEmployers?.[1]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_ddlEmpDateFromMonth': 
-        data.workEducation?.previousEmployers?.[1]?.empDateFromMonth,
+        (() => this.getMonthNumber(data.workEducation?.previousEmployers?.[1]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbxEmpDateFromYear': 
-        data.workEducation?.previousEmployers?.[1]?.empDateFromYear,
+        (() => this.getYearFromDate(data.workEducation?.previousEmployers?.[1]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_ddlEmpDateToDay': 
-        data.workEducation?.previousEmployers?.[1]?.empDateToDay,
+        (() => this.getDayFromDate(data.workEducation?.previousEmployers?.[1]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_ddlEmpDateToMonth': 
-        data.workEducation?.previousEmployers?.[1]?.empDateToMonth,
+        (() => this.getMonthNumber(data.workEducation?.previousEmployers?.[1]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbxEmpDateToYear': 
-        data.workEducation?.previousEmployers?.[1]?.empDateToYear,
+        (() => this.getYearFromDate(data.workEducation?.previousEmployers?.[1]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl01_tbDescribeDuties': 
-        data.workEducation?.previousEmployers?.[1]?.describeDuties,
+        data.workEducation?.previousEmployers?.[1]?.duties,
       
       // Third Employer (ctl02) - if exists
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_tbEmployerName': 
-        this.sanitizeEmployerName(data.workEducation?.previousEmployers?.[2]?.employerName),
+        this.sanitizeEmployerName(data.workEducation?.previousEmployers?.[2]?.name),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_tbEmployerStreetAddress1': 
-        this.truncateAddress(data.workEducation?.previousEmployers?.[2]?.employerStreetAddress1),
+        this.truncateAddress(data.workEducation?.previousEmployers?.[2]?.address?.street1),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_tbEmployerStreetAddress2': 
-        data.workEducation?.previousEmployers?.[2]?.employerStreetAddress2,
+        data.workEducation?.previousEmployers?.[2]?.address?.street2,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_tbEmployerCity': 
-        data.workEducation?.previousEmployers?.[2]?.employerCity,
+        data.workEducation?.previousEmployers?.[2]?.address?.city,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_tbxPREV_EMPL_ADDR_STATE': 
-        data.workEducation?.previousEmployers?.[2]?.employerState,
+        data.workEducation?.previousEmployers?.[2]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_cbxPREV_EMPL_ADDR_STATE_NA': 
-        !data.workEducation?.previousEmployers?.[2]?.employerState || 
-        data.workEducation?.previousEmployers?.[2]?.employerStateNA === true,
+        !data.workEducation?.previousEmployers?.[2]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_tbxPREV_EMPL_ADDR_POSTAL_CD': 
-        data.workEducation?.previousEmployers?.[2]?.employerPostalCode,
+        data.workEducation?.previousEmployers?.[2]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_cbxPREV_EMPL_ADDR_POSTAL_CD_NA': 
-        !data.workEducation?.previousEmployers?.[2]?.employerPostalCode || 
-        data.workEducation?.previousEmployers?.[2]?.employerPostalCodeNA === true,
+        !data.workEducation?.previousEmployers?.[2]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_DropDownList2': 
-        this.mapCountry(data.workEducation?.previousEmployers?.[2]?.employerCountry),
+        this.mapCountry(data.workEducation?.previousEmployers?.[2]?.address?.country),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_tbEmployerPhone': 
-        data.workEducation?.previousEmployers?.[2]?.employerPhone,
+        data.workEducation?.previousEmployers?.[2]?.phone,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_tbJobTitle': 
-        data.workEducation?.previousEmployers?.[2]?.jobTitle,
+        data.workEducation?.previousEmployers?.[2]?.duties,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_tbSupervisorSurname': 
         data.workEducation?.previousEmployers?.[2]?.supervisorSurname,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_cbxSupervisorSurname_NA': 
-        !data.workEducation?.previousEmployers?.[2]?.supervisorSurname || 
-        data.workEducation?.previousEmployers?.[2]?.supervisorSurnameNA === true,
+        !data.workEducation?.previousEmployers?.[2]?.supervisorSurname,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_tbSupervisorGivenName': 
         data.workEducation?.previousEmployers?.[2]?.supervisorGivenName,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_cbxSupervisorGivenName_NA': 
-        !data.workEducation?.previousEmployers?.[2]?.supervisorGivenName || 
-        data.workEducation?.previousEmployers?.[2]?.supervisorGivenNameNA === true,
+        !data.workEducation?.previousEmployers?.[2]?.supervisorGivenName,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_ddlEmpDateFromDay': 
-        data.workEducation?.previousEmployers?.[2]?.empDateFromDay,
+        (() => this.getDayFromDate(data.workEducation?.previousEmployers?.[2]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_ddlEmpDateFromMonth': 
-        data.workEducation?.previousEmployers?.[2]?.empDateFromMonth,
+        (() => this.getMonthNumber(data.workEducation?.previousEmployers?.[2]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_tbxEmpDateFromYear': 
-        data.workEducation?.previousEmployers?.[2]?.empDateFromYear,
+        (() => this.getYearFromDate(data.workEducation?.previousEmployers?.[2]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_ddlEmpDateToDay': 
-        data.workEducation?.previousEmployers?.[2]?.empDateToDay,
+        (() => this.getDayFromDate(data.workEducation?.previousEmployers?.[2]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_ddlEmpDateToMonth': 
-        data.workEducation?.previousEmployers?.[2]?.empDateToMonth,
+        (() => this.getMonthNumber(data.workEducation?.previousEmployers?.[2]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_tbxEmpDateToYear': 
-        data.workEducation?.previousEmployers?.[2]?.empDateToYear,
+        (() => this.getYearFromDate(data.workEducation?.previousEmployers?.[2]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl02_tbDescribeDuties': 
-        data.workEducation?.previousEmployers?.[2]?.describeDuties,
+        data.workEducation?.previousEmployers?.[2]?.duties,
       
       // Fourth Employer (ctl03) - if exists
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_tbEmployerName': 
-        this.sanitizeEmployerName(data.workEducation?.previousEmployers?.[3]?.employerName),
+        this.sanitizeEmployerName(data.workEducation?.previousEmployers?.[3]?.name),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_tbEmployerStreetAddress1': 
-        this.truncateAddress(data.workEducation?.previousEmployers?.[3]?.employerStreetAddress1),
+        this.truncateAddress(data.workEducation?.previousEmployers?.[3]?.address?.street1),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_tbEmployerStreetAddress2': 
-        data.workEducation?.previousEmployers?.[3]?.employerStreetAddress2,
+        data.workEducation?.previousEmployers?.[3]?.address?.street2,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_tbEmployerCity': 
-        data.workEducation?.previousEmployers?.[3]?.employerCity,
+        data.workEducation?.previousEmployers?.[3]?.address?.city,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_tbxPREV_EMPL_ADDR_STATE': 
-        data.workEducation?.previousEmployers?.[3]?.employerState,
+        data.workEducation?.previousEmployers?.[3]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_cbxPREV_EMPL_ADDR_STATE_NA': 
-        !data.workEducation?.previousEmployers?.[3]?.employerState || 
-        data.workEducation?.previousEmployers?.[3]?.employerStateNA === true,
+        !data.workEducation?.previousEmployers?.[3]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_tbxPREV_EMPL_ADDR_POSTAL_CD': 
-        data.workEducation?.previousEmployers?.[3]?.employerPostalCode,
+        data.workEducation?.previousEmployers?.[3]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_cbxPREV_EMPL_ADDR_POSTAL_CD_NA': 
-        !data.workEducation?.previousEmployers?.[3]?.employerPostalCode || 
-        data.workEducation?.previousEmployers?.[3]?.employerPostalCodeNA === true,
+        !data.workEducation?.previousEmployers?.[3]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_DropDownList2': 
-        this.mapCountry(data.workEducation?.previousEmployers?.[3]?.employerCountry),
+        this.mapCountry(data.workEducation?.previousEmployers?.[3]?.address?.country),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_tbEmployerPhone': 
-        data.workEducation?.previousEmployers?.[3]?.employerPhone,
+        data.workEducation?.previousEmployers?.[3]?.phone,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_tbJobTitle': 
-        data.workEducation?.previousEmployers?.[3]?.jobTitle,
+        data.workEducation?.previousEmployers?.[3]?.duties,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_tbSupervisorSurname': 
         data.workEducation?.previousEmployers?.[3]?.supervisorSurname,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_cbxSupervisorSurname_NA': 
-        !data.workEducation?.previousEmployers?.[3]?.supervisorSurname || 
-        data.workEducation?.previousEmployers?.[3]?.supervisorSurnameNA === true,
+        !data.workEducation?.previousEmployers?.[3]?.supervisorSurname,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_tbSupervisorGivenName': 
         data.workEducation?.previousEmployers?.[3]?.supervisorGivenName,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_cbxSupervisorGivenName_NA': 
-        !data.workEducation?.previousEmployers?.[3]?.supervisorGivenName || 
-        data.workEducation?.previousEmployers?.[3]?.supervisorGivenNameNA === true,
+        !data.workEducation?.previousEmployers?.[3]?.supervisorGivenName,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_ddlEmpDateFromDay': 
-        data.workEducation?.previousEmployers?.[3]?.empDateFromDay,
+        (() => this.getDayFromDate(data.workEducation?.previousEmployers?.[3]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_ddlEmpDateFromMonth': 
-        data.workEducation?.previousEmployers?.[3]?.empDateFromMonth,
+        (() => this.getMonthNumber(data.workEducation?.previousEmployers?.[3]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_tbxEmpDateFromYear': 
-        data.workEducation?.previousEmployers?.[3]?.empDateFromYear,
+        (() => this.getYearFromDate(data.workEducation?.previousEmployers?.[3]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_ddlEmpDateToDay': 
-        data.workEducation?.previousEmployers?.[3]?.empDateToDay,
+        (() => this.getDayFromDate(data.workEducation?.previousEmployers?.[3]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_ddlEmpDateToMonth': 
-        data.workEducation?.previousEmployers?.[3]?.empDateToMonth,
+        (() => this.getMonthNumber(data.workEducation?.previousEmployers?.[3]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_tbxEmpDateToYear': 
-        data.workEducation?.previousEmployers?.[3]?.empDateToYear,
+        (() => this.getYearFromDate(data.workEducation?.previousEmployers?.[3]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl03_tbDescribeDuties': 
-        data.workEducation?.previousEmployers?.[3]?.describeDuties,
+        data.workEducation?.previousEmployers?.[3]?.duties,
       
       // Fifth Employer (ctl04) - if exists
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_tbEmployerName': 
-        this.sanitizeEmployerName(data.workEducation?.previousEmployers?.[4]?.employerName),
+        this.sanitizeEmployerName(data.workEducation?.previousEmployers?.[4]?.name),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_tbEmployerStreetAddress1': 
-        this.truncateAddress(data.workEducation?.previousEmployers?.[4]?.employerStreetAddress1),
+        this.truncateAddress(data.workEducation?.previousEmployers?.[4]?.address?.street1),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_tbEmployerStreetAddress2': 
-        data.workEducation?.previousEmployers?.[4]?.employerStreetAddress2,
+        data.workEducation?.previousEmployers?.[4]?.address?.street2,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_tbEmployerCity': 
-        data.workEducation?.previousEmployers?.[4]?.employerCity,
+        data.workEducation?.previousEmployers?.[4]?.address?.city,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_tbxPREV_EMPL_ADDR_STATE': 
-        data.workEducation?.previousEmployers?.[4]?.employerState,
+        data.workEducation?.previousEmployers?.[4]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_cbxPREV_EMPL_ADDR_STATE_NA': 
-        !data.workEducation?.previousEmployers?.[4]?.employerState || 
-        data.workEducation?.previousEmployers?.[4]?.employerStateNA === true,
+        !data.workEducation?.previousEmployers?.[4]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_tbxPREV_EMPL_ADDR_POSTAL_CD': 
-        data.workEducation?.previousEmployers?.[4]?.employerPostalCode,
+        data.workEducation?.previousEmployers?.[4]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_cbxPREV_EMPL_ADDR_POSTAL_CD_NA': 
-        !data.workEducation?.previousEmployers?.[4]?.employerPostalCode || 
-        data.workEducation?.previousEmployers?.[4]?.employerPostalCodeNA === true,
+        !data.workEducation?.previousEmployers?.[4]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_DropDownList2': 
-        this.mapCountry(data.workEducation?.previousEmployers?.[4]?.employerCountry),
+        this.mapCountry(data.workEducation?.previousEmployers?.[4]?.address?.country),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_tbEmployerPhone': 
-        data.workEducation?.previousEmployers?.[4]?.employerPhone,
+        data.workEducation?.previousEmployers?.[4]?.phone,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_tbJobTitle': 
-        data.workEducation?.previousEmployers?.[4]?.jobTitle,
+        data.workEducation?.previousEmployers?.[4]?.duties,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_tbSupervisorSurname': 
         data.workEducation?.previousEmployers?.[4]?.supervisorSurname,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_cbxSupervisorSurname_NA': 
-        !data.workEducation?.previousEmployers?.[4]?.supervisorSurname || 
-        data.workEducation?.previousEmployers?.[4]?.supervisorSurnameNA === true,
+        !data.workEducation?.previousEmployers?.[4]?.supervisorSurname,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_tbSupervisorGivenName': 
         data.workEducation?.previousEmployers?.[4]?.supervisorGivenName,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_cbxSupervisorGivenName_NA': 
-        !data.workEducation?.previousEmployers?.[4]?.supervisorGivenName || 
-        data.workEducation?.previousEmployers?.[4]?.supervisorGivenNameNA === true,
+        !data.workEducation?.previousEmployers?.[4]?.supervisorGivenName,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_ddlEmpDateFromDay': 
-        data.workEducation?.previousEmployers?.[4]?.empDateFromDay,
+        (() => this.getDayFromDate(data.workEducation?.previousEmployers?.[4]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_ddlEmpDateFromMonth': 
-        data.workEducation?.previousEmployers?.[4]?.empDateFromMonth,
+        (() => this.getMonthNumber(data.workEducation?.previousEmployers?.[4]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_tbxEmpDateFromYear': 
-        data.workEducation?.previousEmployers?.[4]?.empDateFromYear,
+        (() => this.getYearFromDate(data.workEducation?.previousEmployers?.[4]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_ddlEmpDateToDay': 
-        data.workEducation?.previousEmployers?.[4]?.empDateToDay,
+        (() => this.getDayFromDate(data.workEducation?.previousEmployers?.[4]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_ddlEmpDateToMonth': 
-        data.workEducation?.previousEmployers?.[4]?.empDateToMonth,
+        (() => this.getMonthNumber(data.workEducation?.previousEmployers?.[4]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_tbxEmpDateToYear': 
-        data.workEducation?.previousEmployers?.[4]?.empDateToYear,
+        (() => this.getYearFromDate(data.workEducation?.previousEmployers?.[4]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl04_tbDescribeDuties': 
-        data.workEducation?.previousEmployers?.[4]?.describeDuties,
+        data.workEducation?.previousEmployers?.[4]?.duties,
       
       // Dynamic Previous Education (up to 5 entries typically)
       // First School (ctl00)
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolName': 
-        this.sanitizeEmployerName(data.workEducation?.previousEducation?.[0]?.schoolName),
+        this.sanitizeEmployerName(data.workEducation?.education?.institutions?.[0]?.name),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolAddr1': 
-        this.truncateAddress(data.workEducation?.previousEducation?.[0]?.schoolAddr1),
+        this.truncateAddress(data.workEducation?.education?.institutions?.[0]?.address?.street1),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolAddr2': 
-        data.workEducation?.previousEducation?.[0]?.schoolAddr2,
+        data.workEducation?.education?.institutions?.[0]?.address?.street2,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolCity': 
-        data.workEducation?.previousEducation?.[0]?.schoolCity,
+        data.workEducation?.education?.institutions?.[0]?.address?.city,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxEDUC_INST_ADDR_STATE': 
-        data.workEducation?.previousEducation?.[0]?.educInstAddrState,
+        data.workEducation?.education?.institutions?.[0]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_cbxEDUC_INST_ADDR_STATE_NA': 
-        !data.workEducation?.previousEducation?.[0]?.educInstAddrState || 
-        data.workEducation?.previousEducation?.[0]?.educInstAddrStateNA === true,
+        !data.workEducation?.education?.institutions?.[0]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxEDUC_INST_POSTAL_CD': 
-        data.workEducation?.previousEducation?.[0]?.educInstPostalCode,
+        data.workEducation?.education?.institutions?.[0]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_cbxEDUC_INST_POSTAL_CD_NA': 
-        !data.workEducation?.previousEducation?.[0]?.educInstPostalCode || 
-        data.workEducation?.previousEducation?.[0]?.educInstPostalCodeNA === true,
+        !data.workEducation?.education?.institutions?.[0]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_ddlSchoolCountry': 
-        this.mapCountry(data.workEducation?.previousEducation?.[0]?.schoolCountry),
+        this.mapCountry(data.workEducation?.education?.institutions?.[0]?.address?.country),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolCourseOfStudy': 
-        data.workEducation?.previousEducation?.[0]?.schoolCourseOfStudy,
+        data.workEducation?.education?.institutions?.[0]?.courseOfStudy,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_ddlSchoolFromDay': 
-        data.workEducation?.previousEducation?.[0]?.schoolFromDay,
+        (() => this.getDayFromDate(data.workEducation?.education?.institutions?.[0]?.fromDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_ddlSchoolFromMonth': 
-        data.workEducation?.previousEducation?.[0]?.schoolFromMonth,
+        (() => this.getMonthNumber(data.workEducation?.education?.institutions?.[0]?.fromDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolFromYear': 
-        data.workEducation?.previousEducation?.[0]?.schoolFromYear,
+        (() => this.getYearFromDate(data.workEducation?.education?.institutions?.[0]?.fromDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_ddlSchoolToDay': 
-        data.workEducation?.previousEducation?.[0]?.schoolToDay,
+        (() => this.getDayFromDate(data.workEducation?.education?.institutions?.[0]?.toDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_ddlSchoolToMonth': 
-        data.workEducation?.previousEducation?.[0]?.schoolToMonth,
+        (() => this.getMonthNumber(data.workEducation?.education?.institutions?.[0]?.toDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolToYear': 
-        data.workEducation?.previousEducation?.[0]?.schoolToYear,
+        (() => this.getYearFromDate(data.workEducation?.education?.institutions?.[0]?.toDate))(),
       
       // Second School (ctl01) - if exists
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxSchoolName': 
-        this.sanitizeEmployerName(data.workEducation?.previousEducation?.[1]?.schoolName),
+        this.sanitizeEmployerName(data.workEducation?.education?.institutions?.[1]?.name),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxSchoolAddr1': 
-        this.truncateAddress(data.workEducation?.previousEducation?.[1]?.schoolAddr1),
+        this.truncateAddress(data.workEducation?.education?.institutions?.[1]?.address?.street1),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxSchoolAddr2': 
-        data.workEducation?.previousEducation?.[1]?.schoolAddr2,
+        data.workEducation?.education?.institutions?.[1]?.address?.street2,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxSchoolCity': 
-        data.workEducation?.previousEducation?.[1]?.schoolCity,
+        data.workEducation?.education?.institutions?.[1]?.address?.city,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxEDUC_INST_ADDR_STATE': 
-        data.workEducation?.previousEducation?.[1]?.educInstAddrState,
+        data.workEducation?.education?.institutions?.[1]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_cbxEDUC_INST_ADDR_STATE_NA': 
-        !data.workEducation?.previousEducation?.[1]?.educInstAddrState || 
-        data.workEducation?.previousEducation?.[1]?.educInstAddrStateNA === true,
+        !data.workEducation?.education?.institutions?.[1]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxEDUC_INST_POSTAL_CD': 
-        data.workEducation?.previousEducation?.[1]?.educInstPostalCode,
+        data.workEducation?.education?.institutions?.[1]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_cbxEDUC_INST_POSTAL_CD_NA': 
-        !data.workEducation?.previousEducation?.[1]?.educInstPostalCode || 
-        data.workEducation?.previousEducation?.[1]?.educInstPostalCodeNA === true,
+        !data.workEducation?.education?.institutions?.[1]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_ddlSchoolCountry': 
-        this.mapCountry(data.workEducation?.previousEducation?.[1]?.schoolCountry),
+        this.mapCountry(data.workEducation?.education?.institutions?.[1]?.address?.country),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxSchoolCourseOfStudy': 
-        data.workEducation?.previousEducation?.[1]?.schoolCourseOfStudy,
+        data.workEducation?.education?.institutions?.[1]?.courseOfStudy,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_ddlSchoolFromDay': 
-        data.workEducation?.previousEducation?.[1]?.schoolFromDay,
+        (() => this.getDayFromDate(data.workEducation?.education?.institutions?.[1]?.fromDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_ddlSchoolFromMonth': 
-        data.workEducation?.previousEducation?.[1]?.schoolFromMonth,
+        (() => this.getMonthNumber(data.workEducation?.education?.institutions?.[1]?.fromDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxSchoolFromYear': 
-        data.workEducation?.previousEducation?.[1]?.schoolFromYear,
+        (() => this.getYearFromDate(data.workEducation?.education?.institutions?.[1]?.fromDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_ddlSchoolToDay': 
-        data.workEducation?.previousEducation?.[1]?.schoolToDay,
+        (() => this.getDayFromDate(data.workEducation?.education?.institutions?.[1]?.toDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_ddlSchoolToMonth': 
-        data.workEducation?.previousEducation?.[1]?.schoolToMonth,
+        (() => this.getMonthNumber(data.workEducation?.education?.institutions?.[1]?.toDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl01_tbxSchoolToYear': 
-        data.workEducation?.previousEducation?.[1]?.schoolToYear,
+        (() => this.getYearFromDate(data.workEducation?.education?.institutions?.[1]?.toDate))(),
       
       // Third School (ctl02) - if exists
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl02_tbxSchoolName': 
-        this.sanitizeEmployerName(data.workEducation?.previousEducation?.[2]?.schoolName),
+        this.sanitizeEmployerName(data.workEducation?.education?.institutions?.[2]?.name),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl02_tbxSchoolAddr1': 
-        this.truncateAddress(data.workEducation?.previousEducation?.[2]?.schoolAddr1),
+        this.truncateAddress(data.workEducation?.education?.institutions?.[2]?.address?.street1),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl02_tbxSchoolAddr2': 
-        data.workEducation?.previousEducation?.[2]?.schoolAddr2,
+        data.workEducation?.education?.institutions?.[2]?.address?.street2,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl02_tbxSchoolCity': 
-        data.workEducation?.previousEducation?.[2]?.schoolCity,
+        data.workEducation?.education?.institutions?.[2]?.address?.city,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl02_tbxEDUC_INST_ADDR_STATE': 
-        data.workEducation?.previousEducation?.[2]?.educInstAddrState,
+        data.workEducation?.education?.institutions?.[2]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl02_cbxEDUC_INST_ADDR_STATE_NA': 
-        !data.workEducation?.previousEducation?.[2]?.educInstAddrState || 
-        data.workEducation?.previousEducation?.[2]?.educInstAddrStateNA === true,
+        !data.workEducation?.education?.institutions?.[2]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl02_tbxEDUC_INST_POSTAL_CD': 
-        data.workEducation?.previousEducation?.[2]?.educInstPostalCode,
+        data.workEducation?.education?.institutions?.[2]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl02_cbxEDUC_INST_POSTAL_CD_NA': 
-        !data.workEducation?.previousEducation?.[2]?.educInstPostalCode || 
-        data.workEducation?.previousEducation?.[2]?.educInstPostalCodeNA === true,
+        !data.workEducation?.education?.institutions?.[2]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl02_ddlSchoolCountry': 
-        this.mapCountry(data.workEducation?.previousEducation?.[2]?.schoolCountry),
+        this.mapCountry(data.workEducation?.education?.institutions?.[2]?.address?.country),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl02_tbxSchoolCourseOfStudy': 
-        data.workEducation?.previousEducation?.[2]?.schoolCourseOfStudy,
+        data.workEducation?.education?.institutions?.[2]?.courseOfStudy,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl02_ddlSchoolFromDay': 
-        data.workEducation?.previousEducation?.[2]?.schoolFromDay,
+        (() => this.getDayFromDate(data.workEducation?.education?.institutions?.[2]?.fromDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl02_ddlSchoolFromMonth': 
-        data.workEducation?.previousEducation?.[2]?.schoolFromMonth,
+        (() => this.getMonthNumber(data.workEducation?.education?.institutions?.[2]?.fromDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl02_tbxSchoolFromYear': 
-        data.workEducation?.previousEducation?.[2]?.schoolFromYear,
+        (() => this.getYearFromDate(data.workEducation?.education?.institutions?.[2]?.fromDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl02_ddlSchoolToDay': 
-        data.workEducation?.previousEducation?.[2]?.schoolToDay,
+        (() => this.getDayFromDate(data.workEducation?.education?.institutions?.[2]?.toDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl02_ddlSchoolToMonth': 
-        data.workEducation?.previousEducation?.[2]?.schoolToMonth,
+        (() => this.getMonthNumber(data.workEducation?.education?.institutions?.[2]?.toDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl02_tbxSchoolToYear': 
-        data.workEducation?.previousEducation?.[2]?.schoolToYear,
+        (() => this.getYearFromDate(data.workEducation?.education?.institutions?.[2]?.toDate))(),
       
       // Fourth School (ctl03) - if exists
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl03_tbxSchoolName': 
-        this.sanitizeEmployerName(data.workEducation?.previousEducation?.[3]?.schoolName),
+        this.sanitizeEmployerName(data.workEducation?.education?.institutions?.[3]?.name),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl03_tbxSchoolAddr1': 
-        this.truncateAddress(data.workEducation?.previousEducation?.[3]?.schoolAddr1),
+        this.truncateAddress(data.workEducation?.education?.institutions?.[3]?.address?.street1),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl03_tbxSchoolAddr2': 
-        data.workEducation?.previousEducation?.[3]?.schoolAddr2,
+        data.workEducation?.education?.institutions?.[3]?.address?.street2,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl03_tbxSchoolCity': 
-        data.workEducation?.previousEducation?.[3]?.schoolCity,
+        data.workEducation?.education?.institutions?.[3]?.address?.city,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl03_tbxEDUC_INST_ADDR_STATE': 
-        data.workEducation?.previousEducation?.[3]?.educInstAddrState,
+        data.workEducation?.education?.institutions?.[3]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl03_cbxEDUC_INST_ADDR_STATE_NA': 
-        !data.workEducation?.previousEducation?.[3]?.educInstAddrState || 
-        data.workEducation?.previousEducation?.[3]?.educInstAddrStateNA === true,
+        !data.workEducation?.education?.institutions?.[3]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl03_tbxEDUC_INST_POSTAL_CD': 
-        data.workEducation?.previousEducation?.[3]?.educInstPostalCode,
+        data.workEducation?.education?.institutions?.[3]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl03_cbxEDUC_INST_POSTAL_CD_NA': 
-        !data.workEducation?.previousEducation?.[3]?.educInstPostalCode || 
-        data.workEducation?.previousEducation?.[3]?.educInstPostalCodeNA === true,
+        !data.workEducation?.education?.institutions?.[3]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl03_ddlSchoolCountry': 
-        this.mapCountry(data.workEducation?.previousEducation?.[3]?.schoolCountry),
+        this.mapCountry(data.workEducation?.education?.institutions?.[3]?.address?.country),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl03_tbxSchoolCourseOfStudy': 
-        data.workEducation?.previousEducation?.[3]?.schoolCourseOfStudy,
+        data.workEducation?.education?.institutions?.[3]?.courseOfStudy,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl03_ddlSchoolFromDay': 
-        data.workEducation?.previousEducation?.[3]?.schoolFromDay,
+        (() => this.getDayFromDate(data.workEducation?.education?.institutions?.[3]?.fromDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl03_ddlSchoolFromMonth': 
-        data.workEducation?.previousEducation?.[3]?.schoolFromMonth,
+        (() => this.getMonthNumber(data.workEducation?.education?.institutions?.[3]?.fromDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl03_tbxSchoolFromYear': 
-        data.workEducation?.previousEducation?.[3]?.schoolFromYear,
+        (() => this.getYearFromDate(data.workEducation?.education?.institutions?.[3]?.fromDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl03_ddlSchoolToDay': 
-        data.workEducation?.previousEducation?.[3]?.schoolToDay,
+        (() => this.getDayFromDate(data.workEducation?.education?.institutions?.[3]?.toDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl03_ddlSchoolToMonth': 
-        data.workEducation?.previousEducation?.[3]?.schoolToMonth,
+        (() => this.getMonthNumber(data.workEducation?.education?.institutions?.[3]?.toDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl03_tbxSchoolToYear': 
-        data.workEducation?.previousEducation?.[3]?.schoolToYear,
+        (() => this.getYearFromDate(data.workEducation?.education?.institutions?.[3]?.toDate))(),
       
       // Fifth School (ctl04) - if exists
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl04_tbxSchoolName': 
-        this.sanitizeEmployerName(data.workEducation?.previousEducation?.[4]?.schoolName),
+        this.sanitizeEmployerName(data.workEducation?.education?.institutions?.[4]?.name),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl04_tbxSchoolAddr1': 
-        this.truncateAddress(data.workEducation?.previousEducation?.[4]?.schoolAddr1),
+        this.truncateAddress(data.workEducation?.education?.institutions?.[4]?.address?.street1),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl04_tbxSchoolAddr2': 
-        data.workEducation?.previousEducation?.[4]?.schoolAddr2,
+        data.workEducation?.education?.institutions?.[4]?.address?.street2,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl04_tbxSchoolCity': 
-        data.workEducation?.previousEducation?.[4]?.schoolCity,
+        data.workEducation?.education?.institutions?.[4]?.address?.city,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl04_tbxEDUC_INST_ADDR_STATE': 
-        data.workEducation?.previousEducation?.[4]?.educInstAddrState,
+        data.workEducation?.education?.institutions?.[4]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl04_cbxEDUC_INST_ADDR_STATE_NA': 
-        !data.workEducation?.previousEducation?.[4]?.educInstAddrState || 
-        data.workEducation?.previousEducation?.[4]?.educInstAddrStateNA === true,
+        !data.workEducation?.education?.institutions?.[4]?.address?.state,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl04_tbxEDUC_INST_POSTAL_CD': 
-        data.workEducation?.previousEducation?.[4]?.educInstPostalCode,
+        data.workEducation?.education?.institutions?.[4]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl04_cbxEDUC_INST_POSTAL_CD_NA': 
-        !data.workEducation?.previousEducation?.[4]?.educInstPostalCode || 
-        data.workEducation?.previousEducation?.[4]?.educInstPostalCodeNA === true,
+        !data.workEducation?.education?.institutions?.[4]?.address?.postalCode,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl04_ddlSchoolCountry': 
-        this.mapCountry(data.workEducation?.previousEducation?.[4]?.schoolCountry),
+        this.mapCountry(data.workEducation?.education?.institutions?.[4]?.address?.country),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl04_tbxSchoolCourseOfStudy': 
-        data.workEducation?.previousEducation?.[4]?.schoolCourseOfStudy,
+        data.workEducation?.education?.institutions?.[4]?.courseOfStudy,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl04_ddlSchoolFromDay': 
-        data.workEducation?.previousEducation?.[4]?.schoolFromDay,
+        (() => this.getDayFromDate(data.workEducation?.education?.institutions?.[4]?.fromDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl04_ddlSchoolFromMonth': 
-        data.workEducation?.previousEducation?.[4]?.schoolFromMonth,
+        (() => this.getMonthNumber(data.workEducation?.education?.institutions?.[4]?.fromDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl04_tbxSchoolFromYear': 
-        data.workEducation?.previousEducation?.[4]?.schoolFromYear,
+        (() => this.getYearFromDate(data.workEducation?.education?.institutions?.[4]?.fromDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl04_ddlSchoolToDay': 
-        data.workEducation?.previousEducation?.[4]?.schoolToDay,
+        (() => this.getDayFromDate(data.workEducation?.education?.institutions?.[4]?.toDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl04_ddlSchoolToMonth': 
-        data.workEducation?.previousEducation?.[4]?.schoolToMonth,
+        (() => this.getMonthNumber(data.workEducation?.education?.institutions?.[4]?.toDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl04_tbxSchoolToYear': 
-        data.workEducation?.previousEducation?.[4]?.schoolToYear,
+        (() => this.getYearFromDate(data.workEducation?.education?.institutions?.[4]?.toDate))(),
       
       // === ADDITIONAL WORK/EDUCATION/TRAINING INFORMATION PAGE ===
       // Languages
@@ -2297,81 +2855,119 @@ class TwoPassFiller {
       
       // Countries Visited in Last 5 Years
       'ctl00_SiteContentPlaceHolder_FormView1_rblCOUNTRIES_VISITED_IND_0': 
-        data.workEducation?.countriesVisited5Years && data.workEducation?.countriesVisited5Years.length > 0,
+        data.workEducation?.countriesVisited?.hasVisited === true,
       'ctl00_SiteContentPlaceHolder_FormView1_rblCOUNTRIES_VISITED_IND_1': 
-        !data.workEducation?.countriesVisited5Years || data.workEducation?.countriesVisited5Years.length === 0,
+        data.workEducation?.countriesVisited?.hasVisited === false || !data.workEducation?.countriesVisited?.hasVisited,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl00_ddlCOUNTRIES_VISITED': 
-        this.mapCountry(data.workEducation?.countriesVisited5Years?.[0]),
+        this.mapCountry(data.workEducation?.countriesVisited?.countries?.[0]),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl01_ddlCOUNTRIES_VISITED': 
-        this.mapCountry(data.workEducation?.countriesVisited5Years?.[1]),
+        this.mapCountry(data.workEducation?.countriesVisited?.countries?.[1]),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl02_ddlCOUNTRIES_VISITED': 
-        this.mapCountry(data.workEducation?.countriesVisited5Years?.[2]),
+        this.mapCountry(data.workEducation?.countriesVisited?.countries?.[2]),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl03_ddlCOUNTRIES_VISITED': 
-        this.mapCountry(data.workEducation?.countriesVisited5Years?.[3]),
+        this.mapCountry(data.workEducation?.countriesVisited?.countries?.[3]),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl04_ddlCOUNTRIES_VISITED': 
-        this.mapCountry(data.workEducation?.countriesVisited5Years?.[4]),
+        this.mapCountry(data.workEducation?.countriesVisited?.countries?.[4]),
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl05_ddlCOUNTRIES_VISITED': 
+        this.mapCountry(data.workEducation?.countriesVisited?.countries?.[5]),
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl06_ddlCOUNTRIES_VISITED': 
+        this.mapCountry(data.workEducation?.countriesVisited?.countries?.[6]),
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl07_ddlCOUNTRIES_VISITED': 
+        this.mapCountry(data.workEducation?.countriesVisited?.countries?.[7]),
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl08_ddlCOUNTRIES_VISITED': 
+        this.mapCountry(data.workEducation?.countriesVisited?.countries?.[8]),
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl09_ddlCOUNTRIES_VISITED': 
+        this.mapCountry(data.workEducation?.countriesVisited?.countries?.[9]),
       
       // Clan/Tribe Membership
       'ctl00_SiteContentPlaceHolder_FormView1_rblCLAN_TRIBE_IND_0': 
-        data.workEducation?.clanTribeMembership === 'YES' || data.workEducation?.clanTribeMembership === true,
+        data.workEducation?.clanTribe?.belongsToClan === true,
       'ctl00_SiteContentPlaceHolder_FormView1_rblCLAN_TRIBE_IND_1': 
-        data.workEducation?.clanTribeMembership === 'NO' || data.workEducation?.clanTribeMembership === false || 
-        !data.workEducation?.clanTribeMembership,
+        data.workEducation?.clanTribe?.belongsToClan === false || !data.workEducation?.clanTribe?.belongsToClan,
       'ctl00_SiteContentPlaceHolder_FormView1_tbxCLAN_TRIBE_NAME': 
-        data.workEducation?.clanTribeName,
+        data.workEducation?.clanTribe?.clanName,
       
       // Organization Membership
       'ctl00_SiteContentPlaceHolder_FormView1_rblORGANIZATION_IND_0': 
-        data.workEducation?.organizationMembership === 'YES' || 
-        (data.workEducation?.organizations && data.workEducation?.organizations.length > 0),
+        data.workEducation?.organizationMembership?.hasMembership === true,
       'ctl00_SiteContentPlaceHolder_FormView1_rblORGANIZATION_IND_1': 
-        data.workEducation?.organizationMembership === 'NO' || 
-        !data.workEducation?.organizations || data.workEducation?.organizations.length === 0,
+        data.workEducation?.organizationMembership?.hasMembership === false || !data.workEducation?.organizationMembership?.hasMembership,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlORGANIZATIONS_ctl00_tbxORGANIZATION_NAME': 
-        data.workEducation?.organizations?.[0],
+        data.workEducation?.organizationMembership?.organizations?.[0]?.name,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlORGANIZATIONS_ctl01_tbxORGANIZATION_NAME': 
-        data.workEducation?.organizations?.[1],
+        data.workEducation?.organizationMembership?.organizations?.[1]?.name,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlORGANIZATIONS_ctl02_tbxORGANIZATION_NAME': 
+        data.workEducation?.organizationMembership?.organizations?.[2]?.name,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlORGANIZATIONS_ctl03_tbxORGANIZATION_NAME': 
+        data.workEducation?.organizationMembership?.organizations?.[3]?.name,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlORGANIZATIONS_ctl04_tbxORGANIZATION_NAME': 
+        data.workEducation?.organizationMembership?.organizations?.[4]?.name,
       
       // Military Service
       'ctl00_SiteContentPlaceHolder_FormView1_rblMILITARY_SERVICE_IND_0': 
-        data.workEducation?.hasMilitaryService === 'YES' || data.workEducation?.hasMilitaryService === true,
+        data.workEducation?.militaryService?.hasServed === true,
       'ctl00_SiteContentPlaceHolder_FormView1_rblMILITARY_SERVICE_IND_1': 
-        data.workEducation?.hasMilitaryService === 'NO' || data.workEducation?.hasMilitaryService === false || 
-        !data.workEducation?.hasMilitaryService,
+        data.workEducation?.militaryService?.hasServed === false || !data.workEducation?.militaryService?.hasServed,
       
       // Military Service Details (dynamic)
       'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_ddlMILITARY_SVC_CNTRY': 
-        this.mapCountry(data.workEducation?.militaryService?.[0]?.country),
+        this.mapCountry(data.workEducation?.militaryService?.details?.[0]?.country),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_tbxMILITARY_SVC_BRANCH': 
-        data.workEducation?.militaryService?.[0]?.branch,
+        data.workEducation?.militaryService?.details?.[0]?.branch,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_tbxMILITARY_SVC_RANK': 
-        data.workEducation?.militaryService?.[0]?.rank,
+        data.workEducation?.militaryService?.details?.[0]?.rank,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_tbxMILITARY_SVC_SPECIALTY': 
-        data.workEducation?.militaryService?.[0]?.specialty,
+        data.workEducation?.militaryService?.details?.[0]?.specialty,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_ddlMILITARY_SVC_FROMDay': 
-        data.workEducation?.militaryService?.[0]?.fromDay,
+        (() => this.getDayFromDate(data.workEducation?.militaryService?.details?.[0]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_ddlMILITARY_SVC_FROMMonth': 
-        data.workEducation?.militaryService?.[0]?.fromMonth,
+        (() => this.getMonthNumber(data.workEducation?.militaryService?.details?.[0]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_tbxMILITARY_SVC_FROMYear': 
-        data.workEducation?.militaryService?.[0]?.fromYear,
+        (() => this.getYearFromDate(data.workEducation?.militaryService?.details?.[0]?.startDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_ddlMILITARY_SVC_TODay': 
-        data.workEducation?.militaryService?.[0]?.toDay,
+        (() => this.getDayFromDate(data.workEducation?.militaryService?.details?.[0]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_ddlMILITARY_SVC_TOMonth': 
-        data.workEducation?.militaryService?.[0]?.toMonth,
+        (() => this.getMonthNumber(data.workEducation?.militaryService?.details?.[0]?.endDate))(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl00_tbxMILITARY_SVC_TOYear': 
-        data.workEducation?.militaryService?.[0]?.toYear,
+        (() => this.getYearFromDate(data.workEducation?.militaryService?.details?.[0]?.endDate))(),
+      
+      // Additional Military Service entries (if exists)
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl01_ddlMILITARY_SVC_CNTRY': 
+        this.mapCountry(data.workEducation?.militaryService?.details?.[1]?.country),
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl01_tbxMILITARY_SVC_BRANCH': 
+        data.workEducation?.militaryService?.details?.[1]?.branch,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl01_tbxMILITARY_SVC_RANK': 
+        data.workEducation?.militaryService?.details?.[1]?.rank,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl01_tbxMILITARY_SVC_SPECIALTY': 
+        data.workEducation?.militaryService?.details?.[1]?.specialty,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl01_ddlMILITARY_SVC_FROMDay': 
+        (() => this.getDayFromDate(data.workEducation?.militaryService?.details?.[1]?.startDate))(),
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl01_ddlMILITARY_SVC_FROMMonth': 
+        (() => this.getMonthNumber(data.workEducation?.militaryService?.details?.[1]?.startDate))(),
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl01_tbxMILITARY_SVC_FROMYear': 
+        (() => this.getYearFromDate(data.workEducation?.militaryService?.details?.[1]?.startDate))(),
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl01_ddlMILITARY_SVC_TODay': 
+        (() => this.getDayFromDate(data.workEducation?.militaryService?.details?.[1]?.endDate))(),
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl01_ddlMILITARY_SVC_TOMonth': 
+        (() => this.getMonthNumber(data.workEducation?.militaryService?.details?.[1]?.endDate))(),
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlMILITARY_SERVICE_ctl01_tbxMILITARY_SVC_TOYear': 
+        (() => this.getYearFromDate(data.workEducation?.militaryService?.details?.[1]?.endDate))(),
       
       // Specialized Skills
       'ctl00_SiteContentPlaceHolder_FormView1_rblSPECIALIZED_SKILLS_IND_0': 
-        data.workEducation?.specialSkills && data.workEducation?.specialSkills !== 'N/A',
+        data.workEducation?.specializedSkills?.hasSkills === true,
       'ctl00_SiteContentPlaceHolder_FormView1_rblSPECIALIZED_SKILLS_IND_1': 
-        !data.workEducation?.specialSkills || data.workEducation?.specialSkills === 'N/A',
+        data.workEducation?.specializedSkills?.hasSkills === false || !data.workEducation?.specializedSkills?.hasSkills,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxSPECIALIZED_SKILLS_EXPL': 
+        data.workEducation?.specializedSkills?.explanation,
       
       // Security Questions (Default to NO unless explicitly stated)
       'ctl00_SiteContentPlaceHolder_FormView1_rblINSURGENT_ORG_IND_0': 
-        data.workEducation?.insurgentOrganization === true || data.workEducation?.insurgentOrganization === 'YES',
+        data.workEducation?.insurgentOrganization?.hasInvolvement === true,
       'ctl00_SiteContentPlaceHolder_FormView1_rblINSURGENT_ORG_IND_1': 
-        data.workEducation?.insurgentOrganization !== true && data.workEducation?.insurgentOrganization !== 'YES',
+        data.workEducation?.insurgentOrganization?.hasInvolvement === false || !data.workEducation?.insurgentOrganization?.hasInvolvement,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxINSURGENT_ORG_EXPL': 
+        data.workEducation?.insurgentOrganization?.explanation,
       'ctl00_SiteContentPlaceHolder_FormView1_rblTALIBAN_IND_0': 
         data.workEducation?.talibanAssociation === true || data.workEducation?.talibanAssociation === 'YES',
       'ctl00_SiteContentPlaceHolder_FormView1_rblTALIBAN_IND_1': 
@@ -2380,244 +2976,204 @@ class TwoPassFiller {
       // === SECURITY AND BACKGROUND: PART 1 PAGE ===
       // Medical/Health Questions - DEFAULT TO NO unless explicitly stated
       'ctl00_SiteContentPlaceHolder_FormView1_rblDisease_0': 
-        data.security?.medicalHealth?.hasInfectiousDisease === true || 
-        data.security?.medicalHealth?.hasInfectiousDisease === 'YES',
+        getSecurityValue(data.security?.medicalHealth?.hasInfectiousDisease || data.security?.part1?.disease),
       'ctl00_SiteContentPlaceHolder_FormView1_rblDisease_1': 
-        data.security?.medicalHealth?.hasInfectiousDisease !== true && 
-        data.security?.medicalHealth?.hasInfectiousDisease !== 'YES',
+        !getSecurityValue(data.security?.medicalHealth?.hasInfectiousDisease || data.security?.part1?.disease),
       'ctl00_SiteContentPlaceHolder_FormView1_rblDisorder_0': 
-        data.security?.medicalHealth?.hasMentalDisorder === true || 
-        data.security?.medicalHealth?.hasMentalDisorder === 'YES',
+        getSecurityValue(data.security?.medicalHealth?.hasMentalDisorder || data.security?.part1?.disorder),
       'ctl00_SiteContentPlaceHolder_FormView1_rblDisorder_1': 
-        data.security?.medicalHealth?.hasMentalDisorder !== true && 
-        data.security?.medicalHealth?.hasMentalDisorder !== 'YES',
+        !getSecurityValue(data.security?.medicalHealth?.hasMentalDisorder || data.security?.part1?.disorder),
       'ctl00_SiteContentPlaceHolder_FormView1_rblDruguser_0': 
-        data.security?.medicalHealth?.hasDrugAbuse === true || 
-        data.security?.medicalHealth?.hasDrugAbuse === 'YES',
+        getSecurityValue(data.security?.medicalHealth?.hasDrugAbuse || data.security?.part1?.drugUser),
       'ctl00_SiteContentPlaceHolder_FormView1_rblDruguser_1': 
-        data.security?.medicalHealth?.hasDrugAbuse !== true && 
-        data.security?.medicalHealth?.hasDrugAbuse !== 'YES',
+        !getSecurityValue(data.security?.medicalHealth?.hasDrugAbuse || data.security?.part1?.drugUser),
         
       // === SECURITY AND BACKGROUND: PART 2 PAGE ===
       // Criminal/Security Questions - DEFAULT TO NO unless explicitly stated
       // Arrested or convicted
       'ctl00_SiteContentPlaceHolder_FormView1_rblArrested_0': 
-        data.security?.criminal?.hasBeenArrested === true || 
-        data.security?.criminal?.hasBeenArrested === 'YES',
+        getSecurityValue(data.security?.criminal?.hasBeenArrested || data.security?.part2?.arrested),
       'ctl00_SiteContentPlaceHolder_FormView1_rblArrested_1': 
-        data.security?.criminal?.hasBeenArrested !== true && 
-        data.security?.criminal?.hasBeenArrested !== 'YES',
+        !getSecurityValue(data.security?.criminal?.hasBeenArrested || data.security?.part2?.arrested),
         
       // Controlled substances violation
       'ctl00_SiteContentPlaceHolder_FormView1_rblControlledSubstances_0': 
-        data.security?.criminal?.hasViolatedDrugLaw === true || 
-        data.security?.criminal?.hasViolatedDrugLaw === 'YES',
+        getSecurityValue(data.security?.criminal?.hasViolatedDrugLaw || data.security?.part2?.controlledSubstances),
       'ctl00_SiteContentPlaceHolder_FormView1_rblControlledSubstances_1': 
-        data.security?.criminal?.hasViolatedDrugLaw !== true && 
-        data.security?.criminal?.hasViolatedDrugLaw !== 'YES',
+        !getSecurityValue(data.security?.criminal?.hasViolatedDrugLaw || data.security?.part2?.controlledSubstances),
         
       // Prostitution
       'ctl00_SiteContentPlaceHolder_FormView1_rblProstitution_0': 
-        data.security?.criminal?.hasEngagedInProstitution === true || 
-        data.security?.criminal?.hasEngagedInProstitution === 'YES',
+        getSecurityValue(data.security?.criminal?.hasEngagedInProstitution || data.security?.part2?.prostitution),
       'ctl00_SiteContentPlaceHolder_FormView1_rblProstitution_1': 
-        data.security?.criminal?.hasEngagedInProstitution !== true && 
-        data.security?.criminal?.hasEngagedInProstitution !== 'YES',
+        !getSecurityValue(data.security?.criminal?.hasEngagedInProstitution || data.security?.part2?.prostitution),
         
       // Money laundering
       'ctl00_SiteContentPlaceHolder_FormView1_rblMoneyLaundering_0': 
-        data.security?.criminal?.hasEngagedInMoneyLaundering === true || 
-        data.security?.criminal?.hasEngagedInMoneyLaundering === 'YES',
+        getSecurityValue(data.security?.criminal?.hasEngagedInMoneyLaundering || data.security?.part2?.moneyLaundering),
       'ctl00_SiteContentPlaceHolder_FormView1_rblMoneyLaundering_1': 
-        data.security?.criminal?.hasEngagedInMoneyLaundering !== true && 
-        data.security?.criminal?.hasEngagedInMoneyLaundering !== 'YES',
+        !getSecurityValue(data.security?.criminal?.hasEngagedInMoneyLaundering || data.security?.part2?.moneyLaundering),
         
       // Human trafficking
       'ctl00_SiteContentPlaceHolder_FormView1_rblHumanTrafficking_0': 
-        data.security?.criminal?.hasCommittedHumanTrafficking === true || 
-        data.security?.criminal?.hasCommittedHumanTrafficking === 'YES',
+        getSecurityValue(data.security?.criminal?.hasCommittedHumanTrafficking || data.security?.part2?.humanTrafficking),
       'ctl00_SiteContentPlaceHolder_FormView1_rblHumanTrafficking_1': 
-        data.security?.criminal?.hasCommittedHumanTrafficking !== true && 
-        data.security?.criminal?.hasCommittedHumanTrafficking !== 'YES',
+        !getSecurityValue(data.security?.criminal?.hasCommittedHumanTrafficking || data.security?.part2?.humanTrafficking),
         
       // Assisted severe trafficking
       'ctl00_SiteContentPlaceHolder_FormView1_rblAssistedSevereTrafficking_0': 
-        data.security?.criminal?.hasAssistedInTrafficking === true || 
-        data.security?.criminal?.hasAssistedInTrafficking === 'YES',
+        getSecurityValue(data.security?.criminal?.hasAssistedInTrafficking || data.security?.part2?.assistedTrafficking),
       'ctl00_SiteContentPlaceHolder_FormView1_rblAssistedSevereTrafficking_1': 
-        data.security?.criminal?.hasAssistedInTrafficking !== true && 
-        data.security?.criminal?.hasAssistedInTrafficking !== 'YES',
+        !getSecurityValue(data.security?.criminal?.hasAssistedInTrafficking || data.security?.part2?.assistedTrafficking),
         
       // Human trafficking related (spouse/son/daughter)
       'ctl00_SiteContentPlaceHolder_FormView1_rblHumanTraffickingRelated_0': 
-        data.security?.criminal?.isRelatedToTrafficker === true || 
-        data.security?.criminal?.isRelatedToTrafficker === 'YES',
+        getSecurityValue(data.security?.criminal?.isRelatedToTrafficker || data.security?.part2?.traffickingRelated),
       'ctl00_SiteContentPlaceHolder_FormView1_rblHumanTraffickingRelated_1': 
-        data.security?.criminal?.isRelatedToTrafficker !== true && 
-        data.security?.criminal?.isRelatedToTrafficker !== 'YES',
+        !getSecurityValue(data.security?.criminal?.isRelatedToTrafficker || data.security?.part2?.traffickingRelated),
         
       // === SECURITY AND BACKGROUND: PART 3 PAGE ===
       // Security/Terrorism Questions - DEFAULT TO NO unless explicitly stated
       
       // Illegal activity/espionage/sabotage
       'ctl00_SiteContentPlaceHolder_FormView1_rblIllegalActivity_0':
-        data.security?.part3?.illegalActivity === true ||
-        data.security?.securityViolations?.hasOtherIllegalActivity === 'YES',
+        getSecurityValue(data.security?.part3?.illegalActivity || data.security?.securityViolations?.hasOtherIllegalActivity),
       'ctl00_SiteContentPlaceHolder_FormView1_rblIllegalActivity_1':
-        data.security?.part3?.illegalActivity !== true &&
-        data.security?.securityViolations?.hasOtherIllegalActivity !== 'YES',
+        !getSecurityValue(data.security?.part3?.illegalActivity || data.security?.securityViolations?.hasOtherIllegalActivity),
         
       // Terrorist activity
       'ctl00_SiteContentPlaceHolder_FormView1_rblTerroristActivity_0':
-        data.security?.part3?.terroristActivity === true ||
-        data.security?.securityViolations?.hasTerrorism === 'YES',
+        getSecurityValue(data.security?.part3?.terroristActivity || data.security?.securityViolations?.hasTerrorism),
       'ctl00_SiteContentPlaceHolder_FormView1_rblTerroristActivity_1':
-        data.security?.part3?.terroristActivity !== true &&
-        data.security?.securityViolations?.hasTerrorism !== 'YES',
+        !getSecurityValue(data.security?.part3?.terroristActivity || data.security?.securityViolations?.hasTerrorism),
         
       // Terrorist support (financial)
       'ctl00_SiteContentPlaceHolder_FormView1_rblTerroristSupport_0':
-        data.security?.part3?.terroristSupport === true ||
-        data.security?.securityViolations?.hasProvidedFinancialSupport === 'YES',
+        getSecurityValue(data.security?.part3?.terroristSupport || data.security?.securityViolations?.hasProvidedFinancialSupport),
       'ctl00_SiteContentPlaceHolder_FormView1_rblTerroristSupport_1':
-        data.security?.part3?.terroristSupport !== true &&
-        data.security?.securityViolations?.hasProvidedFinancialSupport !== 'YES',
+        !getSecurityValue(data.security?.part3?.terroristSupport || data.security?.securityViolations?.hasProvidedFinancialSupport),
         
       // Terrorist organization member
       'ctl00_SiteContentPlaceHolder_FormView1_rblTerroristOrg_0':
-        data.security?.part3?.terroristOrg === true ||
-        data.security?.securityViolations?.hasTerroristMembership === 'YES',
+        getSecurityValue(data.security?.part3?.terroristOrg || data.security?.securityViolations?.hasTerroristMembership),
       'ctl00_SiteContentPlaceHolder_FormView1_rblTerroristOrg_1':
-        data.security?.part3?.terroristOrg !== true &&
-        data.security?.securityViolations?.hasTerroristMembership !== 'YES',
+        !getSecurityValue(data.security?.part3?.terroristOrg || data.security?.securityViolations?.hasTerroristMembership),
         
       // Related to terrorist (spouse, son, or daughter)
       'ctl00_SiteContentPlaceHolder_FormView1_rblTerroristRel_0':
-        data.security?.part3?.terroristRelated === true,
+        getSecurityValue(data.security?.part3?.terroristRelated),
       'ctl00_SiteContentPlaceHolder_FormView1_rblTerroristRel_1':
-        data.security?.part3?.terroristRelated !== true,
+        !getSecurityValue(data.security?.part3?.terroristRelated),
         
       // Genocide
       'ctl00_SiteContentPlaceHolder_FormView1_rblGenocide_0':
-        data.security?.part3?.genocide === true ||
-        data.security?.securityViolations?.hasGenocide === 'YES',
+        getSecurityValue(data.security?.part3?.genocide || data.security?.securityViolations?.hasGenocide),
       'ctl00_SiteContentPlaceHolder_FormView1_rblGenocide_1':
-        data.security?.part3?.genocide !== true &&
-        data.security?.securityViolations?.hasGenocide !== 'YES',
+        !getSecurityValue(data.security?.part3?.genocide || data.security?.securityViolations?.hasGenocide),
         
       // Torture
       'ctl00_SiteContentPlaceHolder_FormView1_rblTorture_0':
-        data.security?.part3?.torture === true ||
-        data.security?.securityViolations?.hasTorture === 'YES',
+        getSecurityValue(data.security?.part3?.torture || data.security?.securityViolations?.hasTorture),
       'ctl00_SiteContentPlaceHolder_FormView1_rblTorture_1':
-        data.security?.part3?.torture !== true &&
-        data.security?.securityViolations?.hasTorture !== 'YES',
+        !getSecurityValue(data.security?.part3?.torture || data.security?.securityViolations?.hasTorture),
         
       // Extrajudicial/political killings
       'ctl00_SiteContentPlaceHolder_FormView1_rblExViolence_0':
-        data.security?.part3?.extrajudicialViolence === true ||
-        data.security?.securityViolations?.hasExtrajudicialKillings === 'YES' ||
-        data.security?.securityViolations?.hasPoliticalKillings === 'YES',
+        getSecurityValue(data.security?.part3?.extrajudicialViolence || 
+          data.security?.securityViolations?.hasExtrajudicialKillings ||
+          data.security?.securityViolations?.hasPoliticalKillings),
       'ctl00_SiteContentPlaceHolder_FormView1_rblExViolence_1':
-        data.security?.part3?.extrajudicialViolence !== true &&
-        data.security?.securityViolations?.hasExtrajudicialKillings !== 'YES' &&
-        data.security?.securityViolations?.hasPoliticalKillings !== 'YES',
+        !getSecurityValue(data.security?.part3?.extrajudicialViolence || 
+          data.security?.securityViolations?.hasExtrajudicialKillings ||
+          data.security?.securityViolations?.hasPoliticalKillings),
         
       // Child soldier
       'ctl00_SiteContentPlaceHolder_FormView1_rblChildSoldier_0':
-        data.security?.part3?.childSoldier === true,
+        getSecurityValue(data.security?.part3?.childSoldier),
       'ctl00_SiteContentPlaceHolder_FormView1_rblChildSoldier_1':
-        data.security?.part3?.childSoldier !== true,
+        !getSecurityValue(data.security?.part3?.childSoldier),
         
       // Religious freedom violation
       'ctl00_SiteContentPlaceHolder_FormView1_rblReligiousFreedom_0':
-        data.security?.part3?.religiousFreedom === true ||
-        data.security?.securityViolations?.hasReligiousFreedomViolation === 'YES',
+        getSecurityValue(data.security?.part3?.religiousFreedom || data.security?.securityViolations?.hasReligiousFreedomViolation),
       'ctl00_SiteContentPlaceHolder_FormView1_rblReligiousFreedom_1':
-        data.security?.part3?.religiousFreedom !== true &&
-        data.security?.securityViolations?.hasReligiousFreedomViolation !== 'YES',
+        !getSecurityValue(data.security?.part3?.religiousFreedom || data.security?.securityViolations?.hasReligiousFreedomViolation),
         
       // Population controls (forced abortion/sterilization)
       'ctl00_SiteContentPlaceHolder_FormView1_rblPopulationControls_0':
-        data.security?.part3?.populationControls === true,
+        getSecurityValue(data.security?.part3?.populationControls),
       'ctl00_SiteContentPlaceHolder_FormView1_rblPopulationControls_1':
-        data.security?.part3?.populationControls !== true,
+        !getSecurityValue(data.security?.part3?.populationControls),
         
       // Organ transplant
       'ctl00_SiteContentPlaceHolder_FormView1_rblTransplant_0':
-        data.security?.part3?.organTransplant === true,
+        getSecurityValue(data.security?.part3?.organTransplant),
       'ctl00_SiteContentPlaceHolder_FormView1_rblTransplant_1':
-        data.security?.part3?.organTransplant !== true,
+        !getSecurityValue(data.security?.part3?.organTransplant),
         
       // === SECURITY AND BACKGROUND: PART 4 PAGE ===
       // Immigration Questions - DEFAULT TO NO unless explicitly stated
       
       // Immigration fraud/misrepresentation
       'ctl00_SiteContentPlaceHolder_FormView1_rblImmigrationFraud_0':
-        data.security?.part4?.immigrationFraud === true ||
-        data.security?.immigration?.hasImmigrationFraud === 'YES' ||
-        data.security?.immigration?.hasVisaFraud === 'YES',
+        getSecurityValue(data.security?.part4?.immigrationFraud || 
+          data.security?.immigration?.hasImmigrationFraud ||
+          data.security?.immigration?.hasVisaFraud),
       'ctl00_SiteContentPlaceHolder_FormView1_rblImmigrationFraud_1':
-        data.security?.part4?.immigrationFraud !== true &&
-        data.security?.immigration?.hasImmigrationFraud !== 'YES' &&
-        data.security?.immigration?.hasVisaFraud !== 'YES',
+        !getSecurityValue(data.security?.part4?.immigrationFraud || 
+          data.security?.immigration?.hasImmigrationFraud ||
+          data.security?.immigration?.hasVisaFraud),
         
       // Failed to attend removal proceedings
       'ctl00_SiteContentPlaceHolder_FormView1_rblFailToAttend_0':
-        data.security?.part4?.failedToAttend === true,
+        getSecurityValue(data.security?.part4?.failedToAttend),
       'ctl00_SiteContentPlaceHolder_FormView1_rblFailToAttend_1':
-        data.security?.part4?.failedToAttend !== true,
+        !getSecurityValue(data.security?.part4?.failedToAttend),
         
       // Unlawful presence (subject to 3 or 10 year bar)
       'ctl00_SiteContentPlaceHolder_FormView1_rblVisaViolation_0':
-        data.security?.part4?.visaViolation === true ||
-        data.security?.other?.hasViolatedUSVisa === 'YES',
+        getSecurityValue(data.security?.part4?.visaViolation || data.security?.other?.hasViolatedUSVisa),
       'ctl00_SiteContentPlaceHolder_FormView1_rblVisaViolation_1':
-        data.security?.part4?.visaViolation !== true &&
-        data.security?.other?.hasViolatedUSVisa !== 'YES',
+        !getSecurityValue(data.security?.part4?.visaViolation || data.security?.other?.hasViolatedUSVisa),
         
       // Removal hearing (ordered to appear before immigration judge)
       'ctl00_SiteContentPlaceHolder_FormView1_rblRemovalHearing_0':
-        data.security?.part4?.removalHearing === true,
+        getSecurityValue(data.security?.part4?.removalHearing),
       'ctl00_SiteContentPlaceHolder_FormView1_rblRemovalHearing_1':
-        data.security?.part4?.removalHearing !== true,
+        !getSecurityValue(data.security?.part4?.removalHearing),
         
       // Deportation or removal from US
       'ctl00_SiteContentPlaceHolder_FormView1_rblDeport_0':
-        data.security?.part4?.deported === true,
+        getSecurityValue(data.security?.part4?.deported || data.security?.part4?.deportation),
       'ctl00_SiteContentPlaceHolder_FormView1_rblDeport_1':
-        data.security?.part4?.deported !== true,
+        !getSecurityValue(data.security?.part4?.deported || data.security?.part4?.deportation),
         
       // === SECURITY AND BACKGROUND: PART 5 PAGE ===
       // Other Questions - DEFAULT TO NO unless explicitly stated
       
       // Child custody
       'ctl00_SiteContentPlaceHolder_FormView1_rblChildCustody_0':
-        data.security?.part5?.childCustody === true ||
-        data.security?.other?.hasChildCustodyIssue === 'YES',
+        getSecurityValue(data.security?.part5?.childCustody || data.security?.other?.hasChildCustodyIssue),
       'ctl00_SiteContentPlaceHolder_FormView1_rblChildCustody_1':
-        data.security?.part5?.childCustody !== true &&
-        data.security?.other?.hasChildCustodyIssue !== 'YES',
+        !getSecurityValue(data.security?.part5?.childCustody || data.security?.other?.hasChildCustodyIssue),
         
       // Voting violation
       'ctl00_SiteContentPlaceHolder_FormView1_rblVotingViolation_0':
-        data.security?.part5?.votingViolation === true ||
-        data.security?.other?.hasVotingViolation === 'YES',
+        getSecurityValue(data.security?.part5?.votingViolation || data.security?.other?.hasVotingViolation),
       'ctl00_SiteContentPlaceHolder_FormView1_rblVotingViolation_1':
-        data.security?.part5?.votingViolation !== true &&
-        data.security?.other?.hasVotingViolation !== 'YES',
+        !getSecurityValue(data.security?.part5?.votingViolation || data.security?.other?.hasVotingViolation),
         
       // Renounced US citizenship for tax purposes
       'ctl00_SiteContentPlaceHolder_FormView1_rblRenounceExp_0':
-        data.security?.part5?.renounceExpenses === true,
+        getSecurityValue(data.security?.part5?.renounceExpenses),
       'ctl00_SiteContentPlaceHolder_FormView1_rblRenounceExp_1':
-        data.security?.part5?.renounceExpenses !== true,
+        !getSecurityValue(data.security?.part5?.renounceExpenses),
         
       // Attended public school (F-1 violation)
       'ctl00_SiteContentPlaceHolder_FormView1_rblSchoolViolation_0':
-        data.security?.other?.hasAttendedPublicSchool === 'YES',
+        getSecurityValue(data.security?.other?.hasAttendedPublicSchool),
       'ctl00_SiteContentPlaceHolder_FormView1_rblSchoolViolation_1':
-        data.security?.other?.hasAttendedPublicSchool !== 'YES',
+        !getSecurityValue(data.security?.other?.hasAttendedPublicSchool),
         
       // Exchange visitor (J-1/J-2) subject to 2-year foreign residence requirement
       'ctl00_SiteContentPlaceHolder_FormView1_rblExchangeVisitor_0':
@@ -2666,6 +3222,922 @@ class TwoPassFiller {
       'ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSalaryInUSD':
         data.temporaryWork?.monthlyIncome || data.petition?.monthlyIncome || 
         (data.workEducation?.presentEmployer?.monthlyIncome ? String(data.workEducation.presentEmployer.monthlyIncome) : null),
+        
+      // === E-VISA BUSINESS PROFILE FIELDS ===
+      // Business Information
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxBusinessName': 
+        data.evisaBusiness?.businessName || data.evisa_business?.business_name,
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlBusinessType': 
+        data.evisaBusiness?.businessTypeCode || this.mapBusinessType(data.evisaBusiness?.businessType) || 
+        data.evisa_business?.business_type,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxBusinessTypeOther': 
+        data.evisaBusiness?.businessTypeOther || data.evisa_business?.business_type_other,
+        
+      // Business Incorporation Date
+      'ctl00_SiteContentPlaceHolder_FormView1_dllBusinessStartDateDay': 
+        this.getDayFromDate(data.evisaBusiness?.incorporationDate) || 
+        data.evisa_business?.incorporation_date?.day,
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlBusinessStartMonth': 
+        this.getMonthNumber(data.evisaBusiness?.incorporationDate) || 
+        data.evisa_business?.incorporation_date?.month,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxBusinessStartDateYear': 
+        this.getYearFromDate(data.evisaBusiness?.incorporationDate) || 
+        data.evisa_business?.incorporation_date?.year,
+        
+      // Business Incorporation Location
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxBusinessStartCity': 
+        data.evisaBusiness?.incorporationCity || 
+        data.evisa_business?.incorporation_location?.city,
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlBusinessStartState': 
+        this.mapUSState(data.evisaBusiness?.incorporationState) || 
+        this.mapUSState(data.evisa_business?.incorporation_location?.state),
+        
+      // Office Information (First Office - usually headquarters)
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_ddlEVISA_OFFICE_TYPE': 
+        data.evisaBusiness?.offices?.[0]?.type || data.evisa_business?.offices?.[0]?.type,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_TYPE_OTHER': 
+        data.evisaBusiness?.offices?.[0]?.typeOther || data.evisa_business?.offices?.[0]?.type_other,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_NAME': 
+        data.evisaBusiness?.offices?.[0]?.name || data.evisa_business?.offices?.[0]?.name,
+        
+      // Office Address
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_ST_LN1': 
+        data.evisaBusiness?.offices?.[0]?.address?.street1 || 
+        data.evisa_business?.offices?.[0]?.address?.street_line1,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_ST_LN2': 
+        data.evisaBusiness?.offices?.[0]?.address?.street2 || 
+        data.evisa_business?.offices?.[0]?.address?.street_line2,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_CITY': 
+        data.evisaBusiness?.offices?.[0]?.address?.city || 
+        data.evisa_business?.offices?.[0]?.address?.city,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_STATE': 
+        data.evisaBusiness?.offices?.[0]?.address?.state || 
+        data.evisa_business?.offices?.[0]?.address?.state,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_cbxEVISA_OFFICE_STATE_NA': 
+        data.evisaBusiness?.offices?.[0]?.address?.stateNA || 
+        data.evisa_business?.offices?.[0]?.address?.state_na,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_POSTAL_CD': 
+        data.evisaBusiness?.offices?.[0]?.address?.postalCode || 
+        data.evisa_business?.offices?.[0]?.address?.postal_code,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_cbxEVISA_OFFICE_POSTAL_CD_NA': 
+        data.evisaBusiness?.offices?.[0]?.address?.postalCodeNA || 
+        data.evisa_business?.offices?.[0]?.address?.postal_code_na,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_ddlEVISA_OFFICE_CNTRY': 
+        this.mapCountry(data.evisaBusiness?.offices?.[0]?.address?.country || 
+        data.evisa_business?.offices?.[0]?.address?.country),
+        
+      // Office Phone and Fax
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_TEL': 
+        data.evisaBusiness?.offices?.[0]?.phone || 
+        data.evisa_business?.offices?.[0]?.phone ||
+        data.evisaBusiness?.businessPhone || 
+        data.evisa_business?.business_phone,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_FAX': 
+        data.evisaBusiness?.offices?.[0]?.fax || 
+        data.evisa_business?.offices?.[0]?.fax ||
+        data.evisaBusiness?.businessFax || 
+        data.evisa_business?.business_fax,
+        
+      // Business Nature Checkboxes (correct field IDs from actual form)
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxEVISA_BUS_NATURE_GEN_IND': 
+        data.evisaBusiness?.natureOfBusiness?.includes('General Trade') || 
+        data.evisa_business?.nature_of_business?.includes('General Trade') || false,
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxEVISA_BUS_NATURE_EXP_IND': 
+        data.evisaBusiness?.natureOfBusiness?.includes('Exports from U.S.') || 
+        data.evisa_business?.nature_of_business?.includes('Exports from U.S.') || false,
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxEVISA_BUS_NATURE_RET_IND': 
+        data.evisaBusiness?.natureOfBusiness?.includes('Retail Sales') || 
+        data.evisa_business?.nature_of_business?.includes('Retail Sales') || false,
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxEVISA_BUS_NATURE_IMP_IND': 
+        data.evisaBusiness?.natureOfBusiness?.includes('Imports to U.S.') || 
+        data.evisa_business?.nature_of_business?.includes('Imports to U.S.') || false,
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxEVISA_BUS_NATURE_MAN_IND': 
+        data.evisaBusiness?.natureOfBusiness?.includes('Manufacturing') || 
+        data.evisa_business?.nature_of_business?.includes('Manufacturing') || false,
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxEVISA_BUS_NATURE_SVC_IND': 
+        data.evisaBusiness?.natureOfBusiness?.includes('Services/Technology') || 
+        data.evisa_business?.nature_of_business?.includes('Services/Technology') || true, // Default to true for tech companies
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxEVISA_BUS_NATURE_OTH_IND': 
+        data.evisaBusiness?.natureOfBusiness?.includes('Other') || 
+        data.evisa_business?.nature_of_business?.includes('Other') || false,
+        
+      // Business Activities Description (correct field ID from actual form)
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxBusinessNatureDescription': 
+        data.evisaBusiness?.businessActivities || 
+        data.evisa_business?.business_activities ||
+        (() => {
+          // Extract description from businessType if it contains a dash
+          if (data.evisaBusiness?.businessType?.includes('–')) {
+            return data.evisaBusiness.businessType.split('–')[1].trim();
+          }
+          return null;
+        })(),
+        
+      // Additional offices would use ctl01, ctl02, etc. for the index
+      // These would be filled dynamically when multiple offices are present
+      
+      // === E-VISA FOREIGN PARENT BUSINESS FIELDS (PAGE 2) ===
+      
+      // Radio button questions
+      'ctl00_SiteContentPlaceHolder_FormView1_rblForeignBusinessQuestion_0': 
+        data.evisaForeignBusiness?.hasForeignBusiness === true || 
+        data.evisa_foreign_business?.has_foreign_business === 'Yes',
+      'ctl00_SiteContentPlaceHolder_FormView1_rblForeignBusinessQuestion_1': 
+        data.evisaForeignBusiness?.hasForeignBusiness === false || 
+        data.evisa_foreign_business?.has_foreign_business === 'No',
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_rblForeignEntityQuestion_0': 
+        data.evisaForeignBusiness?.hasForeignEntity === true || 
+        data.evisa_foreign_business?.has_foreign_entity === 'Yes',
+      'ctl00_SiteContentPlaceHolder_FormView1_rblForeignEntityQuestion_1': 
+        data.evisaForeignBusiness?.hasForeignEntity === false || 
+        data.evisa_foreign_business?.has_foreign_entity === 'No',
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_rblForeignIndividualOwnerQuestion_0': 
+        data.evisaForeignBusiness?.hasForeignIndividualOwner === true || 
+        data.evisa_foreign_business?.has_foreign_individual_owner === 'Yes',
+      'ctl00_SiteContentPlaceHolder_FormView1_rblForeignIndividualOwnerQuestion_1': 
+        data.evisaForeignBusiness?.hasForeignIndividualOwner === false || 
+        data.evisa_foreign_business?.has_foreign_individual_owner === 'No',
+        
+      // === E-VISA FINANCE AND TRADE RADIO BUTTONS ===
+      // Year Type (Fiscal/Calendar) for Financial Statement
+      'ctl00_SiteContentPlaceHolder_FormView1_rblYearType_0': 
+        data.evisaFinanceTrade?.yearType === 'F' || 
+        data.evisa_finance_trade?.year_type === 'F',
+      'ctl00_SiteContentPlaceHolder_FormView1_rblYearType_1': 
+        data.evisaFinanceTrade?.yearType === 'C' || 
+        data.evisa_finance_trade?.year_type === 'C',
+        
+      // Second Year Type for Trade section
+      'ctl00_SiteContentPlaceHolder_FormView1_rblYearType1_0': 
+        (data.evisaFinanceTrade?.yearType2 || 
+         data.evisa_finance_trade?.year_type2 ||
+         data.evisaFinanceTrade?.yearType || 
+         data.evisa_finance_trade?.year_type || 'F') === 'F',
+      'ctl00_SiteContentPlaceHolder_FormView1_rblYearType1_1': 
+        (data.evisaFinanceTrade?.yearType2 || 
+         data.evisa_finance_trade?.year_type2 ||
+         data.evisaFinanceTrade?.yearType || 
+         data.evisa_finance_trade?.year_type || 'F') === 'C',
+        
+      // Assets Type (Current Cash/Historical Cost)
+      'ctl00_SiteContentPlaceHolder_FormView1_rblAssetsType_0': 
+        data.evisaFinanceTrade?.assetsType === 'C' || 
+        data.evisa_finance_trade?.assets_type === 'C',
+      'ctl00_SiteContentPlaceHolder_FormView1_rblAssetsType_1': 
+        data.evisaFinanceTrade?.assetsType === 'H' || 
+        data.evisa_finance_trade?.assets_type === 'H',
+        
+      // === E-VISA APPLICANT POSITION RADIO BUTTONS (PAGE 5) ===
+      // Other Education
+      'ctl00_SiteContentPlaceHolder_FormView1_rblOtherEducation_0': 
+        data.evisaApplicantPosition?.hasOtherEducation === true || 
+        data.evisa_applicant_position?.has_other_education === true,
+      'ctl00_SiteContentPlaceHolder_FormView1_rblOtherEducation_1': 
+        data.evisaApplicantPosition?.hasOtherEducation === false || 
+        data.evisa_applicant_position?.has_other_education === false,
+      
+      // Other Education Explanation (appears when Other Education = Yes)
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxOtherEducation':
+        data.evisaApplicantPosition?.otherEducationExplanation ||
+        data.evisa_applicant_position?.other_education_explanation,
+        
+      // Parent Business Fields (appear when Foreign Business = Yes)
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PARENT': 
+        data.evisaForeignBusiness?.parentBusiness?.name ||  // Added nested camelCase structure
+        data.evisaForeignBusiness?.parentBusinessName || 
+        data.evisa_foreign_business?.parent_business?.name,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PARENT_LN1': 
+        data.evisaForeignBusiness?.parentBusiness?.address?.street1 ||  // Added nested camelCase
+        data.evisaForeignBusiness?.parentBusinessAddress?.street1 || 
+        data.evisa_foreign_business?.parent_business?.address?.street_line1,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PARENT_LN2': 
+        data.evisaForeignBusiness?.parentBusiness?.address?.street2 ||  // Added nested camelCase
+        data.evisaForeignBusiness?.parentBusinessAddress?.street2 || 
+        data.evisa_foreign_business?.parent_business?.address?.street_line2,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PARENT_CITY': 
+        data.evisaForeignBusiness?.parentBusiness?.address?.city ||  // Added nested camelCase
+        data.evisaForeignBusiness?.parentBusinessAddress?.city || 
+        data.evisa_foreign_business?.parent_business?.address?.city,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PARENT_STATE': 
+        data.evisaForeignBusiness?.parentBusiness?.address?.state ||  // Added nested camelCase
+        data.evisaForeignBusiness?.parentBusinessAddress?.state || 
+        data.evisa_foreign_business?.parent_business?.address?.state,
+      'ctl00_SiteContentPlaceHolder_FormView1_cbexEVISA_BUS_PARENT_STATE_NA': 
+        data.evisaForeignBusiness?.parentBusiness?.address?.stateNA ||  // Added nested camelCase
+        data.evisaForeignBusiness?.parentBusinessAddress?.stateNA || 
+        data.evisa_foreign_business?.parent_business?.address?.state_na,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PARENT_POSTAL_CD': 
+        data.evisaForeignBusiness?.parentBusiness?.address?.postalCode ||  // Added nested camelCase
+        data.evisaForeignBusiness?.parentBusinessAddress?.postalCode || 
+        data.evisa_foreign_business?.parent_business?.address?.postal_code,
+      'ctl00_SiteContentPlaceHolder_FormView1_cbexEVISA_BUS_PARENT_POSTAL_CD_NA': 
+        data.evisaForeignBusiness?.parentBusiness?.address?.postalCodeNA ||  // Added nested camelCase
+        data.evisaForeignBusiness?.parentBusinessAddress?.postalCodeNA || 
+        data.evisa_foreign_business?.parent_business?.address?.postal_code_na,
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlEVISA_BUS_PARENT_CNTRY': 
+        this.mapCountry(data.evisaForeignBusiness?.parentBusiness?.address?.country ||  // Added nested camelCase
+        data.evisaForeignBusiness?.parentBusinessAddress?.country || 
+        data.evisa_foreign_business?.parent_business?.address?.country),
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PARENT_TEL': 
+        data.evisaForeignBusiness?.parentBusiness?.phone ||  // Added nested camelCase
+        data.evisaForeignBusiness?.parentBusinessPhone || 
+        data.evisa_foreign_business?.parent_business?.phone,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PARENT_FAX': 
+        data.evisaForeignBusiness?.parentBusiness?.fax ||  // Added nested camelCase
+        data.evisaForeignBusiness?.parentBusinessFax || 
+        data.evisa_foreign_business?.parent_business?.fax,
+        
+      // Foreign Entity Fields (appear when Foreign Entity = Yes)
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlForeignEntity_ctl00_tbxBUS_ENT_NAME': 
+        data.evisaForeignBusiness?.foreignEntities?.[0]?.name || 
+        data.evisa_foreign_business?.foreign_entities?.[0]?.name,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlForeignEntity_ctl00_ddlBUS_ENT_NATL': 
+        this.mapCountry(data.evisaForeignBusiness?.foreignEntities?.[0]?.nationality || 
+        data.evisa_foreign_business?.foreign_entities?.[0]?.nationality),
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlForeignEntity_ctl00_tbxOWNERSHIP_PCT': 
+        data.evisaForeignBusiness?.foreignEntities?.[0]?.ownershipPercentage || 
+        data.evisa_foreign_business?.foreign_entities?.[0]?.ownership_percentage,
+        
+      // Foreign Individual Owner Fields (appear when Individual Owner = Yes)
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl00_tbxIND_OWNER_SURNAME': 
+        data.evisaForeignBusiness?.foreignOwners?.[0]?.surname || 
+        data.evisa_foreign_business?.foreign_owners?.[0]?.surname,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl00_tbxIND_OWNER_GIVEN_NAME': 
+        data.evisaForeignBusiness?.foreignOwners?.[0]?.givenName || 
+        data.evisa_foreign_business?.foreign_owners?.[0]?.given_name,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl00_tbxIND_OWNER_STATUS': 
+        data.evisaForeignBusiness?.foreignOwners?.[0]?.status || 
+        data.evisa_foreign_business?.foreign_owners?.[0]?.status,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl00_ddlIND_OWNER_RES_CNTRY': 
+        this.mapCountry(data.evisaForeignBusiness?.foreignOwners?.[0]?.residenceCountry || 
+        data.evisa_foreign_business?.foreign_owners?.[0]?.residence_country),
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl00_ddlIND_OWNER_NATL': 
+        this.mapCountry(data.evisaForeignBusiness?.foreignOwners?.[0]?.nationality || 
+        data.evisa_foreign_business?.foreign_owners?.[0]?.nationality),
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl00_tbxIND_OWNERSHIP_PCT': 
+        data.evisaForeignBusiness?.foreignOwners?.[0]?.ownershipPercentage || 
+        data.evisa_foreign_business?.foreign_owners?.[0]?.ownership_percentage,
+        
+      // === E-VISA INVESTMENT INFORMATION FIELDS ===
+      
+      // Investment type radio buttons
+      'ctl00_SiteContentPlaceHolder_FormView1_rblEVISA_BUS_TYPE_IND_0':
+        data.evisaInvestment?.investmentType === 'C', // Creation of new business
+      'ctl00_SiteContentPlaceHolder_FormView1_rblEVISA_BUS_TYPE_IND_1':
+        data.evisaInvestment?.investmentType === 'P', // Purchase of existing
+      'ctl00_SiteContentPlaceHolder_FormView1_rblEVISA_BUS_TYPE_IND_2':
+        data.evisaInvestment?.investmentType === 'E', // Continuation of existing
+      
+      // Fair market value (appears when Continuation is selected)
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_CONT_COST':
+        data.evisaInvestment?.fairMarketValue,
+
+      // Financial year
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_FI_YR':
+        data.evisaInvestment?.financialYear,
+      'ctl00_SiteContentPlaceHolder_FormView1_rblEVISA_BUS_FI_YR_TYPE_0':
+        data.evisaInvestment?.yearType === 'F', // Fiscal
+      'ctl00_SiteContentPlaceHolder_FormView1_rblEVISA_BUS_FI_YR_TYPE_1':
+        data.evisaInvestment?.yearType === 'C', // Calendar
+
+      // Cash Investment
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_CI_INITIAL':
+        data.evisaInvestment?.cashInitial,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_CI_TOTAL':
+        data.evisaInvestment?.cashTotal,
+
+      // Inventory Investment  
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_II_INITIAL':
+        data.evisaInvestment?.inventoryInitial,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_II_TOTAL':
+        data.evisaInvestment?.inventoryTotal,
+
+      // Equipment Investment
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_EI_INITIAL':
+        data.evisaInvestment?.equipmentInitial,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_EI_TOTAL':
+        data.evisaInvestment?.equipmentTotal,
+
+      // Property Investment
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PI_INITIAL':
+        data.evisaInvestment?.propertyInitial,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PI_TOTAL':
+        data.evisaInvestment?.propertyTotal,
+
+      // Other Investment
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_OI_INITIAL':
+        data.evisaInvestment?.otherInitial,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_OI_TOTAL':
+        data.evisaInvestment?.otherTotal,
+
+      // Source of funds
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlInvestmentCaptial':
+        data.evisaInvestment?.sourceOfFunds, // P=Personal, C=Corporate, L=Loans, O=Other
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlFundsFrom':
+        data.evisaInvestment?.fundsFrom, // P=Treaty country, C=Domestic, L=Third countries
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_INV_FUNDS_AMT':
+        data.evisaInvestment?.fundsAmount,
+
+      // Documentation checkboxes
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxEVISA_BUS_INV_DOC_WIRE_IND':
+        data.evisaInvestment?.hasWireTransfers,
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxEVISA_BUS_INV_DOC_BANK_IND':
+        data.evisaInvestment?.hasBankStatements,
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxEVISA_BUS_INV_DOC_NOTE_IND':
+        data.evisaInvestment?.hasPromissoryNote,
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxEVISA_BUS_INV_DOC_OTH_IND':
+        data.evisaInvestment?.hasOtherDocs,
+
+      // Does Not Apply checkboxes (skip if we have data)
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxEVISA_BUS_TYPE_NA':
+        !data.evisaInvestment?.investmentType,
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxEVISA_BUS_INVEST_ABROAD_NA':
+        !data.evisaInvestment?.cashInitial && !data.evisaInvestment?.inventoryInitial,
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxEVISA_SOURCE_INVEST_CAP_NA':
+        !data.evisaInvestment?.sourceOfFunds,
+        
+      // === E-VISA FINANCE AND TRADE FIELDS (PAGE 3) ===
+      
+      // Financial Statement Fields
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxForYear': 
+        data.evisaFinanceTrade?.financialYear || 
+        data.evisa_finance_trade?.financial_year ||
+        data.evisaFinancial?.taxYear ||
+        new Date().getFullYear().toString(),
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_ASSETS': 
+        data.evisaFinanceTrade?.totalAssets || 
+        data.evisa_finance_trade?.total_assets ||
+        data.evisaFinancial?.totalAssets,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_LIABILITIES': 
+        data.evisaFinanceTrade?.totalLiabilities || 
+        data.evisa_finance_trade?.total_liabilities ||
+        data.evisaFinancial?.totalLiabilities,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_OWN_EQUITY': 
+        data.evisaFinanceTrade?.ownerEquity || 
+        data.evisa_finance_trade?.owner_equity ||
+        data.evisaFinancial?.ownerEquity ||
+        data.evisaFinancial?.netWorth,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_EXPENSES_PRETAX': 
+        data.evisaFinanceTrade?.operatingIncomeBeforeTax || 
+        data.evisa_finance_trade?.operating_income_before_tax ||
+        data.evisaFinancial?.operatingIncomeBeforeTax ||
+        data.evisaFinancial?.grossIncome,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_EXPENSES_POSTAX': 
+        data.evisaFinanceTrade?.operatingIncomeAfterTax || 
+        data.evisa_finance_trade?.operating_income_after_tax ||
+        data.evisaFinancial?.operatingIncomeAfterTax ||
+        data.evisaFinancial?.netIncome,
+        
+      // Gross International Trade
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxGROSS_INTL_TRADE_NA': 
+        data.evisaFinanceTrade?.tradeNotApplicable || 
+        data.evisa_finance_trade?.trade_not_applicable || false,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_GIT_YR': 
+        data.evisaFinanceTrade?.grossInternationalTradeYear || 
+        data.evisa_finance_trade?.gross_international_trade_year ||
+        data.evisaFinanceTrade?.financialYear ||
+        new Date().getFullYear().toString(),
+        
+      // Treaty Country Trade
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_TRTY_IMP_USD': 
+        data.evisaFinanceTrade?.treatyCountryImports || 
+        data.evisa_finance_trade?.treaty_country_imports,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_TRTY_IMP_TRANS': 
+        data.evisaFinanceTrade?.treatyCountryImportTransactions || 
+        data.evisa_finance_trade?.treaty_country_import_transactions,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_TRTY_EXP_USD': 
+        data.evisaFinanceTrade?.treatyCountryExports || 
+        data.evisa_finance_trade?.treaty_country_exports,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_TRTY_EXP_TRANS': 
+        data.evisaFinanceTrade?.treatyCountryExportTransactions || 
+        data.evisa_finance_trade?.treaty_country_export_transactions,
+        
+      // Third Country Trade
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_THRD_IMP_USD': 
+        data.evisaFinanceTrade?.thirdCountryImports || 
+        data.evisa_finance_trade?.third_country_imports,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_THRD_IMP_TRANS': 
+        data.evisaFinanceTrade?.thirdCountryImportTransactions || 
+        data.evisa_finance_trade?.third_country_import_transactions,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_THRD_EXP_USD': 
+        data.evisaFinanceTrade?.thirdCountryExports || 
+        data.evisa_finance_trade?.third_country_exports,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_THRD_EXP_TRANS': 
+        data.evisaFinanceTrade?.thirdCountryExportTransactions || 
+        data.evisa_finance_trade?.third_country_export_transactions,
+        
+      // Domestic Production
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_MANUF_USD': 
+        data.evisaFinanceTrade?.domesticProductionValue || 
+        data.evisa_finance_trade?.domestic_production_value ||
+        data.evisaFinanceTrade?.domesticProduction,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_MANUF_TRANS': 
+        data.evisaFinanceTrade?.domesticProductionTransactions || 
+        data.evisa_finance_trade?.domestic_production_transactions,
+        
+      // === E-VISA US PERSONNEL INFORMATION (PAGE 4) ===
+      // Personnel fields (support multiple personnel with ctl00, ctl01, etc.)
+      // First person
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl00_tbxEVISA_PSNL_SURNAME': 
+        data.evisaUSPersonnel?.personnel?.[0]?.surname || 
+        data.evisa_us_personnel?.personnel?.[0]?.surname,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl00_tbxEVISA_PSNL_GIVEN_NAME': 
+        data.evisaUSPersonnel?.personnel?.[0]?.givenName || 
+        data.evisa_us_personnel?.personnel?.[0]?.given_name,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl00_tbxEVISA_PSNL_POSITION': 
+        data.evisaUSPersonnel?.personnel?.[0]?.position || 
+        data.evisa_us_personnel?.personnel?.[0]?.position,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl00_tbxEVISA_PSNL_DIVISION': 
+        data.evisaUSPersonnel?.personnel?.[0]?.division || 
+        data.evisa_us_personnel?.personnel?.[0]?.division,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl00_ddlEVISA_PSNL_NATL': 
+        this.mapCountry(data.evisaUSPersonnel?.personnel?.[0]?.nationality || 
+        data.evisa_us_personnel?.personnel?.[0]?.nationality),
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl00_ddlEVISA_PSNL_STATUS_IND': (function() {
+        const status = data.evisaUSPersonnel?.personnel?.[0]?.usStatus || 
+                        data.evisa_us_personnel?.personnel?.[0]?.us_status;
+        const mapped = this.mapUSStatus(status);
+        return mapped;
+      }).call(this),
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl00_tbxEVISA_PSNL_STATUS_OTH': 
+        data.evisaUSPersonnel?.personnel?.[0]?.usStatusOther || 
+        data.evisa_us_personnel?.personnel?.[0]?.us_status_other,
+        
+      // Visa information for personnel
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl00_ddlEVISA_PSNL_VISA_TYPE': 
+        data.evisaUSPersonnel?.personnel?.[0]?.visaType || 
+        data.evisa_us_personnel?.personnel?.[0]?.visa_type,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl00_ddlEVISA_PSNL_VISA_DTE_DY': 
+        this.parseDate(data.evisaUSPersonnel?.personnel?.[0]?.visaIssueDate || 
+        data.evisa_us_personnel?.personnel?.[0]?.visa_issue_date)?.day,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl00_ddlEVISA_PSNL_VISA_DTE_MO': 
+        this.parseDate(data.evisaUSPersonnel?.personnel?.[0]?.visaIssueDate || 
+        data.evisa_us_personnel?.personnel?.[0]?.visa_issue_date)?.month,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl00_tbxEVISA_PSNL_VISA_DTE_YR': 
+        this.parseDate(data.evisaUSPersonnel?.personnel?.[0]?.visaIssueDate || 
+        data.evisa_us_personnel?.personnel?.[0]?.visa_issue_date)?.year,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl00_ddlEVISA_PSNL_VISA_PLACE': 
+        data.evisaUSPersonnel?.personnel?.[0]?.visaIssuePlace || 
+        data.evisa_us_personnel?.personnel?.[0]?.visa_issue_place,
+        
+      // A Number (Alien Registration Number)
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl00_tbxEVISA_PSNL_A_NUM': 
+        data.evisaUSPersonnel?.personnel?.[0]?.alienNumber || 
+        data.evisa_us_personnel?.personnel?.[0]?.alien_number,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl00_cbxEVISA_PSNL_A_NUM_DNK': 
+        !data.evisaUSPersonnel?.personnel?.[0]?.alienNumber || 
+        data.evisaUSPersonnel?.personnel?.[0]?.alienNumberUnknown === true,
+        
+      // Second person (if exists)
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl01_tbxEVISA_PSNL_SURNAME': 
+        data.evisaUSPersonnel?.personnel?.[1]?.surname || 
+        data.evisa_us_personnel?.personnel?.[1]?.surname,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl01_tbxEVISA_PSNL_GIVEN_NAME': 
+        data.evisaUSPersonnel?.personnel?.[1]?.givenName || 
+        data.evisa_us_personnel?.personnel?.[1]?.given_name,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl01_tbxEVISA_PSNL_POSITION': 
+        data.evisaUSPersonnel?.personnel?.[1]?.position || 
+        data.evisa_us_personnel?.personnel?.[1]?.position,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl01_tbxEVISA_PSNL_DIVISION': 
+        data.evisaUSPersonnel?.personnel?.[1]?.division || 
+        data.evisa_us_personnel?.personnel?.[1]?.division,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl01_ddlEVISA_PSNL_NATL': 
+        this.mapCountry(data.evisaUSPersonnel?.personnel?.[1]?.nationality || 
+        data.evisa_us_personnel?.personnel?.[1]?.nationality),
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlUSBusPers_ctl01_ddlEVISA_PSNL_STATUS_IND': (function() {
+        const status = data.evisaUSPersonnel?.personnel?.[1]?.usStatus || 
+                        data.evisa_us_personnel?.personnel?.[1]?.us_status;
+        const mapped = this.mapUSStatus(status);
+        return mapped;
+      }).call(this),
+      
+      // === E-VISA US PERSONNEL INFORMATION 1 - EMPLOYEE COUNTS ===
+      // Year Type radio buttons for Employee Counts page
+      'ctl00_SiteContentPlaceHolder_FormView1_rblYearType_0': 
+        (data.evisaEmployeeCounts?.yearType || 
+         data.evisa_employee_counts?.year_type || 'F') === 'F',
+      'ctl00_SiteContentPlaceHolder_FormView1_rblYearType_1': 
+        (data.evisaEmployeeCounts?.yearType || 
+         data.evisa_employee_counts?.year_type || 'F') === 'C',
+      
+      // Treaty Country National Employee Counts
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_TRTY_MGR_CY': 
+        data.evisaEmployeeCounts?.treatyNationals?.managerial?.thisYear || 
+        data.evisa_employee_counts?.treaty_nationals?.managerial?.this_year,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_TRTY_MGR_NY': 
+        data.evisaEmployeeCounts?.treatyNationals?.managerial?.nextYear || 
+        data.evisa_employee_counts?.treaty_nationals?.managerial?.next_year,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_TRTY_SPEC_CY': 
+        data.evisaEmployeeCounts?.treatyNationals?.specialized?.thisYear || 
+        data.evisa_employee_counts?.treaty_nationals?.specialized?.this_year,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_TRTY_SPEC_NY': 
+        data.evisaEmployeeCounts?.treatyNationals?.specialized?.nextYear || 
+        data.evisa_employee_counts?.treaty_nationals?.specialized?.next_year,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_TRTY_OTH_CY': 
+        data.evisaEmployeeCounts?.treatyNationals?.other?.thisYear || 
+        data.evisa_employee_counts?.treaty_nationals?.other?.this_year,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_TRTY_OTH_NY': 
+        data.evisaEmployeeCounts?.treatyNationals?.other?.nextYear || 
+        data.evisa_employee_counts?.treaty_nationals?.other?.next_year,
+      
+      // US Citizens/LPR Employee Counts
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_US_MGR_CY': 
+        data.evisaEmployeeCounts?.usCitizensLPR?.managerial?.thisYear || 
+        data.evisa_employee_counts?.us_citizens_lpr?.managerial?.this_year,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_US_MGR_NY': 
+        data.evisaEmployeeCounts?.usCitizensLPR?.managerial?.nextYear || 
+        data.evisa_employee_counts?.us_citizens_lpr?.managerial?.next_year,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_US_SPEC_CY': 
+        data.evisaEmployeeCounts?.usCitizensLPR?.specialized?.thisYear || 
+        data.evisa_employee_counts?.us_citizens_lpr?.specialized?.this_year,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_US_SPEC_NY': 
+        data.evisaEmployeeCounts?.usCitizensLPR?.specialized?.nextYear || 
+        data.evisa_employee_counts?.us_citizens_lpr?.specialized?.next_year,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_US_OTH_CY': 
+        data.evisaEmployeeCounts?.usCitizensLPR?.other?.thisYear || 
+        data.evisa_employee_counts?.us_citizens_lpr?.other?.this_year,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_US_OTH_NY': 
+        data.evisaEmployeeCounts?.usCitizensLPR?.other?.nextYear || 
+        data.evisa_employee_counts?.us_citizens_lpr?.other?.next_year,
+      
+      // Third Country National Employee Counts
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_THRD_MGR_CY': 
+        data.evisaEmployeeCounts?.thirdCountryNationals?.managerial?.thisYear || 
+        data.evisa_employee_counts?.third_country_nationals?.managerial?.this_year,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_THRD_MGR_NY': 
+        data.evisaEmployeeCounts?.thirdCountryNationals?.managerial?.nextYear || 
+        data.evisa_employee_counts?.third_country_nationals?.managerial?.next_year,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_THRD_SPEC_CY': 
+        data.evisaEmployeeCounts?.thirdCountryNationals?.specialized?.thisYear || 
+        data.evisa_employee_counts?.third_country_nationals?.specialized?.this_year,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_THRD_SPEC_NY': 
+        data.evisaEmployeeCounts?.thirdCountryNationals?.specialized?.nextYear || 
+        data.evisa_employee_counts?.third_country_nationals?.specialized?.next_year,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_THRD_OTH_CY': 
+        data.evisaEmployeeCounts?.thirdCountryNationals?.other?.thisYear || 
+        data.evisa_employee_counts?.third_country_nationals?.other?.this_year,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_PERS_THRD_OTH_NY': 
+        data.evisaEmployeeCounts?.thirdCountryNationals?.other?.nextYear || 
+        data.evisa_employee_counts?.third_country_nationals?.other?.next_year,
+        
+      // === E-VISA APPLICANT PRESENT POSITION (PAGE 5) ===
+      // Applicant Type
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlApplicantType': 
+        data.evisaApplicantPosition?.applicantType || 
+        data.evisa_applicant_position?.applicant_type,
+        
+      // Present Position and Duties
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxPresentPosition': 
+        data.evisaApplicantPosition?.presentPosition || 
+        data.evisa_applicant_position?.present_position,
+        
+      // Employer Information
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEmployerName': 
+        data.evisaApplicantPosition?.employerName || 
+        data.evisa_applicant_position?.employer_name,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxYearsWithEmployer': 
+        data.evisaApplicantPosition?.yearsWithEmployer || 
+        data.evisa_applicant_position?.years_with_employer,
+        
+      // Employer Address
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEmpStreetAddress1': 
+        data.evisaApplicantPosition?.employerAddress?.street1 || 
+        data.evisa_applicant_position?.employer_address?.street1,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEmpStreetAddress2': 
+        data.evisaApplicantPosition?.employerAddress?.street2 || 
+        data.evisa_applicant_position?.employer_address?.street2,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEmpCity': 
+        data.evisaApplicantPosition?.employerAddress?.city || 
+        data.evisa_applicant_position?.employer_address?.city,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_APP_EMP_STATE': 
+        data.evisaApplicantPosition?.employerAddress?.state || 
+        data.evisa_applicant_position?.employer_address?.state,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_cbexEVISA_APP_EMP_STATE_NA': 
+        !data.evisaApplicantPosition?.employerAddress?.state || 
+        data.evisaApplicantPosition?.employerAddress?.stateNA === true,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_APP_EMP_POSTAL_CD': 
+        data.evisaApplicantPosition?.employerAddress?.postalCode || 
+        data.evisa_applicant_position?.employer_address?.postal_code,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_cbexEVISA_APP_EMP_POSTAL_CD_NA': 
+        !data.evisaApplicantPosition?.employerAddress?.postalCode || 
+        data.evisaApplicantPosition?.employerAddress?.postalCodeNA === true,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlEmpCountry': 
+        this.mapCountry(data.evisaApplicantPosition?.employerAddress?.country || 
+        data.evisa_applicant_position?.employer_address?.country),
+        
+      // Education Information
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxSchool': 
+        data.evisaApplicantPosition?.education?.school || 
+        data.evisa_applicant_position?.education?.school,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxDegree': 
+        data.evisaApplicantPosition?.education?.degree || 
+        data.evisa_applicant_position?.education?.degree,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxMajor': 
+        data.evisaApplicantPosition?.education?.major || 
+        data.evisa_applicant_position?.education?.major,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxYear': 
+        data.evisaApplicantPosition?.education?.year || 
+        data.evisa_applicant_position?.education?.year,
+        
+      // === E-VISA APPLICANT POSITION IN U.S. (PAGE 6) ===
+      // Position details in the United States
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxTitle': 
+        data.evisaApplicantUSPosition?.title || 
+        data.evisa_applicant_us_position?.title,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxDuties': 
+        data.evisaApplicantUSPosition?.duties || 
+        data.evisa_applicant_us_position?.duties,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxSalary': 
+        data.evisaApplicantUSPosition?.salary || 
+        data.evisa_applicant_us_position?.salary,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxBenefits': 
+        data.evisaApplicantUSPosition?.benefits || 
+        data.evisa_applicant_us_position?.benefits,
+        
+      // Immediate Subordinates Question
+      'ctl00_SiteContentPlaceHolder_FormView1_rblImmSuborQuestion_0':
+        data.evisaApplicantUSPosition?.hasImmediateSubordinates === true,
+      'ctl00_SiteContentPlaceHolder_FormView1_rblImmSuborQuestion_1':
+        data.evisaApplicantUSPosition?.hasImmediateSubordinates === false,
+        
+      // Immediate Subordinates (up to 6, following pattern of other "Add Another" fields)
+      // First Subordinate (ctl00)
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlImmSubor_ctl00_tbxEVISA_SUB_SURNAME':
+        data.evisaApplicantUSPosition?.immediateSubordinates?.[0]?.surname,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlImmSubor_ctl00_tbxEVISA_SUB_GIVEN_NAME':
+        data.evisaApplicantUSPosition?.immediateSubordinates?.[0]?.givenName,
+        
+      // Second Subordinate (ctl01)
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlImmSubor_ctl01_tbxEVISA_SUB_SURNAME':
+        data.evisaApplicantUSPosition?.immediateSubordinates?.[1]?.surname,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlImmSubor_ctl01_tbxEVISA_SUB_GIVEN_NAME':
+        data.evisaApplicantUSPosition?.immediateSubordinates?.[1]?.givenName,
+        
+      // Third Subordinate (ctl02)
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlImmSubor_ctl02_tbxEVISA_SUB_SURNAME':
+        data.evisaApplicantUSPosition?.immediateSubordinates?.[2]?.surname,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlImmSubor_ctl02_tbxEVISA_SUB_GIVEN_NAME':
+        data.evisaApplicantUSPosition?.immediateSubordinates?.[2]?.givenName,
+        
+      // Fourth Subordinate (ctl03)
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlImmSubor_ctl03_tbxEVISA_SUB_SURNAME':
+        data.evisaApplicantUSPosition?.immediateSubordinates?.[3]?.surname,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlImmSubor_ctl03_tbxEVISA_SUB_GIVEN_NAME':
+        data.evisaApplicantUSPosition?.immediateSubordinates?.[3]?.givenName,
+        
+      // Fifth Subordinate (ctl04)
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlImmSubor_ctl04_tbxEVISA_SUB_SURNAME':
+        data.evisaApplicantUSPosition?.immediateSubordinates?.[4]?.surname,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlImmSubor_ctl04_tbxEVISA_SUB_GIVEN_NAME':
+        data.evisaApplicantUSPosition?.immediateSubordinates?.[4]?.givenName,
+        
+      // Sixth Subordinate (ctl05)
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlImmSubor_ctl05_tbxEVISA_SUB_SURNAME':
+        data.evisaApplicantUSPosition?.immediateSubordinates?.[5]?.surname,
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlImmSubor_ctl05_tbxEVISA_SUB_GIVEN_NAME':
+        data.evisaApplicantUSPosition?.immediateSubordinates?.[5]?.givenName,
+        
+      // Worker Replacement Question
+      'ctl00_SiteContentPlaceHolder_FormView1_rblWorkerReplacedQuestion_0':
+        data.evisaApplicantUSPosition?.isReplacingWorker === true,
+      'ctl00_SiteContentPlaceHolder_FormView1_rblWorkerReplacedQuestion_1':
+        data.evisaApplicantUSPosition?.isReplacingWorker === false,
+        
+      // Replaced Worker Details (if applicable)
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_APP_REPL_SURNAME':
+        data.evisaApplicantUSPosition?.replacedWorker?.surname,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_APP_REPL_GIVEN_NAME':
+        data.evisaApplicantUSPosition?.replacedWorker?.givenName,
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlVisaType':
+        data.evisaApplicantUSPosition?.replacedWorker?.visaType,
+        
+      // Replaced Worker Visa Issue Date
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlVisaIssuedDateDay':
+        data.evisaApplicantUSPosition?.replacedWorker?.visaIssuedDate?.split('-')?.[0],
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlVisaIssuedDateMonth':
+        (() => {
+          const month = data.evisaApplicantUSPosition?.replacedWorker?.visaIssuedDate?.split('-')?.[1];
+          const monthMap = { 'JAN': '1', 'FEB': '2', 'MAR': '3', 'APR': '4', 'MAY': '5', 'JUN': '6', 
+                           'JUL': '7', 'AUG': '8', 'SEP': '9', 'OCT': '10', 'NOV': '11', 'DEC': '12' };
+          return monthMap[month];
+        })(),
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxVisaIssuedDateYear':
+        data.evisaApplicantUSPosition?.replacedWorker?.visaIssuedDate?.split('-')?.[2],
+        
+      // Replaced Worker Visa Issue Country
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlVisaIssuePlace':
+        data.evisaApplicantUSPosition?.replacedWorker?.visaIssuedCountry,
+        
+      // Staff Increase Question (only relevant if not replacing worker)
+      'ctl00_SiteContentPlaceHolder_FormView1_rblIncreaseStaffQuestion_0':
+        data.evisaApplicantUSPosition?.willIncreaseStaff === true,
+      'ctl00_SiteContentPlaceHolder_FormView1_rblIncreaseStaffQuestion_1':
+        data.evisaApplicantUSPosition?.willIncreaseStaff === false,
+        
+      // Continuation of Employment Question (only relevant if not replacing worker)
+      'ctl00_SiteContentPlaceHolder_FormView1_rblContinuedEmploymentQuestion_0':
+        data.evisaApplicantUSPosition?.continuationOfEmployment === true,
+      'ctl00_SiteContentPlaceHolder_FormView1_rblContinuedEmploymentQuestion_1':
+        data.evisaApplicantUSPosition?.continuationOfEmployment === false,
+        
+      // === E-VISA APPLICATION CONTACT (PAGE 7) ===
+      // Officer Information
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxOfficerSurname': 
+        data.evisaApplicationContact?.officer?.surname || 
+        data.evisa_application_contact?.officer?.surname ||
+        data.evisaApplicationContact?.officerSurname ||
+        data.evisa_application_contact?.officer_surname,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxOfficerGivenName': 
+        data.evisaApplicationContact?.officer?.givenName || 
+        data.evisa_application_contact?.officer?.given_name ||
+        data.evisaApplicationContact?.officerGivenName ||
+        data.evisa_application_contact?.officer_given_name,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxOfficerPosition': 
+        data.evisaApplicationContact?.officer?.position || 
+        data.evisa_application_contact?.officer?.position ||
+        data.evisaApplicationContact?.officerPosition ||
+        data.evisa_application_contact?.officer_position,
+        
+      // Contact Person Information
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxContactSurname': 
+        data.evisaApplicationContact?.contact?.surname || 
+        data.evisa_application_contact?.contact?.surname ||
+        data.evisaApplicationContact?.contactSurname ||
+        data.evisa_application_contact?.contact_surname,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxContactGivenName': 
+        data.evisaApplicationContact?.contact?.givenName || 
+        data.evisa_application_contact?.contact?.given_name ||
+        data.evisaApplicationContact?.contactGivenName ||
+        data.evisa_application_contact?.contact_given_name,
+        
+      // Contact Address
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxAddress1': 
+        data.evisaApplicationContact?.address?.street1 || 
+        data.evisa_application_contact?.address?.street1 ||
+        data.evisaApplicationContact?.street1 ||
+        data.evisa_application_contact?.street1,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxAddress2': 
+        data.evisaApplicationContact?.address?.street2 || 
+        data.evisa_application_contact?.address?.street2 ||
+        data.evisaApplicationContact?.street2 ||
+        data.evisa_application_contact?.street2,
+        
+      // City field handled specially in findMatchingValue based on page context
+      // Removed duplicate mapping - see special handling at line 1006
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_APP_POC_STATE': 
+        data.evisaApplicationContact?.address?.state || 
+        data.evisa_application_contact?.address?.state ||
+        data.evisaApplicationContact?.state ||
+        data.evisa_application_contact?.state,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_cbexEVISA_APP_POC_STATE_NA': 
+        data.evisaApplicationContact?.address?.stateNA || 
+        data.evisa_application_contact?.address?.state_na ||
+        data.evisaApplicationContact?.stateNA ||
+        data.evisa_application_contact?.state_na,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_APP_POC_POSTAL_CD': 
+        data.evisaApplicationContact?.address?.postalCode || 
+        data.evisa_application_contact?.address?.postal_code ||
+        data.evisaApplicationContact?.postalCode ||
+        data.evisa_application_contact?.postal_code,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_cbexEVISA_APP_POC_POSTAL_CD_NA': 
+        data.evisaApplicationContact?.address?.postalCodeNA || 
+        data.evisa_application_contact?.address?.postal_code_na ||
+        data.evisaApplicationContact?.postalCodeNA ||
+        data.evisa_application_contact?.postal_code_na,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlCountry': 
+        data.evisaApplicationContact?.address?.country || 
+        data.evisa_application_contact?.address?.country ||
+        data.evisaApplicationContact?.country ||
+        data.evisa_application_contact?.country,
+        
+      // Contact Communication
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxPhoneNum': 
+        data.evisaApplicationContact?.phone || 
+        data.evisa_application_contact?.phone ||
+        data.evisaApplicationContact?.phoneNumber ||
+        data.evisa_application_contact?.phone_number,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_APP_POC_FAX': 
+        data.evisaApplicationContact?.fax || 
+        data.evisa_application_contact?.fax ||
+        data.evisaApplicationContact?.faxNumber ||
+        data.evisa_application_contact?.fax_number,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_cbexEVISA_APP_POC_FAX_NA': 
+        data.evisaApplicationContact?.faxNA || 
+        data.evisa_application_contact?.fax_na,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_APP_POC_EMAIL': 
+        data.evisaApplicationContact?.email || 
+        data.evisa_application_contact?.email ||
+        data.evisaApplicationContact?.emailAddress ||
+        data.evisa_application_contact?.email_address,
+        
+      'ctl00_SiteContentPlaceHolder_FormView1_cbexEVISA_APP_POC_EMAIL_NA': 
+        data.evisaApplicationContact?.emailNA || 
+        data.evisa_application_contact?.email_na,
+        
+      // === TEMPORARY WORK VISA INFORMATION PAGE === 
+      // For E-visa applicants - US employer information (last page in DS-160)
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEmployerName': 
+        data.evisaBusiness?.businessName,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEvisaCoRegNum':
+        data.evisaBusiness?.registrationNumber || '',
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEmpStreetAddress1':
+        data.evisaBusiness?.businessAddress?.street1 || 
+        data.evisaBusiness?.offices?.[0]?.address?.street1,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEmpStreetAddress2':
+        data.evisaBusiness?.businessAddress?.street2 || 
+        data.evisaBusiness?.offices?.[0]?.address?.street2 || '',
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEmpCity':
+        data.evisaBusiness?.businessAddress?.city ||
+        data.evisaBusiness?.offices?.[0]?.address?.city,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlEmpState':
+        data.evisaBusiness?.businessAddress?.state ||
+        data.evisaBusiness?.offices?.[0]?.address?.state,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxZIPCode':
+        data.evisaBusiness?.businessAddress?.postalCode ||
+        data.evisaBusiness?.offices?.[0]?.address?.postalCode,
+      
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxTEMP_WORK_TEL':
+        data.evisaBusiness?.businessPhone ||
+        data.evisaBusiness?.offices?.[0]?.phone,
+        
     };
 
     // Check direct mapping first
@@ -2687,11 +4159,10 @@ class TwoPassFiller {
     
     console.log(`getMonthNumber called with: ${dateStr}`);
     
-    // DS-160 month dropdowns can expect either:
-    // 1. Month abbreviation (e.g., "JAN", "FEB", "JUL")
-    // 2. Numeric value (e.g., "01", "02", "07")
+    // DS-160 month dropdowns expect numeric values: "1" for JAN, "2" for FEB, etc.
+    // NOT zero-padded ("01", "02")
     
-    // Check for month name format (e.g., "09-JUL-2025")
+    // Check for month name format (e.g., "09-JUL-2025" or "01-OCT-1997")
     const parts = dateStr.toUpperCase().split(/[-/]/);
     const monthAbbreviations = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 
                                  'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -2702,9 +4173,9 @@ class TwoPassFiller {
       const part = parts[i];
       const monthIndex = monthAbbreviations.indexOf(part);
       if (monthIndex !== -1) {
-        // Found month abbreviation - return numeric value for dropdown with leading zero
+        // Found month abbreviation - return numeric value for dropdown WITHOUT leading zero
         console.log(`Found month abbreviation: ${part} (index: ${monthIndex + 1})`);
-        return (monthIndex + 1).toString().padStart(2, '0'); // Return "01" for JAN, "02" for FEB, etc.
+        return (monthIndex + 1).toString(); // Return "1" for JAN, "2" for FEB, "10" for OCT, etc.
       }
     }
     
@@ -2770,6 +4241,40 @@ class TwoPassFiller {
     
     return statusMap[status.toUpperCase()] || status;
   }
+  
+  // Map US Status abbreviations to dropdown values (single letter codes)
+  mapUSStatus(status) {
+    if (!status) return '';
+    
+    const statusMap = {
+      // Map common abbreviations to dropdown letter codes
+      'USC': 'U',              // U.S. Citizen
+      'U.S. Citizen': 'U',
+      'U.S. CITIZEN': 'U',
+      'LPR': 'L',              // Lawful Permanent Resident
+      'Legal Permanent Resident': 'L',
+      'LAWFUL PERMANENT RESIDENT': 'L',
+      'NI': 'N',               // NonImmigrant
+      'Nonimmigrant': 'N',
+      'NONIMMIGRANT': 'N',
+      'Other': 'O',            // Other/I Don't Know
+      'Unknown': 'O',
+      'OTHER': 'O'
+    };
+    
+    // Check if it's a visa type (for non-immigrant status)
+    const visaTypes = ['H1B', 'H-1B', 'H1', 'H-1', 'L1', 'L-1', 'L2', 'L-2', 
+                      'E1', 'E-1', 'E2', 'E-2', 'F1', 'F-1', 'J1', 'J-1', 
+                      'O1', 'O-1', 'P1', 'P-1', 'TN', 'B1', 'B-1', 'B2', 'B-2'];
+    const upperStatus = status?.toUpperCase();
+    for (const visa of visaTypes) {
+      if (upperStatus === visa || upperStatus === visa.replace('-', '')) {
+        return 'N';  // Return 'N' for NonImmigrant
+      }
+    }
+    
+    return statusMap[status] || statusMap[upperStatus] || status;
+  }
 
   mapCountry(country) {
     console.log(`mapCountry called with: "${country}"`);
@@ -2788,6 +4293,7 @@ class TwoPassFiller {
       'AMERICA': 'USA',
       
       'CHINA': 'CHIN',
+      'CHN': 'CHIN',  // ISO-3 code
       'PRC': 'CHIN',
       'PEOPLE\'S REPUBLIC OF CHINA': 'CHIN',
       'CHIN': 'CHIN',
@@ -2811,15 +4317,21 @@ class TwoPassFiller {
       
       'UNITED KINGDOM': 'GRBR',
       'UK': 'GRBR',
+      'GBR': 'GRBR',  // ISO-3 code
       'GREAT BRITAIN': 'GRBR',
       'ENGLAND': 'GRBR',
       'SCOTLAND': 'GRBR',
       'WALES': 'GRBR',
+      'GRBR': 'GRBR',
       
       'GERMANY': 'GER',
       'DEUTSCHLAND': 'GER',
+      'DEU': 'GER',  // ISO-3 code
+      'GER': 'GER',
       
       'FRANCE': 'FRAN',
+      'FRA': 'FRAN',  // ISO-3 code
+      'FRAN': 'FRAN',
       
       'INDIA': 'IND',
       'IND': 'IND',
@@ -2828,6 +4340,8 @@ class TwoPassFiller {
       'MEX': 'MEX',
       
       'BRAZIL': 'BRZL',
+      'BRA': 'BRZL',  // ISO-3 code
+      'BRZL': 'BRZL',
       'BRASIL': 'BRZL',
       
       'AUSTRALIA': 'ASTL',
@@ -2835,15 +4349,21 @@ class TwoPassFiller {
       
       'ITALY': 'ITLY',
       'ITALIA': 'ITLY',
+      'ITA': 'ITLY',  // ISO-3 code
+      'ITLY': 'ITLY',
       
       'SPAIN': 'SPN',
       'ESPANA': 'SPN',
       'ESPAÑA': 'SPN',
+      'ESP': 'SPN',  // ISO-3 code
+      'SPN': 'SPN',
       
       'RUSSIA': 'RUS',
       'RUSSIAN FEDERATION': 'RUS',
+      'RUS': 'RUS',  // ISO-3 code
       
       'PHILIPPINES': 'PHIL',
+      'PHL': 'PHIL',  // ISO-3 code
       'PHIL': 'PHIL',
       
       'TAIWAN': 'TWAN',
@@ -2858,85 +4378,879 @@ class TwoPassFiller {
       'HONG KONG SAR': 'HNK',
       
       'THAILAND': 'THAI',
+      'THA': 'THAI',  // ISO-3 code
+      'THAI': 'THAI',
       
       'VIETNAM': 'VTNM',
+      'VNM': 'VTNM',  // ISO-3 code
       'VIET NAM': 'VTNM',
       
+      'CAMBODIA': 'CBDA',
+      'KHM': 'CBDA',  // ISO-3 code
+      'KAMPUCHEA': 'CBDA',
+      'CBDA': 'CBDA',
+      
       'INDONESIA': 'IDSA',
+      'IDN': 'IDSA',  // ISO-3 code
+      'IDSA': 'IDSA',
       
       'MALAYSIA': 'MLAS',
+      'MYS': 'MLAS',  // ISO-3 code
+      'MLAS': 'MLAS',
       
-      'NETHERLANDS': 'NL',
-      'HOLLAND': 'NL',
+      'NETHERLANDS': 'NETH',
+      'HOLLAND': 'NETH',
+      'NLD': 'NETH',  // ISO-3 code
+      'NETH': 'NETH',
       
-      'BELGIUM': 'B',
+      'BELGIUM': 'BELG',
+      'BEL': 'BELG',  // ISO-3 code
+      'BELG': 'BELG',
       
-      'SWITZERLAND': 'CH',
+      'SWITZERLAND': 'SWTZ',
+      'CHE': 'SWTZ',  // ISO-3 code
+      'SWTZ': 'SWTZ',
       
-      'SWEDEN': 'S',
+      'SWEDEN': 'SWDN',
+      'SWE': 'SWDN',  // ISO-3 code
+      'SWDN': 'SWDN',
       
-      'NORWAY': 'N',
+      'NORWAY': 'NORW',
+      'NOR': 'NORW',  // ISO-3 code
+      'NORW': 'NORW',
       
-      'DENMARK': 'DK',
+      'DENMARK': 'DEN',
+      'DNK': 'DEN',  // ISO-3 code
+      'DEN': 'DEN',
       
-      'FINLAND': 'SF',
+      'FINLAND': 'FIN',
+      'FIN': 'FIN',  // ISO-3 code
       
-      'POLAND': 'PL',
+      'POLAND': 'POL',
+      'POL': 'POL',  // ISO-3 code
       
-      'IRELAND': 'IRL',
+      'IRELAND': 'IRE',
+      'IRL': 'IRE',  // ISO-3 code
+      'IRE': 'IRE',
       
-      'NEW ZEALAND': 'NZ',
-      'NZ': 'NZ',
+      'NEW ZEALAND': 'NZLD',
+      'NZL': 'NZLD',  // ISO-3 code
+      'NZ': 'NZLD',
+      'NZLD': 'NZLD',
       
-      'ARGENTINA': 'RA',
+      'ARGENTINA': 'ARG',
+      'ARG': 'ARG',  // ISO-3 code
       
-      'CHILE': 'RCH',
+      'CHILE': 'CHIL',
+      'CHL': 'CHIL',  // ISO-3 code
+      'CHIL': 'CHIL',
       
-      'COLOMBIA': 'CO',
+      'COLOMBIA': 'COL',
+      'COL': 'COL',  // ISO-3 code
       
-      'PERU': 'PE',
+      'PERU': 'PERU',
+      'PER': 'PERU',  // ISO-3 code
+      'PERU': 'PERU',
       
-      'VENEZUELA': 'YV',
+      'VENEZUELA': 'VENZ',
+      'VEN': 'VENZ',  // ISO-3 code
+      'VENZ': 'VENZ',
       
-      'ISRAEL': 'IL',
+      'ISRAEL': 'ISRL',
+      'ISR': 'ISRL',  // ISO-3 code
+      'ISRL': 'ISRL',
       
-      'SAUDI ARABIA': 'SA',
-      'KSA': 'SA',
+      'SAUDI ARABIA': 'SARB',
+      'SAU': 'SARB',  // ISO-3 code
+      'KSA': 'SARB',
+      'SARB': 'SARB',
       
       'UAE': 'UAE',
+      'ARE': 'UAE',  // ISO-3 code
       'UNITED ARAB EMIRATES': 'UAE',
       
-      'TURKEY': 'TR',
-      'TURKIYE': 'TR',
+      'TURKEY': 'TRKY',
+      'TURKIYE': 'TRKY',
+      'TUR': 'TRKY',  // ISO-3 code
+      'TRKY': 'TRKY',
       
-      'EGYPT': 'ET',
+      'EGYPT': 'EGYP',
+      'EGY': 'EGYP',  // ISO-3 code
+      'EGYP': 'EGYP',
       
-      'SOUTH AFRICA': 'ZA',
+      'SOUTH AFRICA': 'SAFR',
+      'ZAF': 'SAFR',  // ISO-3 code
+      'SAFR': 'SAFR',
       
-      'NIGERIA': 'WAN',
+      'NIGERIA': 'NRA',
+      'NGA': 'NRA',  // ISO-3 code
+      'NRA': 'NRA',
       
-      'PAKISTAN': 'PK',
+      'PAKISTAN': 'PKST',
+      'PAK': 'PKST',  // ISO-3 code
+      'PKST': 'PKST',
       
-      'BANGLADESH': 'BD',
+      'BANGLADESH': 'BANG',
+      'BGD': 'BANG',  // ISO-3 code
+      'BANG': 'BANG',
       
-      'SRI LANKA': 'CL',
+      'SRI LANKA': 'SRL',
+      'LKA': 'SRL',  // ISO-3 code
+      'SRL': 'SRL',
       
       'NEPAL': 'NEP',
+      'NPL': 'NEP',  // ISO-3 code
       
-      'PORTUGAL': 'P',
+      'PORTUGAL': 'PORT',
+      'PRT': 'PORT',  // ISO-3 code
+      'PORT': 'PORT',
       
-      'AUSTRIA': 'A',
+      'AUSTRIA': 'AUST',
+      'AUT': 'AUST',  // ISO-3 code
+      'AUST': 'AUST',
       
-      'GREECE': 'GR',
+      'GREECE': 'GRC',
+      'GRC': 'GRC',  // ISO-3 code
       
-      'CZECH REPUBLIC': 'CZ',
-      'CZECHIA': 'CZ',
+      'CZECH REPUBLIC': 'CZEC',
+      'CZECHIA': 'CZEC',
+      'CZE': 'CZEC',  // ISO-3 code
+      'CZEC': 'CZEC',
       
-      'HUNGARY': 'H',
+      'HUNGARY': 'HUNG',
+      'HUN': 'HUNG',  // ISO-3 code
+      'HUNG': 'HUNG',
       
-      'ROMANIA': 'RO',
+      'ROMANIA': 'ROM',
+      'ROU': 'ROM',  // ISO-3 code
+      'ROM': 'ROM',
       
-      'UKRAINE': 'UA'
+      'UKRAINE': 'UKR',
+      'UKR': 'UKR',  // ISO-3 code
+      
+      // Additional comprehensive country mappings
+      'AFGHANISTAN': 'AFGH',
+      'AFG': 'AFGH',  // ISO-3 code
+      'AFGH': 'AFGH',
+      
+      'ALBANIA': 'ALB',
+      'ALB': 'ALB',  // ISO-3 code
+      
+      'ALGERIA': 'ALGR',
+      'DZA': 'ALGR',  // ISO-3 code
+      'ALGR': 'ALGR',
+      
+      'AMERICAN SAMOA': 'ASMO',
+      'ASM': 'ASMO',  // ISO-3 code
+      'ASMO': 'ASMO',
+      
+      'ANDORRA': 'ANDO',
+      'AND': 'ANDO',  // ISO-3 code
+      'ANDO': 'ANDO',
+      
+      'ANGOLA': 'ANGL',
+      'AGO': 'ANGL',  // ISO-3 code
+      'ANGL': 'ANGL',
+      
+      'ANGUILLA': 'ANGU',
+      'AIA': 'ANGU',  // ISO-3 code
+      'ANGU': 'ANGU',
+      
+      'ANTIGUA AND BARBUDA': 'ANTI',
+      'ANTIGUA': 'ANTI',
+      'ATG': 'ANTI',  // ISO-3 code
+      'ANTI': 'ANTI',
+      
+      'ARMENIA': 'ARM',
+      'ARM': 'ARM',  // ISO-3 code
+      
+      'ARUBA': 'ARB',
+      'ABW': 'ARB',  // ISO-3 code
+      'ARB': 'ARB',
+      
+      'AZERBAIJAN': 'AZR',
+      'AZE': 'AZR',  // ISO-3 code
+      'AZR': 'AZR',
+      
+      'BAHAMAS': 'BAMA',
+      'BHS': 'BAMA',  // ISO-3 code
+      'BAMA': 'BAMA',
+      
+      'BAHRAIN': 'BAHR',
+      'BHR': 'BAHR',  // ISO-3 code
+      'BAHR': 'BAHR',
+      
+      'BARBADOS': 'BRDO',
+      'BRB': 'BRDO',  // ISO-3 code
+      'BRDO': 'BRDO',
+      
+      'BELARUS': 'BYS',
+      'BLR': 'BYS',  // ISO-3 code
+      'BYS': 'BYS',
+      
+      'BELIZE': 'BLZ',
+      'BLZ': 'BLZ',  // ISO-3 code
+      
+      'BENIN': 'BENN',
+      'BEN': 'BENN',  // ISO-3 code
+      'BENN': 'BENN',
+      
+      'BERMUDA': 'BERM',
+      'BMU': 'BERM',  // ISO-3 code
+      'BERM': 'BERM',
+      
+      'BHUTAN': 'BHU',
+      'BTN': 'BHU',  // ISO-3 code
+      'BHU': 'BHU',
+      
+      'BOLIVIA': 'BOL',
+      'BOL': 'BOL',  // ISO-3 code
+      
+      'BONAIRE': 'BON',
+      'BES': 'BON',  // ISO-3 code for Caribbean Netherlands
+      'BON': 'BON',
+      
+      'BOSNIA': 'BIH',
+      'BOSNIA-HERZEGOVINA': 'BIH',
+      'BOSNIA AND HERZEGOVINA': 'BIH',
+      'BIH': 'BIH',  // ISO-3 code
+      
+      'BOTSWANA': 'BOT',
+      'BWA': 'BOT',  // ISO-3 code
+      'BOT': 'BOT',
+      
+      'BRITISH INDIAN OCEAN TERRITORY': 'IOT',
+      'IOT': 'IOT',  // ISO-3 code
+      
+      'BRUNEI': 'BRNI',
+      'BRN': 'BRNI',  // ISO-3 code
+      'BRNI': 'BRNI',
+      
+      'BULGARIA': 'BULG',
+      'BGR': 'BULG',  // ISO-3 code
+      'BULG': 'BULG',
+      
+      'BURKINA FASO': 'BURK',
+      'BFA': 'BURK',  // ISO-3 code
+      'BURK': 'BURK',
+      
+      'BURMA': 'BURM',
+      'MYANMAR': 'BURM',
+      'MMR': 'BURM',  // ISO-3 code
+      'BURM': 'BURM',
+      
+      'BURUNDI': 'BRND',
+      'BDI': 'BRND',  // ISO-3 code
+      'BRND': 'BRND',
+      
+      'CAMEROON': 'CMRN',
+      'CMR': 'CMRN',  // ISO-3 code
+      'CMRN': 'CMRN',
+      
+      'CABO VERDE': 'CAVI',
+      'CAPE VERDE': 'CAVI',
+      'CPV': 'CAVI',  // ISO-3 code
+      'CAVI': 'CAVI',
+      
+      'CAYMAN ISLANDS': 'CAYI',
+      'CYM': 'CAYI',  // ISO-3 code
+      'CAYI': 'CAYI',
+      
+      'CENTRAL AFRICAN REPUBLIC': 'CAFR',
+      'CAF': 'CAFR',  // ISO-3 code
+      'CAFR': 'CAFR',
+      
+      'CHAD': 'CHAD',
+      'TCD': 'CHAD',  // ISO-3 code
+      
+      'CHRISTMAS ISLAND': 'CHRI',
+      'CXR': 'CHRI',  // ISO-3 code
+      'CHRI': 'CHRI',
+      
+      'COCOS ISLANDS': 'COCI',
+      'COCOS KEELING ISLANDS': 'COCI',
+      'CCK': 'COCI',  // ISO-3 code
+      'COCI': 'COCI',
+      
+      'COMOROS': 'COMO',
+      'COM': 'COMO',  // ISO-3 code
+      'COMO': 'COMO',
+      
+      'CONGO, DEMOCRATIC REPUBLIC': 'COD',
+      'CONGO DRC': 'COD',
+      'DEMOCRATIC REPUBLIC OF CONGO': 'COD',
+      'COD': 'COD',  // ISO-3 code
+      
+      'CONGO, REPUBLIC': 'CONB',
+      'CONGO': 'CONB',
+      'CONGO BRAZZAVILLE': 'CONB',
+      'COG': 'CONB',  // ISO-3 code
+      'CONB': 'CONB',
+      
+      'COOK ISLANDS': 'CKIS',
+      'COK': 'CKIS',  // ISO-3 code
+      'CKIS': 'CKIS',
+      
+      'COSTA RICA': 'CSTR',
+      'CRI': 'CSTR',  // ISO-3 code
+      'CSTR': 'CSTR',
+      
+      'COTE D\'IVOIRE': 'IVCO',
+      'IVORY COAST': 'IVCO',
+      'CIV': 'IVCO',  // ISO-3 code
+      'IVCO': 'IVCO',
+      
+      'CROATIA': 'HRV',
+      'HRV': 'HRV',  // ISO-3 code
+      
+      'CUBA': 'CUBA',
+      'CUB': 'CUBA',  // ISO-3 code
+      
+      'CURACAO': 'CUR',
+      'CUW': 'CUR',  // ISO-3 code
+      'CUR': 'CUR',
+      
+      'CYPRUS': 'CYPR',
+      'CYP': 'CYPR',  // ISO-3 code
+      'CYPR': 'CYPR',
+      
+      'DJIBOUTI': 'DJI',
+      'DJI': 'DJI',  // ISO-3 code
+      
+      'DOMINICA': 'DOMN',
+      'DMA': 'DOMN',  // ISO-3 code
+      'DOMN': 'DOMN',
+      
+      'DOMINICAN REPUBLIC': 'DOMR',
+      'DOM': 'DOMR',  // ISO-3 code
+      'DOMR': 'DOMR',
+      
+      'ECUADOR': 'ECUA',
+      'ECU': 'ECUA',  // ISO-3 code
+      'ECUA': 'ECUA',
+      
+      'EL SALVADOR': 'ELSL',
+      'SLV': 'ELSL',  // ISO-3 code
+      'ELSL': 'ELSL',
+      
+      'EQUATORIAL GUINEA': 'EGN',
+      'GNQ': 'EGN',  // ISO-3 code
+      'EGN': 'EGN',
+      
+      'ERITREA': 'ERI',
+      'ERI': 'ERI',  // ISO-3 code
+      
+      'ESTONIA': 'EST',
+      'EST': 'EST',  // ISO-3 code
+      
+      'ESWATINI': 'SZLD',
+      'SWAZILAND': 'SZLD',
+      'SWZ': 'SZLD',  // ISO-3 code
+      'SZLD': 'SZLD',
+      
+      'ETHIOPIA': 'ETH',
+      'ETH': 'ETH',  // ISO-3 code
+      
+      'FALKLAND ISLANDS': 'FKLI',
+      'FLK': 'FKLI',  // ISO-3 code
+      'FKLI': 'FKLI',
+      
+      'FAROE ISLANDS': 'FRO',
+      'FRO': 'FRO',  // ISO-3 code
+      
+      'FIJI': 'FIJI',
+      'FJI': 'FIJI',  // ISO-3 code
+      
+      'FRENCH GUIANA': 'FRGN',
+      'GUF': 'FRGN',  // ISO-3 code
+      'FRGN': 'FRGN',
+      
+      'FRENCH POLYNESIA': 'FPOL',
+      'PYF': 'FPOL',  // ISO-3 code
+      'FPOL': 'FPOL',
+      
+      'FRENCH SOUTHERN TERRITORIES': 'FSAT',
+      'ATF': 'FSAT',  // ISO-3 code
+      'FSAT': 'FSAT',
+      
+      'GABON': 'GABN',
+      'GAB': 'GABN',  // ISO-3 code
+      'GABN': 'GABN',
+      
+      'GAMBIA': 'GAM',
+      'THE GAMBIA': 'GAM',
+      'GMB': 'GAM',  // ISO-3 code
+      'GAM': 'GAM',
+      
+      'GAZA STRIP': 'XGZ',
+      'GAZA': 'XGZ',
+      'XGZ': 'XGZ',
+      
+      'GEORGIA': 'GEO',
+      'GEO': 'GEO',  // ISO-3 code
+      
+      'GHANA': 'GHAN',
+      'GHA': 'GHAN',  // ISO-3 code
+      'GHAN': 'GHAN',
+      
+      'GIBRALTAR': 'GIB',
+      'GIB': 'GIB',  // ISO-3 code
+      
+      'GREENLAND': 'GRLD',
+      'GRL': 'GRLD',  // ISO-3 code
+      'GRLD': 'GRLD',
+      
+      'GRENADA': 'GREN',
+      'GRD': 'GREN',  // ISO-3 code
+      'GREN': 'GREN',
+      
+      'GUADELOUPE': 'GUAD',
+      'GLP': 'GUAD',  // ISO-3 code
+      'GUAD': 'GUAD',
+      
+      'GUAM': 'GUAM',
+      'GUM': 'GUAM',  // ISO-3 code
+      
+      'GUATEMALA': 'GUAT',
+      'GTM': 'GUAT',  // ISO-3 code
+      'GUAT': 'GUAT',
+      
+      'GUINEA': 'GNEA',
+      'GIN': 'GNEA',  // ISO-3 code
+      'GNEA': 'GNEA',
+      
+      'GUINEA-BISSAU': 'GUIB',
+      'GUINEA BISSAU': 'GUIB',
+      'GNB': 'GUIB',  // ISO-3 code
+      'GUIB': 'GUIB',
+      
+      'GUYANA': 'GUY',
+      'GUY': 'GUY',  // ISO-3 code
+      
+      'HAITI': 'HAT',
+      'HTI': 'HAT',  // ISO-3 code
+      'HAT': 'HAT',
+      
+      'HEARD AND MCDONALD ISLANDS': 'HMD',
+      'HMD': 'HMD',  // ISO-3 code
+      
+      'HOLY SEE': 'VAT',
+      'VATICAN': 'VAT',
+      'VATICAN CITY': 'VAT',
+      'VAT': 'VAT',  // ISO-3 code
+      
+      'HONDURAS': 'HOND',
+      'HND': 'HOND',  // ISO-3 code
+      'HOND': 'HOND',
+      
+      'ICELAND': 'ICLD',
+      'ISL': 'ICLD',  // ISO-3 code
+      'ICLD': 'ICLD',
+      
+      'IRAN': 'IRAN',
+      'IRN': 'IRAN',  // ISO-3 code
+      
+      'IRAQ': 'IRAQ',
+      'IRQ': 'IRAQ',  // ISO-3 code
+      
+      'JAMAICA': 'JAM',
+      'JAM': 'JAM',  // ISO-3 code
+      
+      'JERUSALEM': 'JRSM',
+      'JRSM': 'JRSM',
+      
+      'JORDAN': 'JORD',
+      'JOR': 'JORD',  // ISO-3 code
+      'JORD': 'JORD',
+      
+      'KAZAKHSTAN': 'KAZ',
+      'KAZ': 'KAZ',  // ISO-3 code
+      
+      'KENYA': 'KENY',
+      'KEN': 'KENY',  // ISO-3 code
+      'KENY': 'KENY',
+      
+      'KIRIBATI': 'KIRI',
+      'KIR': 'KIRI',  // ISO-3 code
+      'KIRI': 'KIRI',
+      
+      'KOSOVO': 'KSV',
+      'XKX': 'KSV',  // Unofficial ISO-3 code
+      'KSV': 'KSV',
+      
+      'KUWAIT': 'KUWT',
+      'KWT': 'KUWT',  // ISO-3 code
+      'KUWT': 'KUWT',
+      
+      'KYRGYZSTAN': 'KGZ',
+      'KGZ': 'KGZ',  // ISO-3 code
+      
+      'LAOS': 'LAOS',
+      'LAO': 'LAOS',  // ISO-3 code
+      
+      'LATVIA': 'LATV',
+      'LVA': 'LATV',  // ISO-3 code
+      'LATV': 'LATV',
+      
+      'LEBANON': 'LEBN',
+      'LBN': 'LEBN',  // ISO-3 code
+      'LEBN': 'LEBN',
+      
+      'LESOTHO': 'LES',
+      'LSO': 'LES',  // ISO-3 code
+      'LES': 'LES',
+      
+      'LIBERIA': 'LIBR',
+      'LBR': 'LIBR',  // ISO-3 code
+      'LIBR': 'LIBR',
+      
+      'LIBYA': 'LBYA',
+      'LBY': 'LBYA',  // ISO-3 code
+      'LBYA': 'LBYA',
+      
+      'LIECHTENSTEIN': 'LCHT',
+      'LIE': 'LCHT',  // ISO-3 code
+      'LCHT': 'LCHT',
+      
+      'LITHUANIA': 'LITH',
+      'LTU': 'LITH',  // ISO-3 code
+      'LITH': 'LITH',
+      
+      'LUXEMBOURG': 'LXM',
+      'LUX': 'LXM',  // ISO-3 code
+      'LXM': 'LXM',
+      
+      'MACAU': 'MAC',
+      'MACAO': 'MAC',
+      'MAC': 'MAC',  // ISO-3 code
+      
+      'MACEDONIA': 'MKD',
+      'NORTH MACEDONIA': 'MKD',
+      'MKD': 'MKD',  // ISO-3 code
+      
+      'MADAGASCAR': 'MADG',
+      'MDG': 'MADG',  // ISO-3 code
+      'MADG': 'MADG',
+      
+      'MALAWI': 'MALW',
+      'MWI': 'MALW',  // ISO-3 code
+      'MALW': 'MALW',
+      
+      'MALDIVES': 'MLDV',
+      'MDV': 'MLDV',  // ISO-3 code
+      'MLDV': 'MLDV',
+      
+      'MALI': 'MALI',
+      'MLI': 'MALI',  // ISO-3 code
+      
+      'MALTA': 'MLTA',
+      'MLT': 'MLTA',  // ISO-3 code
+      'MLTA': 'MLTA',
+      
+      'MARSHALL ISLANDS': 'RMI',
+      'MHL': 'RMI',  // ISO-3 code
+      'RMI': 'RMI',
+      
+      'MARTINIQUE': 'MART',
+      'MTQ': 'MART',  // ISO-3 code
+      'MART': 'MART',
+      
+      'MAURITANIA': 'MAUR',
+      'MRT': 'MAUR',  // ISO-3 code
+      'MAUR': 'MAUR',
+      
+      'MAURITIUS': 'MRTS',
+      'MUS': 'MRTS',  // ISO-3 code
+      'MRTS': 'MRTS',
+      
+      'MAYOTTE': 'MYT',
+      'MYT': 'MYT',  // ISO-3 code
+      
+      'MICRONESIA': 'FSM',
+      'FSM': 'FSM',  // ISO-3 code
+      
+      'MOLDOVA': 'MLD',
+      'MDA': 'MLD',  // ISO-3 code
+      'MLD': 'MLD',
+      
+      'MONACO': 'MON',
+      'MCO': 'MON',  // ISO-3 code
+      'MON': 'MON',
+      
+      'MONGOLIA': 'MONG',
+      'MNG': 'MONG',  // ISO-3 code
+      'MONG': 'MONG',
+      
+      'MONTENEGRO': 'MTG',
+      'MNE': 'MTG',  // ISO-3 code
+      'MTG': 'MTG',
+      
+      'MONTSERRAT': 'MONT',
+      'MSR': 'MONT',  // ISO-3 code
+      'MONT': 'MONT',
+      
+      'MOROCCO': 'MORO',
+      'MAR': 'MORO',  // ISO-3 code
+      'MORO': 'MORO',
+      
+      'MOZAMBIQUE': 'MOZ',
+      'MOZ': 'MOZ',  // ISO-3 code
+      
+      'NAMIBIA': 'NAMB',
+      'NAM': 'NAMB',  // ISO-3 code
+      'NAMB': 'NAMB',
+      
+      'NAURU': 'NAU',
+      'NRU': 'NAU',  // ISO-3 code
+      'NAU': 'NAU',
+      
+      'NEW CALEDONIA': 'NCAL',
+      'NCL': 'NCAL',  // ISO-3 code
+      'NCAL': 'NCAL',
+      
+      'NICARAGUA': 'NIC',
+      'NIC': 'NIC',  // ISO-3 code
+      
+      'NIGER': 'NIR',
+      'NER': 'NIR',  // ISO-3 code
+      'NIR': 'NIR',
+      
+      'NIUE': 'NIUE',
+      'NIU': 'NIUE',  // ISO-3 code
+      
+      'NORFOLK ISLAND': 'NFK',
+      'NFK': 'NFK',  // ISO-3 code
+      
+      'NORTHERN MARIANA ISLANDS': 'MNP',
+      'NORTH MARIANA ISLANDS': 'MNP',
+      'MNP': 'MNP',  // ISO-3 code
+      
+      'OMAN': 'OMAN',
+      'OMN': 'OMAN',  // ISO-3 code
+      
+      'PALAU': 'PALA',
+      'PLW': 'PALA',  // ISO-3 code
+      'PALA': 'PALA',
+      
+      'PANAMA': 'PAN',
+      'PAN': 'PAN',  // ISO-3 code
+      
+      'PAPUA NEW GUINEA': 'PNG',
+      'PNG': 'PNG',  // ISO-3 code
+      
+      'PARAGUAY': 'PARA',
+      'PRY': 'PARA',  // ISO-3 code
+      'PARA': 'PARA',
+      
+      'PITCAIRN': 'PITC',
+      'PITCAIRN ISLANDS': 'PITC',
+      'PCN': 'PITC',  // ISO-3 code
+      'PITC': 'PITC',
+      
+      'PUERTO RICO': 'PR',
+      'PRI': 'PR',  // ISO-3 code
+      'PR': 'PR',
+      
+      'QATAR': 'QTAR',
+      'QAT': 'QTAR',  // ISO-3 code
+      'QTAR': 'QTAR',
+      
+      'REUNION': 'REUN',
+      'REU': 'REUN',  // ISO-3 code
+      'REUN': 'REUN',
+      
+      'RWANDA': 'RWND',
+      'RWA': 'RWND',  // ISO-3 code
+      'RWND': 'RWND',
+      
+      'SAINT MARTIN': 'MAF',
+      'ST MARTIN': 'MAF',
+      'MAF': 'MAF',  // ISO-3 code
+      
+      'SAMOA': 'WSAM',
+      'WSM': 'WSAM',  // ISO-3 code
+      'WSAM': 'WSAM',
+      
+      'SAN MARINO': 'SMAR',
+      'SMR': 'SMAR',  // ISO-3 code
+      'SMAR': 'SMAR',
+      
+      'SAO TOME': 'STPR',
+      'SAO TOME AND PRINCIPE': 'STPR',
+      'STP': 'STPR',  // ISO-3 code
+      'STPR': 'STPR',
+      
+      'SENEGAL': 'SENG',
+      'SEN': 'SENG',  // ISO-3 code
+      'SENG': 'SENG',
+      
+      'SERBIA': 'SBA',
+      'SRB': 'SBA',  // ISO-3 code
+      'SBA': 'SBA',
+      
+      'SEYCHELLES': 'SEYC',
+      'SYC': 'SEYC',  // ISO-3 code
+      'SEYC': 'SEYC',
+      
+      'SIERRA LEONE': 'SLEO',
+      'SLE': 'SLEO',  // ISO-3 code
+      'SLEO': 'SLEO',
+      
+      'SINT MAARTEN': 'STM',
+      'SXM': 'STM',  // ISO-3 code
+      'STM': 'STM',
+      
+      'SLOVAKIA': 'SVK',
+      'SVK': 'SVK',  // ISO-3 code
+      
+      'SLOVENIA': 'SVN',
+      'SVN': 'SVN',  // ISO-3 code
+      
+      'SOLOMON ISLANDS': 'SLMN',
+      'SLB': 'SLMN',  // ISO-3 code
+      'SLMN': 'SLMN',
+      
+      'SOMALIA': 'SOMA',
+      'SOM': 'SOMA',  // ISO-3 code
+      'SOMA': 'SOMA',
+      
+      'SOUTH GEORGIA': 'SGS',
+      'SGS': 'SGS',  // ISO-3 code
+      
+      'SOUTH SUDAN': 'SSDN',
+      'SSD': 'SSDN',  // ISO-3 code
+      'SSDN': 'SSDN',
+      
+      'ST HELENA': 'SHEL',
+      'SAINT HELENA': 'SHEL',
+      'SHN': 'SHEL',  // ISO-3 code
+      'SHEL': 'SHEL',
+      
+      'ST KITTS': 'STCN',
+      'SAINT KITTS': 'STCN',
+      'ST KITTS AND NEVIS': 'STCN',
+      'KNA': 'STCN',  // ISO-3 code
+      'STCN': 'STCN',
+      
+      'ST LUCIA': 'SLCA',
+      'SAINT LUCIA': 'SLCA',
+      'LCA': 'SLCA',  // ISO-3 code
+      'SLCA': 'SLCA',
+      
+      'ST PIERRE': 'SPMI',
+      'SAINT PIERRE': 'SPMI',
+      'ST PIERRE AND MIQUELON': 'SPMI',
+      'SPM': 'SPMI',  // ISO-3 code
+      'SPMI': 'SPMI',
+      
+      'ST VINCENT': 'STVN',
+      'SAINT VINCENT': 'STVN',
+      'ST VINCENT AND THE GRENADINES': 'STVN',
+      'VCT': 'STVN',  // ISO-3 code
+      'STVN': 'STVN',
+      
+      'SUDAN': 'SUDA',
+      'SDN': 'SUDA',  // ISO-3 code
+      'SUDA': 'SUDA',
+      
+      'SURINAME': 'SURM',
+      'SUR': 'SURM',  // ISO-3 code
+      'SURM': 'SURM',
+      
+      'SVALBARD': 'SJM',
+      'SJM': 'SJM',  // ISO-3 code
+      
+      'SYRIA': 'SYR',
+      'SYR': 'SYR',  // ISO-3 code
+      
+      'TAJIKISTAN': 'TJK',
+      'TJK': 'TJK',  // ISO-3 code
+      
+      'TANZANIA': 'TAZN',
+      'TZA': 'TAZN',  // ISO-3 code
+      'TAZN': 'TAZN',
+      
+      'TIMOR-LESTE': 'TMOR',
+      'EAST TIMOR': 'TMOR',
+      'TLS': 'TMOR',  // ISO-3 code
+      'TMOR': 'TMOR',
+      
+      'TOGO': 'TOGO',
+      'TGO': 'TOGO',  // ISO-3 code
+      
+      'TOKELAU': 'TKL',
+      'TKL': 'TKL',  // ISO-3 code
+      
+      'TONGA': 'TONG',
+      'TON': 'TONG',  // ISO-3 code
+      'TONG': 'TONG',
+      
+      'TRINIDAD': 'TRIN',
+      'TRINIDAD AND TOBAGO': 'TRIN',
+      'TTO': 'TRIN',  // ISO-3 code
+      'TRIN': 'TRIN',
+      
+      'TUNISIA': 'TNSA',
+      'TUN': 'TNSA',  // ISO-3 code
+      'TNSA': 'TNSA',
+      
+      'TURKMENISTAN': 'TKM',
+      'TKM': 'TKM',  // ISO-3 code
+      
+      'TURKS AND CAICOS': 'TCIS',
+      'TCA': 'TCIS',  // ISO-3 code
+      'TCIS': 'TCIS',
+      
+      'TUVALU': 'TUV',
+      'TUV': 'TUV',  // ISO-3 code
+      
+      'UGANDA': 'UGAN',
+      'UGA': 'UGAN',  // ISO-3 code
+      'UGAN': 'UGAN',
+      
+      'URUGUAY': 'URU',
+      'URY': 'URU',  // ISO-3 code
+      'URU': 'URU',
+      
+      'UZBEKISTAN': 'UZB',
+      'UZB': 'UZB',  // ISO-3 code
+      
+      'VANUATU': 'VANU',
+      'VUT': 'VANU',  // ISO-3 code
+      'VANU': 'VANU',
+      
+      'VIRGIN ISLANDS': 'VI',
+      'US VIRGIN ISLANDS': 'VI',
+      'VIR': 'VI',  // ISO-3 code
+      'VI': 'VI',
+      
+      'BRITISH VIRGIN ISLANDS': 'BRVI',
+      'VGB': 'BRVI',  // ISO-3 code
+      'BRVI': 'BRVI',
+      
+      'WALLIS AND FUTUNA': 'WAFT',
+      'WLF': 'WAFT',  // ISO-3 code
+      'WAFT': 'WAFT',
+      
+      'WEST BANK': 'XWB',
+      'PSE': 'XWB',  // ISO-3 code for Palestine
+      'PALESTINE': 'XWB',
+      'XWB': 'XWB',
+      
+      'WESTERN SAHARA': 'SSAH',
+      'ESH': 'SSAH',  // ISO-3 code
+      'SSAH': 'SSAH',
+      
+      'YEMEN': 'YEM',
+      'YEM': 'YEM',  // ISO-3 code
+      
+      'ZAMBIA': 'ZAMB',
+      'ZMB': 'ZAMB',  // ISO-3 code
+      'ZAMB': 'ZAMB',
+      
+      'ZIMBABWE': 'ZIMB',
+      'ZWE': 'ZIMB',  // ISO-3 code
+      'ZIMB': 'ZIMB'
     };
     
     const upperCountry = country.toUpperCase().trim();
@@ -3102,7 +5416,23 @@ class TwoPassFiller {
       'E-3': 'AUSTRALIAN SPECIALTY (E3)',
       'E3': 'AUSTRALIAN SPECIALTY (E3)',
       'E-3D': 'SPOUSE OF E3 (E3D)',
-      'E3D': 'SPOUSE OF E3 (E3D)'
+      'E3D': 'SPOUSE OF E3 (E3D)',
+      
+      // E-1 visa specific subtypes
+      'E1-CH': 'E1-CH',  // CHILD OF AN E1 (E1)
+      'E1-EX': 'E1-EX',  // EXECUTIVE/MGR/ESSENTIAL EMP (E1)
+      'E1-SP': 'E1-SP',  // SPOUSE OF AN E1 (E1)
+      'E1-TR': 'E1-TR',  // TREATY TRADER (E1)
+      
+      // E-2 visa specific subtypes
+      'E2-CH': 'E2-CH',  // CHILD OF AN E2 (E2)
+      'E2-EX': 'E2-EX',  // EXECUTIVE/MGR/ESSENTIAL EMP (E2)
+      'E2-SP': 'E2-SP',  // SPOUSE OF AN E2 (E2)
+      'E2-TR': 'E2-TR',  // TREATY INVESTOR (E2)
+      
+      // E-3 visa specific subtypes
+      'E3D-CH': 'E3D-CH',  // CHILD OF AN E3 (E3D)
+      'E3D-SP': 'E3D-SP'   // SPOUSE OF AN E3 (E3D)
     };
     
     return subtypeMap[subtype.toUpperCase()] || subtype;
@@ -3295,6 +5625,28 @@ class TwoPassFiller {
     
     // Map social media platform names to actual DS-160 dropdown codes
     const platformMap = {
+      // Direct DS-160 codes (map to themselves)
+      'FCBK': 'FCBK',
+      'TWIT': 'TWIT',
+      'INST': 'INST',
+      'LINK': 'LINK',
+      'YTUB': 'YTUB',
+      'PTST': 'PTST',
+      'TUMB': 'TUMB',
+      'ASKF': 'ASKF',
+      'DUBN': 'DUBN',
+      'FLKR': 'FLKR',
+      'GOGL': 'GOGL',
+      'MYSP': 'MYSP',
+      'QZNE': 'QZNE',
+      'RDDT': 'RDDT',
+      'SWBO': 'SWBO',
+      'TWBO': 'TWBO',
+      'TWOO': 'TWOO',
+      'VINE': 'VINE',
+      'VKON': 'VKON',
+      'YUKU': 'YUKU',
+      // User-friendly names
       'FACEBOOK': 'FCBK',
       'FB': 'FCBK',
       'TWITTER': 'TWIT',
@@ -3411,64 +5763,59 @@ class TwoPassFiller {
   }
   
   // Map spouse address type
-  mapSpouseAddressType(address) {
-    if (!address) return 'H'; // Default to same as home address if no address specified
+  mapSpouseAddressType(addressType) {
+    if (!addressType) return 'H'; // Default to same as home address if no address specified
     
-    // If address is an object with street/city/etc, it's a different address
-    if (typeof address === 'object' && (address.street1 || address.city || address.country)) {
-      return 'O'; // Other (Specify Address)
-    }
-    
-    // Only try to uppercase if it's a string
-    if (typeof address === 'string') {
-      const addressUpper = address.toUpperCase();
+    // Handle explicit addressType values from the new prompt structure
+    if (typeof addressType === 'string') {
+      const typeUpper = addressType.toUpperCase();
       
-      if (addressUpper.includes('SAME AS MY RESIDENCE') || addressUpper.includes('SAME AS HOME')) {
+      // Map from prompt values to DS-160 dropdown values
+      const addressTypeMap = {
+        'SAME_AS_HOME': 'H',
+        'SAME AS HOME': 'H',
+        'SAME_AS_MAILING': 'M',
+        'SAME AS MAILING': 'M',
+        'SAME_AS_US_CONTACT': 'U',
+        'SAME AS US CONTACT': 'U',
+        'DO_NOT_KNOW': 'D',
+        'DO NOT KNOW': 'D',
+        'OTHER': 'O'
+      };
+      
+      // Check if it's an explicit type from the new prompt
+      if (addressTypeMap[typeUpper]) {
+        return addressTypeMap[typeUpper];
+      }
+      
+      // Legacy support: check for keywords in the string
+      if (typeUpper.includes('SAME AS MY RESIDENCE') || typeUpper.includes('SAME AS HOME') || typeUpper.includes('SAME AS APPLICANT')) {
         return 'H'; // Same as Home Address
       }
-      if (addressUpper.includes('SAME AS MAILING')) {
+      if (typeUpper.includes('SAME AS MAILING')) {
         return 'M'; // Same as Mailing Address
       }
-      if (addressUpper.includes('SAME AS U.S. CONTACT') || addressUpper.includes('SAME AS US CONTACT')) {
+      if (typeUpper.includes('SAME AS U.S. CONTACT') || typeUpper.includes('SAME AS US CONTACT')) {
         return 'U'; // Same as U.S. Contact Address
       }
-      if (addressUpper.includes('DO NOT KNOW') || addressUpper.includes("DON'T KNOW")) {
+      if (typeUpper.includes('DO NOT KNOW') || typeUpper.includes("DON'T KNOW")) {
         return 'D'; // Do Not Know
       }
       
       // If it's any other string value that's not "N/A", assume it's a different address
-      if (address !== 'N/A') {
+      if (addressType !== 'N/A') {
         return 'O'; // Other (Specify Address)
       }
+    }
+    
+    // Legacy support: if address is an object with street/city/etc, it's a different address
+    if (typeof addressType === 'object' && (addressType.street1 || addressType.city || addressType.country)) {
+      return 'O'; // Other (Specify Address)
     }
     
     return 'H'; // Default to same as home address
   }
 
-  mapUSStatus(status) {
-    if (!status) return null;
-    
-    const statusMap = {
-      'CITIZEN': 'S',
-      'US_CITIZEN': 'S',
-      'U.S. CITIZEN': 'S',
-      'LPR': 'C',
-      'LEGAL_PERMANENT_RESIDENT': 'C',
-      'U.S. LEGAL PERMANENT RESIDENT': 'C',
-      'GREEN_CARD': 'C',
-      'NONIMMIGRANT': 'P',
-      'NON_IMMIGRANT': 'P',
-      'OTHER': 'O',
-      'UNKNOWN': 'O',
-      'I DON\'T KNOW': 'O',
-      'DONT_KNOW': 'O'
-    };
-    
-    const upperStatus = status.toUpperCase();
-    const mapped = statusMap[upperStatus] || null;
-    console.log(`US Status mapping: ${status} -> ${mapped}`);
-    return mapped;
-  }
   
   mapPayerType(payer) {
     if (!payer) return null;
@@ -3476,11 +5823,12 @@ class TwoPassFiller {
     const payerMap = {
       'SELF': 'S',
       'S': 'S',
+      'COMPANY': 'P',           // Map COMPANY to Present Employer
+      'PRESENT_EMPLOYER': 'P',
+      'EMPLOYER_IN_US': 'U',
       'OTHER_PERSON': 'O',
       'O': 'O',
-      'PRESENT_EMPLOYER': 'P',
       'P': 'P',
-      'EMPLOYER_IN_US': 'U',
       'U': 'U',
       'OTHER_COMPANY': 'C',
       'C': 'C'
@@ -3494,21 +5842,30 @@ class TwoPassFiller {
     
     // Map common relationships to DS-160 codes
     const relationshipMap = {
-      'FRIEND': 'F',
-      'F': 'F',
+      // Travel companion relationships
+      'PARENT': 'P',
+      'P': 'P',
+      'SPOUSE': 'S',
+      'S': 'S',
+      'CHILD': 'C',
+      'C': 'C',
+      'OTHER RELATIVE': 'R',
       'RELATIVE': 'R',
       'R': 'R',
+      'FRIEND': 'C',  // Changed from 'F' to 'C' for US Contact
+      'F': 'C',       // Changed from 'F' to 'C'
       'BUSINESS': 'B',
       'BUSINESS ASSOCIATE': 'B',
       'B': 'B',
-      'SCHOOL': 'S',
-      'S': 'S',
-      'EMPLOYER': 'E',
-      'E': 'E',
-      'HOTEL': 'H',
-      'H': 'H',
       'OTHER': 'O',
       'O': 'O',
+      // US Contact relationships (correct DS-160 values)
+      'SCHOOL': 'H',           // School Official
+      'SCHOOL OFFICIAL': 'H',
+      'EMPLOYER': 'P',         // Fixed: P for EMPLOYER
+      'E': 'P',               // Fixed: map E to P
+      'HOTEL': 'H',
+      'H': 'H',
       'SELF': 'SELF'
     };
     
@@ -4073,7 +6430,7 @@ class TwoPassFiller {
       dataPresent: !!data,
       workEducationData: !!data?.workEducation,
       previousEmployersCount: data?.workEducation?.previousEmployers?.length || 0,
-      previousEducationCount: data?.workEducation?.previousEducation?.length || 0,
+      previousEducationCount: data?.workEducation?.education?.institutions?.length || 0,
       testMode
     });
     
@@ -4548,6 +6905,20 @@ class TwoPassFiller {
     });
   }
   
+  showSubordinatesNotification(subordinatesCount) {
+    // Only show if there are multiple subordinates
+    if (subordinatesCount <= 1) return;
+    
+    this.showUnifiedNotification({
+      title: '👥 Multiple Subordinates Detected',
+      sections: [{
+        icon: '👤',
+        title: `${subordinatesCount} Immediate Subordinates`,
+        description: 'After filling the first subordinate, click "Add Another" to add additional subordinates. Each entry will be auto-filled in order.'
+      }]
+    });
+  }
+  
   // Helper function to detect which employer/education entries are currently visible
   detectVisibleEmployerEntries() {
     const entries = [];
@@ -4663,7 +7034,7 @@ class DS160Extension {
         // Show notification if on previous work/education page
         if (currentPage === 'workEducationPrevious' && this.data) {
           const employerCount = this.data.workEducation?.previousEmployers?.length || 0;
-          const educationCount = this.data.workEducation?.previousEducation?.length || 0;
+          const educationCount = this.data.workEducation?.education?.institutions?.length || 0;
           this.filler.showMultipleEntriesNotification(employerCount, educationCount);
         }
         
@@ -4676,6 +7047,12 @@ class DS160Extension {
           if (languageCount > 0 || countriesCount > 0) {
             this.showLanguagesAndCountriesNotification(languageCount, countriesCount);
           }
+        }
+        
+        // Show notification if on E-visa Applicant US Position page with multiple subordinates
+        if (currentPage === 'evisaApplicantUSPosition' && this.data) {
+          const subordinatesCount = this.data.evisaApplicantUSPosition?.immediateSubordinates?.length || 0;
+          this.filler.showSubordinatesNotification(subordinatesCount);
         }
         
         // Check for incorrect social media selection on contact page
@@ -4770,7 +7147,7 @@ class DS160Extension {
     // Check if we're on the previous work/education page and show notification
     if (currentPage === 'workEducationPrevious' && this.data) {
       const employerCount = this.data.workEducation?.previousEmployers?.length || 0;
-      const educationCount = this.data.workEducation?.previousEducation?.length || 0;
+      const educationCount = this.data.workEducation?.education?.institutions?.length || 0;
       this.filler.showMultipleEntriesNotification(employerCount, educationCount);
     }
     
@@ -4870,15 +7247,15 @@ class DS160Extension {
       
       // Show social media helper if user has any accounts - EXACTLY like US travel notification
       if (socialCount > 0) {
-        const socialAccounts = this.data?.contact?.socialMediaAccounts || [];
+        const socialAccounts = this.data?.contact?.socialMediaAccounts || this.data?.contact?.socialMedia || [];
         console.log('[SOCIAL MEDIA] Calling showSocialMediaHelper with accounts:', socialAccounts);
         this.showSocialMediaHelper(socialAccounts);
       }
       
-      // Also show the multiple accounts warning if more than 1
-      if (socialCount > 1) {
-        this.showMultipleSocialMediaNotification(socialCount);
-      }
+      // Don't show the generic notification - the detailed helper is enough
+      // if (socialCount > 1) {
+      //   this.showMultipleSocialMediaNotification(socialCount);
+      // }
       
       // Check if additional social media is incorrectly set to Yes
       if (this.checkForIncorrectAdditionalSocialMedia(this.data)) {
@@ -4899,8 +7276,17 @@ class DS160Extension {
     // Check for multiple work/education entries - only on previous work/education page
     if (currentPage === 'workEducationPrevious') {
       const employerCount = this.data.workEducation?.previousEmployers?.length || 0;
-      const educationCount = this.data.workEducation?.previousEducation?.length || 0;
+      const educationCount = this.data.workEducation?.education?.institutions?.length || 0;
       this.filler.showMultipleEntriesNotification(employerCount, educationCount);
+      
+      // Use batch processing for previous employers if we have any
+      if (employerCount > 0) {
+        console.log(`[BATCH PROCESSING] Processing ${employerCount} previous employers`);
+        const success = this.filler.fillPreviousEmployers(this.data);
+        if (success) {
+          console.log('[BATCH PROCESSING] Previous employers injected successfully');
+        }
+      }
     }
     
     // Check for multiple US travel entries and driver's licenses - only on previous travel page
@@ -4914,6 +7300,21 @@ class DS160Extension {
       const licenseCount = this.checkForMultipleDriversLicenses(this.data);
       if (licenseCount > 1) {
         this.showMultipleDriversLicensesNotification(licenseCount);
+      }
+    }
+    
+    // Check for multiple immediate subordinates - only on E-Visa applicant position page
+    if (currentPage === 'evisaApplicantUSPosition' || currentPage.includes('applicant') || currentPage.includes('position')) {
+      const subordinatesCount = this.data.evisaApplicantUSPosition?.immediateSubordinates?.length || 0;
+      if (subordinatesCount > 1) {
+        this.filler.showMultipleSubordinatesNotification(subordinatesCount);
+        
+        // Use batch processing for immediate subordinates if we have any
+        console.log(`[BATCH PROCESSING] Processing ${subordinatesCount} immediate subordinates`);
+        const success = this.filler.fillImmediateSubordinates(this.data);
+        if (success) {
+          console.log('[BATCH PROCESSING] Immediate subordinates injected successfully');
+        }
       }
     }
     
@@ -4978,7 +7379,7 @@ class DS160Extension {
           <span style="font-weight: 500;">Platform:</span> ${account.platform} → ${this.filler.mapSocialMediaPlatform(account.platform) || 'Not mapped'}
           <span style="float: right; font-size: 12px; color: #6c757d;">📋</span>
         </div>
-        <div class="copyable-field" data-value="${account.handle || ''}" style="
+        <div class="copyable-field" data-value="${account.handle || account.username || ''}" style="
           padding: 8px;
           background: white;
           border: 1px solid #dee2e6;
@@ -4986,7 +7387,7 @@ class DS160Extension {
           cursor: pointer;
           transition: all 0.2s;
         ">
-          <span style="font-weight: 500;">Handle:</span> ${account.handle || 'Not provided'}
+          <span style="font-weight: 500;">Handle:</span> ${account.handle || account.username || 'Not provided'}
           <span style="float: right; font-size: 12px; color: #6c757d;">📋</span>
         </div>
       </div>
@@ -5102,8 +7503,8 @@ class DS160Extension {
   
   checkForMultipleCountriesVisited(data) {
     // Return the count of countries visited in last 5 years
-    if (data && data.workEducation?.countriesVisited5Years) {
-      return data.workEducation.countriesVisited5Years.length;
+    if (data && data.workEducation?.countriesVisited?.countries) {
+      return data.workEducation.countriesVisited.countries.length;
     }
     return 0;
   }
@@ -5126,10 +7527,15 @@ class DS160Extension {
   
   checkForMultipleDriversLicenses(data) {
     // Return the count of driver's licenses
+    // Check for array format first (new format)
+    if (data && data.previousTravel?.driverLicense?.licenses) {
+      return data.previousTravel.driverLicense.licenses.length;
+    }
+    // Check for old plural format
     if (data && data.previousTravel?.driversLicenses) {
       return data.previousTravel.driversLicenses.length;
     }
-    // Check if single license exists
+    // Check if single license exists (old format)
     if (data && data.previousTravel?.driverLicense?.number) {
       return 1;
     }
@@ -5195,7 +7601,7 @@ class DS160Extension {
     
     // Add countries section if present
     if (countriesCount > 0) {
-      const countries = this.data?.workEducation?.countriesVisited5Years || [];
+      const countries = this.data?.workEducation?.countriesVisited?.countries || [];
       let countryList = countries.slice(0, Math.min(5, countries.length))
         .map((country, index) => `${index + 1}. ${country}`)
         .join('\n');
@@ -5306,8 +7712,8 @@ class DS160Extension {
       visits.slice(0, 5).forEach((visit, index) => {
         visitsList += `<tr style="border-bottom: 1px solid #eee;">`;
         visitsList += `<td style="padding: 4px;">#${index + 1}</td>`;
-        visitsList += `<td style="padding: 4px;">${visit.arrivalDate || 'N/A'}</td>`;
-        visitsList += `<td style="padding: 4px;">${visit.lengthOfStayNumber || 'N/A'} ${visit.lengthOfStayUnit || ''}</td>`;
+        visitsList += `<td style="padding: 4px;">${visit.arrivalDate || visit.entryDate || 'N/A'}</td>`;
+        visitsList += `<td style="padding: 4px;">${visit.lengthOfStayNumber || this.parseLengthOfStay(visit.lengthOfStay)?.number || 'N/A'} ${visit.lengthOfStayUnit || this.parseLengthOfStay(visit.lengthOfStay)?.unit || ''}</td>`;
         visitsList += `</tr>`;
       });
     }
