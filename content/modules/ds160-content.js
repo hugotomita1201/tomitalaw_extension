@@ -323,7 +323,7 @@ class TwoPassFiller {
       'personal1': 'tbxAPP_SURNAME',
       'personal2': 'ddlAPP_NATL', // Nationality dropdown is unique to page 2
       'travel': 'ddlPurposeOfTrip',
-      'travelCompanions': 'rblTravelingWithYou',
+      'travelCompanions': 'dlTravelCompanions',  // Changed to look for the actual travel companions fields
       'previousTravel': 'rblPREV_US_TRAVEL_IND',
       'addressPhone': 'tbxAPP_ADDR_LN1',
       'contact': 'rblAddSocial', // Social media question on contact page
@@ -950,7 +950,6 @@ class TwoPassFiller {
     document.body.appendChild(script);
     script.onload = () => script.remove();
   }
-
   // Country code mapping for dropdowns
   getCountryMapping(country) {
     const countryMappings = {
@@ -7229,6 +7228,7 @@ class DS160Extension {
       }
     }
     
+    
     // Check for multiple emails - only on contact pages
     if (currentPage === 'contact' || currentPage === 'address') {
       const emailCount = this.checkForMultipleEmails(this.data);
@@ -7239,16 +7239,11 @@ class DS160Extension {
     
     // Check for multiple social media accounts - only on contact page
     if (currentPage === 'contact' || currentPage === 'addressPhone') {
-      console.log('[SOCIAL MEDIA CHECK] Current page:', currentPage);
-      console.log('[SOCIAL MEDIA CHECK] Data:', this.data?.contact);
-      
       const socialCount = this.checkForMultipleSocialMedia(this.data);
-      console.log('[SOCIAL MEDIA CHECK] Found', socialCount, 'social media accounts');
       
       // Show social media helper if user has any accounts - EXACTLY like US travel notification
       if (socialCount > 0) {
         const socialAccounts = this.data?.contact?.socialMediaAccounts || this.data?.contact?.socialMedia || [];
-        console.log('[SOCIAL MEDIA] Calling showSocialMediaHelper with accounts:', socialAccounts);
         this.showSocialMediaHelper(socialAccounts);
       }
       
@@ -7281,11 +7276,7 @@ class DS160Extension {
       
       // Use batch processing for previous employers if we have any
       if (employerCount > 0) {
-        console.log(`[BATCH PROCESSING] Processing ${employerCount} previous employers`);
         const success = this.filler.fillPreviousEmployers(this.data);
-        if (success) {
-          console.log('[BATCH PROCESSING] Previous employers injected successfully');
-        }
       }
     }
     
@@ -7303,24 +7294,26 @@ class DS160Extension {
       }
     }
     
-    // Check for multiple immediate subordinates - only on E-Visa applicant position page
-    if (currentPage === 'evisaApplicantUSPosition' || currentPage.includes('applicant') || currentPage.includes('position')) {
-      const subordinatesCount = this.data.evisaApplicantUSPosition?.immediateSubordinates?.length || 0;
-      if (subordinatesCount > 1) {
-        this.filler.showMultipleSubordinatesNotification(subordinatesCount);
-        
-        // Use batch processing for immediate subordinates if we have any
-        console.log(`[BATCH PROCESSING] Processing ${subordinatesCount} immediate subordinates`);
-        const success = this.filler.fillImmediateSubordinates(this.data);
-        if (success) {
-          console.log('[BATCH PROCESSING] Immediate subordinates injected successfully');
-        }
+    // Check for multiple travel companions - only on travel companions page
+    if (currentPage === 'travelCompanions') {
+      const companionsCount = this.checkForMultipleTravelCompanions(this.data);
+      if (companionsCount > 1) {
+        this.showMultipleTravelCompanionsNotification(companionsCount);
       }
     }
     
-    console.log('Starting two-pass fill process...');
+    // Check for multiple immediate subordinates - only on E-Visa applicant position page
+    if (currentPage === 'evisaApplicantUSPosition') {
+      const subordinatesCount = this.data.evisaApplicantUSPosition?.immediateSubordinates?.length || 0;
+      if (subordinatesCount > 1) {
+        this.filler.showSubordinatesNotification(subordinatesCount);
+        
+        // Use batch processing for immediate subordinates if we have any
+        const success = this.filler.fillImmediateSubordinates(this.data);
+      }
+    }
+    
     const count = await this.filler.fillWithTwoPasses(this.data);
-    console.log('Fill process complete');
     return count;
   }
   
@@ -7542,6 +7535,15 @@ class DS160Extension {
     return 0;
   }
   
+  checkForMultipleTravelCompanions(data) {
+    // Return the count of travel companions
+    if (data && data.travelCompanions) {
+      return Array.isArray(data.travelCompanions) ? data.travelCompanions.length : 0;
+    }
+    
+    return 0;
+  }
+  
   checkForIncorrectAdditionalSocialMedia(data) {
     // Check if additional social media question is set to Yes when it should be No
     // Check the actual radio button state on the page
@@ -7742,6 +7744,18 @@ class DS160Extension {
         title: `${licenseCount} Driver's Licenses Found`,
         description: 'The extension will fill the first license. Click "Add Another" button on the Previous U.S. Travel page to add additional licenses.',
         fieldInfo: 'Fields: US_DRIVER_LICENSE and US_DRIVER_LICENSE_STATE'
+      }]
+    });
+  }
+  
+  showMultipleTravelCompanionsNotification(companionsCount) {
+    this.filler.showUnifiedNotification({
+      title: '👥 Multiple Travel Companions Detected',
+      sections: [{
+        icon: '✈️',
+        title: `${companionsCount} Travel Companions Found`,
+        description: 'The extension will fill the first companion. Click "Add Another" button on the Travel Companions page to add additional companions.',
+        fieldInfo: 'Fields: Surnames, Given Names, and Relationship'
       }]
     });
   }
