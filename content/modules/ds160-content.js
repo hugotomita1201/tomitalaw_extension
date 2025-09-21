@@ -1,14 +1,18 @@
 // Fixed Two-Pass DS-160 Auto-Filler with Complete Field Support
 // Properly handles all Personal Page 1 & 2 fields including gender dropdown, marital status, birth location, telecode
 
-console.log('DS-160 Two-Pass Auto-Filler (Complete Field Support) loaded');
-
-// Simple configuration
-const CONFIG = {
-  fillDelay: 100,
-  passDelay: 3500,  // Increased to allow dynamic petition field to load
-  maxPasses: 2,  // Reduced from 3 to prevent aggressive re-filling
-};
+// Prevent duplicate initialization
+if (typeof window.DS160_INITIALIZED === 'undefined') {
+  window.DS160_INITIALIZED = true;
+  
+  console.log('DS-160 Two-Pass Auto-Filler (Complete Field Support) loaded');
+  
+  // Simple configuration
+  const CONFIG = {
+    fillDelay: 100,
+    passDelay: 3500,  // Increased to allow dynamic petition field to load
+    maxPasses: 2,  // Reduced from 3 to prevent aggressive re-filling
+  };
 
 class TwoPassFiller {
   constructor() {
@@ -845,7 +849,6 @@ class TwoPassFiller {
 
   // Batch process all immediate subordinates with Add Another functionality
   fillImmediateSubordinates(data) {
-    console.log('Starting batch processing for immediate subordinates');
     
     // Find the Add Another button for subordinates - look for enabled buttons only
     const addButtons = document.querySelectorAll('a[id*="InsertButtonImmSubor"], a[id*="InsertButton"][id*="Subor"], a[href*="InsertImmSubor"]');
@@ -855,7 +858,6 @@ class TwoPassFiller {
     for (const btn of addButtons) {
       if (!btn.disabled && !btn.hasAttribute('disabled')) {
         subordinateAddButton = btn;
-        console.log('Found enabled Add Another button for subordinates:', btn.id);
         break;
       }
     }
@@ -881,19 +883,8 @@ class TwoPassFiller {
     }
     
     if (!subordinateAddButton) {
-      console.log('No enabled Add Another button found for subordinates');
-      // Log all potential buttons for debugging
-      const allLinks = document.querySelectorAll('a[href*="Insert"], a:contains("Add")');
-      console.log('Available Insert links:', Array.from(allLinks).map(b => ({
-        id: b.id,
-        href: b.href,
-        text: b.textContent.trim(),
-        disabled: b.disabled || b.hasAttribute('disabled')
-      })));
       return false;
     }
-    
-    console.log(`Found Add Another button for subordinates: ${subordinateAddButton.id || 'no-id'}`);
     
     const allFields = [];
     
@@ -902,7 +893,6 @@ class TwoPassFiller {
       if (!subordinate) return;
       
       const ctl = `ctl${index.toString().padStart(2, '0')}`;
-      console.log(`Processing subordinate ${index}: ${subordinate.surname}, ${subordinate.givenName}`);
       
       // Add surname field
       if (subordinate.surname) {
@@ -7839,3 +7829,5 @@ script.remove();
 
 console.log('DS-160 Debug tools loaded. Run DS160Debug.help() for commands.');
 console.log('DS-160 Two-Pass Auto-Filler (Complete Field Support) initialized');
+
+} // End of DS160_INITIALIZED check
