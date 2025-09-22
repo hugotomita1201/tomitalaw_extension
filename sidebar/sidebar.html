@@ -41,14 +41,13 @@
               <span class="icon" id="ds160-icon"></span>
               DS-160 Form Auto-Filler
             </h2>
-            <p class="card-description">Auto-fill DS-160 visa application forms</p>
           </div>
         
           <div class="card-content">
             <!-- Data Input Section -->
             <div id="ds160DataInputSection">
-              <label for="ds160-data" class="label">Paste Extracted Data (JSON format):</label>
-              <textarea id="ds160-data" class="textarea" placeholder='Paste the JSON data from the web app here...
+              <label for="ds160-data" class="label">DS-160 Core Data (JSON format):</label>
+              <textarea id="ds160-data" class="textarea" placeholder='Paste the main DS-160 JSON data here...
 
 Example format:
 {
@@ -60,7 +59,26 @@ Example format:
   "passport": {
     "passportNumber": "AB123456"
   }
-}' rows="10"></textarea>
+}' rows="8"></textarea>
+              
+              <label for="ds160-evisa-data" class="label mt-3">Partial JSON / Updates (Optional):</label>
+              <textarea id="ds160-evisa-data" class="textarea" placeholder='Paste any partial JSON data to merge with the main data above...
+
+Examples:
+• Missing e-visa job details
+• Additional travel companions  
+• Updated contact information
+• Any section that needs updating
+
+Example format:
+{
+  "evisaApplicantUSPosition": {
+    "title": "Software Engineer",
+    "duties": "Develop and maintain software applications"
+  }
+}
+
+This will be intelligently merged into your main data.' rows="8"></textarea>
           
               <div class="flex gap-2 mt-4">
                 <button class="btn btn-primary" id="ds160-load">
@@ -76,20 +94,45 @@ Example format:
             <!-- Data Preview Section (hidden until data is loaded) -->
             <div id="ds160DataSection" style="display: none;">
               <div class="separator-horizontal"></div>
-              <div class="flex items-center gap-2 mb-4">
-                <span class="icon" id="ds160-data-icon"></span>
-                <h3 class="font-semibold">Extracted Data</h3>
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                  <span class="icon" id="ds160-data-icon"></span>
+                  <h3 class="font-semibold">Extracted Data</h3>
+                </div>
+                <div class="flex gap-2">
+                  <button class="btn btn-sm btn-ghost" id="ds160-copy-json">
+                    📋 Copy JSON
+                  </button>
+                  <button class="btn btn-sm btn-ghost" id="ds160-view-raw">
+                    <span style="font-size: 12px;">{ }</span> Raw
+                  </button>
+                  <button class="btn btn-sm btn-ghost" id="ds160-expand-all">
+                    Expand All
+                  </button>
+                </div>
               </div>
-          <div id="ds160DataPreview" class="data-preview" style="background: #f8f9fa; border-radius: 6px; padding: 12px; font-family: 'Monaco', 'Menlo', monospace; font-size: 12px; max-height: 200px; overflow-y: auto; white-space: pre-wrap; margin-bottom: 15px;"></div>
+              
+              <!-- Editable Data Viewer -->
+              <div id="ds160EditableData" class="editable-data-viewer">
+                <!-- Dynamic content will be inserted here -->
+              </div>
+              
+              <!-- Legacy text preview (hidden by default) -->
+              <div id="ds160DataPreview" class="data-preview" style="display: none; background: #f8f9fa; border-radius: 6px; padding: 12px; font-family: 'Monaco', 'Menlo', monospace; font-size: 12px; max-height: 200px; overflow-y: auto; white-space: pre-wrap; margin-bottom: 15px;"></div>
           
               <div class="flex flex-col gap-2 mt-4">
                 <button class="btn btn-primary w-full" id="ds160-fill">
                   <span class="icon-sm" id="ds160-fill-icon"></span>
                   Auto-Fill DS-160 Form
                 </button>
-                <button class="btn btn-secondary w-full" id="ds160-edit">
-                  ✏️ Edit Data
-                </button>
+                <div class="flex gap-2">
+                  <button class="btn btn-secondary flex-1" id="ds160-save-changes" style="display: none;">
+                    💾 Save Changes
+                  </button>
+                  <button class="btn btn-outline flex-1" id="ds160-edit">
+                    ✏️ Edit JSON
+                  </button>
+                </div>
               </div>
             </div>
 

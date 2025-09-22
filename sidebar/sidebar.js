@@ -157,17 +157,489 @@ function setupModuleHandlers(module) {
 // DS-160 specific handlers
 function setupDS160Handlers() {
   let currentData = null;
+  let modifiedFields = new Set();
+  let isRawView = false;
   
   const loadBtn = document.getElementById('ds160-load');
   const clearInputBtn = document.getElementById('ds160-clear-input');
   const fillBtn = document.getElementById('ds160-fill');
   const editBtn = document.getElementById('ds160-edit');
+  const saveChangesBtn = document.getElementById('ds160-save-changes');
+  const copyJsonBtn = document.getElementById('ds160-copy-json');
+  const viewRawBtn = document.getElementById('ds160-view-raw');
+  const expandAllBtn = document.getElementById('ds160-expand-all');
   const dataInput = document.getElementById('ds160-data');
   const dataInputSection = document.getElementById('ds160DataInputSection');
   const dataSection = document.getElementById('ds160DataSection');
   const dataPreview = document.getElementById('ds160DataPreview');
+  const editableDataViewer = document.getElementById('ds160EditableData');
   
-  // Helper function to display extracted data
+  // Section configuration with icons and field labels
+  const sectionConfig = {
+    personal: {
+      icon: '👤',
+      title: 'Personal Information',
+      fields: {
+        surname: 'Last Name',
+        givenName: 'First Name',
+        fullNameNative: 'Full Name (Native)',
+        gender: 'Gender',
+        maritalStatus: 'Marital Status',
+        dateOfBirth: 'Date of Birth',
+        birthCity: 'Birth City',
+        birthState: 'Birth State',
+        birthCountry: 'Birth Country',
+        nationality: 'Nationality',
+        nationalId: 'National ID',
+        usSocialSecurity: 'US SSN',
+        usTaxId: 'US Tax ID'
+      }
+    },
+    passport: {
+      icon: '📔',
+      title: 'Passport Information',
+      fields: {
+        type: 'Passport Type',
+        number: 'Passport Number',
+        bookNumber: 'Book Number',
+        issuingAuthority: 'Issuing Authority',
+        issueCountry: 'Issue Location Country',
+        issueCity: 'Issue City',
+        issueState: 'Issue State',
+        issueDate: 'Issue Date',
+        expirationDate: 'Expiration Date'
+      }
+    },
+    travel: {
+      icon: '✈️',
+      title: 'Travel Information',
+      fields: {
+        purposeOfTrip: 'Purpose of Trip',
+        otherPurposeDetail: 'Visa Type Detail',
+        specificTravelPlans: 'Specific Plans',
+        intendedArrivalDate: 'Arrival Date',
+        arrivalFlightNumber: 'Arrival Flight',
+        arrivalCity: 'Arrival City',
+        intendedDepartureDate: 'Departure Date',
+        lengthOfStay: 'Length of Stay',
+        lengthOfStayNumber: 'Stay Duration',
+        lengthOfStayUnit: 'Stay Unit',
+        usStreetAddress: 'US Address',
+        usCity: 'US City',
+        usState: 'US State',
+        usZipCode: 'US Zip Code',
+        tripPayer: 'Trip Payer'
+      }
+    },
+    homeAddress: {
+      icon: '🏠',
+      title: 'Home Address',
+      fields: {
+        street: 'Street Address',
+        street2: 'Street Address 2',
+        city: 'City',
+        state: 'State/Province',
+        postalCode: 'Postal Code',
+        country: 'Country'
+      }
+    },
+    contact: {
+      icon: '📧',
+      title: 'Contact Information',
+      fields: {
+        homeStreet: 'Home Street',
+        homeApt: 'Apartment',
+        homeCity: 'Home City',
+        homeState: 'Home State',
+        homePostalCode: 'Postal Code',
+        homeCountry: 'Home Country',
+        homePhone: 'Home Phone',
+        secondaryPhone: 'Secondary Phone',
+        workPhone: 'Work Phone',
+        email: 'Email Address'
+      }
+    },
+    usContact: {
+      icon: '🏢',
+      title: 'US Contact',
+      fields: {
+        organizationName: 'Organization',
+        relationship: 'Relationship'
+      }
+    },
+    family: {
+      icon: '👨‍👩‍👧‍👦',
+      title: 'Family Information'
+    },
+    education: {
+      icon: '🎓',
+      title: 'Education',
+      fields: {
+        institutions: 'Educational Institutions'
+      }
+    },
+    employment: {
+      icon: '💼',
+      title: 'Employment',
+      fields: {
+        currentEmployer: 'Current Employer',
+        previousEmployers: 'Previous Employers'
+      }
+    },
+    workEducation: {
+      icon: '💼',
+      title: 'Work & Education'
+    },
+    countriesVisited: {
+      icon: '🌍',
+      title: 'Countries Visited',
+      fields: {
+        hasVisited: 'Has visited other countries',
+        countries: 'List of countries'
+      }
+    },
+    previousTravel: {
+      icon: '🗺️',
+      title: 'Previous US Travel'
+    }
+  };
+  
+  // Helper function to check if a field is a boolean and get its default
+  function isBooleanField(fieldName) {
+    // Convert to lowercase for checking
+    const name = fieldName.toLowerCase();
+    
+    // Common DS-160 boolean fields - comprehensive list
+    const booleanPatterns = [
+      // Previous patterns
+      'inus', 'inustemporary', 'visited', 'refused', 'arrested',
+      'convicted', 'visa', 'lost', 'cancelled', 'denied', 'deported',
+      'overstayed', 'worked', 'attended', 'married', 'permanent',
+      'citizen', 'taxpayer', 'served', 'military', 'belonged', 'belongs',
+      'participated', 'traveled', 'provided', 'trained',
+      'violator', 'involved', 'engaged', 'related', 'sought',
+      'assisted', 'committed', 'ordered', 'detained', 'withheld',
+      'disease', 'disorder', 'addiction', 'associated', 'espionage',
+      'sabotage', 'genocide', 'torture', 'killings', 'terrorist',
+      'financial', 'representative', 'public', 'immunity', 'compulsory',
+      'child', 'custody', 'voting', 'renounced', 'tax',
+      
+      // New patterns for missing fields
+      'drug', 'user', 'controlled', 'substances', 'prostitution',
+      'laundering', 'trafficking', 'human', 'money', 'weapons',
+      'violation', 'fraud', 'misrepresentation', 'illegal', 'unlawful',
+      'criminal', 'offense', 'conviction', 'removal', 'exclusion',
+      'inadmissible', 'false', 'activity', 'organization', 'group',
+      'violence', 'persecution', 'conflict', 'assistance', 'support',
+      
+      // Additional patterns from screenshots
+      'hasmembership', 'membership', 'hasskills', 'skills',
+      'hasinvolvement', 'involvement', 'deportation', 'deport',
+      'renounce', 'expenses', 'hasserved'
+    ];
+    
+    // Check if field name contains any boolean pattern
+    return booleanPatterns.some(pattern => name.includes(pattern));
+  }
+  
+  // Create editable field element
+  function createEditableField(label, value, path, depth = 0) {
+    // Check if value is an object or array - if so, handle it specially
+    if (value && typeof value === 'object') {
+      // For nested objects, create a container with the label at the top
+      const containerDiv = document.createElement('div');
+      containerDiv.className = 'nested-field-container';
+      
+      // Add the label for the nested object
+      const labelDiv = document.createElement('div');
+      labelDiv.className = 'nested-field-label';
+      labelDiv.textContent = label + ':';
+      containerDiv.appendChild(labelDiv);
+      
+      // Create container for child fields
+      const childrenContainer = document.createElement('div');
+      childrenContainer.className = depth > 1 ? 'nested-children-flat' : 'nested-children';
+      
+      if (Array.isArray(value)) {
+        // Handle arrays
+        value.forEach((item, index) => {
+          if (typeof item === 'object' && item !== null) {
+            const itemSection = document.createElement('div');
+            itemSection.className = 'array-item-section';
+            
+            const itemHeader = document.createElement('div');
+            itemHeader.className = 'array-item-header';
+            itemHeader.textContent = `#${index + 1}`;
+            itemSection.appendChild(itemHeader);
+            
+            // Render each property of the object
+            Object.entries(item).forEach(([key, val]) => {
+              const nestedField = createEditableField(key, val, `${path}[${index}].${key}`, depth + 1);
+              itemSection.appendChild(nestedField);
+            });
+            
+            childrenContainer.appendChild(itemSection);
+          } else {
+            // Simple array item
+            const itemField = createEditableField(`[${index + 1}]`, item, `${path}[${index}]`, depth + 1);
+            childrenContainer.appendChild(itemField);
+          }
+        });
+      } else {
+        // Handle nested objects - render each property
+        Object.entries(value).forEach(([key, val]) => {
+          const nestedField = createEditableField(key, val, `${path}.${key}`, depth + 1);
+          childrenContainer.appendChild(nestedField);
+        });
+      }
+      
+      containerDiv.appendChild(childrenContainer);
+      return containerDiv;
+    }
+    
+    // Handle primitive values (strings, numbers, booleans, null)
+    const fieldDiv = document.createElement('div');
+    fieldDiv.className = 'data-field';
+    
+    const labelDiv = document.createElement('div');
+    labelDiv.className = 'field-label';
+    labelDiv.textContent = label + ':';
+    
+    const valueDiv = document.createElement('div');
+    valueDiv.className = 'field-value';
+    valueDiv.dataset.path = path;
+    
+    if (!value || value === 'N/A') {
+      // Check if this is a boolean field that should default to false
+      if (isBooleanField(label)) {
+        valueDiv.textContent = 'false';
+        valueDiv.className += ' default-value';
+      } else {
+        valueDiv.className += ' empty';
+        valueDiv.textContent = '';
+      }
+    } else {
+      valueDiv.textContent = value;
+    }
+    
+    // Track if this field was modified
+    if (modifiedFields.has(path)) {
+      valueDiv.classList.add('modified');
+    }
+    
+    // Click to edit functionality for primitive values only
+    valueDiv.addEventListener('click', function(e) {
+      if (this.classList.contains('editing')) return;
+      
+      const currentValue = this.textContent;
+      const isDefault = this.classList.contains('default-value');
+      this.classList.add('editing');
+      
+      const input = document.createElement('input');
+      input.type = 'text';
+      // If it's a default value, start with empty input for easier typing
+      input.value = (currentValue === '' || isDefault) ? '' : currentValue;
+      input.addEventListener('blur', () => saveFieldValue(this, input, path));
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          saveFieldValue(this, input, path);
+        } else if (e.key === 'Escape') {
+          this.classList.remove('editing');
+          this.textContent = currentValue;
+          // Restore default-value class if it was a default
+          if (isDefault) {
+            this.classList.add('default-value');
+          }
+        }
+      });
+      
+      this.innerHTML = '';
+      this.appendChild(input);
+      input.focus();
+      input.select();
+    });
+    
+    fieldDiv.appendChild(labelDiv);
+    fieldDiv.appendChild(valueDiv);
+    return fieldDiv;
+  }
+  
+  // Save field value after editing
+  function saveFieldValue(fieldDiv, input, path) {
+    const newValue = input.value.trim();
+    
+    // Parse the path to handle array indices
+    const pathParts = [];
+    let currentPath = '';
+    for (let i = 0; i < path.length; i++) {
+      if (path[i] === '[') {
+        if (currentPath) {
+          pathParts.push(currentPath);
+          currentPath = '';
+        }
+        // Extract array index
+        let j = i + 1;
+        while (j < path.length && path[j] !== ']') {
+          currentPath += path[j];
+          j++;
+        }
+        pathParts.push(parseInt(currentPath));
+        currentPath = '';
+        i = j; // Skip the closing bracket
+      } else if (path[i] === '.') {
+        if (currentPath) {
+          pathParts.push(currentPath);
+          currentPath = '';
+        }
+      } else {
+        currentPath += path[i];
+      }
+    }
+    if (currentPath) {
+      pathParts.push(currentPath);
+    }
+    
+    // Update the data object
+    let obj = currentData;
+    for (let i = 0; i < pathParts.length - 1; i++) {
+      const part = pathParts[i];
+      if (!obj[part]) {
+        // Create array or object as needed
+        if (typeof pathParts[i + 1] === 'number') {
+          obj[part] = [];
+        } else {
+          obj[part] = {};
+        }
+      }
+      obj = obj[part];
+    }
+    obj[pathParts[pathParts.length - 1]] = newValue || 'N/A';
+    
+    // Update display
+    fieldDiv.classList.remove('editing', 'empty', 'default-value');
+    if (!newValue) {
+      // Check if this is a boolean field that should show default
+      const label = fieldDiv.parentElement?.querySelector('.field-label')?.textContent?.replace(':', '');
+      if (label && isBooleanField(label)) {
+        fieldDiv.classList.add('default-value');
+        fieldDiv.textContent = 'false';
+      } else {
+        fieldDiv.classList.add('empty');
+        fieldDiv.textContent = '';
+      }
+    } else {
+      fieldDiv.textContent = newValue;
+    }
+    
+    // Mark as modified
+    modifiedFields.add(path);
+    fieldDiv.classList.add('modified');
+    
+    // Show save button
+    if (saveChangesBtn) {
+      saveChangesBtn.style.display = 'block';
+    }
+  }
+  
+  // Create collapsible section
+  function createSection(sectionKey, sectionData, config) {
+    const section = document.createElement('div');
+    section.className = 'data-section';
+    
+    const header = document.createElement('div');
+    header.className = 'section-header';
+    
+    const title = document.createElement('div');
+    title.className = 'section-title';
+    title.innerHTML = `<span>${config.icon || '📁'}</span><span>${config.title || sectionKey}</span>`;
+    
+    const chevron = document.createElement('span');
+    chevron.className = 'section-chevron';
+    chevron.textContent = '▶';
+    
+    header.appendChild(title);
+    header.appendChild(chevron);
+    
+    const content = document.createElement('div');
+    content.className = 'section-content';
+    
+    // Add fields based on config or data
+    if (config.fields) {
+      Object.entries(config.fields).forEach(([fieldKey, fieldLabel]) => {
+        const value = sectionData?.[fieldKey];
+        if (value !== undefined) {
+          content.appendChild(createEditableField(fieldLabel, value, `${sectionKey}.${fieldKey}`, 0));
+        }
+      });
+    } else {
+      // Handle nested objects and arrays
+      if (sectionData && typeof sectionData === 'object') {
+        renderNestedData(sectionData, sectionKey, content);
+      }
+    }
+    
+    // Toggle section on header click
+    header.addEventListener('click', () => {
+      header.classList.toggle('active');
+      content.classList.toggle('expanded');
+    });
+    
+    // Auto-expand sections with data
+    if (content.children.length > 0) {
+      header.classList.add('active');
+      content.classList.add('expanded');
+    }
+    
+    section.appendChild(header);
+    section.appendChild(content);
+    return section;
+  }
+  
+  // Render nested data structures
+  function renderNestedData(data, parentPath, container, depth = 0) {
+    Object.entries(data).forEach(([key, value]) => {
+      if (value === null || value === undefined) return;
+      
+      // Pass all values (arrays, objects, primitives) to createEditableField for consistent handling
+      container.appendChild(createEditableField(key, value, `${parentPath}.${key}`, depth));
+    });
+  }
+  
+  // Display data in editable format
+  function displayEditableData(data) {
+    if (!data) return;
+    
+    editableDataViewer.innerHTML = '';
+    modifiedFields.clear();
+    
+    // Create sections based on data structure
+    Object.entries(sectionConfig).forEach(([sectionKey, config]) => {
+      if (data[sectionKey]) {
+        const section = createSection(sectionKey, data[sectionKey], config);
+        editableDataViewer.appendChild(section);
+      }
+    });
+    
+    // Handle any additional sections not in config
+    Object.keys(data).forEach(key => {
+      if (!sectionConfig[key]) {
+        const section = createSection(key, data[key], {
+          icon: '📋',
+          title: key.charAt(0).toUpperCase() + key.slice(1)
+        });
+        editableDataViewer.appendChild(section);
+      }
+    });
+    
+    // Show editable viewer, hide text preview
+    editableDataViewer.style.display = 'block';
+    dataPreview.style.display = 'none';
+    dataSection.style.display = 'block';
+    dataInputSection.style.display = 'none';
+  }
+  
+  // Display data in raw text format (legacy)
   function displayData(data) {
     if (!data) return;
     
@@ -187,11 +659,11 @@ function setupDS160Handlers() {
     if (data.passport) {
       preview.push('');
       preview.push('=== PASSPORT ===' );
-      if (data.passport.passportNumber) {
-        preview.push(`Passport #: ${data.passport.passportNumber}`);
+      if (data.passport.number) {
+        preview.push(`Passport #: ${data.passport.number}`);
       }
-      if (data.passport.issuingCountry) {
-        preview.push(`Issuing Country: ${data.passport.issuingCountry}`);
+      if (data.passport.issuingAuthority) {
+        preview.push(`Issuing Authority: ${data.passport.issuingAuthority}`);
       }
     }
     
@@ -201,8 +673,8 @@ function setupDS160Handlers() {
       if (data.travel.purposeOfTrip) {
         preview.push(`Purpose: ${data.travel.purposeOfTrip}`);
       }
-      if (data.travel.arrivalDate) {
-        preview.push(`Arrival: ${data.travel.arrivalDate}`);
+      if (data.travel.intendedArrivalDate) {
+        preview.push(`Arrival: ${data.travel.intendedArrivalDate}`);
       }
     }
     
@@ -212,20 +684,35 @@ function setupDS160Handlers() {
       if (data.contact.email) {
         preview.push(`Email: ${data.contact.email}`);
       }
-      if (data.contact.phone) {
-        preview.push(`Phone: ${data.contact.phone}`);
+      if (data.contact.homePhone) {
+        preview.push(`Phone: ${data.contact.homePhone}`);
       }
     }
     
     dataPreview.textContent = preview.join('\n') || 'Data loaded (no preview available)';
+    editableDataViewer.style.display = 'none';
+    dataPreview.style.display = 'block';
     dataSection.style.display = 'block';
     dataInputSection.style.display = 'none';
   }
   
   // Load saved data on module load
-  chrome.storage.local.get(['ds160Data', 'lastDS160Data'], (result) => {
-    if (result.lastDS160Data) {
-      // Auto-load last used data
+  chrome.storage.local.get(['ds160Data', 'lastDS160CoreData', 'lastDS160EvisaData', 'lastDS160Data'], (result) => {
+    const evisaDataInput = document.getElementById('ds160-evisa-data');
+    
+    // Load core data
+    if (result.lastDS160CoreData) {
+      dataInput.value = result.lastDS160CoreData;
+      // Load E-visa data if available
+      if (result.lastDS160EvisaData && evisaDataInput) {
+        evisaDataInput.value = result.lastDS160EvisaData;
+      }
+      // Trigger load automatically
+      if (loadBtn) {
+        loadBtn.click();
+      }
+    } else if (result.lastDS160Data) {
+      // Backward compatibility: load old single field data
       dataInput.value = result.lastDS160Data;
       // Trigger load automatically
       if (loadBtn) {
@@ -242,29 +729,186 @@ function setupDS160Handlers() {
   // Load Data button
   if (loadBtn) {
     loadBtn.addEventListener('click', () => {
-      const pastedData = dataInput.value.trim();
+      const coreData = dataInput.value.trim();
+      const evisaDataInput = document.getElementById('ds160-evisa-data');
+      const evisaData = evisaDataInput ? evisaDataInput.value.trim() : '';
       
-      if (!pastedData) {
-        showStatus('Please paste the extracted data from the web app', 'error');
+      // Must have at least one field filled
+      if (!coreData && !evisaData) {
+        showStatus('Please paste data in at least one field', 'error');
+        return;
+      }
+      
+      let finalData = {};
+      let coreLoaded = false;
+      let evisaLoaded = false;
+      
+      // Try to parse core data field
+      if (coreData) {
+        try {
+          const parsedData = JSON.parse(coreData);
+          finalData = { ...finalData, ...parsedData };
+          
+          // Check if this is actually E-visa data
+          if (parsedData.evisaClassification || parsedData.evisaBusiness || parsedData.evisaInvestment) {
+            evisaLoaded = true;
+          }
+          // Check if this is core DS-160 data
+          if (parsedData.personal || parsedData.travel || parsedData.passport) {
+            coreLoaded = true;
+          }
+        } catch (error) {
+          console.error('Error parsing core data field:', error);
+          showStatus('Error parsing data in first field', 'error');
+          return;
+        }
+      }
+      
+      // Try to parse E-visa data field
+      if (evisaData) {
+        try {
+          const parsedData = JSON.parse(evisaData);
+          finalData = { ...finalData, ...parsedData };
+          
+          // Check what type of data this is
+          if (parsedData.evisaClassification || parsedData.evisaBusiness || parsedData.evisaInvestment) {
+            evisaLoaded = true;
+          }
+          if (parsedData.personal || parsedData.travel || parsedData.passport) {
+            coreLoaded = true;
+          }
+        } catch (error) {
+          console.error('Error parsing E-visa data field:', error);
+          if (!coreData) {
+            showStatus('Error parsing data in E-visa field', 'error');
+            return;
+          } else {
+            showStatus('Warning: E-visa field data invalid, using first field only', 'warning');
+          }
+        }
+      }
+      
+      // Set the final data
+      currentData = finalData;
+      
+      // Show appropriate status message
+      if (coreLoaded && evisaLoaded) {
+        showStatus('Core DS-160 and E-visa data loaded successfully!', 'success');
+      } else if (evisaLoaded) {
+        showStatus('E-visa data loaded successfully!', 'success');
+      } else if (coreLoaded) {
+        showStatus('Core DS-160 data loaded successfully!', 'success');
+      } else {
+        showStatus('Data loaded successfully!', 'success');
+      }
+      
+      displayEditableData(currentData);
+      
+      // Save the data for next time
+      chrome.storage.local.set({ 
+        ds160Data: currentData,
+        lastDS160CoreData: coreData,
+        lastDS160EvisaData: evisaData
+      });
+      
+      // Update the preview
+      const preview = document.getElementById('ds160DataPreview');
+      if (preview) {
+        preview.textContent = JSON.stringify(currentData, null, 2);
+      }
+      
+      // Show the data section
+      document.getElementById('ds160DataInputSection').style.display = 'none';
+      document.getElementById('ds160DataSection').style.display = 'block';
+    });
+  }
+  
+  // Copy Combined JSON button
+  if (copyJsonBtn) {
+    copyJsonBtn.addEventListener('click', async () => {
+      if (!currentData) {
+        showStatus('No data to copy', 'error');
         return;
       }
       
       try {
-        // Parse the JSON data
-        currentData = JSON.parse(pastedData);
-        displayData(currentData);
-        showStatus('Data loaded successfully!', 'success');
+        // Convert the current data to formatted JSON string
+        const jsonString = JSON.stringify(currentData, null, 2);
         
-        // Save the data for next time
-        chrome.storage.local.set({ 
-          ds160Data: currentData,
-          lastDS160Data: pastedData 
-        });
+        // Copy to clipboard
+        await navigator.clipboard.writeText(jsonString);
         
+        // Show success message
+        showStatus('Combined JSON copied to clipboard!', 'success');
+        
+        // Temporarily change button text to show success
+        const originalText = copyJsonBtn.innerHTML;
+        copyJsonBtn.innerHTML = '✅ Copied!';
+        setTimeout(() => {
+          copyJsonBtn.innerHTML = originalText;
+        }, 2000);
       } catch (error) {
-        console.error('Error parsing data:', error);
-        showStatus('Error: Invalid JSON data. Please copy the complete data from the web app.', 'error');
+        console.error('Failed to copy:', error);
+        showStatus('Failed to copy to clipboard', 'error');
       }
+    });
+  }
+  
+  // View Raw button - toggle between editable and raw view
+  if (viewRawBtn) {
+    viewRawBtn.addEventListener('click', () => {
+      isRawView = !isRawView;
+      if (isRawView) {
+        displayData(currentData);
+        viewRawBtn.innerHTML = '📝 Editable';
+      } else {
+        displayEditableData(currentData);
+        viewRawBtn.innerHTML = '<span style="font-size: 12px;">{ }</span> Raw';
+      }
+    });
+  }
+  
+  // Expand All button
+  if (expandAllBtn) {
+    expandAllBtn.addEventListener('click', () => {
+      const sections = editableDataViewer.querySelectorAll('.data-section');
+      const allExpanded = Array.from(sections).every(s => 
+        s.querySelector('.section-header').classList.contains('active')
+      );
+      
+      sections.forEach(section => {
+        const header = section.querySelector('.section-header');
+        const content = section.querySelector('.section-content');
+        if (allExpanded) {
+          header.classList.remove('active');
+          content.classList.remove('expanded');
+          expandAllBtn.textContent = 'Expand All';
+        } else {
+          header.classList.add('active');
+          content.classList.add('expanded');
+          expandAllBtn.textContent = 'Collapse All';
+        }
+      });
+    });
+  }
+  
+  // Save Changes button
+  if (saveChangesBtn) {
+    saveChangesBtn.addEventListener('click', () => {
+      // Save the modified data
+      chrome.storage.local.set({ 
+        ds160Data: currentData,
+        lastDS160Data: JSON.stringify(currentData, null, 2)
+      });
+      
+      // Clear modified indicators
+      modifiedFields.clear();
+      document.querySelectorAll('.field-value.modified').forEach(field => {
+        field.classList.remove('modified');
+      });
+      
+      saveChangesBtn.style.display = 'none';
+      showStatus('Changes saved successfully!', 'success');
     });
   }
   
@@ -272,8 +916,12 @@ function setupDS160Handlers() {
   if (clearInputBtn) {
     clearInputBtn.addEventListener('click', () => {
       dataInput.value = '';
+      const evisaDataInput = document.getElementById('ds160-evisa-data');
+      if (evisaDataInput) {
+        evisaDataInput.value = '';
+      }
       currentData = null;
-      chrome.storage.local.remove(['ds160Data', 'lastDS160Data']);
+      chrome.storage.local.remove(['ds160Data', 'lastDS160Data', 'lastDS160CoreData', 'lastDS160EvisaData']);
       showStatus('Data cleared', 'info');
     });
   }
@@ -341,9 +989,41 @@ function setupDS160Handlers() {
   // Edit Data button - go back to input
   if (editBtn) {
     editBtn.addEventListener('click', () => {
+      // Separate E-visa and core data for editing
+      const evisaDataInput = document.getElementById('ds160-evisa-data');
+      const evisaFields = ['evisaClassification', 'evisaBusiness', 'evisaInvestment', 'evisaFinanceTrade', 
+                          'evisaEmployeeCounts', 'evisaUSPersonnel', 'evisaApplicantPosition', 
+                          'evisaApplicantUSPosition', 'evisaOwnership', 'evisaForeignBusiness', 
+                          'evisaFinancial', 'evisaTrade', 'evisaApplicationContact', 'evisaEmployee'];
+      
+      let coreDataObj = {};
+      let evisaDataObj = {};
+      
+      // Separate the data
+      for (const key in currentData) {
+        if (evisaFields.includes(key)) {
+          evisaDataObj[key] = currentData[key];
+        } else {
+          coreDataObj[key] = currentData[key];
+        }
+      }
+      
+      // Put data in appropriate fields
+      if (Object.keys(coreDataObj).length > 0) {
+        dataInput.value = JSON.stringify(coreDataObj, null, 2);
+      } else {
+        dataInput.value = '';
+      }
+      
+      if (evisaDataInput && Object.keys(evisaDataObj).length > 0) {
+        evisaDataInput.value = JSON.stringify(evisaDataObj, null, 2);
+      } else if (evisaDataInput) {
+        evisaDataInput.value = '';
+      }
+      
       dataSection.style.display = 'none';
       dataInputSection.style.display = 'block';
-      showStatus('Edit your data and click Load Data again', 'info');
+      showStatus('Edit your JSON data and click Load Data again', 'info');
     });
   }
 }
