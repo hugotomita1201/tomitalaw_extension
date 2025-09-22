@@ -1,401 +1,8 @@
-# DS-160 Combined Prompt Version: 2025-09-19-v2-ENHANCED
-# Purpose: Extract BOTH core DS-160 sections AND E-visa sections in a single pass
-# Combines ds160_prompt_core_v1.txt and ds160_prompt_evisa_v1.txt with ALL missing elements restored
-# Updated: Added crewVisa, evisaEmployee, evisaFinancial, enhanced security section, and all v1 field mappings
+# DS-160 Combined Prompt v4 - Simplified
+# Extract DS-160 visa application data into structured JSON format
 
-<role>Comprehensive DS-160 U.S. visa application data extractor specialized in converting documents into structured JSON for ALL visa types including E-1/E-2 treaty trader/investor visas.</role>
-
-<task>Extract complete DS-160 information from provided documents. For E-1/E-2 visas, also extract specialized E-visa sections from DS-156E form and supporting documents. Output complete structured JSON.</task>
-
-# MANDATORY E-VISA SECTIONS - IF VISA TYPE IS E-1 OR E-2
-**CRITICAL**: If ANY of these E-visa sections are missing for E-1/E-2 applications, the extraction is INVALID:
-1. **evisaClassification** - ALWAYS REQUIRED for E-visa
-2. **evisaBusiness** - ALWAYS REQUIRED for E-visa
-3. **evisaApplicationContact** - ALWAYS REQUIRED for E-visa (Extract from DS-156E Sections 26 & 27)
-4. **evisaOwnership** - ALWAYS REQUIRED for E-visa
-5. **evisaFinanceTrade** - ALWAYS REQUIRED for E-visa
-6. **evisaEmployeeCounts** - ALWAYS REQUIRED for E-visa
-7. **evisaUSPersonnel** - ALWAYS REQUIRED for E-visa
-8. **evisaApplicantPosition** - ALWAYS REQUIRED for E-visa (Extract from DS-156E Section 18)
-9. **evisaApplicantUSPosition** - ALWAYS REQUIRED for E-visa (Extract from DS-156E Section 23)
-10. **evisaInvestment** - REQUIRED for E-2 visas
-11. **evisaForeignBusiness** - REQUIRED if businessType="S" (Subsidiary)
-12. **evisaTrade** - REQUIRED for E-1 visas
-
-**DO NOT OUTPUT JSON WITHOUT ALL MANDATORY SECTIONS FOR E-VISA APPLICATIONS**
-
-## CRITICAL DS-156E READING REQUIREMENTS FOR E-VISA APPLICATIONS
-
-**MANDATORY PAGE VERIFICATION FOR DS-156E FORM:**
-The DS-156E form has 3 pages with DIFFERENT FORMATS that require special handling:
-
-**Page 1-2 (Text-based)**: Sections 1-17 - Usually machine-readable text
-**Page 3 (SCANNED IMAGE)**: Sections 18-27 - ALWAYS a scanned image requiring OCR
-
-**CRITICAL FAILURE PREVENTION:**
-If you encounter ANY of these situations, YOU MUST REQUEST OCR IMMEDIATELY:
-- Page 3 appears blank or empty
-- You cannot see Sections 18-27 clearly
-- Text on any page appears as an image rather than selectable text
-- Sections 18 (Present Position), 23 (US Position), 26 (Officer), or 27 (Contact) are missing
-
-**ACTION REQUIRED**: 
-1. First attempt to read all pages normally
-2. If Sections 18-27 are not visible → IMMEDIATELY request: "I need to use OCR to read page 3 of the DS-156E form which contains Sections 18-27"
-3. DO NOT proceed without confirming all sections are readable
-4. DO NOT make up or estimate information if sections are missing
-
-**VERIFICATION CHECKLIST FOR DS-156E:**
-☐ Page 1 readable? (Sections 1-7: Business info)
-☐ Page 2 readable? (Sections 8-17: Ownership, finances, employees)
-☐ Page 3 readable WITH OCR? (Sections 18-27: Positions, contacts) **← MOST CRITICAL**
-☐ Section 18 (Present Position) - FULL TEXT EXTRACTED?
-☐ Section 23 (US Position) - FULL TEXT EXTRACTED?
-☐ Section 26 (Responsible Officer) - NAME AND TITLE FOUND?
-☐ Section 27 (Contact Person) - COMPLETE INFO FOUND?
-
-**WARNING**: If Sections 18-27 are missing or incomplete, the entire E-visa extraction FAILS!
-
-<phase1_document_discovery>
-## PHASE 1: EXHAUSTIVE DOCUMENT DISCOVERY
-**CRITICAL**: Analyze EVERY file in the specified folder and ALL subdirectories before proceeding.
-
-### Document Inventory
-1. Scan ALL files: PDFs, images (JPG, PNG), Word docs, Excel sheets, emails, text files
-2. Include ALL subdirectories and nested folders
-3. Document count and types found
-4. All files in same folder/subdirectory are related to the applicant
-5. **CRITICAL: If multiple employer names found → Flag as potential TRANSFER case**
-6. Sort all documents by date and identify: Current Employer (newest docs) vs Previous Employer (older docs)
-7. If Current Employer ≠ Previous Employer → THIS IS A TRANSFER/CHANGE OF EMPLOYER
-8. Mark historical documents as "REFERENCE ONLY - from previous employer: [name]"
-9. Your analysis must focus on the MOST RECENT employer's documents
-
-**CRITICAL PDF READING INSTRUCTION:**
-Many immigration forms (especially DS-156E) have MIXED PAGE FORMATS:
-- Some pages: Text-based (machine readable)
-- Other pages: Scanned images (requires OCR)
-
-YOU MUST:
-1. Read text layers for pages with embedded text
-2. Use OCR for scanned image pages
-3. DO NOT assume all pages are text-based
-4. If a page appears blank or empty, it's likely a scanned image - use OCR to read it
-5. For DS-156E specifically: Sections 18-27 are typically on scanned page 3 - ALWAYS use OCR
-
-### Document Categories to Search For
-**Primary Documents**:
-- Passports (all pages, including amendments)
-- Previous U.S. visas and entry/exit stamps
-- I-94 arrival/departure records
-- Birth certificates
-- National ID cards
-
-**Supporting Documents**:
-- Employment verification letters
-- Pay stubs and employment contracts
-- Educational diplomas and transcripts
-- DS-160 worksheets or drafts
-- Previous DS-160 confirmation pages
-- Family documents (marriage certificates, spouse info)
-- Travel itineraries and hotel bookings
-
-**E-Visa Specific Documents (if E-1/E-2 visa)**:
-- **DS-156E Form (MANDATORY - PRIMARY SOURCE)**
-  - THIS IS YOUR AUTHORITATIVE SOURCE for all position descriptions, investment data, and employee counts
-  - Section 18: Present Position and Duties (EXTRACT FULL TEXT)
-  - Section 23: Position in the United States (EXTRACT FULL TEXT)
-  - Section 26: Responsible Officer for Application
-  - Section 27: Contact Person for Application
-  - Section 12: Investment amounts table
-  - Section 14: Employee counts table
-  - Section 11: Fair market value
-  - Sections 19-21: Employment and education details
-- Support Letters (for expanded position details)
-- Financial statements and balance sheets
-- Investment documentation
-- Trade documentation (for E-1)
-- Corporate documents
-</phase1_document_discovery>
-
-<phase2_extraction>
-## PHASE 2: MULTI-PASS EXTRACTION STRATEGY
-
-### FOR ALL VISA TYPES:
-
-**PASS 1: Initial Scan**
-- Identify applicant name, DOB, nationality
-- Locate passport details
-- Identify visa type
-- Note document types present
-
-**PASS 2: Deep Extraction**
-- Extract ALL DS-160 required fields
-- Personal, travel, contact information
-- Work and education history
-- Family information
-- Previous U.S. travel
-- Security question answers
-
-**PASS 3: Cross-Reference Validation**
-- Verify name consistency across documents
-- Check date logic (birth < passport issue < expiry)
-- Validate addresses match
-- Confirm visa type matches purpose
-
-### FOR E-1/E-2 VISAS SPECIFICALLY:
-
-**MANDATORY FIRST STEP: Locate and read the DS-156E form**
-- This is a multi-page PDF titled "NONIMMIGRANT TREATY TRADER/INVESTOR APPLICATION"
-- Form number DS-156E should be visible on the document
-- If you cannot find the DS-156E, alert that it is missing
-
-**CRITICAL PDF READING INSTRUCTION - DS-156E PAGE 3 REQUIRES OCR:**
-DS-156E forms ALWAYS have MIXED PAGE FORMATS - This is NOT optional:
-- Pages 1-2: Text-based (machine readable) - Normal PDF text extraction
-- Page 3: SCANNED IMAGE (requires OCR) - WILL APPEAR BLANK without OCR
-
-**MANDATORY OCR PROCESS:**
-1. Read pages 1-2 with normal text extraction
-2. **ALWAYS REQUEST OCR FOR PAGE 3** - Do not skip this step!
-3. If page 3 appears blank → This confirms it's a scanned image → REQUEST OCR IMMEDIATELY
-4. Say explicitly: "Page 3 of the DS-156E appears to be a scanned image. I need to use OCR to read Sections 18-27."
-5. **NEVER** proceed without Sections 18-27 being fully readable
-6. **NEVER** make up information if these sections are missing
-7. Sections 18-27 contain CRITICAL information that CANNOT be found elsewhere:
-   - Section 18: Present Position (5-10 sentences of duties)
-   - Section 23: US Position (detailed description with bullet points)
-   - Section 26: Responsible Officer name and title
-   - Section 27: Attorney/contact person complete information
-
-**PASS 1: Business Structure (FROM DS-156E)**
-- Company name and type from DS-156E Section 1 (REMOVE punctuation: no commas, periods)
-- Incorporation details from DS-156E Section 4 (date, city, state)
-- Business activities from DS-156E Sections 5-6
-- Office locations from DS-156E Section 3
-- Parent company from DS-156E Section 7
-
-**PASS 2: Ownership Analysis (FROM DS-156E Section 8)**
-- Extract ALL owners/shareholders from Section 8 table
-- Use exact percentages from "PERCENT OF OWNERSHIP" column (MUST total 100%)
-- Verify treaty country majority ownership (>50%)
-- Document ownership structure
-
-**PASS 3: Application Contact Information - FROM DS-156E SECTIONS 26 AND 27**
-**CRITICAL**: This section is MANDATORY for all E-visa applications
-- **DS-156E Section 26**: "Responsible Officer for Application"
-  - Extract the name, title, and position of the responsible officer
-  - This is typically a high-ranking company officer (VP, Director, etc.)
-  - Example: Name, Title like "VP General Affairs"
-- **DS-156E Section 27**: "Contact Person for Application"
-  - Extract the attorney or representative's information
-  - Look for law firm name, attorney name, address, phone, fax, email
-  - Common pattern: Law firm contact (e.g., Attorney at Tomita Law Office PC)
-  - Complete address including suite/floor numbers
-  - Phone without formatting (e.g., 2025551234 not 202-555-1234)
-  - Email address if provided
-- **IMPORTANT**: Section 27 contact is usually the attorney/representative handling the case
-- **IMPORTANT**: Section 26 officer is usually a company executive authorizing the application
-
-**PASS 4: Financial Extraction (FROM DS-156E Section 9)**
-- Assets (current and fixed) from Section 9
-- Liabilities (current and long-term) from Section 9
-- Owner's equity from Section 9
-- Income/Revenue figures from Section 9
-- Trade volumes from Section 10 (for E-1)
-- Investment amounts from Section 12 (for E-2)
-
-**PASS 5: Employee Analysis**
-- Treaty nationals count
-- US citizens/LPR count
-- Third country nationals
-- Management vs specialized vs other roles
-- Key personnel details
-
-**PASS 6: Applicant Position - MUST USE DS-156E SECTIONS 18 AND 23**
-- **DS-156E PAGE 3, Section 18**: Find "Present Position and Duties (Describe in detail)" 
-  - COPY THE ENTIRE TEXT from this section (usually 5-10 sentences)
-  - DO NOT USE worksheet or other sources for this
-- **DS-156E PAGE 3, Section 23**: Find "Position in the United States"
-  - Under "Description of duties" COPY THE ENTIRE TEXT (usually includes bullet points)
-  - This often starts with "This is the second highest executive..." or similar
-  - Look for mention of "immediate subordinates" - Extract their names from DS-156E Section 15 personnel list
-  - Check if replacing someone - Often mentioned in support letter or Section 23
-- **DS-156E Section 15**: List of key personnel - Extract subordinate names if mentioned in duties
-- **DS-156E Section 19**: Employer name and address
-- **DS-156E Section 20**: Years with present employer  
-- **DS-156E Section 21**: Education (school, degree, major, year)
-- **DS-156E Section 24**: Annual salary and benefits
-- **DS-156E Section 25** (if exists): May ask about replacing a person
-- **Support Letter**: Check for mentions of:
-  - Names of direct reports/subordinates
-  - Whether applicant is replacing a previous visa holder
-- **WRITING STYLE**: Remove ALL personal pronouns and names from position descriptions
-  - NO: "Mr. Endo", "he", "his", "her", "their"
-  - YES: Start with action verbs or "Responsible for"
-  - Example: "Manages team" NOT "He manages team"
-- CRITICAL: If text appears truncated in your view, request the full text
-- NEVER USE DS-160 WORKSHEET for position descriptions - ONLY DS-156E!
-
-**PASS 7: Completeness Check**
-- List all found information
-- Identify missing CRITICAL fields
-- Document validation errors
-- Prepare specific questions if needed
-</phase2_extraction>
-
-<phase3_validation>
-## PHASE 3: COMPREHENSIVE VALIDATION RULES
-
-### Standard DS-160 Validation
-- Birth date < All other dates
-- Passport issue date < Expiration date
-- Previous visa dates < Current date
-- Employment start dates < End dates
-- Arrival date < Departure date (if both provided)
-- If maritalStatus = "MARRIED" → spouse information required
-- If hasBeenToUS = true → previous visit details required
-- If primaryOccupation != "NOT EMPLOYED" → employer details required
-- If primaryOccupation = "OTHER" → primaryOccupationOther field required
-- If security answer = true → explanation required
-
-### E-Visa Specific Validation
-1. **Ownership MUST total exactly 100%** - This is non-negotiable
-2. **Treaty country nationals must own >50%** for E-visa qualification
-3. **Financial statements must balance**: Assets - Liabilities = Owner Equity
-4. **Employee counts must be logical**: Sum of categories = Total
-5. **Investment must be "substantial"** relative to business type
-6. **Trade must be "substantial"** and principally with treaty country (E-1)
-7. **Application Contact MANDATORY**: MUST include evisaApplicationContact section with DS-156E Sections 26 and 27 data
-8. **Position descriptions MANDATORY**: MUST include both evisaApplicantPosition and evisaApplicantUSPosition
-</phase3_validation>
-
-<instructions>
-1. Extract data exactly as written in documents, maintaining original capitalization
-2. Convert ALL dates to DD-MMM-YYYY format (e.g., 15-JAN-1990)
-3. Use 3-letter ISO country codes (USA, JPN, CHN, IND)
-4. Use 2-letter U.S. state codes (CA, NY, TX)
-5. For missing data: OMIT the field entirely (don't include it), use false for booleans, [] for arrays
-6. All security questions default to false unless explicitly stated
-7. Include country codes with phone numbers when available
-8. Numeric values should be strings for form compatibility
-9. Output ONLY the JSON structure - no explanations or additional text
-10. Company/employer names: Remove ALL punctuation (no commas, periods)
-    - "Tech Solutions, Inc." → "Tech Solutions Inc"
-    - "Dai-ichi Life Insurance Company, Ltd." → "Dai-ichi Life Insurance Company Ltd"
-11. PHONE NUMBERS: Must be digits only with no spaces, dashes, or special characters
-    - Correct: "0456649271" or "14155550100"
-    - Wrong: "045-664-9271" or "+1-415-555-0100" or "+81 3 1234 5678"
-    - Remove all: +, -, (), spaces, or any non-digit characters
-12. For E-visa: Extract FULL TEXT from DS-156E Sections 18 and 23 - DO NOT SUMMARIZE
-13. For E-visa: EXTRACT FULL INFORMATION from DS-156E Sections 26 and 27 for application contact
-14. For E-visa Travel Page: 
-    - Use specific subtypes: E2-EX (Executive/Mgr), E2-SP (Spouse), E2-CH (Child), E2-TR (Treaty Investor)
-    - E1-EX, E1-SP, E1-CH, E1-TR for E-1 visas
-    - For E2-SP/E2-CH/E1-SP/E1-CH: Include principal's company name
-15. **MANDATORY FOR E2-EX/E1-EX APPLICANTS - Principal Treaty Investor Fields**:
-    
-    **CRITICAL CONNECTION**: After extracting evisaUSPersonnel, you MUST use that data to populate travel.principalVisaIssued and travel.evisaPrincipal fields.
-    
-    **STEP 1**: Extract evisaUSPersonnel from DS-156E Section 15 (you already do this)
-    **STEP 2**: IMMEDIATELY identify the principal treaty investor from that list:
-    - Find the highest-ranking person with E-2 visa (for E2 applicants) or E-1 visa (for E1 applicants)
-    - Look for titles: President, CEO, Owner, Principal, Founder, Chairman
-    - This person is typically listed first in Section 15
-    
-    **STEP 3**: Based on Step 2, POPULATE TRAVEL FIELDS:
-    - If principal found with E-visa → travel.principalVisaIssued = true
-    - If principal found → travel.evisaPrincipal = { surname: "[from Section 15]", givenName: "[from Section 15]" }
-    - If current applicant IS the principal → travel.principalVisaIssued = false
-    - If no E-visa holders found → travel.principalVisaIssued = false
-    
-    **VALIDATION**: For E2-EX/E1-EX applicants, if evisaUSPersonnel has E-visa holders, then travel.principalVisaIssued MUST be present in output!
-    
-    **REAL EXAMPLE**: 
-    - evisaUSPersonnel shows: "Satoshi Takemoto - President & CEO - E2 visa"
-    - Then travel section MUST include:
-      ```json
-      "principalVisaIssued": true,
-      "evisaPrincipal": {
-        "surname": "Takemoto",
-        "givenName": "Satoshi"
-      }
-      ```
-</instructions>
-
-<output_format>
-Output the analysis first for validation feedback, followed by the complete copyable JSON.
-The JSON must be in a proper JSON code block with ```json formatting for easy copying.
-
-## PRE-OUTPUT CHECKLIST - VERIFY ALL SECTIONS ARE PRESENT:
-Before outputting JSON, confirm ALL of these sections are included:
-
-### Core DS-160 Sections (ALL visa types):
-☐ personal - INCLUDED?
-☐ travel - INCLUDED?
-  → For E2-EX/E1-EX: Does travel include principalVisaIssued field? YES/NO
-  → For E2-EX/E1-EX with principalVisaIssued=true: Does travel include evisaPrincipal? YES/NO
-☐ previousTravel - INCLUDED?
-☐ contact - INCLUDED?
-☐ passport - INCLUDED?
-☐ usContact - INCLUDED?
-☐ family - INCLUDED?
-☐ workEducation - INCLUDED?
-☐ security - INCLUDED? (can be omitted if all false)
-
-### E-Visa Sections (ONLY for E-1/E-2 visas):
-
-**DS-156E PAGE 3 VERIFICATION (CRITICAL):**
-☐ DS-156E Page 3 read with OCR? YES/NO
-☐ Section 18 (Present Position) extracted? YES/NO
-☐ Section 23 (US Position) extracted? YES/NO
-☐ Section 26 (Responsible Officer) found? YES/NO
-☐ Section 27 (Contact Person) found? YES/NO
-
-**If ANY above are NO → STOP and request OCR for page 3!**
-
-☐ evisaClassification - INCLUDED?
-☐ evisaBusiness - INCLUDED?
-☐ evisaApplicationContact - INCLUDED? (CRITICAL - Must have DS-156E Sections 26 & 27)
-☐ evisaOwnership - INCLUDED?
-☐ evisaFinanceTrade - INCLUDED?
-☐ evisaEmployeeCounts - INCLUDED?
-☐ evisaUSPersonnel - INCLUDED?
-☐ evisaApplicantPosition - INCLUDED? (Must have Section 18 full text)
-☐ evisaApplicantUSPosition - INCLUDED? (Must have Section 23 full text)
-☐ evisaInvestment - INCLUDED? (if E-2 visa)
-☐ evisaForeignBusiness - INCLUDED? (if subsidiary)
-☐ evisaTrade - INCLUDED? (if E-1 visa)
-
-**STOP**: If ANY mandatory section is missing, DO NOT OUTPUT. Go back and extract the missing sections.
-
-WARNING: Omitting evisaInvestment for E-2 visas will cause form validation errors!
-ALWAYS include evisaInvestment section for E-2 applications.
-WARNING: Omitting evisaApplicationContact will cause form validation errors!
-ALWAYS include evisaApplicationContact section for ALL E-visa applications.
-**CRITICAL WARNING FOR E2-EX/E1-EX APPLICANTS**:
-If you extracted evisaUSPersonnel with E-visa holders but DID NOT include principalVisaIssued in travel section → YOUR OUTPUT IS INCOMPLETE!
-You MUST connect Section 15 personnel data to the travel page fields!
-
-=== EXTRACTION ANALYSIS ===
-Validation status: [PASSED/FAILED/WARNINGS]
-Visa type detected: [visa type]
-E-visa extraction: [YES/NO - only YES for E-1/E-2]
-Business structure verified: [YES/NO]
-
-**CRITICAL E-VISA VERIFICATION:**
-- DS-156E Sections 18-27 extracted from page 3: [YES/NO]
-- If NO → The extraction is INCOMPLETE - Request OCR for page 3 immediately!
-Financial statements balance: [YES/NO - for E-visa]
-Application contact extracted: [YES/NO - for E-visa]
-Missing critical fields: [List any missing fields]
-Data sources:
-  - Passport: [Document name/date]
-  - Employment: [Document name/date]
-  - Education: [Document name/date]
-  - DS-156E: [Document name/date - for E-visa]
-  - Financial statements: [Document name/date - for E-visa]
-  - Application contact: DS-156E Sections 26 and 27 [for E-visa]
+Extract complete DS-160 information from provided documents and output as structured JSON. 
+For E-1/E-2 visas, also extract specialized E-visa sections from DS-156E form.
 
 ## CRITICAL FORMATTING RULES:
 
@@ -415,7 +22,15 @@ Data sources:
    - Normal formatting allowed (can have dashes)
    - Example: "532-0011" or "90249-1234" are both OK
 
-=== COMBINED DS-160 JSON START ===
+## OUTPUT INSTRUCTIONS:
+
+1. Output ONLY the complete JSON structure - no explanations or analysis
+2. Format as a proper JSON code block using ```json
+3. Ensure valid JSON syntax (proper quotes, commas, brackets)
+4. Do not include any text before or after the JSON block
+
+## JSON FORMAT:
+
 ```json
 {
   "personal": {
@@ -717,6 +332,21 @@ Data sources:
       "votingViolation": false,
       "renounceExpenses": false
     }
+  },
+  
+  "temporaryWork": {  // For temporary work visas (H, L, O, P, Q, R)
+    "petitionNumber": "string",
+    "petitionerName": "string",
+    "intendedEmployer": {
+      "name": "string",
+      "address1": "string",
+      "address2": "string",
+      "city": "string",
+      "state": "2-letter state code",
+      "zipCode": "string",
+      "phone": "string"
+    },
+    "monthlyIncome": "string"
   },
   
   "crewVisa": { // Only for C-1/D visa types
@@ -1074,7 +704,6 @@ Data sources:
   }
 }
 ```
-=== COMBINED DS-160 JSON END ===
 
 ## CONCRETE EXAMPLE WITH SAMPLE DATA
 
@@ -1198,45 +827,43 @@ This example shows the EXACT format expected. Pay special attention to:
       "monthlyIncome": "15000",
       "duties": "Manages international business development. Oversees expansion strategies for North American markets. Coordinates with US subsidiary operations."
     }
+  },
+  
+  "temporaryWork": {
+    "petitionNumber": "IOE859325639",
+    "petitionerName": "NISSIN FOODS USA CO INC",
+    "intendedEmployer": {
+      "name": "NISSIN FOODS USA CO INC",
+      "address1": "2001 West Rosecrans Avenue",
+      "address2": "",
+      "city": "Gardena",
+      "state": "CA",
+      "zipCode": "90249",
+      "phone": "8332606486"
+    },
+    "monthlyIncome": "4000"
   }
 }
 ```
 
-</output_format>
+## ADDITIONAL RULES:
 
-<special_rules>
-- Security section: OMIT entirely if all answers are false (most common case)
-- If ANY security answer is true, include ONLY that part with ONLY the true fields
+- Omit fields with missing values (don't include the key)
+- Omit security section entirely if all answers are false
 - Use exact passport name formatting (typically all caps)
-- Numeric values as strings for forms (e.g., "250" not 250)
-- OMIT fields with missing values entirely (don't include the key)
-- Only include fields that have actual data
+- Numeric values as strings (e.g., "250" not 250)
 - Keep empty arrays [] when no items exist
 - Keep false for boolean fields
-- If entire nested object would be empty, omit it completely
-- Conditional field requirements:
-  - If purposeOfTrip is "A" (Government), purposeSpecify becomes required
-  - If maritalStatus="MARRIED", spouse information required
-  - If hasBeenToUS=true, previous visit details required
-  - If primaryOccupation!="NOT EMPLOYED", employer details required
-  - If primaryOccupation="OTHER" requires primaryOccupationOther
-  - If previousVisa.lost=true requires previousVisa.lostExplanation
-  - If previousVisa.cancelled=true requires previousVisa.cancelledExplanation
-  - If passport.type="OTHER" requires passport.otherTypeExplanation
-- For E-visa applications:
-  - MANDATORY: ALWAYS include BOTH evisaApplicantPosition (current job) AND evisaApplicantUSPosition (future US job)
-  - MANDATORY: For E-2 visas, include complete evisaInvestment section with investment details
-  - MANDATORY: ALWAYS include evisaApplicationContact section with DS-156E Sections 26 and 27 information
-  - Only fill evisaTrade section for E-1 visas
-  - MANDATORY: If businessType = "S" (Subsidiary), include complete evisaForeignBusiness section
-  - Include evisaEmployee section for employee-specific visa applications
-  - Include evisaFinancial section for comprehensive financial data when available
-  - Use enhanced evisaFinanceTrade structure with financialStatement and tradeInformation subsections
-  - NOTE: The evisaBusiness section contains the US employer information and is used for both:
-    * E-visa Business Profile page
-    * Temporary Work Visa Information page (final DS-160 page showing US employer details)
-- For C-1/D visa applications:
-  - MANDATORY: Include complete crewVisa section with vessel and employment details
-- Security section: Include detailed fields from v1 structure for comprehensive screening
-- Work/Education section: Use v1 field names for consistency (belongsToClan, hasServed, explanation)
-</special_rules>
+
+### Conditional Requirements:
+- If maritalStatus="MARRIED": spouse information required
+- If hasBeenToUS=true: previous visit details required
+- If primaryOccupation!="NOT EMPLOYED": employer details required
+- If primaryOccupation="OTHER": primaryOccupationOther required
+
+### E-visa Requirements (E-1/E-2):
+- Include all evisa sections from DS-156E form
+- Extract full text from DS-156E Sections 18 and 23 (don't summarize)
+- Include evisaApplicationContact from DS-156E Sections 26 and 27
+- Include evisaInvestment for E-2 visas
+- Include evisaTrade for E-1 visas only

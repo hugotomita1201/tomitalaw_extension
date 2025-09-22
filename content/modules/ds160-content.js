@@ -3177,40 +3177,81 @@ class TwoPassFiller {
         data.security?.part5?.attendedWithoutReimbursement !== true,
         
       // === TEMPORARY WORK VISA INFORMATION PAGE ===
+      // Handles both regular temporary work visas (L, H, O) and E-visas
       // Application Receipt/Petition Number (still using WP_APP_RCPT_NUM for this field)
       'ctl00_SiteContentPlaceHolder_FormView1_tbxWP_APP_RCPT_NUM': 
         data.travel?.petitionNumber || data.petition?.receiptNumber || data.temporaryWork?.petitionNumber || data.petitionerInfo?.petitionNumber,
         
       // Name of Person/Company who Filed Petition
       'ctl00_SiteContentPlaceHolder_FormView1_tbxNameOfPetitioner':
-        data.petition?.petitionerName || data.temporaryWork?.petitionerName || data.petitionerInfo?.petitionerCompanyName,
+        data.temporaryWork?.petitionerName || 
+        data.petition?.petitionerName || 
+        data.petitionerInfo?.petitionerCompanyName,
         
       // Where Do You Intend to Work - Employer Information
+      // Supports temporaryWork (L/H/O), evisaBusiness (E visas), and evisaApplicantPosition (E visa current employer)
       'ctl00_SiteContentPlaceHolder_FormView1_tbxEmployerName':
-        data.temporaryWork?.intendedEmployer?.name || data.petition?.employerName || data.petitionerInfo?.petitionerCompanyName,
+        data.temporaryWork?.intendedEmployer?.name || 
+        data.evisaBusiness?.businessName ||
+        data.evisaApplicantPosition?.employerName ||
+        data.petition?.employerName || 
+        data.petitionerInfo?.petitionerCompanyName,
         
       'ctl00_SiteContentPlaceHolder_FormView1_tbxEmpStreetAddress1':
-        data.temporaryWork?.intendedEmployer?.address1 || data.petition?.employerAddress1 || data.petitionerInfo?.petitionerAddress?.street1,
+        data.temporaryWork?.intendedEmployer?.address1 || 
+        data.evisaBusiness?.businessAddress?.street1 || 
+        data.evisaBusiness?.offices?.[0]?.address?.street1 ||
+        data.evisaApplicantPosition?.employerAddress?.street1 ||
+        data.petition?.employerAddress1 || 
+        data.petitionerInfo?.petitionerAddress?.street1,
         
       'ctl00_SiteContentPlaceHolder_FormView1_tbxEmpStreetAddress2':
-        data.temporaryWork?.intendedEmployer?.address2 || data.petition?.employerAddress2 || data.petitionerInfo?.petitionerAddress?.street2,
+        data.temporaryWork?.intendedEmployer?.address2 || 
+        data.evisaBusiness?.businessAddress?.street2 || 
+        data.evisaBusiness?.offices?.[0]?.address?.street2 ||
+        data.evisaApplicantPosition?.employerAddress?.street2 ||
+        data.petition?.employerAddress2 || 
+        data.petitionerInfo?.petitionerAddress?.street2,
         
       'ctl00_SiteContentPlaceHolder_FormView1_tbxEmpCity':
-        data.temporaryWork?.intendedEmployer?.city || data.petition?.employerCity || data.petitionerInfo?.petitionerAddress?.city,
+        data.temporaryWork?.intendedEmployer?.city || 
+        data.evisaBusiness?.businessAddress?.city ||
+        data.evisaBusiness?.offices?.[0]?.address?.city ||
+        data.evisaApplicantPosition?.employerAddress?.city ||
+        data.petition?.employerCity || 
+        data.petitionerInfo?.petitionerAddress?.city,
         
       'ctl00_SiteContentPlaceHolder_FormView1_ddlEmpState':
-        data.temporaryWork?.intendedEmployer?.state || data.petition?.employerState || data.petitionerInfo?.petitionerAddress?.state,
+        data.temporaryWork?.intendedEmployer?.state || 
+        data.evisaBusiness?.businessAddress?.state ||
+        data.evisaBusiness?.offices?.[0]?.address?.state ||
+        data.petition?.employerState || 
+        data.petitionerInfo?.petitionerAddress?.state,
         
       'ctl00_SiteContentPlaceHolder_FormView1_tbxZIPCode':
-        data.temporaryWork?.intendedEmployer?.zipCode || data.petition?.employerZipCode || data.petitionerInfo?.petitionerAddress?.postalCode,
+        data.temporaryWork?.intendedEmployer?.zipCode || 
+        data.evisaBusiness?.businessAddress?.postalCode ||
+        data.evisaBusiness?.offices?.[0]?.address?.postalCode ||
+        data.petition?.employerZipCode || 
+        data.petitionerInfo?.petitionerAddress?.postalCode,
         
       'ctl00_SiteContentPlaceHolder_FormView1_tbxTEMP_WORK_TEL':
-        data.temporaryWork?.intendedEmployer?.phone || data.petition?.employerPhone || data.petitionerInfo?.petitionerPhone,
+        data.temporaryWork?.intendedEmployer?.phone || 
+        data.evisaBusiness?.businessPhone ||
+        data.evisaBusiness?.offices?.[0]?.phone ||
+        data.petition?.employerPhone || 
+        data.petitionerInfo?.petitionerPhone,
         
       // Monthly Income in USD
       'ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSalaryInUSD':
-        data.temporaryWork?.monthlyIncome || data.petition?.monthlyIncome || 
+        data.temporaryWork?.monthlyIncome || 
+        data.evisaApplicantUSPosition?.salary ||
+        data.petition?.monthlyIncome || 
         (data.workEducation?.presentEmployer?.monthlyIncome ? String(data.workEducation.presentEmployer.monthlyIncome) : null),
+        
+      // E-visa Registration Number (if applicable)
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxEvisaCoRegNum':
+        data.evisaBusiness?.registrationNumber || '',
         
       // === E-VISA BUSINESS PROFILE FIELDS ===
       // Business Information
@@ -3826,6 +3867,9 @@ class TwoPassFiller {
         data.evisaApplicantPosition?.presentPosition || 
         data.evisa_applicant_position?.present_position,
         
+      // NOTE: These employer field mappings have been merged into the Temporary Work Visa
+      // mappings at lines 3193-3222 to avoid duplicate mappings and undefined overwrites
+      /*
       // Employer Information
       'ctl00_SiteContentPlaceHolder_FormView1_tbxEmployerName': 
         data.evisaApplicantPosition?.employerName || 
@@ -3847,7 +3891,9 @@ class TwoPassFiller {
       'ctl00_SiteContentPlaceHolder_FormView1_tbxEmpCity': 
         data.evisaApplicantPosition?.employerAddress?.city || 
         data.evisa_applicant_position?.employer_address?.city,
-        
+      */
+      
+      // Note: Keep this state field as it uses different field ID (tbxEVISA_APP_EMP_STATE vs ddlEmpState)
       'ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_APP_EMP_STATE': 
         data.evisaApplicantPosition?.employerAddress?.state || 
         data.evisa_applicant_position?.employer_address?.state,
@@ -4096,7 +4142,10 @@ class TwoPassFiller {
         data.evisa_application_contact?.email_na,
         
       // === TEMPORARY WORK VISA INFORMATION PAGE === 
-      // For E-visa applicants - US employer information (last page in DS-160)
+      // NOTE: These duplicate E-visa mappings have been commented out and merged
+      // into the main temporary work visa mappings at lines 3189-3213
+      // to avoid undefined values overwriting valid data.
+      /*
       'ctl00_SiteContentPlaceHolder_FormView1_tbxEmployerName': 
         data.evisaBusiness?.businessName,
       
@@ -4126,6 +4175,7 @@ class TwoPassFiller {
       'ctl00_SiteContentPlaceHolder_FormView1_tbxTEMP_WORK_TEL':
         data.evisaBusiness?.businessPhone ||
         data.evisaBusiness?.offices?.[0]?.phone,
+      */
         
     };
 
