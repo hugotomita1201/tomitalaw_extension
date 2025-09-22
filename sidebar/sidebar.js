@@ -175,7 +175,9 @@ function setupDS160Handlers() {
   const editableDataViewer = document.getElementById('ds160EditableData');
   
   // Section configuration with icons and field labels
+  // Ordered to match DS-160 form page sequence
   const sectionConfig = {
+    // 1. Personal (Page 2)
     personal: {
       icon: '👤',
       title: 'Personal Information',
@@ -195,21 +197,7 @@ function setupDS160Handlers() {
         usTaxId: 'US Tax ID'
       }
     },
-    passport: {
-      icon: '📔',
-      title: 'Passport Information',
-      fields: {
-        type: 'Passport Type',
-        number: 'Passport Number',
-        bookNumber: 'Book Number',
-        issuingAuthority: 'Issuing Authority',
-        issueCountry: 'Issue Location Country',
-        issueCity: 'Issue City',
-        issueState: 'Issue State',
-        issueDate: 'Issue Date',
-        expirationDate: 'Expiration Date'
-      }
-    },
+    // 2. Travel (Page 3)
     travel: {
       icon: '✈️',
       title: 'Travel Information',
@@ -231,9 +219,20 @@ function setupDS160Handlers() {
         tripPayer: 'Trip Payer'
       }
     },
+    // 3. Travel Companions (Page 4)
+    travelCompanions: {
+      icon: '👥',
+      title: 'Travel Companions'
+    },
+    // 4. Previous U.S. Travel (Page 5)
+    previousTravel: {
+      icon: '🗺️',
+      title: 'Previous U.S. Travel'
+    },
+    // 5. Address and Phone (Page 6) - combining homeAddress and contact
     homeAddress: {
       icon: '🏠',
-      title: 'Home Address',
+      title: 'Address and Phone',
       fields: {
         street: 'Street Address',
         street2: 'Street Address 2',
@@ -259,17 +258,40 @@ function setupDS160Handlers() {
         email: 'Email Address'
       }
     },
+    // 6. Passport (Page 7)
+    passport: {
+      icon: '📔',
+      title: 'Passport',
+      fields: {
+        type: 'Passport Type',
+        number: 'Passport Number',
+        bookNumber: 'Book Number',
+        issuingAuthority: 'Issuing Authority',
+        issueCountry: 'Issue Location Country',
+        issueCity: 'Issue City',
+        issueState: 'Issue State',
+        issueDate: 'Issue Date',
+        expirationDate: 'Expiration Date'
+      }
+    },
+    // 7. U.S. Contact (Page 8)
     usContact: {
       icon: '🏢',
-      title: 'US Contact',
+      title: 'U.S. Contact',
       fields: {
         organizationName: 'Organization',
         relationship: 'Relationship'
       }
     },
+    // 8. Family (Page 9)
     family: {
       icon: '👨‍👩‍👧‍👦',
-      title: 'Family Information'
+      title: 'Family'
+    },
+    // 9. Work / Education / Training (Page 10)
+    workEducation: {
+      icon: '💼',
+      title: 'Work / Education / Training'
     },
     education: {
       icon: '🎓',
@@ -286,10 +308,12 @@ function setupDS160Handlers() {
         previousEmployers: 'Previous Employers'
       }
     },
-    workEducation: {
-      icon: '💼',
-      title: 'Work & Education'
+    // 10. Security and Background (Page 11)
+    security: {
+      icon: '🔒',
+      title: 'Security and Background'
     },
+    // Additional sections that may appear
     countriesVisited: {
       icon: '🌍',
       title: 'Countries Visited',
@@ -298,9 +322,9 @@ function setupDS160Handlers() {
         countries: 'List of countries'
       }
     },
-    previousTravel: {
-      icon: '🗺️',
-      title: 'Previous US Travel'
+    travelGroup: {
+      icon: '👥',
+      title: 'Travel Group'
     }
   };
   
