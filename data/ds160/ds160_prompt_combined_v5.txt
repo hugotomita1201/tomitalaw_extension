@@ -1,0 +1,1621 @@
+# DS-160 Combined Prompt v5 - Complete Sample Data
+# Extract DS-160 visa application data into structured JSON format
+
+Extract complete DS-160 information from provided documents and output as structured JSON. 
+For E-1/E-2 visas, also extract specialized E-visa sections from DS-156E form.
+
+## CRITICAL FORMATTING RULES:
+
+1. **Company/Organization Names**:
+   - LETTERS AND SPACES ONLY
+   - NO punctuation: Remove all periods, commas, parentheses, apostrophes
+   - Example: "ABC COMPANY INC" not "A.B.C. Company, Inc."
+   - Example: "NISSIN FOODS USA CO INC" not "NISSIN FOODS (U.S.A.) CO., INC."
+
+2. **Phone Numbers**:
+   - DIGITS ONLY (no formatting)
+   - Remove all: dashes, spaces, parentheses, plus signs
+   - Example: "8332606486" not "833-260-6486" or "+1 (833) 260-6486"
+   - Include country code as pure digits: "81661234567" not "+81-6-6123-4567"
+
+3. **Postal Codes**:
+   - Normal formatting allowed (can have dashes)
+   - Example: "532-0011" or "90249-1234" are both OK
+
+## OUTPUT INSTRUCTIONS:
+
+1. Output ONLY the complete JSON structure - no explanations or analysis
+2. Format as a proper JSON code block using ```json
+3. Ensure valid JSON syntax (proper quotes, commas, brackets)
+4. Do not include any text before or after the JSON block
+
+## JSON FORMAT:
+
+```json
+{
+  "personal": {
+    "surname": "string",
+    "givenName": "string",
+    "fullNameNative": "string or omit",
+    "otherNames": [],
+    "gender": "MALE or FEMALE",
+    "maritalStatus": "SINGLE, MARRIED, DIVORCED, WIDOWED, or SEPARATED",
+    "dateOfBirth": "DD-MMM-YYYY",
+    "birthCity": "string",
+    "birthState": "string or omit",
+    "birthCountry": "3-letter country code",
+    "nationality": "3-letter country code",
+    "otherNationalities": [],
+    "permanentResident": false,
+    "permanentResidentExplanation": "string if permanentResident is true",
+    "nationalId": "string or omit",
+    "usSocialSecurity": "string or omit",
+    "usTaxId": "string or omit"
+  },
+  
+  "travel": {
+    "purposeOfTrip": "B, F, H, J, A, E, etc.",
+    "otherPurposeDetail": "string (e.g., 'H-1B', 'L-1', 'E-2', 'E2-EX', 'E2-SP', 'E2-CH', 'E1-EX')",
+    "purposeSpecify": "string for Government officials",
+    "petitionNumber": "string", //required here AND in temporary work section
+    "principalApplicant": {
+      "surname": "string",
+      "givenName": "string",
+      "petitionNumber": "string",
+      "companyName": "string (for E-visa spouse/child only)"
+    },
+    "principalVisaIssued": true,  // For E2-EX/E1-EX: Has the principal treaty investor already been issued a visa?
+    "evisaPrincipal": {  // Only fill if principalVisaIssued = true
+      "surname": "string - Principal treaty investor's surname from DS-156E Section 15",
+      "givenName": "string - Principal treaty investor's given name from DS-156E Section 15",
+      "dateOfBirth": "DD-MMM-YYYY - Principal's DOB if available, omit if not found"
+    },
+    "specificTravelPlans": false,
+    "intendedArrivalDate": "DD-MMM-YYYY",
+    "arrivalFlightNumber": "string",
+    "arrivalCity": "string",
+    "intendedDepartureDate": "DD-MMM-YYYY",
+    "departureFlightNumber": "string",
+    "departureCity": "string",
+    "lengthOfStay": "string",
+    "lengthOfStayNumber": "string",
+    "lengthOfStayUnit": "Y/M/W/D",
+    "usStreetAddress": "string",
+    "usStreetAddress2": "string",
+    "usCity": "string",
+    "usState": "2-letter state code",
+    "usZipCode": "string",
+    "tripPayer": "SELF, COMPANY, PRESENT_EMPLOYER, etc.", //Default to PRESENT_EMPLOYER if n/a
+    "payerInfo": {  // If OTHER_PERSON
+      "surname": "string or N/A",
+      "givenName": "string or N/A",
+      "phone": "string or N/A",
+      "email": "string or N/A",
+      "relationship": "string or N/A",
+      "sameAddress": true,
+      "street1": "string or N/A",
+      "street2": "string or N/A",
+      "city": "string or N/A",
+      "state": "string or N/A",
+      "postalCode": "string or N/A",
+      "country": "string or N/A"
+    },
+    "companyInfo": {  // If COMPANY or OTHER_COMPANY
+      "name": "string or N/A",
+      "relationship": "string or N/A",
+      "street1": "string or N/A",
+      "street2": "string or N/A",
+      "city": "string or N/A",
+      "state": "string or N/A",
+      "zipCode": "string or N/A",
+      "country": "string or N/A"
+    }
+  },
+  
+  "travelCompanions": [],  // Array of {surname: "", givenName: "", relationship: ""}
+  
+  "travelGroup": {
+    "traveling": false,
+    "name": "string or N/A"
+  },
+  
+  "previousTravel": {
+    "hasBeenToUS": false,
+    "visits": [],  // Array: {arrivalDate: "DD-MMM-YYYY", lengthOfStayNumber: "14", lengthOfStayUnit: "D/W/M/Y"}
+    "driverLicense": {
+      "hasLicense": false,
+      "licenses": []  // Array: {state: "2-letter code", number: "string"}
+    },
+    "previousVisa": {
+      "hasVisa": false,
+      "issueDate": "DD-MMM-YYYY or N/A",
+      "visaNumber": "string or N/A",
+      "sameType": false,
+      "sameCountry": true,
+      "tenPrinted": false,
+      "lost": false,
+      "lostExplanation": "string or N/A",
+      "cancelled": false,
+      "cancelledExplanation": "string or N/A"
+    },
+    "visaRefused": false,
+    "visaRefusedExplanation": "string if true",
+    "estaDenied": false,
+    "estaDeniedExplanation": "string if true",
+    "immigrantPetition": false,
+    "immigrantPetitionExplanation": "string if true"
+  },
+  
+  "contact": {
+    "homeStreet": "string",
+    "homeApt": "string",
+    "homeCity": "string",
+    "homeState": "string",
+    "homePostalCode": "string",
+    "homeCountry": "3-letter country code",
+    "mailingAddressSameAsHome": true,
+    "mailingAddress": {  // If different from home
+      "street": "string or N/A",
+      "apt": "string or N/A",
+      "city": "string or N/A",
+      "state": "string or N/A",
+      "postalCode": "string or N/A",
+      "country": "3-letter country code"
+    },
+    "homePhone": "string",
+    "secondaryPhone": "string",
+    "workPhone": "string",
+    "email": "string",
+    "socialMedia": [],  // Array: {platform: "FACEBOOK/TWITTER/etc", handle: "username"}
+    "additionalEmails": []  // Array of email strings
+  },
+  
+  "usContact": {
+    "contactPerson": {
+      "surname": "string",
+      "givenName": "string"
+    },
+    "organizationName": "string",
+    "relationship": "string",
+    "address": {
+      "street1": "string or N/A",
+      "street2": "string or N/A",
+      "city": "string or N/A",
+      "state": "string or N/A",
+      "zipCode": "string or N/A"
+    },
+    "phone": "string",
+    "email": "string"
+  },
+  
+  "passport": {
+    "type": "REGULAR, OFFICIAL, DIPLOMATIC, or OTHER",
+    "otherTypeExplanation": "string or N/A",  // Required if type is OTHER
+    "number": "string",
+    "bookNumber": "string",
+    "issuingAuthority": "3-letter country code",
+    "issueCountry": "3-letter country code",
+    "issueCity": "string",
+    "issueState": "string",
+    "issueDate": "DD-MMM-YYYY",
+    "expirationDate": "DD-MMM-YYYY",
+    "lostPassport": {
+      "hasLost": false,
+      "number": "string or N/A",
+      "country": "string or N/A",
+      "explanation": "string or N/A"
+    }
+  },
+  
+  "family": {
+    "father": {
+      "surname": "string or N/A",
+      "givenName": "string or N/A",
+      "dateOfBirth": "DD-MMM-YYYY or N/A",
+      "inUS": false,
+      "status": "string or N/A"
+    },
+    "mother": {
+      "surname": "string or N/A",
+      "givenName": "string or N/A",
+      "dateOfBirth": "DD-MMM-YYYY or N/A",
+      "inUS": false,
+      "status": "string or N/A"
+    },
+    "relativesInUS": [],  // Array of {surname: "", givenName: "", relationship: "", status: ""}
+    "spouse": {  // If married
+      "surname": "string or N/A",
+      "givenName": "string or N/A",
+      "dateOfBirth": "DD-MMM-YYYY or N/A",
+      "nationality": "string or N/A",
+      "city": "string or N/A",
+      "country": "string or N/A",
+      "addressType": "SAME_AS_HOME, SAME_AS_MAILING, SAME_AS_US_CONTACT, DO_NOT_KNOW, or OTHER",
+      "address": {  // Only include if addressType is OTHER
+        "street1": "string",
+        "street2": "string or N/A",
+        "city": "string",
+        "state": "string or N/A",
+        "postalCode": "string or N/A",
+        "country": "3-letter country code"
+      }
+    }
+  },
+  
+  "workEducation": {
+    "primaryOccupation": "AGRICULTURE, BUSINESS, COMPUTER SCIENCE, EDUCATION, GOVERNMENT, HOMEMAKER, MEDICAL, MILITARY, NOT EMPLOYED, RETIRED, STUDENT, or OTHER",
+    "primaryOccupationOther": "string",  // Required if primaryOccupation is "OTHER"
+    "presentEmployer": {
+      "name": "string or N/A",
+      "address": {
+        "street1": "string or N/A",
+        "street2": "string or N/A",
+        "city": "string or N/A",
+        "state": "string or N/A",
+        "postalCode": "string or N/A",
+        "country": "string or N/A"
+      },
+      "phone": "string or N/A",
+      "startDate": "DD-MMM-YYYY or N/A",
+      "monthlyIncome": "string or N/A",
+      "duties": "string or N/A" //Needs to be 3-5 sentences derived from support letter/ws
+    },
+    "previousEmployers": [],  // Array of employer objects with same structure as presentEmployer
+    "education": {
+      "institutions": []  // Array: {name: "", address: {}, courseOfStudy: "", fromDate: "DD-MMM-YYYY", toDate: "DD-MMM-YYYY"}
+    },
+    "languages": [],  // Array of language names
+    "clanTribe": {
+      "belongsToClan": false,
+      "clanName": "string or N/A"
+    },
+    "countriesVisited": {
+      "hasVisited": false,
+      "countries": []  // Array of country codes
+    },
+    "organizationMembership": {
+      "hasMembership": false,
+      "organizations": []  // Array of organization names
+    },
+    "specializedSkills": {
+      "hasSkills": false,
+      "explanation": "string or N/A"
+    },
+    "militaryService": {
+      "hasServed": false,
+      "details": []  // Array: {country: "3-letter code", branch: "string", rank: "string", specialty: "string", fromDate: "DD-MMM-YYYY", toDate: "DD-MMM-YYYY"}
+    },
+    "insurgentOrganization": {
+      "hasInvolvement": false,
+      "explanation": "string or N/A"
+    }
+  },
+  
+  "security": {
+    "part1": {
+      "disease": false,
+      "diseaseExplain": "string",
+      "disorder": false,
+      "disorderExplain": "string",
+      "drugUser": false,
+      "drugUserExplain": "string"
+    },
+    "part2": {
+      "arrested": false,
+      "arrestedExplain": "string",
+      "controlledSubstances": false,
+      "prostitution": false,
+      "moneyLaundering": false,
+      "humanTrafficking": false,
+      "assistedTrafficking": false,
+      "traffickingRelated": false
+    },
+    "part3": {
+      "illegalActivity": false,
+      "terroristActivity": false,
+      "terroristSupport": false,
+      "terroristOrg": false,
+      "terroristRelated": false,
+      "genocide": false,
+      "torture": false,
+      "extrajudicialViolence": false,
+      "childSoldier": false,
+      "religiousFreedom": false,
+      "populationControls": false,
+      "organTransplant": false
+    },
+    "part4": {
+      "immigrationFraud": false,
+      "deportation": false,
+      "deportationExplain": "string"
+    },
+    "part5": {
+      "childCustody": false,
+      "votingViolation": false,
+      "renounceExpenses": false
+    }
+  },
+  
+  "temporaryWork": {  // For temporary work visas (H, L, O, P, Q, R)
+    "petitionNumber": "string", //don't forget this one!
+    "petitionerName": "string",
+    "intendedEmployer": {
+      "name": "string",
+      "address1": "string",
+      "address2": "string",
+      "city": "string",
+      "state": "2-letter state code",
+      "zipCode": "string",
+      "phone": "string"
+    },
+    "monthlyIncome": "string" //remember it's monthly, not yearly
+  },
+  
+  "crewVisa": { // Only for C-1/D visa types
+    "jobTitle": "string",
+    "vesselCompanyName": "string",
+    "companyPhone": "string",
+    "positionThroughAgency": false,
+    "agencyInfo": {
+      "name": "string",
+      "address": "string",
+      "phone": "string"
+    },
+    "vesselWork": false
+  },
+  
+  // === E-VISA SECTIONS (ONLY FOR E-1/E-2 VISAS) ===
+  
+  "evisaClassification": {
+    "visaType": "E1 or E2",
+    "treatyCountry": "3-letter country code",
+    "principalApplicant": true,
+    "principalName": {
+      "surname": "string or N/A",
+      "givenName": "string or N/A"
+    }
+  },
+  
+  "evisaBusiness": {
+    "businessName": "string",
+    "businessType": "S",
+    "businessTypeOther": "string",
+    "incorporationDate": "DD-MMM-YYYY",
+    "incorporationCity": "string",
+    "incorporationState": "2-letter code",
+    "incorporationCountry": "USA",
+    "businessAddress": {
+      "street1": "string",
+      "street2": "string",
+      "city": "string",
+      "state": "string",
+      "postalCode": "string",
+      "country": "3-letter country code"
+    },
+    "businessPhone": "string",
+    "businessFax": "string",
+    "businessEmail": "string",
+    "businessWebsite": "string",
+    "numberOfEmployees": "string",
+    "annualRevenue": "string",
+    "businessActivities": "string",
+    "percentageForeignOwnership": "string",
+    "stockExchangeListed": false,
+    "stockExchangeName": "string",
+    "offices": [
+      {
+        "type": "H",
+        "typeOther": "string",
+        "name": "string",
+        "address": {
+          "street1": "string",
+          "street2": "string",
+          "city": "string",
+          "state": "string",
+          "stateNA": false,
+          "postalCode": "string",
+          "postalCodeNA": false,
+          "country": "3-letter country code"
+        }
+      }
+    ]
+  },
+  
+  "evisaApplicationContact": {
+    "officer": {
+      "surname": "string",
+      "givenName": "string",
+      "position": "string"
+    },
+    "contact": {
+      "surname": "string",
+      "givenName": "string"
+    },
+    "address": {
+      "street1": "string",
+      "street2": "string",
+      "city": "string",
+      "state": "string",
+      "stateNA": false,
+      "postalCode": "string",
+      "postalCodeNA": false,
+      "country": "3-letter country code"
+    },
+    "phone": "string",
+    "fax": "string",
+    "faxNA": false,
+    "email": "string",
+    "emailNA": false
+  },
+  
+  "evisaOwnership": {
+    "owners": [],  // Array: {name: "", nationality: "3-letter code", percentageOwnership: "", position: ""}
+    "majorityOwnedByTreatyCountry": true,
+    "ownershipStructure": "string"
+  },
+  
+  "evisaFinanceTrade": {
+    "yearType": "F or C",
+    "yearType2": "F or C",
+    "assetsType": "C or H",
+    "financialYear": "YYYY",
+    "totalAssets": "string",
+    "totalLiabilities": "string",
+    "ownerEquity": "string",
+    "operatingIncomeBeforeTax": "string",
+    "operatingIncomeAfterTax": "string",
+    "grossInternationalTradeYear": "YYYY",
+    "treatyCountryImports": "string",
+    "treatyCountryImportTransactions": "string",
+    "treatyCountryExports": "string",
+    "treatyCountryExportTransactions": "string",
+    "thirdCountryImports": "string",
+    "thirdCountryImportTransactions": "string",
+    "thirdCountryExports": "string",
+    "thirdCountryExportTransactions": "string",
+    "domesticProductionValue": "string",
+    "domesticProductionTransactions": "string",
+    
+    "financialStatement": {
+      "cash": "string",
+      "receivables": "string",
+      "inventory": "string",
+      "otherCurrentAssets": "string",
+      "land": "string",
+      "building": "string",
+      "machinery": "string",
+      "otherPropertyAssets": "string",
+      "liabilities": "string",
+      "debt": "string",
+      "revenues": "string",
+      "costs": "string",
+      "income": "string",
+      "tax": "string"
+    },
+    
+    "tradeInformation": {
+      "goodsSoldValue": "string",
+      "exportedValue": "string",
+      "principalTradeService": "string",
+      "servicesToUSA": "string",
+      "importsFromUS": "string",
+      "importsFromOther": "string",
+      "exportsToUS": "string",
+      "exportsToOther": "string",
+      "domesticProductionTransactions": "string"
+    }
+  },
+  
+  "evisaEmployeeCounts": {
+    "yearType": "F or C",
+    "treatyNationals": {
+      "managerial": {"thisYear": "string", "nextYear": "string"},
+      "specialized": {"thisYear": "string", "nextYear": "string"},
+      "other": {"thisYear": "string", "nextYear": "string"}
+    },
+    "usCitizensLPR": {
+      "managerial": {"thisYear": "string", "nextYear": "string"},
+      "specialized": {"thisYear": "string", "nextYear": "string"},
+      "other": {"thisYear": "string", "nextYear": "string"}
+    },
+    "thirdCountryNationals": {
+      "managerial": {"thisYear": "string", "nextYear": "string"},
+      "specialized": {"thisYear": "string", "nextYear": "string"},
+      "other": {"thisYear": "string", "nextYear": "string"}
+    }
+  },
+  
+  "evisaUSPersonnel": {
+    "personnel": [
+      {
+        "surname": "string",
+        "givenName": "string",
+        "position": "string",
+        "division": "string",
+        "nationality": "3-letter country code",
+        "usStatus": "string",
+        "usStatusOther": "string",
+        "visaType": "string",
+        "visaIssueDate": "DD-MMM-YYYY",
+        "visaIssuePlace": "string",
+        "alienNumber": "string",
+        "alienNumberUnknown": false
+      }
+    ]
+  },
+  
+  "evisaApplicantPosition": {
+    "applicantType": "M",
+    "presentPosition": "string (FULL TEXT from DS-156E Section 18)",
+    "employerName": "string",
+    "yearsWithEmployer": "string",
+    "employerAddress": {
+      "street1": "string",
+      "street2": "string or N/A",
+      "city": "string",
+      "state": "string",
+      "postalCode": "string",
+      "country": "3-letter code"
+    },
+    "employerAddress": {
+      "street1": "string",
+      "street2": "string",
+      "city": "string",
+      "state": "string",
+      "stateNA": false,
+      "postalCode": "string",
+      "postalCodeNA": false,
+      "country": "3-letter code"
+    },
+    "education": {
+      "school": "string",
+      "degree": "string",
+      "major": "string",
+      "year": "string"
+    },
+    "hasOtherEducation": false,
+    "otherEducationExplanation": "string"
+  },
+  
+  "evisaApplicantUSPosition": {
+    "title": "string",
+    "duties": "string (FULL TEXT from DS-156E Section 23)",
+    "salary": "string",
+    "benefits": "string",
+    "hasImmediateSubordinates": true,
+    "immediateSubordinates": [],  // Array of subordinate names from DS-156E Section 15
+    "isReplacingWorker": false,
+    "replacedWorker": {
+      "name": "string or N/A",
+      "visaType": "string or N/A"
+    },
+    "willIncreaseStaff": false,
+    "continuationOfEmployment": true
+  },
+  
+  "evisaEmployee": {
+    "positionTitle": "string",
+    "dutiesDescription": "string",
+    "startDate": "DD-MMM-YYYY",
+    "yearsExperience": "string",
+    "salary": "string",
+    "educationLevel": "string",
+    "fieldOfStudy": "string",
+    "specialQualifications": "string",
+    "previousUSEmployment": false,
+    "previousEmployer": "string",
+    "previousPosition": "string",
+    "previousDates": "string"
+  },
+  
+  "evisaInvestment": {
+    "investmentType": "E",
+    "fairMarketValue": "string",
+    "financialYear": "YYYY",
+    "yearType": "C",
+    "cashInitial": "string",
+    "cashTotal": "string",
+    "inventoryInitial": "string",
+    "inventoryTotal": "string",
+    "equipmentInitial": "string",
+    "equipmentTotal": "string",
+    "propertyInitial": "string",
+    "propertyTotal": "string",
+    "otherInitial": "string",
+    "otherTotal": "string",
+    "sourceOfFunds": "C",
+    "fundsFrom": "P",
+    "fundsAmount": "string",
+    "hasWireTransfers": true,
+    "hasBankStatements": true,
+    "hasPromissoryNote": false,
+    "hasOtherDocs": false
+  },
+  
+  "evisaForeignBusiness": {
+    "hasForeignBusiness": true,
+    "hasForeignEntity": true,
+    "hasForeignIndividualOwner": false,
+    "parentBusiness": {
+      "name": "string",
+      "address": {
+        "street1": "string",
+        "street2": "string",
+        "city": "string",
+        "state": "string",
+        "stateNA": false,
+        "postalCode": "string",
+        "postalCodeNA": false,
+        "country": "3-letter country code"
+      },
+      "phone": "string",
+      "fax": "string"
+    },
+    "foreignEntities": [
+      {
+        "name": "string",
+        "nationality": "3-letter country code",
+        "ownershipPercentage": "string"
+      }
+    ],
+    "foreignOwners": [
+      {
+        "surname": "string",
+        "givenName": "string",
+        "status": "string",
+        "residenceCountry": "3-letter country code",
+        "nationality": "3-letter country code",
+        "ownershipPercentage": "string"
+      }
+    ]
+  },
+  
+  "evisaFinancial": {
+    "currentAssets": "string",
+    "fixedAssets": "string",
+    "totalAssets": "string",
+    "currentLiabilities": "string",
+    "longTermLiabilities": "string",
+    "totalLiabilities": "string",
+    "ownerEquity": "string",
+    "netWorth": "string",
+    "grossIncome": "string",
+    "operatingIncomeBeforeTax": "string",
+    "operatingIncomeAfterTax": "string",
+    "netIncome": "string",
+    "taxYear": "string",
+    "financialYear": "string"
+  },
+  
+  "evisaTrade": {
+    "goodsServices": "string",
+    "tradeWithUS": true,
+    "annualTradeVolume": "string",
+    "percentageTradeUS": "string",
+    "usCompanies": [
+      {
+        "name": "string",
+        "address": "string",
+        "relationship": "string"
+      }
+    ],
+    "importFromUS": false,
+    "exportToUS": false,
+    "importDescription": "string",
+    "exportDescription": "string"
+  }
+}
+```
+
+## COMPLETE EXAMPLE WITH COMPREHENSIVE SAMPLE DATA
+
+This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay special attention to:
+- No empty arrays or "N/A" values - every field has actual sample data
+- Company names without punctuation
+- Phone numbers as pure digits only
+- Proper formatting for all field types
+- Complete E-visa sections for E-2 application
+
+```json
+{
+  "personal": {
+    "surname": "NAKAMURA",
+    "givenName": "Takeshi",
+    "fullNameNative": "中村武志",
+    "otherNames": [
+      {
+        "surname": "YAMAMOTO",
+        "givenName": "Takeshi"
+      }
+    ],
+    "gender": "MALE",
+    "maritalStatus": "MARRIED",
+    "dateOfBirth": "15-MAR-1978",
+    "birthCity": "Tokyo",
+    "birthState": "Tokyo",
+    "birthCountry": "JPN",
+    "nationality": "JPN",
+    "otherNationalities": ["USA"],
+    "permanentResident": false,
+    "permanentResidentExplanation": "Not applicable as applicant holds Japanese citizenship only",
+    "nationalId": "123456789012",
+    "usSocialSecurity": "123456789",
+    "usTaxId": "987654321"
+  },
+  
+  "travel": {
+    "purposeOfTrip": "E",
+    "otherPurposeDetail": "E-2",
+    "purposeSpecify": "Treaty investor establishing US operations",
+    "petitionNumber": "ABC1234567890",
+    "principalApplicant": {
+      "surname": "NAKAMURA",
+      "givenName": "Takeshi",
+      "petitionNumber": "ABC1234567890",
+      "companyName": "NAKAMURA TRADING USA INC"
+    },
+    "principalVisaIssued": false,
+    "evisaPrincipal": {
+      "surname": "NAKAMURA", 
+      "givenName": "Takeshi",
+      "dateOfBirth": "15-MAR-1978"
+    },
+    "specificTravelPlans": true,
+    "intendedArrivalDate": "15-APR-2024",
+    "arrivalFlightNumber": "NH006",
+    "arrivalCity": "Los Angeles",
+    "intendedDepartureDate": "15-APR-2027",
+    "departureFlightNumber": "NH005",
+    "departureCity": "Los Angeles",
+    "lengthOfStay": "3 years",
+    "lengthOfStayNumber": "3",
+    "lengthOfStayUnit": "Y",
+    "usStreetAddress": "1234 Wilshire Boulevard",
+    "usStreetAddress2": "Suite 567",
+    "usCity": "Los Angeles",
+    "usState": "CA",
+    "usZipCode": "90017",
+    "tripPayer": "COMPANY",
+    "payerInfo": {
+      "surname": "SUZUKI",
+      "givenName": "Hiroshi",
+      "phone": "81354567890",
+      "email": "hsuzuki@nakamuratrading.co.jp",
+      "relationship": "Business partner",
+      "sameAddress": false,
+      "street1": "3-15-2 Shibuya",
+      "street2": "Yamada Building 8F",
+      "city": "Tokyo",
+      "state": "Tokyo",
+      "postalCode": "150-0002",
+      "country": "JPN"
+    },
+    "companyInfo": {
+      "name": "NAKAMURA TRADING USA INC",
+      "relationship": "Owned company",
+      "street1": "1234 Wilshire Boulevard",
+      "street2": "Suite 567",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zipCode": "90017",
+      "country": "USA"
+    }
+  },
+  
+  "travelCompanions": [
+    {
+      "surname": "NAKAMURA",
+      "givenName": "Yuki",
+      "relationship": "Spouse"
+    },
+    {
+      "surname": "NAKAMURA", 
+      "givenName": "Kenta",
+      "relationship": "Child"
+    }
+  ],
+  
+  "travelGroup": {
+    "traveling": true,
+    "name": "Japan Business Delegation 2024"
+  },
+  
+  "previousTravel": {
+    "hasBeenToUS": true,
+    "visits": [
+      {
+        "arrivalDate": "10-JUN-2022",
+        "lengthOfStayNumber": "14",
+        "lengthOfStayUnit": "D"
+      },
+      {
+        "arrivalDate": "05-SEP-2023",
+        "lengthOfStayNumber": "21",
+        "lengthOfStayUnit": "D"
+      }
+    ],
+    "driverLicense": {
+      "hasLicense": true,
+      "licenses": [
+        {
+          "state": "CA",
+          "number": "D1234567"
+        }
+      ]
+    },
+    "previousVisa": {
+      "hasVisa": true,
+      "issueDate": "15-MAY-2022",
+      "visaNumber": "123456789",
+      "sameType": false,
+      "sameCountry": true,
+      "tenPrinted": true,
+      "lost": false,
+      "lostExplanation": "Visa was not lost",
+      "cancelled": false,
+      "cancelledExplanation": "Visa was not cancelled"
+    },
+    "visaRefused": false,
+    "visaRefusedExplanation": "No previous visa refusals",
+    "estaDenied": false,
+    "estaDeniedExplanation": "No ESTA denials",
+    "immigrantPetition": false,
+    "immigrantPetitionExplanation": "No immigrant petition filed"
+  },
+  
+  "contact": {
+    "homeStreet": "2-15-8 Roppongi",
+    "homeApt": "Mansion Hills 1205",
+    "homeCity": "Tokyo",
+    "homeState": "Tokyo",
+    "homePostalCode": "106-0032",
+    "homeCountry": "JPN",
+    "mailingAddressSameAsHome": false,
+    "mailingAddress": {
+      "street": "1-3-5 Marunouchi",
+      "apt": "Tokyo Station Building 20F",
+      "city": "Tokyo",
+      "state": "Tokyo",
+      "postalCode": "100-0005",
+      "country": "JPN"
+    },
+    "homePhone": "81354567890",
+    "secondaryPhone": "81901234567",
+    "workPhone": "81332211234",
+    "email": "tnakamura@nakamuratrading.co.jp",
+    "socialMedia": [
+      {
+        "platform": "LINKEDIN",
+        "handle": "takeshi-nakamura-business"
+      },
+      {
+        "platform": "TWITTER",
+        "handle": "tnakamura_tokyo"
+      }
+    ],
+    "additionalEmails": [
+      "takeshi.personal@gmail.com",
+      "t.nakamura@example.com"
+    ]
+  },
+  
+  "usContact": {
+    "contactPerson": {
+      "surname": "JOHNSON",
+      "givenName": "Michael"
+    },
+    "organizationName": "CALIFORNIA BUSINESS PARTNERS LLC",
+    "relationship": "Business partner and legal representative",
+    "address": {
+      "street1": "5678 Century Boulevard",
+      "street2": "Floor 25",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zipCode": "90045"
+    },
+    "phone": "13107654321",
+    "email": "mjohnson@californiabusiness.com"
+  },
+  
+  "passport": {
+    "type": "REGULAR",
+    "otherTypeExplanation": "Standard Japanese passport",
+    "number": "TK9876543",
+    "bookNumber": "BK123456",
+    "issuingAuthority": "JPN",
+    "issueCountry": "JPN",
+    "issueCity": "Tokyo",
+    "issueState": "Tokyo",
+    "issueDate": "20-JAN-2020",
+    "expirationDate": "20-JAN-2030",
+    "lostPassport": {
+      "hasLost": true,
+      "number": "TK1111111",
+      "country": "JPN",
+      "explanation": "Previous passport was lost during travel in 2019, reported to Japanese consulate and replaced"
+    }
+  },
+  
+  "family": {
+    "father": {
+      "surname": "NAKAMURA",
+      "givenName": "Hiroshi",
+      "dateOfBirth": "10-APR-1945",
+      "inUS": false,
+      "status": "Japanese citizen residing in Japan"
+    },
+    "mother": {
+      "surname": "NAKAMURA",
+      "givenName": "Sachiko",
+      "dateOfBirth": "25-JUN-1950",
+      "inUS": false,
+      "status": "Japanese citizen residing in Japan"
+    },
+    "relativesInUS": [
+      {
+        "surname": "NAKAMURA",
+        "givenName": "Ken",
+        "relationship": "Cousin",
+        "status": "US Permanent Resident"
+      },
+      {
+        "surname": "TANAKA",
+        "givenName": "Mary",
+        "relationship": "Sister-in-law",
+        "status": "US Citizen"
+      }
+    ],
+    "spouse": {
+      "surname": "NAKAMURA",
+      "givenName": "Yuki",
+      "dateOfBirth": "22-NOV-1982",
+      "nationality": "JPN",
+      "city": "Tokyo",
+      "country": "JPN",
+      "addressType": "SAME_AS_HOME",
+      "address": {
+        "street1": "2-15-8 Roppongi",
+        "street2": "Mansion Hills 1205",
+        "city": "Tokyo",
+        "state": "Tokyo",
+        "postalCode": "106-0032",
+        "country": "JPN"
+      }
+    }
+  },
+  
+  "workEducation": {
+    "primaryOccupation": "BUSINESS",
+    "primaryOccupationOther": "International trade and investment management",
+    "presentEmployer": {
+      "name": "NAKAMURA TRADING CO LTD",
+      "address": {
+        "street1": "1-3-5 Marunouchi",
+        "street2": "Tokyo Station Building 20F",
+        "city": "Tokyo",
+        "state": "Tokyo",
+        "postalCode": "100-0005",
+        "country": "JPN"
+      },
+      "phone": "81332211234",
+      "startDate": "01-APR-2005",
+      "monthlyIncome": "2500000",
+      "duties": "Chief Executive Officer responsible for overall company strategy, international expansion, and US market development. Manages 150 employees across 5 departments including import-export operations, logistics, and business development."
+    },
+    "previousEmployers": [
+      {
+        "name": "MITSUBISHI CORPORATION",
+        "address": {
+          "street1": "3-1-1 Marunouchi",
+          "street2": "Mitsubishi Building",
+          "city": "Tokyo",
+          "state": "Tokyo",
+          "postalCode": "100-8086",
+          "country": "JPN"
+        },
+        "phone": "81332101111",
+        "startDate": "01-APR-2000",
+        "endDate": "31-MAR-2005",
+        "monthlyIncome": "800000",
+        "duties": "Senior Manager in International Business Division, handled US market analysis and partnership development"
+      },
+      {
+        "name": "TOYOTA MOTOR CORPORATION",
+        "address": {
+          "street1": "1 Toyota-cho",
+          "street2": "Corporate Headquarters",
+          "city": "Toyota",
+          "state": "Aichi",
+          "postalCode": "471-8571",
+          "country": "JPN"
+        },
+        "phone": "81565282121",
+        "startDate": "01-APR-1997",
+        "endDate": "31-MAR-2000",
+        "monthlyIncome": "450000",
+        "duties": "Market Research Analyst for North American automotive market"
+      }
+    ],
+    "education": {
+      "institutions": [
+        {
+          "name": "UNIVERSITY OF TOKYO",
+          "address": {
+            "street1": "7-3-1 Hongo",
+            "street2": "Bunkyo-ku",
+            "city": "Tokyo",
+            "state": "Tokyo",
+            "postalCode": "113-0033",
+            "country": "JPN"
+          },
+          "courseOfStudy": "Economics",
+          "fromDate": "01-APR-1996",
+          "toDate": "31-MAR-2000"
+        },
+        {
+          "name": "STANFORD UNIVERSITY GRADUATE SCHOOL OF BUSINESS",
+          "address": {
+            "street1": "655 Knight Way",
+            "street2": "Stanford Graduate School of Business",
+            "city": "Stanford",
+            "state": "CA",
+            "postalCode": "94305",
+            "country": "USA"
+          },
+          "courseOfStudy": "Master of Business Administration",
+          "fromDate": "01-SEP-2002",
+          "toDate": "15-JUN-2004"
+        }
+      ]
+    },
+    "languages": ["Japanese", "English", "Mandarin Chinese", "Korean"],
+    "clanTribe": {
+      "belongsToClan": false,
+      "clanName": "Not applicable"
+    },
+    "countriesVisited": {
+      "hasVisited": true,
+      "countries": ["USA", "CHN", "KOR", "THA", "SGP", "MYS", "IDN", "VNM", "PHL", "TWN", "HKG", "GBR", "DEU", "FRA"]
+    },
+    "organizationMembership": {
+      "hasMembership": true,
+      "organizations": [
+        "Japan Business Federation",
+        "Tokyo Chamber of Commerce and Industry", 
+        "Japan External Trade Organization",
+        "Asia-Pacific Business Council",
+        "US-Japan Business Council"
+      ]
+    },
+    "specializedSkills": {
+      "hasSkills": true,
+      "explanation": "Expert in international trade finance, cross-border investment structuring, supply chain management, and US-Japan business relations. Certified in project management and holds advanced certifications in international business law."
+    },
+    "militaryService": {
+      "hasServed": true,
+      "details": [
+        {
+          "country": "JPN",
+          "branch": "Japan Self-Defense Forces",
+          "rank": "Lance Corporal",
+          "specialty": "Communications and logistics",
+          "fromDate": "01-APR-1996",
+          "toDate": "31-MAR-1998"
+        }
+      ]
+    },
+    "insurgentOrganization": {
+      "hasInvolvement": false,
+      "explanation": "No involvement in any insurgent organizations"
+    }
+  },
+  
+  "security": {
+    "part1": {
+      "disease": false,
+      "diseaseExplain": "No communicable diseases",
+      "disorder": true,
+      "disorderExplain": "Mild anxiety disorder diagnosed in 2010, successfully managed with medication and therapy, no impact on daily activities or work performance",
+      "drugUser": false,
+      "drugUserExplain": "No history of drug abuse"
+    },
+    "part2": {
+      "arrested": true,
+      "arrestedExplain": "Traffic violation in Tokyo in 2018 for exceeding speed limit, paid fine of 50000 yen, no criminal record",
+      "controlledSubstances": false,
+      "prostitution": false,
+      "moneyLaundering": false,
+      "humanTrafficking": false,
+      "assistedTrafficking": false,
+      "traffickingRelated": false
+    },
+    "part3": {
+      "illegalActivity": false,
+      "terroristActivity": false,
+      "terroristSupport": false,
+      "terroristOrg": false,
+      "terroristRelated": false,
+      "genocide": false,
+      "torture": false,
+      "extrajudicialViolence": false,
+      "childSoldier": false,
+      "religiousFreedom": false,
+      "populationControls": false,
+      "organTransplant": false
+    },
+    "part4": {
+      "immigrationFraud": false,
+      "deportation": false,
+      "deportationExplain": "No history of deportation or removal"
+    },
+    "part5": {
+      "childCustody": false,
+      "votingViolation": false,
+      "renounceExpenses": false
+    }
+  },
+  
+  "temporaryWork": {
+    "petitionNumber": "ABC1234567890",
+    "petitionerName": "NAKAMURA TRADING USA INC",
+    "intendedEmployer": {
+      "name": "NAKAMURA TRADING USA INC",
+      "address1": "1234 Wilshire Boulevard",
+      "address2": "Suite 567",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zipCode": "90017",
+      "phone": "13107654321"
+    },
+    "monthlyIncome": "25000"
+  },
+  
+  "crewVisa": {
+    "jobTitle": "Not applicable - E-2 visa",
+    "vesselCompanyName": "Not applicable",
+    "companyPhone": "Not applicable",
+    "positionThroughAgency": false,
+    "agencyInfo": {
+      "name": "Not applicable",
+      "address": "Not applicable",
+      "phone": "Not applicable"
+    },
+    "vesselWork": false
+  },
+  
+  "evisaClassification": {
+    "visaType": "E2",
+    "treatyCountry": "JPN",
+    "principalApplicant": true,
+    "principalName": {
+      "surname": "NAKAMURA",
+      "givenName": "Takeshi"
+    }
+  },
+  
+  "evisaBusiness": {
+    "businessName": "NAKAMURA TRADING USA INC",
+    "businessType": "S",
+    "businessTypeOther": "Import-export and wholesale trading company",
+    "incorporationDate": "15-JAN-2024",
+    "incorporationCity": "Los Angeles",
+    "incorporationState": "CA",
+    "incorporationCountry": "USA",
+    "businessAddress": {
+      "street1": "1234 Wilshire Boulevard",
+      "street2": "Suite 567",
+      "city": "Los Angeles",
+      "state": "CA",
+      "postalCode": "90017",
+      "country": "USA"
+    },
+    "businessPhone": "13107654321",
+    "businessFax": "13107654322",
+    "businessEmail": "info@nakamuratrading.com",
+    "businessWebsite": "www.nakamuratrading.com",
+    "numberOfEmployees": "25",
+    "annualRevenue": "15000000",
+    "businessActivities": "Import and distribution of Japanese consumer goods, electronics, and automotive parts to US retailers and wholesalers. Export of US agricultural products and technology to Asian markets.",
+    "percentageForeignOwnership": "75",
+    "stockExchangeListed": false,
+    "stockExchangeName": "Company is privately held",
+    "offices": [
+      {
+        "type": "H",
+        "typeOther": "Headquarters and main distribution center",
+        "name": "NAKAMURA TRADING USA INC HEADQUARTERS",
+        "address": {
+          "street1": "1234 Wilshire Boulevard",
+          "street2": "Suite 567",
+          "city": "Los Angeles",
+          "state": "CA",
+          "stateNA": false,
+          "postalCode": "90017",
+          "postalCodeNA": false,
+          "country": "USA"
+        }
+      },
+      {
+        "type": "W",
+        "typeOther": "Warehouse and logistics facility",
+        "name": "NAKAMURA TRADING WAREHOUSE",
+        "address": {
+          "street1": "5678 Industrial Way",
+          "street2": "Building B",
+          "city": "Carson",
+          "state": "CA",
+          "stateNA": false,
+          "postalCode": "90746",
+          "postalCodeNA": false,
+          "country": "USA"
+        }
+      }
+    ]
+  },
+  
+  "evisaApplicationContact": {
+    "officer": {
+      "surname": "NAKAMURA",
+      "givenName": "Takeshi",
+      "position": "Chief Executive Officer"
+    },
+    "contact": {
+      "surname": "SMITH",
+      "givenName": "Jennifer"
+    },
+    "address": {
+      "street1": "1234 Wilshire Boulevard",
+      "street2": "Suite 567",
+      "city": "Los Angeles",
+      "state": "CA",
+      "stateNA": false,
+      "postalCode": "90017",
+      "postalCodeNA": false,
+      "country": "USA"
+    },
+    "phone": "13107654321",
+    "fax": "13107654322",
+    "faxNA": false,
+    "email": "info@nakamuratrading.com",
+    "emailNA": false
+  },
+  
+  "evisaOwnership": {
+    "owners": [
+      {
+        "name": "NAKAMURA TAKESHI",
+        "nationality": "JPN",
+        "percentageOwnership": "75",
+        "position": "Chief Executive Officer and Majority Shareholder"
+      },
+      {
+        "name": "NAKAMURA TRADING CO LTD",
+        "nationality": "JPN", 
+        "percentageOwnership": "20",
+        "position": "Parent Company"
+      },
+      {
+        "name": "JOHNSON MICHAEL",
+        "nationality": "USA",
+        "percentageOwnership": "5",
+        "position": "Local Business Partner"
+      }
+    ],
+    "majorityOwnedByTreatyCountry": true,
+    "ownershipStructure": "75% owned by Japanese national Takeshi Nakamura, 20% owned by Japanese parent company Nakamura Trading Co Ltd, 5% owned by US business partner Michael Johnson"
+  },
+  
+  "evisaFinanceTrade": {
+    "yearType": "C",
+    "yearType2": "C", 
+    "assetsType": "C",
+    "financialYear": "2023",
+    "totalAssets": "5500000",
+    "totalLiabilities": "2200000",
+    "ownerEquity": "3300000",
+    "operatingIncomeBeforeTax": "1800000",
+    "operatingIncomeAfterTax": "1350000",
+    "grossInternationalTradeYear": "2023",
+    "treatyCountryImports": "8500000",
+    "treatyCountryImportTransactions": "145",
+    "treatyCountryExports": "3200000",
+    "treatyCountryExportTransactions": "67",
+    "thirdCountryImports": "1500000",
+    "thirdCountryImportTransactions": "23",
+    "thirdCountryExports": "800000",
+    "thirdCountryExportTransactions": "12",
+    "domesticProductionValue": "0",
+    "domesticProductionTransactions": "0",
+    
+    "financialStatement": {
+      "cash": "850000",
+      "receivables": "1200000",
+      "inventory": "2100000",
+      "otherCurrentAssets": "350000",
+      "land": "0",
+      "building": "600000",
+      "machinery": "300000",
+      "otherPropertyAssets": "100000",
+      "liabilities": "2200000",
+      "debt": "1500000",
+      "revenues": "12000000",
+      "costs": "9500000",
+      "income": "1350000",
+      "tax": "450000"
+    },
+    
+    "tradeInformation": {
+      "goodsSoldValue": "12000000",
+      "exportedValue": "4000000",
+      "principalTradeService": "Import and wholesale distribution of Japanese consumer electronics, automotive parts, and specialty foods",
+      "servicesToUSA": "2500000",
+      "importsFromUS": "3200000",
+      "importsFromOther": "10000000",
+      "exportsToUS": "0",
+      "exportsToOther": "4000000",
+      "domesticProductionTransactions": "0"
+    }
+  },
+  
+  "evisaEmployeeCounts": {
+    "yearType": "C",
+    "treatyNationals": {
+      "managerial": {"thisYear": "3", "nextYear": "5"},
+      "specialized": {"thisYear": "8", "nextYear": "12"},
+      "other": {"thisYear": "2", "nextYear": "3"}
+    },
+    "usCitizensLPR": {
+      "managerial": {"thisYear": "2", "nextYear": "3"},
+      "specialized": {"thisYear": "5", "nextYear": "8"},
+      "other": {"thisYear": "5", "nextYear": "8"}
+    },
+    "thirdCountryNationals": {
+      "managerial": {"thisYear": "0", "nextYear": "0"},
+      "specialized": {"thisYear": "0", "nextYear": "1"},
+      "other": {"thisYear": "0", "nextYear": "0"}
+    }
+  },
+  
+  "evisaUSPersonnel": {
+    "personnel": [
+      {
+        "surname": "JOHNSON",
+        "givenName": "Michael",
+        "position": "Operations Manager",
+        "division": "Logistics and Distribution",
+        "nationality": "USA",
+        "usStatus": "US Citizen",
+        "usStatusOther": "Born in California",
+        "visaType": "Not applicable",
+        "visaIssueDate": "Not applicable",
+        "visaIssuePlace": "Not applicable",
+        "alienNumber": "Not applicable",
+        "alienNumberUnknown": false
+      },
+      {
+        "surname": "GARCIA",
+        "givenName": "Maria",
+        "position": "Sales Manager",
+        "division": "Sales and Marketing",
+        "nationality": "USA",
+        "usStatus": "US Permanent Resident",
+        "usStatusOther": "Green card holder since 2018",
+        "visaType": "Not applicable",
+        "visaIssueDate": "Not applicable", 
+        "visaIssuePlace": "Not applicable",
+        "alienNumber": "A123456789",
+        "alienNumberUnknown": false
+      },
+      {
+        "surname": "TANAKA",
+        "givenName": "Hiroshi",
+        "position": "Import Specialist",
+        "division": "International Trade",
+        "nationality": "JPN",
+        "usStatus": "H-1B",
+        "usStatusOther": "Specialty occupation worker",
+        "visaType": "H-1B",
+        "visaIssueDate": "15-MAR-2023",
+        "visaIssuePlace": "Tokyo",
+        "alienNumber": "A987654321",
+        "alienNumberUnknown": false
+      }
+    ]
+  },
+  
+  "evisaApplicantPosition": {
+    "applicantType": "M",
+    "presentPosition": "Chief Executive Officer of Nakamura Trading Co Ltd, responsible for overall corporate strategy, international business development, and oversight of all operations including import-export activities, supply chain management, and market expansion initiatives across Asia-Pacific region",
+    "employerName": "NAKAMURA TRADING CO LTD",
+    "yearsWithEmployer": "19",
+    "employerAddress": {
+      "street1": "1-3-5 Marunouchi",
+      "street2": "Tokyo Station Building 20F",
+      "city": "Tokyo",
+      "state": "Tokyo",
+      "stateNA": false,
+      "postalCode": "100-0005",
+      "postalCodeNA": false,
+      "country": "JPN"
+    },
+    "education": {
+      "school": "STANFORD UNIVERSITY GRADUATE SCHOOL OF BUSINESS",
+      "degree": "Master of Business Administration",
+      "major": "International Business and Finance",
+      "year": "2004"
+    },
+    "hasOtherEducation": true,
+    "otherEducationExplanation": "Bachelor of Economics from University of Tokyo (2000), Certificate in International Trade Finance from Japan External Trade Organization (2001)"
+  },
+  
+  "evisaApplicantUSPosition": {
+    "title": "Chief Executive Officer",
+    "duties": "Lead overall strategic direction and daily operations of Nakamura Trading USA Inc. Develop and execute business plans for US market expansion. Manage relationships with key suppliers in Japan and distributors throughout the United States. Oversee import operations, compliance with US trade regulations, and quality control processes. Direct sales and marketing efforts targeting US retail and wholesale customers. Supervise staff of 25 employees across multiple departments including purchasing, logistics, sales, and administration. Establish partnerships with US companies for export opportunities to Asian markets.",
+    "salary": "300000",
+    "benefits": "Health insurance, dental coverage, retirement plan contributions, paid vacation, company car allowance",
+    "hasImmediateSubordinates": true,
+    "immediateSubordinates": [
+      "Michael Johnson - Operations Manager",
+      "Maria Garcia - Sales Manager", 
+      "Jennifer Smith - Administrative Manager",
+      "David Kim - Finance Manager"
+    ],
+    "isReplacingWorker": false,
+    "replacedWorker": {
+      "name": "Position is newly created",
+      "visaType": "Not applicable"
+    },
+    "willIncreaseStaff": true,
+    "continuationOfEmployment": true
+  },
+  
+  "evisaEmployee": {
+    "positionTitle": "Chief Executive Officer",
+    "dutiesDescription": "Executive leadership and strategic management of US subsidiary operations",
+    "startDate": "01-MAY-2024",
+    "yearsExperience": "24",
+    "salary": "300000",
+    "educationLevel": "Masters Degree",
+    "fieldOfStudy": "Business Administration and International Finance",
+    "specialQualifications": "MBA from Stanford University, 24 years experience in international trade, fluent in Japanese and English, extensive knowledge of US-Japan business relations and trade regulations",
+    "previousUSEmployment": false,
+    "previousEmployer": "No prior US employment",
+    "previousPosition": "Not applicable",
+    "previousDates": "Not applicable"
+  },
+  
+  "evisaInvestment": {
+    "investmentType": "E",
+    "fairMarketValue": "2500000",
+    "financialYear": "2024",
+    "yearType": "C",
+    "cashInitial": "1200000",
+    "cashTotal": "1500000",
+    "inventoryInitial": "300000",
+    "inventoryTotal": "800000",
+    "equipmentInitial": "150000",
+    "equipmentTotal": "200000",
+    "propertyInitial": "0",
+    "propertyTotal": "0",
+    "otherInitial": "0",
+    "otherTotal": "0",
+    "sourceOfFunds": "C",
+    "fundsFrom": "P",
+    "fundsAmount": "2500000",
+    "hasWireTransfers": true,
+    "hasBankStatements": true,
+    "hasPromissoryNote": false,
+    "hasOtherDocs": true
+  },
+  
+  "evisaForeignBusiness": {
+    "hasForeignBusiness": true,
+    "hasForeignEntity": true,
+    "hasForeignIndividualOwner": true,
+    "parentBusiness": {
+      "name": "NAKAMURA TRADING CO LTD",
+      "address": {
+        "street1": "1-3-5 Marunouchi",
+        "street2": "Tokyo Station Building 20F",
+        "city": "Tokyo",
+        "state": "Tokyo",
+        "stateNA": false,
+        "postalCode": "100-0005",
+        "postalCodeNA": false,
+        "country": "JPN"
+      },
+      "phone": "81332211234",
+      "fax": "81332211235"
+    },
+    "foreignEntities": [
+      {
+        "name": "NAKAMURA TRADING CO LTD",
+        "nationality": "JPN",
+        "ownershipPercentage": "20"
+      },
+      {
+        "name": "ASIA PACIFIC TRADING PARTNERS",
+        "nationality": "SGP",
+        "ownershipPercentage": "5"
+      }
+    ],
+    "foreignOwners": [
+      {
+        "surname": "NAKAMURA",
+        "givenName": "Takeshi",
+        "status": "Individual investor and business owner",
+        "residenceCountry": "JPN",
+        "nationality": "JPN", 
+        "ownershipPercentage": "75"
+      }
+    ]
+  },
+  
+  "evisaFinancial": {
+    "currentAssets": "4500000",
+    "fixedAssets": "1000000",
+    "totalAssets": "5500000",
+    "currentLiabilities": "1200000",
+    "longTermLiabilities": "1000000",
+    "totalLiabilities": "2200000",
+    "ownerEquity": "3300000",
+    "netWorth": "3300000",
+    "grossIncome": "12000000",
+    "operatingIncomeBeforeTax": "1800000",
+    "operatingIncomeAfterTax": "1350000",
+    "netIncome": "1350000",
+    "taxYear": "2023",
+    "financialYear": "2023"
+  },
+  
+  "evisaTrade": {
+    "goodsServices": "Consumer electronics, automotive parts, specialty foods, and technology products",
+    "tradeWithUS": true,
+    "annualTradeVolume": "12000000",
+    "percentageTradeUS": "65",
+    "usCompanies": [
+      {
+        "name": "BEST BUY CO INC",
+        "address": "7601 Penn Avenue South, Richfield, MN 55423",
+        "relationship": "Major retail customer for consumer electronics"
+      },
+      {
+        "name": "AUTOZONE INC",
+        "address": "123 South Front Street, Memphis, TN 38103", 
+        "relationship": "Distributor for Japanese automotive parts"
+      },
+      {
+        "name": "SYSCO CORPORATION",
+        "address": "1390 Enclave Parkway, Houston, TX 77077",
+        "relationship": "Food service distributor for specialty Japanese products"
+      }
+    ],
+    "importFromUS": true,
+    "exportToUS": false,
+    "importDescription": "Agricultural products including soybeans, corn, and wheat for distribution in Asian markets through parent company network",
+    "exportDescription": "Not applicable - focus is on importing to US market"
+  }
+}
+```
+
+## ADDITIONAL RULES:
+
+- Omit fields with missing values (don't include the key)
+- Omit security section entirely if all answers are false
+- Use exact passport name formatting (typically all caps)
+- Numeric values as strings (e.g., "250" not 250)
+- Keep empty arrays [] when no items exist
+- Keep false for boolean fields
+
+### Conditional Requirements:
+- If maritalStatus="MARRIED": spouse information required
+- If hasBeenToUS=true: previous visit details required
+- If primaryOccupation!="NOT EMPLOYED": employer details required
+- If primaryOccupation="OTHER": primaryOccupationOther required
+
+### E-visa Requirements (E-1/E-2):
+- Include all evisa sections from DS-156E form
+- Extract full text from DS-156E Sections 18 and 23 (don't summarize)
+- Include evisaApplicationContact from DS-156E Sections 26 and 27
+- Include evisaInvestment for E-2 visas
+- Include evisaTrade for E-1 visas only
