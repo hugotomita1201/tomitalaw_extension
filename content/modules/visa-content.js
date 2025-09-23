@@ -251,7 +251,7 @@ class VisaSchedulingFiller {
     
     // Birth information
     this.fillField('atlas_birthdate_datepicker_description', data.atlas_birthdate_datepicker_description);
-    this.fillField('atlas_pob_country_temp', data.atlas_pob_country_temp);
+    this.fillDropdownByText('atlas_pob_country', data.atlas_pob_country);
     
     // Country/Nationality - Use text matching for dropdowns
     this.fillDropdownByText('atlas_country', data.atlas_country);

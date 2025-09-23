@@ -201,9 +201,151 @@ To add a new tool:
 - Check that the JSON data format matches the samples
 - Some fields may require manual adjustment (addresses > 40 characters)
 
+## Recent Improvements & Lessons Learned
+
+### DS-160 Auto-Filler Enhancements (January 2025)
+
+#### 1. JSON Size Optimization (60-70% reduction)
+**Problem:** API responses getting cut off due to large JSON payloads with excessive "N/A" values and boolean fields.
+
+**Solutions Implemented:**
+- **Omit Empty Fields**: Removed all "N/A" string values - fields are now omitted entirely if empty
+- **Security Section Optimization**: Security section omitted completely when all answers are false (most common case)
+- **Smart Defaults**: Added `getSecurityValue()` helper function to default missing security fields to false
+- **Result**: JSON payload reduced from ~2000 lines to ~600 lines for typical applications
+
+#### 2. Field Mapping Fixes
+**Problems Identified by Paralegal Testing:**
+- Month fields showing incorrect values (May instead of December)
+- Apartment numbers not being filled
+- Phone numbers with hyphens causing validation errors
+- US Contact fields not mapping correctly from Sana AI output
+
+**Solutions:**
+- **Month Parsing**: Fixed `getMonthNumber()` function to handle DD/MM/YYYY and MM/DD/YYYY formats correctly
+- **Address Fields**: Added support for `homeStreet2` apartment/unit field mapping
+- **Phone Formatting**: Added `.replace(/[-() ]/g, '')` to strip all formatting from phone numbers
+- **Field Name Flexibility**: Added fallback mappings for both `usPointOfContact` and `usContact` naming conventions
+
+#### 3. Prompt Engineering Improvements
+**Original Issues:**
+- 857-line prompt was bloated and difficult to parse
+- Missing Claude AI best practices (XML tags, examples)
+- No validation or error handling instructions
+
+**Optimizations:**
+- **Structure**: Restructured with XML tags (`<role>`, `<task>`, `<instructions>`, `<examples>`)
+- **Validation Phases**: Added 5-phase extraction process (discovery, extraction, validation, interaction, output)
+- **Size Reduction**: Reduced prompt by 18% while maintaining all fields
+- **Examples**: Added 3 minimal, targeted examples for date formatting, E-visa extraction, and conditional fields
+- **Metadata**: Added extraction confidence scoring and validation error tracking
+
+#### 4. Architecture Insights
+**Key Learnings:**
+- **Separation of Concerns**: Keep extraction (prompt) separate from form mapping (extension)
+  - Prompt: Documents → Clean JSON structure
+  - Extension: JSON → Form field IDs (ctl00_SiteContentPlaceHolder_FormView1_*)
+- **Field ID Location**: The 820+ field mappings belong in the extension, NOT in the extraction prompt
+- **Radio Button Pattern**: Boolean radio buttons require individual `_0`/`_1` suffix mappings, not group names
+  ```javascript
+  // Wrong: 'rblDisease': value
+  // Right: 'rblDisease_0': true, 'rblDisease_1': false
+  ```
+
+#### 5. E-Visa Specific Validations
+**Requirements Discovered:**
+- Ownership percentages MUST total exactly 100%
+- Treaty country nationals must own >50% for E-visa qualification
+- Financial statements must balance: Assets - Liabilities = Owner Equity
+- Employee counts must be internally consistent
+
+#### 6. Best Practices Established
+- **Always use optional chaining** (`?.`) for resilient field access
+- **Default security questions to false** to comply with State Department requirements
+- **Validate data consistency** across documents before extraction
+- **Test with real-world data** including edge cases and missing fields
+- **Handle multiple data formats** (both snake_case and camelCase field names)
+
+### DS-160 Form Improvements (September 2024)
+
+#### Country Code Mapping System
+**Problem:** DS-160 form uses non-standard country codes (e.g., "THAI" for Thailand, "GER" for Germany) that differ from ISO-3 codes, causing dropdowns to remain unfilled.
+
+**Solution Implemented:**
+- Created comprehensive `mapCountry()` function with 150+ country mappings
+- Maps ISO-3 codes, full country names, and common variations to DS-160 format
+- Examples: DEU→GER, THA→THAI, GBR→GRBR, CHN→CHIN, FRA→FRAN
+
+#### Field Mapping Enhancements
+**Issues Fixed:**
+- **Nationality Field**: Now properly uses `mapCountry()` function for conversion
+- **Dropdown Pre-fill Detection**: Fixed logic to allow overwriting default values like "NONE"
+- **Social Media Platform**: Added direct DS-160 code mappings (FCBK, TWTR, INST, etc.)
+- **Travel Companions**: Ensured all companion fields are properly mapped
+- **Driver's License**: Fixed state and number field mappings
+
+#### Multiple Entries Handling
+**Implementation:**
+- Added batch processing for multiple employers/education with "Add Another" functionality
+- Created notification system for multiple entries
+- Implemented smart field injection with automatic section creation
+- Fixed education notification bug (previousEducation → education.institutions)
+
+### DS-160 Prompt Evolution (September 2024)
+
+#### Version 4 - Passport Field Clarification
+**Problem:** Confusion between passport issuing authority and physical issuance location causing incorrect data like "Tokyo, China"
+
+**Solution:**
+- Separated into distinct fields:
+  - `issuingAuthority`: Government that issued the passport (e.g., "CHN")
+  - `issueCountry`: Physical country where issued (e.g., "JPN" for Tokyo embassy)
+  - `issueCity`: City where issued (e.g., "TOKYO")
+
+### UI/UX Improvements (September 2024)
+
+#### Editable Data Viewer Implementation
+**Features Added:**
+- **Organized Display**: Data shown in collapsible sections with icons (Personal 👤, Passport 📔, Travel ✈️)
+- **Click-to-Edit**: Any field value can be edited inline with Enter to save, Escape to cancel
+- **Change Tracking**: Modified fields highlighted in yellow with indicator dots
+- **View Toggle**: Switch between editable interface and raw JSON view
+- **Bulk Controls**: Expand/Collapse All and Save Changes buttons
+- **Smart Handling**: Nested objects and arrays properly rendered with appropriate UI
+
+#### Sidebar Layout Optimization
+**Space Savings Achieved:**
+- Header padding: 25px → 15px (saved 10px)
+- Logo size: 60px → 40px (saved 20px)
+- Tab padding: 12px 8px → 10px 6px
+- Removed redundant subtitles
+- Card spacing tightened
+- **Result**: ~35px vertical space saved, main action button now immediately visible
+
+**Width Optimization:**
+- Minimum width: 380px → 420px
+- Provides better text consistency in editable viewer
+- Prevents field value wrapping issues
+
 ## Version History
 
-- **v1.2.0** (Current) - Added AI photo validation and postal code system overhaul
+- **v1.4.0** (Current) - September 2024 comprehensive improvements
+  - Implemented country code mapping system with 150+ mappings
+  - Fixed nationality, dropdown, and social media field mappings
+  - Added editable data viewer with click-to-edit functionality
+  - Optimized sidebar layout saving 35px vertical space
+  - Created DS-160 prompt v4 with passport field clarification
+  - Fixed education notification path bug
+  - Enhanced multiple entries handling with batch processing
+
+- **v1.3.0** - DS-160 optimization and reliability improvements
+  - Reduced JSON payload size by 60-70% to prevent API cutoffs
+  - Fixed month parsing, apartment fields, phone formatting, and US Contact mapping
+  - Restructured extraction prompt with validation phases
+  - Added smart security field defaulting
+  - Improved E-visa field validation and ownership checks
+
+- **v1.2.0** - Added AI photo validation and postal code system overhaul
   - Integrated OpenAI GPT-4 Vision for passport photo validation
   - Replaced Japan Post API with local business codes database
   - Added comprehensive test scripts

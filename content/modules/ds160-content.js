@@ -115,7 +115,8 @@ class TwoPassFiller {
       ],
       'previousTravel': [
         'rblPREV_US_TRAVEL', 'dtlPREV_US_VISIT', 'dtlUS_DRIVER_LICENSE',
-        'PREV_VISA', 'rblPREV_VISA_REFUSED', 'tbxPREV_VISA_REFUSED_EXPL'
+        'PREV_VISA', 'rblPREV_VISA_REFUSED', 'tbxPREV_VISA_REFUSED_EXPL',
+        'rblVWP_DENIAL_IND'
       ],
       'addressPhone': [
         'tbxAPP_ADDR_LN1', 'tbxAPP_ADDR_LN2', 'tbxAPP_ADDR_CITY',
@@ -583,7 +584,7 @@ class TwoPassFiller {
           
           // If not matched, try mapping
           if (!matched) {
-            const countryMap = this.getCountryMapping(value);
+            const countryMap = this.mapCountry(value);
             if (countryMap) {
               element.value = countryMap;
               matched = true;
@@ -941,23 +942,6 @@ class TwoPassFiller {
     script.onload = () => script.remove();
   }
   // Country code mapping for dropdowns
-  getCountryMapping(country) {
-    const countryMappings = {
-      'China': 'CHIN',
-      'CHINA': 'CHIN',
-      'Japan': 'JPN',
-      'JAPAN': 'JPN',
-      'United States': 'USA',
-      'UNITED STATES': 'USA',
-      'USA': 'USA',
-      'US': 'USA',
-      'Canada': 'CAN',
-      'CANADA': 'CAN',
-      // Add more as needed
-    };
-    
-    return countryMappings[country] || null;
-  }
 
   // Parse SSN for split fields
   parseSSN(ssn) {
@@ -1506,10 +1490,10 @@ class TwoPassFiller {
       // Who is Paying
       'ctl00_SiteContentPlaceHolder_FormView1_ddlWhoIsPaying': this.mapPayerType(data.travel?.tripPayer),
       
-      // Principal Applicant (for dependents)
+      // Principal Applicant fields (used for primary applicants on certain visa types)
       'ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_tbxPrincipleAppSurname': data.travel?.principalApplicant?.surname,
       'ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_tbxPrincipleAppGivenName': data.travel?.principalApplicant?.givenName,
-      'ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_tbxPRIN_APP_PETITION_NUM': data.travel?.principalApplicant?.petitionNumber,
+      'ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_tbxPRIN_APP_PETITION_NUM': data.travel?.petitionNumber || data.travel?.principalApplicant?.petitionNumber,
       
       // E-visa specific fields for EXECUTIVE/MGR/ESSENTIAL EMP (E1/E2)
       // Radio button: Has the principal Treaty Trader/Investor already been issued a visa?
@@ -1886,6 +1870,12 @@ class TwoPassFiller {
         data.previousTravel?.visaRefused === true,
       'ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_REFUSED_IND_1': 
         data.previousTravel?.visaRefused === false || !data.previousTravel?.visaRefused,
+      
+      // ESTA denial - Have you ever been denied travel authorization by DHS through ESTA?
+      'ctl00_SiteContentPlaceHolder_FormView1_rblVWP_DENIAL_IND_0': 
+        data.previousTravel?.estaDenied === true,
+      'ctl00_SiteContentPlaceHolder_FormView1_rblVWP_DENIAL_IND_1': 
+        data.previousTravel?.estaDenied === false || !data.previousTravel?.estaDenied,
       
       // Applied for permanent residence
       'ctl00_SiteContentPlaceHolder_FormView1_rblPERM_RESIDENT_IND_0': 
@@ -4108,11 +4098,16 @@ class TwoPassFiller {
         data.evisaApplicationContact?.postalCodeNA ||
         data.evisa_application_contact?.postal_code_na,
         
-      'ctl00_SiteContentPlaceHolder_FormView1_ddlCountry': 
-        data.evisaApplicationContact?.address?.country || 
-        data.evisa_application_contact?.address?.country ||
-        data.evisaApplicationContact?.country ||
-        data.evisa_application_contact?.country,
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlCountry': (() => {
+        const country = data.contact?.homeCountry || 
+                       data.evisaApplicationContact?.address?.country || 
+                       data.evisa_application_contact?.address?.country ||
+                       data.evisaApplicationContact?.country ||
+                       data.evisa_application_contact?.country;
+        const mapped = this.mapCountry(country);
+        console.log('[DS160] Mapping country (E-visa section):', country, '->', mapped);
+        return mapped;
+      })(),
         
       // Contact Communication
       'ctl00_SiteContentPlaceHolder_FormView1_tbxPhoneNum': 
@@ -6602,8 +6597,9 @@ class TwoPassFiller {
     
     // Check petition number field
     const petitionField = document.getElementById('ctl00_SiteContentPlaceHolder_FormView1_tbxPETITION_NUM');
-    if (petitionField && data.petition?.receiptNumber) {
-      const expectedValue = data.petition.receiptNumber;
+    const petitionNumber = data.travel?.petitionNumber || data.petition?.receiptNumber;
+    if (petitionField && petitionNumber) {
+      const expectedValue = petitionNumber;
       if (petitionField.value !== expectedValue) {
         console.log(`Re-filling petition number field with: ${expectedValue}`);
         petitionField.value = expectedValue;

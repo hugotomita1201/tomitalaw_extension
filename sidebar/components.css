@@ -132,7 +132,8 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 20px;
+  padding: 12px 16px;
+  padding-bottom: 4px;
 }
 
 .card-title {
@@ -152,8 +153,8 @@
 }
 
 .card-content {
-  padding: 20px;
-  padding-top: 0;
+  padding: 12px;
+  padding-top: 4px;
 }
 
 .card-footer {
@@ -366,7 +367,7 @@
 .separator-horizontal {
   height: 1px;
   width: 100%;
-  margin: 16px 0;
+  margin: 4px 0;
 }
 
 .separator-vertical {

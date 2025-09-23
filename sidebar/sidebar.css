@@ -11,7 +11,7 @@ body {
   background: #f5f5f5;
   color: #333;
   width: 100%;
-  min-width: 380px; /* Increased from 320px to accommodate all tabs */
+  min-width: 420px; /* Increased for better text consistency */
   max-width: 600px;
   min-height: 600px;
   margin: 0;
@@ -32,7 +32,7 @@ body {
 .header {
   background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
   color: white;
-  padding: 25px 20px;
+  padding: 15px 15px;
   text-align: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   display: flex;
@@ -41,9 +41,9 @@ body {
 }
 
 .header-logo {
-  width: 60px;
-  height: 60px;
-  margin-bottom: 12px;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 8px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   background: white;
@@ -51,7 +51,7 @@ body {
 }
 
 .header h1 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   margin: 0;
   letter-spacing: 0.5px;
@@ -90,9 +90,9 @@ body {
 .tab-button {
   flex: 1; /* Distribute space evenly */
   min-width: 72px; /* Minimum width for readability */
-  max-width: 100px; /* Prevent over-stretching */
+  max-width: none; /* Allow dynamic width to fill available space */
   flex-shrink: 0;
-  padding: 12px 8px; /* Optimized padding */
+  padding: 10px 6px; /* Reduced padding for more compact tabs */
   background: none;
   border: none;
   cursor: pointer;
@@ -358,6 +358,287 @@ body {
 
 .info-section li {
   margin-bottom: 5px;
+}
+
+/* Editable Data Viewer Styles */
+.editable-data-viewer {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 8px;
+}
+
+.data-section {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.data-section:last-child {
+  border-bottom: none;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: #f8f9fa;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.section-header:hover {
+  background: #e9ecef;
+}
+
+.section-header.active {
+  background: #e3f2fd;
+  border-left: 3px solid #2196F3;
+  padding-left: 13px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.section-chevron {
+  transition: transform 0.2s;
+  color: #666;
+  font-size: 12px;
+}
+
+.section-header.active .section-chevron {
+  transform: rotate(90deg);
+}
+
+.section-content {
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+}
+
+.section-content.expanded {
+  padding: 8px;
+  max-height: none;
+  overflow: visible;
+  transition: padding 0.3s ease-in;
+}
+
+.data-field {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+  min-width: 0;
+  width: 100%;
+}
+
+.data-field:hover {
+  background: #f8f9fa;
+}
+
+.data-field:last-child {
+  margin-bottom: 0;
+}
+
+/* Nested field container - vertical layout */
+.nested-field-container {
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.nested-field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4A90E2;
+  margin-bottom: 8px;
+  padding: 8px;
+  background: #f8f9fa;
+  border-left: 3px solid #4A90E2;
+}
+
+/* Container for nested children */
+.nested-children {
+  padding-left: 20px;
+  border-left: 2px solid #e8f0fe;
+  margin-left: 8px;
+  margin-top: 8px;
+}
+
+/* Flat layout for deeply nested items */
+.nested-children-flat {
+  padding-left: 12px;
+  margin-top: 8px;
+}
+
+.nested-children .data-field,
+.nested-children-flat .data-field {
+  margin-bottom: 8px;
+  padding: 4px 8px;
+}
+
+/* Ensure nested fields don't get cut off */
+.nested-field-container .field-value {
+  max-width: none;
+  width: auto;
+  flex: 1;
+}
+
+.nested-section {
+  margin-bottom: 12px;
+  padding: 8px;
+  background: #fafafa;
+  border-radius: 4px;
+}
+
+.array-item-section {
+  background: transparent;
+  border-left: 2px solid #e8f0fe;
+  padding-left: 12px;
+  margin-left: 8px;
+  margin-bottom: 12px;
+  margin-top: 8px;
+}
+
+.array-item-header {
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.field-label {
+  flex: 0 0 auto;
+  min-width: 100px;
+  max-width: 140px;
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+  padding-top: 2px;
+  padding-right: 8px;
+}
+
+.field-value {
+  flex: 1;
+  font-size: 13px;
+  color: #333;
+  min-height: 24px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  min-width: 0;
+  white-space: normal;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.field-value:hover {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.field-value.editing {
+  background: #fff;
+  border: 2px solid #2196F3;
+  padding: 4px 8px;
+  cursor: text;
+}
+
+.field-value input,
+.field-value textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  font: inherit;
+  background: transparent;
+  resize: vertical;
+  min-height: 24px;
+}
+
+.field-value.empty {
+  color: #999;
+  font-style: italic;
+}
+
+.field-value.empty::before {
+  content: "Click to add";
+  font-size: 12px;
+}
+
+.field-value.default-value {
+  color: #666;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.field-value.modified {
+  background: #fff3cd;
+  color: #856404;
+  font-weight: 500;
+}
+
+.field-value.modified::after {
+  content: "●";
+  color: #ffc107;
+  position: absolute;
+  right: -12px;
+  top: 2px;
+  font-size: 8px;
+}
+
+.nested-section {
+  margin-left: 20px;
+  padding-left: 16px;
+  border-left: 2px solid #e0e0e0;
+  margin-top: 12px;
+}
+
+/* Old array-item styles - no longer used after unified nested rendering
+.array-item {
+  background: #f8f9fa;
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.array-item-header {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+*/
+
+.btn-sm {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid #dee2e6;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-ghost:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
 }
 
 /* Status Bar */

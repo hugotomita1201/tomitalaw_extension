@@ -140,6 +140,8 @@ For E-1/E-2 visas, also extract specialized E-visa sections from DS-156E form.
     },
     "visaRefused": false,
     "visaRefusedExplanation": "string if true",
+    "estaDenied": false,
+    "estaDeniedExplanation": "string if true",
     "immigrantPetition": false,
     "immigrantPetitionExplanation": "string if true"
   },
