@@ -1248,6 +1248,49 @@ body {
   margin-bottom: 10px;
 }
 
+/* DS-160 Form Specific Styles */
+.ds160-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.ds160-label-secondary {
+  margin-top: 24px; /* Increased spacing before "Partial JSON / Updates" */
+}
+
+.ds160-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  resize: vertical;
+  background: #fafafa;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.ds160-textarea:focus {
+  outline: none;
+  border-color: #4A90E2;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.ds160-textarea::placeholder {
+  color: #999;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Button Group Spacing */
+.flex.gap-2.mt-4 {
+  margin-top: 20px;
+}
+
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 8px;

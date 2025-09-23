@@ -1,0 +1,16 @@
+## DS-160 RENEWAL INSTRUCTIONS
+
+This is a visa RENEWAL. I have provided:
+1. **Original DS-160** - The previous application data
+2. **Renewal Worksheet** - Contains ONLY the updated/changed information
+
+**YOUR TASK:**
+- First, identify which document is the original DS-160 and which is the renewal worksheet
+- Use the original DS-160 as your base data
+- REPLACE any fields that appear in the renewal worksheet with the NEW values (don't merge, completely replace)
+- Keep all other fields from the original DS-160 unchanged
+- Most common updates: new passport number, new address, new employer, new travel dates
+
+**CRITICAL:** When you see updated information in the renewal worksheet, REPLACE the old information entirely. For example, if there's a new passport number, replace ALL passport fields (number, issue date, expiry date) with the new information.
+
+After identifying the updates, generate the complete DS-160 JSON following the standard DS-160 format.
