@@ -1314,15 +1314,6 @@ class TwoPassFiller {
       return this.getMonthNumber(data.previousTravel?.previousVisa?.issueDate);
     }
     
-    // Handle previous US visit date months (dynamic fields)
-    if (fieldId.includes('PREV_US_VISIT') && fieldId.includes('Month')) {
-      const match = fieldId.match(/ctl(\d+)/);
-      if (match) {
-        const index = parseInt(match[1]);
-        const visit = data.previousTravel?.visits?.[index];
-        return this.getMonthNumber(visit?.arrivalDate || visit?.entryDate);
-      }
-    }
     
     // Special handling for SSN fields
     if (fieldId === 'ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_SSN1') {
@@ -1587,8 +1578,13 @@ class TwoPassFiller {
       // Previous US Visit Information (dynamic fields - ctl00 for first visit, ctl01 for second, etc.)
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_ddlPREV_US_VISIT_DTEDay': 
         this.parseDate(data.previousTravel?.visits?.[0]?.arrivalDate || data.previousTravel?.visits?.[0]?.entryDate)?.day,
-      'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_ddlPREV_US_VISIT_DTEMonth': 
-        this.getMonthNumber(data.previousTravel?.visits?.[0]?.arrivalDate || data.previousTravel?.visits?.[0]?.entryDate),
+      'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_ddlPREV_US_VISIT_DTEMonth': (() => {
+        const visit1 = data.previousTravel?.visits?.[0];
+        const date = visit1?.arrivalDate || visit1?.entryDate;
+        const monthValue = this.getMonthNumber(date);
+        console.log(`[MONTH BUG DEBUG] Visit 1 (ctl00): date="${date}", month="${monthValue}"`);
+        return monthValue;
+      })(),
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_tbxPREV_US_VISIT_DTEYear': 
         this.parseDate(data.previousTravel?.visits?.[0]?.arrivalDate || data.previousTravel?.visits?.[0]?.entryDate)?.year,
       'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_tbxPREV_US_VISIT_LOS': 
@@ -1604,8 +1600,12 @@ class TwoPassFiller {
           return {
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_ddlPREV_US_VISIT_DTEDay': 
               this.parseDate(visit2.arrivalDate || visit2.entryDate)?.day,
-            'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_ddlPREV_US_VISIT_DTEMonth': 
-              this.getMonthNumber(visit2.arrivalDate || visit2.entryDate),
+            'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_ddlPREV_US_VISIT_DTEMonth': (() => {
+              const date = visit2.arrivalDate || visit2.entryDate;
+              const monthValue = this.getMonthNumber(date);
+              console.log(`[MONTH BUG DEBUG] Visit 2 (ctl01): date="${date}", month="${monthValue}"`);
+              return monthValue;
+            })(),
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_tbxPREV_US_VISIT_DTEYear': 
               this.parseDate(visit2.arrivalDate || visit2.entryDate)?.year,
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_tbxPREV_US_VISIT_LOS': 
@@ -1624,8 +1624,12 @@ class TwoPassFiller {
           return {
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl02_ddlPREV_US_VISIT_DTEDay': 
               this.parseDate(visit3.arrivalDate || visit3.entryDate)?.day,
-            'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl02_ddlPREV_US_VISIT_DTEMonth': 
-              this.getMonthNumber(visit3.arrivalDate || visit3.entryDate),
+            'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl02_ddlPREV_US_VISIT_DTEMonth': (() => {
+              const date = visit3.arrivalDate || visit3.entryDate;
+              const monthValue = this.getMonthNumber(date);
+              console.log(`[MONTH BUG DEBUG] Visit 3 (ctl02): date="${date}", month="${monthValue}"`);
+              return monthValue;
+            })(),
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl02_tbxPREV_US_VISIT_DTEYear': 
               this.parseDate(visit3.arrivalDate || visit3.entryDate)?.year,
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl02_tbxPREV_US_VISIT_LOS': 
@@ -1644,8 +1648,12 @@ class TwoPassFiller {
           return {
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl03_ddlPREV_US_VISIT_DTEDay': 
               this.parseDate(visit4.arrivalDate || visit4.entryDate)?.day,
-            'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl03_ddlPREV_US_VISIT_DTEMonth': 
-              this.getMonthNumber(visit4.arrivalDate || visit4.entryDate),
+            'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl03_ddlPREV_US_VISIT_DTEMonth': (() => {
+              const date = visit4.arrivalDate || visit4.entryDate;
+              const monthValue = this.getMonthNumber(date);
+              console.log(`[MONTH BUG DEBUG] Visit 4 (ctl03): date="${date}", month="${monthValue}"`);
+              return monthValue;
+            })(),
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl03_tbxPREV_US_VISIT_DTEYear': 
               this.parseDate(visit4.arrivalDate || visit4.entryDate)?.year,
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl03_tbxPREV_US_VISIT_LOS': 
@@ -1664,8 +1672,12 @@ class TwoPassFiller {
           return {
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl04_ddlPREV_US_VISIT_DTEDay': 
               this.parseDate(visit5.arrivalDate || visit5.entryDate)?.day,
-            'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl04_ddlPREV_US_VISIT_DTEMonth': 
-              this.getMonthNumber(visit5.arrivalDate || visit5.entryDate),
+            'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl04_ddlPREV_US_VISIT_DTEMonth': (() => {
+              const date = visit5.arrivalDate || visit5.entryDate;
+              const monthValue = this.getMonthNumber(date);
+              console.log(`[MONTH BUG DEBUG] Visit 5 (ctl04): date="${date}", month="${monthValue}"`);
+              return monthValue;
+            })(),
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl04_tbxPREV_US_VISIT_DTEYear': 
               this.parseDate(visit5.arrivalDate || visit5.entryDate)?.year,
             'ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl04_tbxPREV_US_VISIT_LOS': 
@@ -1989,10 +2001,10 @@ class TwoPassFiller {
         data.contact?.email || data.contact?.emailAddress,
       
       // Additional Emails
-      'ctl00_SiteContentPlaceHolder_FormView1_rblAddEmail_0': 
-        data.contact?.hasOtherEmails === 'YES' || (data.contact?.otherEmails && data.contact?.otherEmails.length > 0),
-      'ctl00_SiteContentPlaceHolder_FormView1_rblAddEmail_1': 
-        data.contact?.hasOtherEmails === 'NO' || !data.contact?.otherEmails || data.contact?.otherEmails.length === 0,
+      'ctl00_SiteContentPlaceHolder_FormView1_rblAddEmail_0':
+        data.contact?.hasOtherEmails === 'YES' || (data.contact?.otherEmails && data.contact?.otherEmails.length > 0) || (data.contact?.additionalEmails && data.contact?.additionalEmails.length > 0),
+      'ctl00_SiteContentPlaceHolder_FormView1_rblAddEmail_1':
+        data.contact?.hasOtherEmails === 'NO' || (!data.contact?.otherEmails || data.contact?.otherEmails.length === 0) && (!data.contact?.additionalEmails || data.contact?.additionalEmails.length === 0),
       
       // Dynamic Mailing Address fields (appear when mailing address different from home)
       'ctl00_SiteContentPlaceHolder_FormView1_tbxMAILING_ADDR_LN1': 
