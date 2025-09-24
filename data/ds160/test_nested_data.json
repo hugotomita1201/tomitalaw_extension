@@ -1,0 +1,87 @@
+{
+  "personal": {
+    "givenName": "John",
+    "surname": "Smith",
+    "dateOfBirth": "1990-01-15",
+    "nationality": "USA"
+  },
+  "passport": {
+    "passportNumber": "AB123456",
+    "issueCountry": "USA",
+    "issueCity": "New York"
+  },
+  "homeAddress": {
+    "street": "123 Main Street",
+    "street2": "Apt 4B",
+    "city": "Tokyo",
+    "state": "Tokyo",
+    "postalCode": "150-0002",
+    "country": "Japan"
+  },
+  "education": {
+    "institutions": [
+      {
+        "name": "Tokyo University",
+        "degree": "Bachelor of Science",
+        "fieldOfStudy": "Computer Science",
+        "startDate": "2008-09-01",
+        "endDate": "2012-06-15",
+        "address": {
+          "street": "7-3-1 Hongo",
+          "city": "Bunkyo",
+          "state": "Tokyo",
+          "country": "Japan"
+        }
+      },
+      {
+        "name": "Kyoto Graduate School",
+        "degree": "Master of Science",
+        "fieldOfStudy": "Data Science",
+        "startDate": "2012-09-01",
+        "endDate": "2014-06-15",
+        "address": {
+          "street": "123 University Ave",
+          "city": "Kyoto",
+          "state": "Kyoto",
+          "country": "Japan"
+        }
+      }
+    ]
+  },
+  "employment": {
+    "currentEmployer": {
+      "name": "Tech Corp",
+      "position": "Software Engineer",
+      "startDate": "2015-01-01",
+      "address": {
+        "street": "456 Business Blvd",
+        "city": "San Francisco",
+        "state": "CA",
+        "country": "USA"
+      },
+      "phoneNumber": "+1-415-555-0123"
+    },
+    "previousEmployers": [
+      {
+        "name": "StartUp Inc",
+        "position": "Junior Developer",
+        "startDate": "2014-07-01",
+        "endDate": "2014-12-31"
+      }
+    ]
+  },
+  "travel": {
+    "purposeOfTrip": "Business",
+    "lengthOfStay": "3 months",
+    "companions": [
+      {
+        "name": "Jane Smith",
+        "relationship": "Spouse"
+      },
+      {
+        "name": "Tom Smith",
+        "relationship": "Child"
+      }
+    ]
+  }
+}

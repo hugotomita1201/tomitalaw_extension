@@ -1,0 +1,131 @@
+{
+  "evisa_business": {
+    "business_name": "Tech Solutions Inc.",
+    "business_type": "C",
+    "business_type_other": "",
+    "incorporation_date": {
+      "day": "15",
+      "month": "3",
+      "year": "2015"
+    },
+    "incorporation_location": {
+      "city": "San Francisco",
+      "state": "CA"
+    },
+    "offices": [
+      {
+        "type": "H",
+        "type_other": "",
+        "name": "Tech Solutions Headquarters",
+        "address": {
+          "street_line1": "123 Market Street",
+          "street_line2": "Suite 500",
+          "city": "San Francisco",
+          "state": "California",
+          "state_na": false,
+          "postal_code": "94105",
+          "postal_code_na": false,
+          "country": "USA"
+        }
+      },
+      {
+        "type": "B",
+        "type_other": "",
+        "name": "Tech Solutions East Coast Office",
+        "address": {
+          "street_line1": "456 Broadway",
+          "street_line2": "",
+          "city": "New York",
+          "state": "New York",
+          "state_na": false,
+          "postal_code": "10013",
+          "postal_code_na": false,
+          "country": "USA"
+        }
+      }
+    ],
+    "business_phone": "+1-415-555-0100",
+    "business_fax": "+1-415-555-0101",
+    "business_email": "info@techsolutions.example.com",
+    "business_website": "www.techsolutions.example.com",
+    "number_of_employees": "250",
+    "annual_revenue": "$50,000,000",
+    "business_activities": "Software development and consulting services specializing in enterprise solutions",
+    "percentage_foreign_ownership": "0",
+    "treaty_country": "JPN",
+    "stock_exchange_listed": false,
+    "stock_exchange_name": ""
+  },
+  "evisa_employee": {
+    "position_title": "Chief Technology Officer",
+    "duties_description": "Oversee technology strategy, manage development teams, architect enterprise solutions",
+    "start_date": {
+      "day": "1",
+      "month": "6",
+      "year": "2020"
+    },
+    "years_experience": "15",
+    "salary": "$180,000",
+    "education_level": "Master's Degree",
+    "field_of_study": "Computer Science",
+    "special_qualifications": "AWS Certified Solutions Architect, PMP Certification",
+    "previous_us_employment": true,
+    "previous_employer": "Previous Tech Corp",
+    "previous_position": "Senior Software Engineer",
+    "previous_dates": "2015-2020"
+  },
+  "evisa_investment": {
+    "total_investment": "$5,000,000",
+    "source_of_funds": "Corporate profits and bank financing",
+    "investment_date": {
+      "day": "1",
+      "month": "1",
+      "year": "2020"
+    },
+    "investment_type": "Equipment, software licenses, and working capital",
+    "owns_real_estate": true,
+    "real_estate_value": "$2,000,000",
+    "real_estate_location": "San Francisco, CA"
+  },
+  "evisa_trade": {
+    "goods_services": "Enterprise software solutions and consulting services",
+    "trade_with_us": true,
+    "annual_trade_volume": "$10,000,000",
+    "percentage_trade_us": "60",
+    "us_companies": [
+      {
+        "name": "Major US Client Corp",
+        "address": "789 Fifth Avenue, New York, NY 10022",
+        "relationship": "Primary client for software services"
+      },
+      {
+        "name": "US Partner Solutions",
+        "address": "321 Tech Drive, Austin, TX 78701",
+        "relationship": "Strategic technology partner"
+      }
+    ],
+    "import_from_us": true,
+    "export_to_us": true,
+    "import_description": "Software licenses and technology equipment",
+    "export_description": "Custom software solutions and technical consulting"
+  },
+  "mapped_fields": {
+    "ctl00_SiteContentPlaceHolder_FormView1_tbxBusinessName": "Tech Solutions Inc.",
+    "ctl00_SiteContentPlaceHolder_FormView1_ddlBusinessType": "C",
+    "ctl00_SiteContentPlaceHolder_FormView1_dllBusinessStartDateDay": "15",
+    "ctl00_SiteContentPlaceHolder_FormView1_ddlBusinessStartMonth": "3",
+    "ctl00_SiteContentPlaceHolder_FormView1_tbxBusinessStartDateYear": "2015",
+    "ctl00_SiteContentPlaceHolder_FormView1_tbxBusinessStartCity": "San Francisco",
+    "ctl00_SiteContentPlaceHolder_FormView1_ddlBusinessStartState": "CA",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_ddlEVISA_OFFICE_TYPE": "H",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_NAME": "Tech Solutions Headquarters",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_ST_LN1": "123 Market Street",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_ST_LN2": "Suite 500",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_CITY": "San Francisco",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_STATE": "California",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_cbxEVISA_OFFICE_STATE_NA": false,
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_POSTAL_CD": "94105",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_cbxEVISA_OFFICE_POSTAL_CD_NA": false,
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_ddlEVISA_OFFICE_CNTRY": "USA"
+  }
+}

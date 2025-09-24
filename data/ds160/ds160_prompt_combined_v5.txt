@@ -4,6 +4,29 @@
 Extract complete DS-160 information from provided documents and output as structured JSON. 
 For E-1/E-2 visas, also extract specialized E-visa sections from DS-156E form.
 
+## VISA RENEWAL SCENARIOS:
+
+When processing visa renewal applications with multiple documents:
+
+1. **Document Identification**:
+   - ORIGINAL DS-160: Complete previous application data
+   - RENEWAL WORKSHEET: Contains only updated/changed information  
+   - ADDITIONAL DOCUMENTS: New support letters, updated petitions, revised employment docs
+
+2. **Processing Rules**:
+   - Start with original DS-160 as base template
+   - REPLACE (don't merge) any fields found in renewal worksheet
+   - Extract new information from additional documents (petition numbers, employer details, etc.)
+   - Common renewal updates: passport, current employer, address, salary, travel dates
+
+3. **Critical Updates to Prioritize**:
+   - Previous US travel: Use most recent visa information
+   - Employment: Replace entire employment section if updated
+   - Petition numbers: Use newest petition/receipt numbers from documents
+   - Contact information: Update all addresses/phones/emails if changed
+
+4. **IMPORTANT**: When a field appears in renewal worksheet, completely REPLACE the original value. Do not combine or merge old and new data.
+
 ## CRITICAL FORMATTING RULES:
 
 1. **Company/Organization Names**:
@@ -85,7 +108,7 @@ For E-1/E-2 visas, also extract specialized E-visa sections from DS-156E form.
     "usCity": "string",
     "usState": "2-letter state code",
     "usZipCode": "string",
-    "tripPayer": "SELF, COMPANY, PRESENT_EMPLOYER, etc.", //Default to PRESENT_EMPLOYER if n/a
+    "tripPayer": "SELF, COMPANY, PRESENT_EMPLOYER, etc."
     "payerInfo": {  // If OTHER_PERSON
       "surname": "string or N/A",
       "givenName": "string or N/A",
@@ -258,9 +281,12 @@ For E-1/E-2 visas, also extract specialized E-visa sections from DS-156E form.
       "phone": "string or N/A",
       "startDate": "DD-MMM-YYYY or N/A",
       "monthlyIncome": "string or N/A",
-      "duties": "string or N/A" //Needs to be 3-5 sentences derived from support letter/ws
+      "duties": "string or N/A", //Needs to be 3-5 sentences derived from support letter/ws
+      "supervisorSurname": "string or N/A",
+      "supervisorGivenName": "string or N/A",
+      "jobTitle": "string or N/A"
     },
-    "previousEmployers": [],  // Array of employer objects with same structure as presentEmployer
+    "previousEmployers": [],  // Array of employer objects with same structure as presentEmployer (including supervisorSurname, supervisorGivenName, jobTitle)
     "education": {
       "institutions": []  // Array: {name: "", address: {}, courseOfStudy: "", fromDate: "DD-MMM-YYYY", toDate: "DD-MMM-YYYY"}
     },
@@ -283,7 +309,7 @@ For E-1/E-2 visas, also extract specialized E-visa sections from DS-156E form.
     },
     "militaryService": {
       "hasServed": false,
-      "details": []  // Array: {country: "3-letter code", branch: "string", rank: "string", specialty: "string", fromDate: "DD-MMM-YYYY", toDate: "DD-MMM-YYYY"}
+      "details": []  // Array: {country: "3-letter code", branch: "string", rank: "string", specialty: "string", startDate: "DD-MMM-YYYY", endDate: "DD-MMM-YYYY"}
     },
     "insurgentOrganization": {
       "hasInvolvement": false,
@@ -707,10 +733,19 @@ For E-1/E-2 visas, also extract specialized E-visa sections from DS-156E form.
 }
 ```
 
+## DEFAULT VALUES WHEN NOT SPECIFIED:
+
+When documents don't provide specific information, use these defaults:
+
+- **intendedArrivalDate**: "01-JAN-2026" (if no travel date provided)
+- **lengthOfStayNumber**: "3" (if duration not specified)
+- **lengthOfStayUnit**: "Y" (if duration unit not specified)
+- **tripPayer**: "PRESENT_EMPLOYER" (if payer information unavailable)
+
 ## COMPLETE EXAMPLE WITH COMPREHENSIVE SAMPLE DATA
 
 This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay special attention to:
-- No empty arrays or "N/A" values - every field has actual sample data
+- Example demonstrates all field types - omit entire sections if not applicable
 - Company names without punctuation
 - Phone numbers as pure digits only
 - Proper formatting for all field types
@@ -1000,7 +1035,10 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
       "phone": "81332211234",
       "startDate": "01-APR-2005",
       "monthlyIncome": "2500000",
-      "duties": "Chief Executive Officer responsible for overall company strategy, international expansion, and US market development. Manages 150 employees across 5 departments including import-export operations, logistics, and business development."
+      "duties": "Chief Executive Officer responsible for overall company strategy, international expansion, and US market development. Manages 150 employees across 5 departments including import-export operations, logistics, and business development.",
+      "supervisorSurname": "TANAKA",
+      "supervisorGivenName": "Hiroshi",
+      "jobTitle": "Chief Executive Officer"
     },
     "previousEmployers": [
       {
@@ -1017,7 +1055,10 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
         "startDate": "01-APR-2000",
         "endDate": "31-MAR-2005",
         "monthlyIncome": "800000",
-        "duties": "Senior Manager in International Business Division, handled US market analysis and partnership development"
+        "duties": "Senior Manager in International Business Division, handled US market analysis and partnership development",
+        "supervisorSurname": "SUZUKI",
+        "supervisorGivenName": "Kenji",
+        "jobTitle": "Senior Manager"
       },
       {
         "name": "TOYOTA MOTOR CORPORATION",
@@ -1033,7 +1074,10 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
         "startDate": "01-APR-1997",
         "endDate": "31-MAR-2000",
         "monthlyIncome": "450000",
-        "duties": "Market Research Analyst for North American automotive market"
+        "duties": "Market Research Analyst for North American automotive market",
+        "supervisorSurname": "YAMAMOTO",
+        "supervisorGivenName": "Takashi",
+        "jobTitle": "Market Research Analyst"
       }
     ],
     "education": {
@@ -1099,8 +1143,8 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
           "branch": "Japan Self-Defense Forces",
           "rank": "Lance Corporal",
           "specialty": "Communications and logistics",
-          "fromDate": "01-APR-1996",
-          "toDate": "31-MAR-1998"
+          "startDate": "01-APR-1996",
+          "endDate": "31-MAR-1998"
         }
       ]
     },
@@ -1168,19 +1212,6 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
       "phone": "13107654321"
     },
     "monthlyIncome": "25000"
-  },
-  
-  "crewVisa": {
-    "jobTitle": "Not applicable - E-2 visa",
-    "vesselCompanyName": "Not applicable",
-    "companyPhone": "Not applicable",
-    "positionThroughAgency": false,
-    "agencyInfo": {
-      "name": "Not applicable",
-      "address": "Not applicable",
-      "phone": "Not applicable"
-    },
-    "vesselWork": false
   },
   
   "evisaClassification": {
@@ -1600,12 +1631,17 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
 
 ## ADDITIONAL RULES:
 
-- Omit fields with missing values (don't include the key)
+- Do not fabricate information, but use logical inference based on source documents and visa knowledge
+- Always include temporaryWork section for work-based visas (H/L/O/P/Q/R)
+- Extract what you can from documents, mark missing required fields clearly
 - Omit security section entirely if all answers are false
 - Use exact passport name formatting (typically all caps)
 - Numeric values as strings (e.g., "250" not 250)
 - Keep empty arrays [] when no items exist
 - Keep false for boolean fields
+- The extension automatically defaults missing boolean fields to false
+- Therefore, omit all false boolean fields to reduce JSON size
+- Only include fields that are true or have actual values
 
 ### Conditional Requirements:
 - If maritalStatus="MARRIED": spouse information required

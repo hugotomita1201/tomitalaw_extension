@@ -124,10 +124,12 @@ Total Documents Found: [X]
 4. Flag fields needing newer data
 
 ### 2B. Absolute Source Documentation Requirements
-- **ZERO ASSUMPTION POLICY**: You are strictly prohibited from inventing, assuming, or inferring any information
+- **DOCUMENT-BASED INFERENCE POLICY**: Do not fabricate information, but use logical inference based on source documents and visa knowledge
+- Always include temporaryWork section for work-based visas (H/L/O/P/Q/R)
+- Extract what you can from documents, mark missing required fields clearly
 - Every single data point entered must reference the Phase 1 analysis
 - When information conflicts, use the most recent verified source
-- If required information cannot be located, you must explicitly state: "Cannot locate [specific information] - last known information from [date] shows [detail]"
+- If required information cannot be located, include the field with available partial data and note what's missing in the analysis section
 
 ## PHASE 3: INFORMATION HIERARCHY
 

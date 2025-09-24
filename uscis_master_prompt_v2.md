@@ -65,10 +65,12 @@ Never combine - output as separate JSON blocks.
 2. **Recent** (6-12 months): Previous petitions if unchanged
 3. **Historical** (>12 months): Education, past employment only
 
-### Zero Assumption Policy
-- Every field must reference source document
+### Document-Based Inference Policy
+- Do not fabricate information, but use logical inference based on source documents and visa knowledge
+- Always include temporaryWork section for work-based visas (H/L/O/P/Q/R)
+- Extract what you can from documents, mark missing required fields clearly
 - When conflicts exist, use most recent source
-- Missing info: Leave field empty in JSON, note in analysis
+- Missing info: Include field with partial data, note what's missing in analysis
 
 ## Output Requirements
 

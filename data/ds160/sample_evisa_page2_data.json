@@ -1,0 +1,147 @@
+{
+  "evisa_foreign_business": {
+    "has_foreign_business": "Yes",
+    "has_foreign_entity": "Yes",
+    "has_foreign_individual_owner": "Yes",
+    
+    "parent_business": {
+      "name": "Global Tech Holdings Ltd",
+      "address": {
+        "street_line1": "456 International Plaza",
+        "street_line2": "Tower B, Floor 20",
+        "city": "Tokyo",
+        "state": "Tokyo",
+        "state_na": false,
+        "postal_code": "100-0001",
+        "postal_code_na": false,
+        "country": "JPN"
+      },
+      "phone": "+81-3-1234-5678",
+      "fax": "+81-3-1234-5679"
+    },
+    
+    "foreign_entities": [
+      {
+        "name": "Asia Pacific Investment Group",
+        "nationality": "JPN",
+        "ownership_percentage": "35"
+      },
+      {
+        "name": "European Venture Partners",
+        "nationality": "DEU",
+        "ownership_percentage": "15"
+      }
+    ],
+    
+    "foreign_owners": [
+      {
+        "surname": "Tanaka",
+        "given_name": "Hiroshi",
+        "status": "Chairman and CEO",
+        "residence_country": "JPN",
+        "nationality": "JPN",
+        "ownership_percentage": "25"
+      },
+      {
+        "surname": "Schmidt",
+        "given_name": "Klaus",
+        "status": "Director",
+        "residence_country": "DEU",
+        "nationality": "DEU",
+        "ownership_percentage": "10"
+      }
+    ]
+  },
+  
+  "evisaForeignBusiness": {
+    "hasForeignBusiness": true,
+    "hasForeignEntity": true,
+    "hasForeignIndividualOwner": true,
+    
+    "parentBusinessName": "Global Tech Holdings Ltd",
+    "parentBusinessAddress": {
+      "street1": "456 International Plaza",
+      "street2": "Tower B, Floor 20",
+      "city": "Tokyo",
+      "state": "Tokyo",
+      "stateNA": false,
+      "postalCode": "100-0001",
+      "postalCodeNA": false,
+      "country": "JPN"
+    },
+    "parentBusinessPhone": "+81-3-1234-5678",
+    "parentBusinessFax": "+81-3-1234-5679",
+    
+    "foreignEntities": [
+      {
+        "name": "Asia Pacific Investment Group",
+        "nationality": "JPN",
+        "ownershipPercentage": "35"
+      },
+      {
+        "name": "European Venture Partners",
+        "nationality": "DEU",
+        "ownershipPercentage": "15"
+      }
+    ],
+    
+    "foreignOwners": [
+      {
+        "surname": "Tanaka",
+        "givenName": "Hiroshi",
+        "status": "Chairman and CEO",
+        "residenceCountry": "JPN",
+        "nationality": "JPN",
+        "ownershipPercentage": "25"
+      },
+      {
+        "surname": "Schmidt",
+        "givenName": "Klaus",
+        "status": "Director",
+        "residenceCountry": "DEU",
+        "nationality": "DEU",
+        "ownershipPercentage": "10"
+      }
+    ]
+  },
+  
+  "mapped_fields": {
+    "ctl00_SiteContentPlaceHolder_FormView1_rblForeignBusinessQuestion": "Yes",
+    "ctl00_SiteContentPlaceHolder_FormView1_rblForeignEntityQuestion": "Yes",
+    "ctl00_SiteContentPlaceHolder_FormView1_rblForeignIndividualOwnerQuestion": "Yes",
+    
+    "ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PARENT": "Global Tech Holdings Ltd",
+    "ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PARENT_LN1": "456 International Plaza",
+    "ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PARENT_LN2": "Tower B, Floor 20",
+    "ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PARENT_CITY": "Tokyo",
+    "ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PARENT_STATE": "Tokyo",
+    "ctl00_SiteContentPlaceHolder_FormView1_cbexEVISA_BUS_PARENT_STATE_NA": false,
+    "ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PARENT_POSTAL_CD": "100-0001",
+    "ctl00_SiteContentPlaceHolder_FormView1_cbexEVISA_BUS_PARENT_POSTAL_CD_NA": false,
+    "ctl00_SiteContentPlaceHolder_FormView1_ddlEVISA_BUS_PARENT_CNTRY": "JPN",
+    "ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PARENT_TEL": "+81-3-1234-5678",
+    "ctl00_SiteContentPlaceHolder_FormView1_tbxEVISA_BUS_PARENT_FAX": "+81-3-1234-5679",
+    
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignEntity_ctl00_tbxBUS_ENT_NAME": "Asia Pacific Investment Group",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignEntity_ctl00_ddlBUS_ENT_NATL": "JPN",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignEntity_ctl00_tbxOWNERSHIP_PCT": "35",
+    
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignEntity_ctl01_tbxBUS_ENT_NAME": "European Venture Partners",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignEntity_ctl01_ddlBUS_ENT_NATL": "DEU",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignEntity_ctl01_tbxOWNERSHIP_PCT": "15",
+    
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl00_tbxIND_OWNER_SURNAME": "Tanaka",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl00_tbxIND_OWNER_GIVEN_NAME": "Hiroshi",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl00_tbxIND_OWNER_STATUS": "Chairman and CEO",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl00_ddlIND_OWNER_RES_CNTRY": "JPN",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl00_ddlIND_OWNER_NATL": "JPN",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl00_tbxIND_OWNERSHIP_PCT": "25",
+    
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl01_tbxIND_OWNER_SURNAME": "Schmidt",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl01_tbxIND_OWNER_GIVEN_NAME": "Klaus",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl01_tbxIND_OWNER_STATUS": "Director",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl01_ddlIND_OWNER_RES_CNTRY": "DEU",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl01_ddlIND_OWNER_NATL": "DEU",
+    "ctl00_SiteContentPlaceHolder_FormView1_dtlForeignOwner_ctl01_tbxIND_OWNERSHIP_PCT": "10"
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "page": "E-Visa Business Profile Information",
+  "url": "https://ceac.state.gov/GenNIV/General/complete/complete_supevisabusiness.aspx",
+  "field_mappings": {
+    "business_info": {
+      "business_name": {
+        "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxBusinessName",
+        "type": "text",
+        "label": "Name of U.S. Enterprise, Business, or Company"
+      },
+      "business_type": {
+        "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlBusinessType",
+        "type": "select",
+        "label": "Type of Business Enterprise",
+        "options": {
+          "C": "Corporation",
+          "P": "Partnership",
+          "B": "Branch/Liaison Office",
+          "R": "Privately Owned",
+          "J": "Joint Venture",
+          "S": "Subsidiary",
+          "O": "Other (Specify)"
+        }
+      },
+      "incorporation_date": {
+        "day": {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dllBusinessStartDateDay",
+          "type": "select",
+          "label": "Day"
+        },
+        "month": {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlBusinessStartMonth",
+          "type": "select",
+          "label": "Month",
+          "options": {
+            "1": "JAN", "2": "FEB", "3": "MAR", "4": "APR",
+            "5": "MAY", "6": "JUN", "7": "JUL", "8": "AUG",
+            "9": "SEP", "10": "OCT", "11": "NOV", "12": "DEC"
+          }
+        },
+        "year": {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxBusinessStartDateYear",
+          "type": "text",
+          "label": "Year"
+        }
+      },
+      "incorporation_location": {
+        "city": {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxBusinessStartCity",
+          "type": "text",
+          "label": "City"
+        },
+        "state": {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlBusinessStartState",
+          "type": "select",
+          "label": "State"
+        }
+      }
+    },
+    "office_info": {
+      "office_type": {
+        "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_ddlEVISA_OFFICE_TYPE",
+        "type": "select",
+        "label": "Type of Office",
+        "options": {
+          "H": "Headquarters",
+          "S": "Subsidiaries",
+          "B": "Branch Offices",
+          "O": "Other (Specify)"
+        }
+      },
+      "office_name": {
+        "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_NAME",
+        "type": "text",
+        "label": "Name"
+      },
+      "office_address": {
+        "street_line1": {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_ST_LN1",
+          "type": "text",
+          "label": "Street Address (Line 1)"
+        },
+        "street_line2": {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_ST_LN2",
+          "type": "text",
+          "label": "Street Address (Line 2)"
+        },
+        "city": {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_CITY",
+          "type": "text",
+          "label": "City"
+        },
+        "state": {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_STATE",
+          "type": "text",
+          "label": "State/Province"
+        },
+        "state_na": {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_cbxEVISA_OFFICE_STATE_NA",
+          "type": "checkbox",
+          "label": "Does Not Apply"
+        },
+        "postal_code": {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_tbxEVISA_OFFICE_POSTAL_CD",
+          "type": "text",
+          "label": "Postal Zone/ZIP Code"
+        },
+        "postal_code_na": {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_cbxEVISA_OFFICE_POSTAL_CD_NA",
+          "type": "checkbox",
+          "label": "Does Not Apply"
+        },
+        "country": {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlOffice_ctl00_ddlEVISA_OFFICE_CNTRY",
+          "type": "select",
+          "label": "Country/Region"
+        }
+      }
+    }
+  }
+}

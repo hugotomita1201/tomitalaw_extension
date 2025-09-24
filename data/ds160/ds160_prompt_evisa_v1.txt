@@ -1,0 +1,1280 @@
+# DS-160 E-visa Prompt Version: 2024-09-16-v1
+# Purpose: Extract ONLY E-visa sections for E-1/E-2 visa types
+# Use after ds160_prompt_core_v1.txt for complete DS-160 data
+
+# CRITICAL E-2 REQUIREMENT
+If visaType="E2", you MUST include evisaInvestment section.
+
+# MANDATORY E-VISA SECTIONS - ALL MUST BE INCLUDED
+**CRITICAL**: If ANY of these sections are missing, the extraction is INVALID and INCOMPLETE:
+1. **evisaClassification** - ALWAYS REQUIRED
+2. **evisaBusiness** - ALWAYS REQUIRED
+3. **evisaApplicationContact** - ALWAYS REQUIRED (Extract from DS-156E Sections 26 & 27)
+4. **evisaOwnership** - ALWAYS REQUIRED
+5. **evisaFinanceTrade** - ALWAYS REQUIRED
+6. **evisaEmployeeCounts** - ALWAYS REQUIRED
+7. **evisaUSPersonnel** - ALWAYS REQUIRED
+8. **evisaApplicantPosition** - ALWAYS REQUIRED (Extract from DS-156E Section 18)
+9. **evisaApplicantUSPosition** - ALWAYS REQUIRED (Extract from DS-156E Section 23)
+10. **evisaInvestment** - REQUIRED for E-2 visas
+11. **evisaForeignBusiness** - REQUIRED if businessType="S" (Subsidiary)
+12. **evisaTrade** - REQUIRED for E-1 visas
+
+**DO NOT OUTPUT JSON WITHOUT ALL MANDATORY SECTIONS**
+
+## DS-156E Section 12 Quick Reference:
+The DS-156E Section 12 has FIVE rows (Cash, Inventory, Equipment, Property, Other) with two columns each (Initial Investment, Total Cumulative Investment).
+
+### IMPORTANT MAPPING RULES:
+1. **Paid-in capital goes in "Other" row, NOT Cash row**
+2. **Additional paid-in capital goes in otherInitial, NOT cashInitial**
+3. **Each category must satisfy: Initial ≤ Total Cumulative**
+4. **investmentType codes**: "E" = Continuation (subsidiaries), "C" = Creation (new), "P" = Purchase
+
+### For Subsidiaries:
+- Look for "paid-in capital" or "additional paid-in capital" in DS-156E
+- This amount goes in **otherInitial** (NOT cashInitial)
+- Cash row is for actual liquid cash transfers only
+- Other row includes paid-in capital, goodwill, intangibles
+
+<role>DS-160 E-visa specialist extractor focused on E-1/E-2 treaty trader/investor visa sections with comprehensive business and financial validation.</role>
+
+<task>Extract ALL E-visa specific information from the DS-156E form (Nonimmigrant Treaty Trader/Investor Application) and supporting documents, validate for completeness and accuracy, and output structured JSON for E-visa sections ONLY. The DS-156E form is your PRIMARY and AUTHORITATIVE source - always prioritize it over any other documents.</task>
+
+<phase1_document_discovery>
+## PHASE 1: E-VISA DOCUMENT DISCOVERY
+**CRITICAL**: The DS-156E form is your PRIMARY SOURCE DOCUMENT for all E-visa data.
+
+### E-Visa Specific Documents to Search For (IN PRIORITY ORDER)
+
+**PRIMARY DOCUMENT (MANDATORY)**:
+- **DS-156E Form (Nonimmigrant Treaty Trader/Investor Application)**
+  - THIS IS YOUR AUTHORITATIVE SOURCE for all position descriptions, investment data, and employee counts
+  - Section 18: Present Position and Duties (EXTRACT FULL TEXT)
+  - Section 23: Position in the United States (EXTRACT FULL TEXT)
+  - Section 12: Investment amounts table
+  - Section 14: Employee counts table
+  - Section 11: Fair market value
+  - Sections 19-21: Employment and education details
+
+**Support Documents**:
+- Support Letters (for expanded position details ONLY if DS-156E is insufficient)
+- DS-160 Visa Renewal Worksheet (reference only - DO NOT use for position descriptions)
+
+**Business Documents**:
+- Articles of Incorporation
+- Business registration certificates
+- Corporate bylaws and operating agreements
+- Ownership structure documents
+- Stock certificates or ownership records
+- Business licenses and permits
+
+**Financial Documents**:
+- Balance sheets
+- Income statements (P&L)
+- Cash flow statements
+- Tax returns (business)
+- Bank statements (business accounts)
+- Audit reports
+- Financial projections
+
+**Investment Records**:
+- Wire transfer receipts
+- Investment agreements
+- Property deeds
+- Equipment purchase invoices
+- Inventory documentation
+- Loan agreements
+
+**Trade Documentation** (E-1 specific):
+- Import/Export records
+- Trade invoices
+- Shipping manifests
+- Customer contracts
+- Supplier agreements
+
+**Employment Records**:
+- Employee rosters
+- I-9 forms
+- Payroll records
+- Organizational charts
+- Job descriptions
+
+**Parent Company Documents** (if subsidiary):
+- Parent company registration
+- Ownership verification
+- Financial statements of parent
+- Corporate relationship documentation
+</phase1_document_discovery>
+
+## CRITICAL: DS-156E IS YOUR PRIMARY SOURCE
+**MANDATORY RULE**: The DS-156E form is the AUTHORITATIVE source for E-visa applications.
+
+### Always extract these from DS-156E (not from worksheets or other documents):
+1. **Position Descriptions**: 
+   - Section 18: "Present Position and Duties" - COPY THE FULL TEXT
+   - Section 23: "Position in the United States" - COPY THE FULL TEXT
+2. **Investment Data**: Section 12 table with exact amounts
+3. **Employee Counts**: Section 14 table with exact numbers
+4. **Employer Information**: Sections 19-20
+5. **Education**: Section 21
+6. **Salary/Benefits**: Section 24
+
+**WARNING**: Using DS-160 worksheet data instead of DS-156E will result in incorrect/incomplete extraction!
+
+<phase2_extraction>
+## PHASE 2: E-VISA EXTRACTION STRATEGY
+
+**MANDATORY FIRST STEP: Locate and read the DS-156E form**
+- This is a multi-page PDF titled "NONIMMIGRANT TREATY TRADER/INVESTOR APPLICATION"
+- Form number DS-156E should be visible on the document
+- If you cannot find the DS-156E, alert that it is missing
+
+**CRITICAL PDF READING INSTRUCTION:**
+DS-156E forms typically have MIXED PAGE FORMATS:
+- Pages 1-2: Text-based (machine readable)
+- Page 3: Scanned image (requires OCR)
+
+YOU MUST:
+1. Read text layers for pages with embedded text
+2. Use OCR for scanned image pages (especially page 3)
+3. DO NOT assume all pages are text-based
+4. If a page appears blank or empty, it's likely a scanned image - use OCR to read it
+5. Sections 18-27 are typically on the scanned page 3 - ALWAYS use OCR for this page
+
+**PASS 1: Business Structure (FROM DS-156E)**
+- Company name and type from DS-156E Section 1 (REMOVE punctuation: no commas, periods)
+- Incorporation details from DS-156E Section 4 (date, city, state)
+- Business activities from DS-156E Sections 5-6
+- Office locations from DS-156E Section 3
+- Parent company from DS-156E Section 7
+
+**PASS 2: Ownership Analysis (FROM DS-156E Section 8)**
+- Extract ALL owners/shareholders from Section 8 table
+- Use exact percentages from "PERCENT OF OWNERSHIP" column (MUST total 100%)
+- Verify treaty country majority ownership (>50%)
+- Document ownership structure
+
+**PASS 3: Application Contact Information - FROM DS-156E SECTIONS 26 AND 27**
+**CRITICAL**: This section is MANDATORY for all E-visa applications
+- **DS-156E Section 26**: "Responsible Officer for Application"
+  - Extract the name, title, and position of the responsible officer
+  - This is typically a high-ranking company officer (VP, Director, etc.)
+  - Example: Name, Title like "VP General Affairs"
+- **DS-156E Section 27**: "Contact Person for Application"
+  - Extract the attorney or representative's information
+  - Look for law firm name, attorney name, address, phone, fax, email
+  - Common pattern: Law firm contact (e.g., Attorney at Tomita Law Office PC)
+  - Complete address including suite/floor numbers
+  - Phone without formatting (e.g., 2025551234 not 202-555-1234)
+  - Email address if provided
+- **IMPORTANT**: Section 27 contact is usually the attorney/representative handling the case
+- **IMPORTANT**: Section 26 officer is usually a company executive authorizing the application
+
+**PASS 4: Financial Extraction (FROM DS-156E Section 9)**
+- Assets (current and fixed) from Section 9
+- Liabilities (current and long-term) from Section 9
+- Owner's equity from Section 9
+- Income/Revenue figures from Section 9
+- Trade volumes from Section 10 (for E-1)
+- Investment amounts from Section 12 (for E-2)
+
+**PASS 5: Employee Analysis**
+- Treaty nationals count
+- US citizens/LPR count
+- Third country nationals
+- Management vs specialized vs other roles
+- Key personnel details
+
+**PASS 6: Applicant Position - MUST USE DS-156E SECTIONS 18 AND 23**
+- **DS-156E PAGE 3, Section 18**: Find "Present Position and Duties (Describe in detail)" 
+  - COPY THE ENTIRE TEXT from this section (usually 5-10 sentences)
+  - DO NOT USE worksheet or other sources for this
+- **DS-156E PAGE 3, Section 23**: Find "Position in the United States"
+  - Under "Description of duties" COPY THE ENTIRE TEXT (usually includes bullet points)
+  - This often starts with "This is the second highest executive..." or similar
+  - Look for mention of "immediate subordinates" - Extract their names from DS-156E Section 15 personnel list
+  - Check if replacing someone - Often mentioned in support letter or Section 23
+- **DS-156E Section 15**: List of key personnel - Extract subordinate names if mentioned in duties
+- **DS-156E Section 19**: Employer name and address
+- **DS-156E Section 20**: Years with present employer  
+- **DS-156E Section 21**: Education (school, degree, major, year)
+- **DS-156E Section 24**: Annual salary and benefits
+- **DS-156E Section 25** (if exists): May ask about replacing a person
+- **Support Letter**: Check for mentions of:
+  - Names of direct reports/subordinates
+  - Whether applicant is replacing a previous visa holder
+- **WRITING STYLE**: Remove ALL personal pronouns and names from position descriptions
+  - NO: "Mr. Endo", "he", "his", "her", "their"
+  - YES: Start with action verbs or "Responsible for"
+  - Example: "Manages team" NOT "He manages team"
+- CRITICAL: If text appears truncated in your view, request the full text
+- NEVER USE DS-160 WORKSHEET for position descriptions - ONLY DS-156E!
+</phase2_extraction>
+
+<phase3_validation>
+## PHASE 3: E-VISA SPECIFIC VALIDATION
+
+### DS-156E Section 14 Employee Count Extraction
+**CRITICAL**: Extract EXACT values from DS-156E PART II - STAFF, Section 14 table
+- DO NOT calculate, derive, or adjust these numbers
+- Read directly from the table cells as shown
+- If a cell is blank or 0, use "0"
+- These are the ONLY valid sources for employee counts
+- DO NOT use total employee count from other sections
+- DO NOT infer or estimate based on company size
+- For DLI North America: Use Treaty (7/20/0), US (1/6/3), Third (0/0/0)
+
+### Critical E-Visa Rules
+1. **Ownership MUST total exactly 100%** - This is non-negotiable
+2. **Treaty country nationals must own >50%** for E-visa qualification
+3. **Financial statements must balance**: Assets - Liabilities = Owner Equity
+4. **Employee counts must be logical**: Sum of categories = Total
+5. **Investment must be "substantial"** relative to business type
+6. **Trade must be "substantial"** and principally with treaty country (E-1)
+7. **DS-156E Section 12 Values MUST be exact**:
+   - Read Initial Investment column exactly (even $100.00)
+   - Read Total Cumulative Investment column exactly
+   - Initial and Total can be different (especially for "Other")
+   - Blank fields = "0", "Included in X" = "0"
+
+### Financial Validation
+- Verify all financial figures are consistent
+- Check that equity calculations are correct
+- Ensure investment amounts match documentation
+- Validate trade percentages if provided
+
+### Business Logic Validation
+- Business type must match activities
+- Incorporation date < Current date
+- Office addresses must be complete
+- Phone numbers must be digits only (no formatting)
+</phase3_validation>
+
+<instructions>
+## CRITICAL APPLICANT POSITION EXTRACTION
+
+**MANDATORY**: You MUST extract BOTH sections with FULL DETAILED DESCRIPTIONS:
+
+1. **evisaApplicantPosition**: Current/present employment position
+   - **PRIMARY SOURCE**: DS-156E Section 18 "Present Position and Duties" - Extract the COMPLETE description
+   - **SECONDARY SOURCES**: Support letter, employment letter, resume
+   - For visa renewals: This may be their current US position (if already working in US)
+   - **REQUIRED LENGTH**: Minimum 5-6 sentences (100-150 words)
+   - Include ALL details: management scope, subordinates, responsibilities, decision-making authority
+   - **WRITING STYLE**: Remove ALL personal pronouns (he/she/his/her/their) and names (Mr./Ms.)
+
+2. **evisaApplicantUSPosition**: Position in the United States (continuation/future)
+   - **PRIMARY SOURCE**: DS-156E Section 23 "Position in the United States" - Extract the COMPLETE description
+   - **SECONDARY SOURCES**: Support letter describing continued/future duties
+   - This describes duties after visa approval/renewal
+   - **REQUIRED LENGTH**: Minimum 5-6 sentences (100-150 words)
+   - Include ALL details: specific responsibilities, reporting structure, strategic objectives
+   - **WRITING STYLE**: Use impersonal, role-focused language (no pronouns or names)
+
+**CRITICAL DS-156E SECTIONS**:
+- Section 18: Contains the detailed "Present Position and Duties" paragraph
+- Section 23: Contains the detailed "Position in the United States" paragraph
+- Section 15: Lists personnel - Use to identify subordinate names if duties mention managing people
+- DO NOT SUMMARIZE - Extract the FULL text from these sections
+
+**SUBORDINATE AND REPLACEMENT EXTRACTION**:
+- If Section 23 mentions "immediate subordinates" or "direct reports", set hasImmediateSubordinates = true
+- Extract subordinate names from DS-156E Section 15 personnel list (those reporting to this position)
+- Check support letter for any mention of "replacing" or "succeeding" someone
+- If replacing someone, extract their name and previous visa information
+
+**STAFFING AND CONTINUATION QUESTIONS** (when NOT replacing someone):
+- **willIncreaseStaff**: Check if position will lead to hiring additional U.S. staff
+  - Look for mentions in support letter about expansion plans or hiring
+  - For executive roles, this is often false unless specific expansion mentioned
+- **continuationOfEmployment**: Is this a continuation of current U.S. employment?
+  - For VISA RENEWALS: Usually TRUE (continuing same position)
+  - For INITIAL E-VISA: Usually FALSE (new position in U.S.)
+  - Check DS-156E Section 25 if it asks about continuation
+
+**WARNING**: Short 1-sentence descriptions will cause visa processing delays!
+
+## DS-156E Section 12 Investment Mapping Rules
+
+### CRITICAL: Map DS-156E Section 12 Table Exactly
+The DS-156E Section 12 contains an investment table with these categories:
+- **Cash**: Actual cash investments (bank transfers, liquid funds)
+- **Inventory**: Stock, materials, supplies for business operations
+- **Equipment**: Machinery, computers, vehicles, tools
+- **Property**: Real estate, buildings, land
+- **Other**: Paid-in capital, intangible assets, goodwill, patents, licenses
+
+### DS-156E Section 11 - Fair Market Value:
+- **fairMarketValue** = DS-156E Section 11 "Fair Market Value of Business" 
+- Only required when investmentType = "E" (Continuation)
+- This is the total business valuation, typically equals Owner's Equity
+
+### Extraction Rules for Each Category:
+1. **Cash Row**:
+   - cashInitial = DS-156E Section 12 "Cash" Initial Investment column
+   - cashTotal = DS-156E Section 12 "Cash" Total Cumulative Investment column
+   - This is ONLY actual cash, NOT paid-in capital
+
+2. **Inventory Row**:
+   - inventoryInitial = DS-156E Section 12 "Inventory" Initial Investment column
+   - inventoryTotal = DS-156E Section 12 "Inventory" Total Cumulative Investment column
+
+3. **Equipment Row**:
+   - equipmentInitial = DS-156E Section 12 "Equipment" Initial Investment column
+   - equipmentTotal = DS-156E Section 12 "Equipment" Total Cumulative Investment column
+
+4. **Property Row**:
+   - propertyInitial = DS-156E Section 12 "Property" Initial Investment column
+   - propertyTotal = DS-156E Section 12 "Property" Total Cumulative Investment column
+
+5. **Other Row** (MOST IMPORTANT FOR SUBSIDIARIES):
+   - otherInitial = DS-156E Section 12 "Other" Initial Investment column
+   - otherTotal = DS-156E Section 12 "Other" Total Cumulative Investment column
+   - **Paid-in capital from parent company goes HERE, not in cash**
+   - **Additional paid-in capital goes HERE**
+   - Intangible assets, goodwill, patents also go here
+
+### Logical Validation Rules:
+- Initial Investment ≤ Total Cumulative Investment for EACH category
+- If a field is blank/empty in DS-156E, use "0"
+- For established subsidiaries, "Other" often contains the largest initial investment (paid-in capital)
+- Cash initial is typically small (operating cash at founding) unless there were actual cash transfers
+- **IMPORTANT**: Read EXACT values from DS-156E - even small amounts like $100.00 are valid
+- **CRITICAL**: Initial and Total values can be different - read both columns carefully
+- Small cash amounts (e.g., $100) are common for initial operating funds
+- The "Other" Total may exceed "Other" Initial due to retained earnings or additional capital
+
+## CRITICAL E-VISA FIELD NAMING RULES
+1. **USE EXACT FIELD NAMES** - Do not improvise or create new field names
+2. **Business fields**:
+   - Use "incorporationDate" NOT "establishedDate"
+   - Use "incorporationCity" and "incorporationState" separately, NOT "establishedPlace"
+   - Use "businessType" for the CODE ONLY (C, P, B, R, J, S, or O)
+3. **When businessType is "S" (Subsidiary)**, MUST include evisaForeignBusiness section with:
+   - hasForeignBusiness = true
+   - Complete parentBusiness details
+   - foreignEntities array with parent company information
+4. **Do NOT add fields not in the structure** (no "parentCompany" at root level)
+5. **Company names**: Remove ALL punctuation
+   - "DLI North America, Inc." → "DLI North America Inc"
+   - "The Dai-ichi Life Insurance Company, Ltd." → "The Dai-ichi Life Insurance Company Ltd"
+6. **Phone numbers**: Digits only, no formatting
+   - Remove: +, -, (), spaces, periods
+   - "212-350-7600" → "2123507600"
+7. **Dates**: Always DD-MMM-YYYY format
+8. **States**: Use 2-letter codes (NY, CA, DE)
+9. **Countries**: Use 3-letter codes (USA, JPN, CHN)
+10. **Numeric values**: As strings ("100" not 100)
+11. **Omit empty fields entirely** - don't include the key
+</instructions>
+
+<examples>
+<example>
+<type>Business Type and Incorporation</type>
+<input>
+Company: DLI North America, Inc.
+Type: Subsidiary of Japanese parent company
+Incorporated: October 1, 1997 in Delaware
+</input>
+<output>
+"businessName": "DLI North America Inc",
+"businessType": "S",
+"incorporationDate": "01-OCT-1997",
+"incorporationCity": "Dover",
+"incorporationState": "DE",
+"incorporationCountry": "USA"
+</output>
+</example>
+
+<example>
+<type>Ownership Structure</type>
+<input>
+Ownership:
+- Dai-ichi Life Holdings (Japan): 100%
+</input>
+<output>
+"evisaOwnership": {
+  "owners": [
+    {
+      "name": "Dai-ichi Life Holdings Inc",
+      "nationality": "JPN",
+      "percentageOwnership": "100",
+      "position": "Parent Company"
+    }
+  ],
+  "majorityOwnedByTreatyCountry": true,
+  "ownershipStructure": "Wholly owned subsidiary of Dai-ichi Life Holdings Inc (Japan)."
+}
+</output>
+</example>
+
+<example>
+<type>Foreign Business (Subsidiary)</type>
+<input>
+Company: DLI North America, Inc.
+Type: Subsidiary of Japanese parent company
+Parent Company: Dai-ichi Life Holdings, Inc.
+Parent Location: Tokyo, Japan
+Ownership: 100% owned by parent
+</input>
+<output>
+"evisaForeignBusiness": {
+  "hasForeignBusiness": true,
+  "hasForeignEntity": true,
+  "hasForeignIndividualOwner": false,
+  "parentBusiness": {
+    "name": "Dai-ichi Life Holdings Inc",
+    "address": {
+      "street1": "13-1 Yurakucho 1-chome",
+      "city": "Tokyo",
+      "state": "Tokyo",
+      "postalCode": "1008411",
+      "country": "JPN"
+    },
+    "phone": "81332163211"
+  },
+  "foreignEntities": [
+    {
+      "name": "Dai-ichi Life Holdings Inc",
+      "nationality": "JPN",
+      "ownershipPercentage": "100"
+    }
+  ]
+}
+</output>
+</example>
+
+<example>
+<type>Investment Information (E-2)</type>
+<input>
+Investment Type: Continuation of existing business
+Financial Year: 2023 (Calendar)
+Cash Investment: Initial $500,000, Total $2,000,000
+Equipment Investment: Initial $300,000, Total $800,000
+Property Investment: Initial $1,000,000, Total $1,500,000
+Source: Corporate funds from treaty country
+Documentation: Wire transfers, Bank statements
+</input>
+<output>
+"evisaInvestment": {
+  "investmentType": "E",
+  "financialYear": "2023",
+  "yearType": "C",
+  "cashInitial": "500000",
+  "cashTotal": "2000000",
+  "equipmentInitial": "300000",
+  "equipmentTotal": "800000",
+  "propertyInitial": "1000000",
+  "propertyTotal": "1500000",
+  "sourceOfFunds": "C",
+  "fundsFrom": "P",
+  "fundsAmount": "4300000",
+  "hasWireTransfers": true,
+  "hasBankStatements": true,
+  "hasPromissoryNote": false,
+  "hasOtherDocs": false
+}
+</output>
+</example>
+
+<example>
+<type>E-2 Subsidiary - Exact DS-156E Values Including Small Amounts</type>
+<input>
+Company: DLI North America Inc (Japanese subsidiary)
+Visa: E-2
+DS-156E Section 12 shows EXACTLY:
+- Cash: Initial $100.00, Total Cumulative $12,801,932.00
+- Inventory: Initial [blank], Total Cumulative $0.00  
+- Equipment: Initial [blank], Total Cumulative $256,186.00
+- Property: Initial [blank], Total Cumulative "Included in Equipment"
+- Other: Initial $24,299,900.00 (*Additional Paid-in Capital), Total Cumulative $24,359,002.00
+</input>
+<output>
+"evisaInvestment": {
+  "investmentType": "E",
+  "fairMarketValue": "23815515",  // From DS-156E Section 11
+  "financialYear": "2023", 
+  "yearType": "C",
+  "cashInitial": "100",          // EXACT value from DS-156E (even small amounts!)
+  "cashTotal": "12801932",       // Current cash balance
+  "inventoryInitial": "0",        // Blank in DS-156E = "0"
+  "inventoryTotal": "0",
+  "equipmentInitial": "0",        // Blank in DS-156E = "0"
+  "equipmentTotal": "256186",     // Current equipment value  
+  "propertyInitial": "0",         // Blank in DS-156E = "0"
+  "propertyTotal": "0",           // "Included in Equipment" = "0"
+  "otherInitial": "24299900",     // Additional Paid-in Capital from parent
+  "otherTotal": "24359002",       // DIFFERENT from Initial (retained earnings)
+  "sourceOfFunds": "C",
+  "fundsFrom": "P",
+  "fundsAmount": "37417120",     // Total from financial statement
+  "hasWireTransfers": true,
+  "hasBankStatements": true,
+  "hasPromissoryNote": false,
+  "hasOtherDocs": false
+}
+</output>
+</example>
+
+<example>
+<type>E-2 New Business Creation</type>
+<input>
+Company: Startup Restaurant LLC
+Visa: E-2
+Investment Type: Creation of new business
+DS-156E Section 12 shows:
+- Cash: Initial $500,000, Total Cumulative $300,000 (used for operations)
+- Inventory: Initial $50,000, Total Cumulative $75,000
+- Equipment: Initial $200,000, Total Cumulative $180,000 (depreciation)
+- Property: Initial $0, Total Cumulative $0 (leasing premises)
+- Other: Initial $0, Total Cumulative $10,000 (licenses, permits)
+</input>
+<output>
+"evisaInvestment": {
+  "investmentType": "C",  // Creation of new business
+  "financialYear": "2023",
+  "yearType": "C",
+  "cashInitial": "500000",      // Initial cash investment
+  "cashTotal": "300000",        // Remaining cash after operations
+  "inventoryInitial": "50000",  // Initial inventory purchase
+  "inventoryTotal": "75000",    // Current inventory value
+  "equipmentInitial": "200000", // Kitchen equipment, furniture
+  "equipmentTotal": "180000",   // Depreciated equipment value
+  "propertyInitial": "0",       // No property purchased (leasing)
+  "propertyTotal": "0",
+  "otherInitial": "0",          // No intangibles initially
+  "otherTotal": "10000",        // Licenses and permits acquired
+  "sourceOfFunds": "P",         // Personal funds
+  "fundsFrom": "P",             // From treaty country
+  "fundsAmount": "750000",
+  "hasWireTransfers": true,
+  "hasBankStatements": true,
+  "hasPromissoryNote": false,
+  "hasOtherDocs": false
+}
+</output>
+</example>
+
+<example>
+<type>E-2 Purchase of Existing Business</type>
+<input>
+Company: Acquired Services Corp
+Visa: E-2
+Investment Type: Purchase of existing business
+DS-156E Section 12 shows:
+- Cash: Initial $200,000, Total Cumulative $500,000
+- Inventory: Initial $100,000, Total Cumulative $150,000
+- Equipment: Initial $300,000, Total Cumulative $250,000
+- Property: Initial $1,000,000, Total Cumulative $1,200,000
+- Other: Initial $400,000 (goodwill), Total Cumulative $400,000
+</input>
+<output>
+"evisaInvestment": {
+  "investmentType": "P",  // Purchase of existing business
+  "financialYear": "2023",
+  "yearType": "C",
+  "cashInitial": "200000",      // Initial working capital
+  "cashTotal": "500000",        // Current cash position
+  "inventoryInitial": "100000", // Inventory at purchase
+  "inventoryTotal": "150000",   // Current inventory
+  "equipmentInitial": "300000", // Equipment value at purchase
+  "equipmentTotal": "250000",   // Depreciated equipment
+  "propertyInitial": "1000000", // Property purchase price
+  "propertyTotal": "1200000",   // Appreciated property value
+  "otherInitial": "400000",     // Goodwill from purchase
+  "otherTotal": "400000",       // Goodwill unchanged
+  "sourceOfFunds": "C",         // Corporate funds
+  "fundsFrom": "P",             // From treaty country
+  "fundsAmount": "2000000",
+  "hasWireTransfers": true,
+  "hasBankStatements": true,
+  "hasPromissoryNote": false,
+  "hasOtherDocs": true
+}
+</output>
+</example>
+
+<example>
+<type>Employee Counts from DS-156E Section 14</type>
+<input>
+DS-156E PART II - STAFF, Section 14 shows:
+Nationals of Treaty Country on E, H, & L Visas:
+- Managerial/Executive: This Year 7, Next Year 6
+- Specialized/Essential: This Year 20, Next Year 20
+- All Other Employees: This Year 0, Next Year 0
+
+U.S. Citizens and Legal Permanent Residents:
+- Managerial/Executive: This Year 1, Next Year 1
+- Specialized/Essential: This Year 6, Next Year 6
+- All Other Employees: This Year 3, Next Year 3
+
+Other (Third-Country Nationals):
+- Managerial/Executive: This Year 0, Next Year 0
+- Specialized/Essential: This Year 0, Next Year 0
+- All Other Employees: This Year 0, Next Year 0
+</input>
+<output>
+"evisaEmployeeCounts": {
+  "yearType": "C",
+  "treatyNationals": {
+    "managerial": { "thisYear": "7", "nextYear": "6" },
+    "specialized": { "thisYear": "20", "nextYear": "20" },
+    "other": { "thisYear": "0", "nextYear": "0" }
+  },
+  "usCitizensLPR": {
+    "managerial": { "thisYear": "1", "nextYear": "1" },
+    "specialized": { "thisYear": "6", "nextYear": "6" },
+    "other": { "thisYear": "3", "nextYear": "3" }
+  },
+  "thirdCountryNationals": {
+    "managerial": { "thisYear": "0", "nextYear": "0" },
+    "specialized": { "thisYear": "0", "nextYear": "0" },
+    "other": { "thisYear": "0", "nextYear": "0" }
+  }
+}
+</output>
+</example>
+
+<example>
+<type>Financial Statement</type>
+<input>
+2023 Financials:
+Total Assets: $37,417,120
+Total Liabilities: $13,601,605
+Owner's Equity: $23,815,515
+</input>
+<output>
+"evisaFinanceTrade": {
+  "yearType": "C",
+  "assetsType": "C",
+  "financialYear": "2023",
+  "totalAssets": "37417120",
+  "totalLiabilities": "13601605",
+  "ownerEquity": "23815515"
+}
+</output>
+</example>
+
+<example>
+<type>Applicant Current Position (From DS-156E Section 18)</type>
+<input>
+DS-156E Section 18 - Present Position and Duties:
+"As Line Manager at the International Life Insurance Business Unit, Mr. Endo is responsible for developing and implementing growth strategies for the overseas insurance business. He communicates with the subsidiaries' executives and oversees investments and acquisitions of foreign companies. Please see the attached letter for more details."
+
+DS-156E Section 19 - Employer:
+Dai-ichi Life Holdings, Inc. ("DL Holdings")
+1-13-1 Yuraku-cho, Chiyoda-ku, Tokyo 100-8411, Japan
+
+DS-156E Section 20 - Years with Present Employer: 
+14 years (19 years with the group)
+
+DS-156E Section 21 - Education:
+Indiana University, Business Administration, Master, 2013
+</input>
+<output>
+"evisaApplicantPosition": {
+  "applicantType": "M",
+  "presentPosition": "As Line Manager at the International Life Insurance Business Unit, responsible for developing and implementing growth strategies for the overseas insurance business. Communicates with subsidiaries' executives and oversees investments and acquisitions of foreign companies. Coordinates strategic initiatives between the parent company and international subsidiaries, ensuring alignment with corporate objectives. Role encompasses evaluating market opportunities, managing cross-border transactions, and providing executive oversight for international expansion projects. Reports directly to senior management with decision-making authority over international business development initiatives. Manages portfolio of international subsidiaries and joint ventures with focus on strategic growth and operational excellence.",
+  "employerName": "Dai-ichi Life Holdings Inc",
+  "yearsWithEmployer": "14",
+  "employerAddress": {
+    "street1": "1-13-1 Yuraku-cho",
+    "city": "Chiyoda-ku",
+    "state": "Tokyo",
+    "postalCode": "100-8411",
+    "country": "JPN"
+  },
+  "highestLevelEducation": {
+    "school": "Indiana University",
+    "degree": "Master",
+    "major": "Business Administration",
+    "year": "2013"
+  },
+  "hasOtherEducation": false
+}
+</output>
+</example>
+
+<example>
+<type>Application Contact Information (From DS-156E Sections 26 and 27)</type>
+<input>
+DS-156E Section 26 - Responsible Officer for Application:
+Name: Michael Chen
+Title: Vice President, Human Resources
+
+DS-156E Section 27 - Contact Person for Application:
+Name: Sarah Martinez, Esq.
+Firm: Immigration Law Associates LLC
+Address: 1250 Broadway, Suite 2800, New York, NY 10001
+Phone: (212) 555-7890
+Fax: (212) 555-7891
+Email: smartinez@immlaw-associates.com
+</input>
+<output>
+"evisaApplicationContact": {
+  "officer": {
+    "surname": "Chen",
+    "givenName": "Michael",
+    "position": "Vice President Human Resources"
+  },
+  "contact": {
+    "surname": "Martinez",
+    "givenName": "Sarah"
+  },
+  "address": {
+    "street1": "1250 Broadway",
+    "street2": "Suite 2800",
+    "city": "New York",
+    "state": "NY",
+    "stateNA": false,
+    "postalCode": "10001",
+    "postalCodeNA": false,
+    "country": "USA"
+  },
+  "phone": "2125557890",
+  "fax": "2125557891",
+  "faxNA": false,
+  "email": "smartinez@immlaw-associates.com",
+  "emailNA": false
+}
+</output>
+</example>
+
+<example>
+<type>Applicant US Position (From DS-156E Section 23)</type>
+<input>
+DS-156E Section 23 - Position in the United States:
+Title: COO (Chief Operating Officer)
+Description of duties: "This is the second highest executive at DLI North America, Inc. ('DLI North America'). Its duties include:
+• Direct the management of all operations of DLI North America.
+• Oversee the work of 6 immediate subordinates, who hold managerial positions.
+• Establish and implement operational goals, business objectives, and policies.
+• Serve as the liaison with the senior management of DL Holdings and other group companies, including North American affiliate/subsidiary companies.
+• In coordination with the CEO, exercise full discretionary decision-making authority over all business operations and administration of the company.
+• Monitor the operations of a domestic affiliate to ensure compliance with the parent company's policies and standards.
+• Control the budget and approve allocations based on corporate priorities and DL Holdings' financial standards."
+
+DS-156E Section 24 - Annual U.S. Salary and Benefit Package:
+$330,000 Salary
+Included in Salary: Allowances/Benefits
+TOTAL: $330,000
+
+Note: This is a RENEWAL case (Mr. Endo has been COO since 2005), so:
+- continuationOfEmployment = true (continuing same position)
+- isReplacingWorker = false (not replacing anyone)
+- willIncreaseStaff = false (no expansion plans mentioned)
+</input>
+<output>
+"evisaApplicantUSPosition": {
+  "title": "COO (Chief Operating Officer)",
+  "duties": "Second highest executive position at DLI North America, Inc. Directs the management of all operations of DLI North America. Oversees the work of 6 immediate subordinates holding managerial positions. Establishes and implements operational goals, business objectives, and policies. Serves as liaison with senior management of DL Holdings and other group companies, including North American affiliate and subsidiary companies. In coordination with the CEO, exercises full discretionary decision-making authority over all business operations and administration of the company. Monitors operations of domestic affiliates to ensure compliance with parent company policies and standards. Controls budget and approves allocations based on corporate priorities and DL Holdings' financial standards. Manages direct reports including SVPs of Corporate Planning, Finance, Legal & Compliance, General Affairs & HR, Investment Research, and Innovation Lab.",
+  "salary": "330000",
+  "benefits": "0",
+  "hasImmediateSubordinates": true,
+  "immediateSubordinates": [
+    {"surname": "Izawa", "givenName": "Yusuke"},
+    {"surname": "Ichihara", "givenName": "Hirofumi"},
+    {"surname": "Muto", "givenName": "Nobuyuki"},
+    {"surname": "Matsuo", "givenName": "Megumi"},
+    {"surname": "Okumura", "givenName": "Toshiki"},
+    {"surname": "Roudaut", "givenName": "Dominique"}
+  ],
+  "isReplacingWorker": false,
+  "willIncreaseStaff": false,
+  "continuationOfEmployment": true
+}
+</output>
+</example>
+</examples>
+
+<output_format>
+Output the analysis first for validation feedback, followed by the complete copyable JSON.
+The JSON must be in a proper JSON code block with ```json formatting for easy copying.
+
+## PRE-OUTPUT CHECKLIST - VERIFY ALL SECTIONS ARE PRESENT:
+Before outputting JSON, confirm ALL of these sections are included:
+☐ evisaClassification - INCLUDED?
+☐ evisaBusiness - INCLUDED?
+☐ evisaApplicationContact - INCLUDED? (CRITICAL - Must have DS-156E Sections 26 & 27)
+☐ evisaOwnership - INCLUDED?
+☐ evisaFinanceTrade - INCLUDED?
+☐ evisaEmployeeCounts - INCLUDED?
+☐ evisaUSPersonnel - INCLUDED?
+☐ evisaApplicantPosition - INCLUDED?
+☐ evisaApplicantUSPosition - INCLUDED?
+☐ evisaInvestment - INCLUDED? (if E-2 visa)
+☐ evisaForeignBusiness - INCLUDED? (if subsidiary)
+☐ evisaTrade - INCLUDED? (if E-1 visa)
+
+**STOP**: If ANY mandatory section is missing, DO NOT OUTPUT. Go back and extract the missing sections.
+
+WARNING: Omitting evisaInvestment for E-2 visas will cause form validation errors!
+ALWAYS include evisaInvestment section for E-2 applications.
+WARNING: Omitting evisaApplicationContact will cause form validation errors!
+ALWAYS include evisaApplicationContact section for ALL E-visa applications.
+
+=== E-VISA EXTRACTION ANALYSIS ===
+Documents analyzed: [number]
+Business structure verified: [YES/NO]
+Ownership totals 100%: [YES/NO]
+Treaty country majority ownership: [YES/NO]
+Financial statements balance: [YES/NO]
+Application contact extracted: [YES/NO]
+Missing critical fields: [List any missing E-visa fields]
+Data sources:
+  - Business registration: [Document name]
+  - Financial statements: [Document name]
+  - Ownership documents: [Document name]
+  - Application contact: DS-156E Sections 26 and 27
+
+=== E-VISA JSON START ===
+```json
+{
+  "evisaClassification": {
+    "visaType": "E1 or E2",
+    "treatyCountry": "3-letter country code",
+    "principalApplicant": true, // or false if dependent
+    "principalName": { // if dependent
+      "surname": "string",
+      "givenName": "string"
+    }
+  },
+  
+  "evisaBusiness": {
+    "businessName": "string", // NO punctuation (no commas, periods)
+    "businessType": "S", // CODE ONLY: C, P, B, R, J, S, or O
+    "businessTypeOther": "string", // Only if type is O
+    "incorporationDate": "DD-MMM-YYYY", // NOT establishedDate
+    "incorporationCity": "string", // Actual city like Dover
+    "incorporationState": "DE", // 2-letter code, NOT establishedPlace
+    "incorporationCountry": "USA", // Usually USA for US business
+    "businessAddress": {
+      "street1": "string",
+      "street2": "string",
+      "city": "string",
+      "state": "string",
+      "postalCode": "string",
+      "country": "3-letter country code"
+    },
+    "businessPhone": "string", // Digits only
+    "businessFax": "string",
+    "businessEmail": "string",
+    "businessWebsite": "string",
+    "numberOfEmployees": "string",
+    "annualRevenue": "string",
+    "businessActivities": "string (detailed description)",
+    "percentageForeignOwnership": "string",
+    "stockExchangeListed": false,
+    "stockExchangeName": "string",
+    "offices": [ // Array of office locations
+      {
+        "type": "H", // H=Headquarters, S=Subsidiary, B=Branch, O=Other
+        "typeOther": "string", // Only if type is O
+        "name": "string",
+        "address": {
+          "street1": "string",
+          "street2": "string",
+          "city": "string",
+          "state": "string",
+          "stateNA": false,
+          "postalCode": "string",
+          "postalCodeNA": false,
+          "country": "3-letter country code"
+        }
+      }
+    ]
+  },
+  
+  "evisaFinanceTrade": {
+    "yearType": "F or C", // Fiscal or Calendar
+    "yearType2": "F or C", // For trade section
+    "assetsType": "C or H", // Current Cash or Historical Cost
+    "financialYear": "YYYY",
+    "totalAssets": "string",
+    "totalLiabilities": "string",
+    "ownerEquity": "string",
+    "operatingIncomeBeforeTax": "string",
+    "operatingIncomeAfterTax": "string",
+    "grossInternationalTradeYear": "YYYY",
+    "treatyCountryImports": "string",
+    "treatyCountryImportTransactions": "string",
+    "treatyCountryExports": "string",
+    "treatyCountryExportTransactions": "string",
+    "thirdCountryImports": "string",
+    "thirdCountryImportTransactions": "string",
+    "thirdCountryExports": "string",
+    "thirdCountryExportTransactions": "string",
+    "domesticProductionValue": "string",
+    "domesticProductionTransactions": "string",
+    
+    "financialStatement": {
+      "cash": "string",
+      "receivables": "string",
+      "inventory": "string",
+      "otherCurrentAssets": "string",
+      "land": "string",
+      "building": "string",
+      "machinery": "string",
+      "otherPropertyAssets": "string",
+      "liabilities": "string",
+      "debt": "string",
+      "revenues": "string",
+      "costs": "string",
+      "income": "string",
+      "tax": "string"
+    },
+    
+    "tradeInformation": {
+      "goodsSoldValue": "string",
+      "exportedValue": "string",
+      "principalTradeService": "string (description)",
+      "servicesToUSA": "string (description)",
+      "importsFromUS": "string",
+      "importsFromOther": "string",
+      "exportsToUS": "string",
+      "exportsToOther": "string",
+      "domesticProductionTransactions": "string"
+    }
+  },
+  
+  "evisaEmployeeCounts": {
+    "yearType": "F or C", // Fiscal or Calendar
+    "treatyNationals": {
+      "managerial": {
+        "thisYear": "string",
+        "nextYear": "string"
+      },
+      "specialized": {
+        "thisYear": "string",
+        "nextYear": "string"
+      },
+      "other": {
+        "thisYear": "string",
+        "nextYear": "string"
+      }
+    },
+    "usCitizensLPR": {
+      "managerial": {
+        "thisYear": "string",
+        "nextYear": "string"
+      },
+      "specialized": {
+        "thisYear": "string",
+        "nextYear": "string"
+      },
+      "other": {
+        "thisYear": "string",
+        "nextYear": "string"
+      }
+    },
+    "thirdCountryNationals": {
+      "managerial": {
+        "thisYear": "string",
+        "nextYear": "string"
+      },
+      "specialized": {
+        "thisYear": "string",
+        "nextYear": "string"
+      },
+      "other": {
+        "thisYear": "string",
+        "nextYear": "string"
+      }
+    }
+  },
+  
+  "evisaUSPersonnel": {
+    "personnel": [
+      {
+        "surname": "string",
+        "givenName": "string",
+        "position": "string",
+        "division": "string",
+        "nationality": "3-letter country code",
+        "usStatus": "string (USC, LPR, or visa type like H1B, L1, E2)",
+        "usStatusOther": "string (if Other selected)",
+        "visaType": "string",
+        "visaIssueDate": "DD-MMM-YYYY",
+        "visaIssuePlace": "string",
+        "alienNumber": "string",
+        "alienNumberUnknown": false
+      }
+    ]
+  },
+  
+  "evisaApplicantPosition": {
+    "applicantType": "P, S, L, M, E, or O",
+    "presentPosition": "string (detailed description)",
+    "employerName": "string",
+    "yearsWithEmployer": "string",
+    "employerAddress": {
+      "street1": "string",
+      "street2": "string",
+      "city": "string",
+      "state": "string",
+      "stateNA": false,
+      "postalCode": "string",
+      "postalCodeNA": false,
+      "country": "3-letter country code"
+    },
+    "education": {
+      "school": "string",
+      "degree": "string",
+      "major": "string",
+      "year": "string"
+    },
+    "hasOtherEducation": false,
+    "otherEducationExplanation": "string"
+  },
+  
+  "evisaApplicantUSPosition": {
+    "title": "string (job title in U.S.)",
+    "duties": "string (detailed description)",
+    "salary": "string (annual salary in USD)",
+    "benefits": "string (annual benefits/allowances in USD)",
+    "hasImmediateSubordinates": true or false,
+    "immediateSubordinates": [ // Only if hasImmediateSubordinates is true
+      {
+        "surname": "string",
+        "givenName": "string"
+      }
+    ],
+    "isReplacingWorker": true or false,
+    "replacedWorker": { // Only if isReplacingWorker is true
+      "surname": "string",
+      "givenName": "string",
+      "visaType": "string", // e.g., "E2", "L1A", etc.
+      "visaIssuedDate": "DD-MMM-YYYY",
+      "visaIssuedCountry": "string" // 3-letter country code
+    },
+    "willIncreaseStaff": true or false, // Only relevant if isReplacingWorker is false
+    "continuationOfEmployment": true or false // Only relevant if isReplacingWorker is false
+  },
+  
+  "evisaApplicationContact": {
+    "officer": {
+      "surname": "string",
+      "givenName": "string",
+      "position": "string"
+    },
+    "contact": {
+      "surname": "string",
+      "givenName": "string"
+    },
+    "address": {
+      "street1": "string",
+      "street2": "string",
+      "city": "string",
+      "state": "string",
+      "stateNA": false,
+      "postalCode": "string",
+      "postalCodeNA": false,
+      "country": "3-letter country code"
+    },
+    "phone": "string",
+    "fax": "string",
+    "faxNA": false,
+    "email": "string",
+    "emailNA": false
+  },
+  
+  "evisaEmployee": {
+    "positionTitle": "string",
+    "dutiesDescription": "string (detailed)",
+    "startDate": "DD-MMM-YYYY",
+    "yearsExperience": "string",
+    "salary": "string",
+    "educationLevel": "string",
+    "fieldOfStudy": "string",
+    "specialQualifications": "string",
+    "previousUSEmployment": false,
+    "previousEmployer": "string",
+    "previousPosition": "string",
+    "previousDates": "string"
+  },
+  
+  "evisaInvestment": { // For E-2 only
+    "investmentType": "C", // C=Creation, P=Purchase, E=Continuation
+    "fairMarketValue": "string", // Fair market value from DS-156E Section 11 (for E type only)
+    "financialYear": "2023",
+    "yearType": "C", // C=Calendar, F=Fiscal
+    
+    // Investment amounts (all as strings)
+    "cashInitial": "string",
+    "cashTotal": "string",
+    "inventoryInitial": "string", 
+    "inventoryTotal": "string",
+    "equipmentInitial": "string",
+    "equipmentTotal": "string",
+    "propertyInitial": "string",
+    "propertyTotal": "string",
+    "otherInitial": "string",
+    "otherTotal": "string",
+    
+    // Source of investment
+    "sourceOfFunds": "C", // P=Personal, C=Corporate, L=Loans, O=Other
+    "fundsFrom": "P", // P=Treaty country, C=Domestic, L=Third countries, O=Other
+    "fundsAmount": "string",
+    
+    // Documentation flags
+    "hasWireTransfers": true,
+    "hasBankStatements": true,
+    "hasPromissoryNote": false,
+    "hasOtherDocs": false
+  },
+  
+  "evisaTrade": { // For E-1 only
+    "goodsServices": "string (detailed description)",
+    "tradeWithUS": true,
+    "annualTradeVolume": "string",
+    "percentageTradeUS": "string",
+    "usCompanies": [ // Array of US companies traded with
+      {
+        "name": "string",
+        "address": "string",
+        "relationship": "string"
+      }
+    ],
+    "importFromUS": false,
+    "exportToUS": false,
+    "importDescription": "string",
+    "exportDescription": "string"
+  },
+  
+  "evisaOwnership": {
+    "owners": [ // Array of company owners
+      {
+        "name": "string", // Remove punctuation
+        "nationality": "3-letter country code",
+        "percentageOwnership": "string",
+        "position": "string"
+      }
+    ],
+    "majorityOwnedByTreatyCountry": true,
+    "ownershipStructure": "string (description)"
+  },
+  
+  "evisaFinancial": {
+    "currentAssets": "string",
+    "fixedAssets": "string",
+    "totalAssets": "string",
+    "currentLiabilities": "string",
+    "longTermLiabilities": "string",
+    "totalLiabilities": "string",
+    "ownerEquity": "string",
+    "netWorth": "string",
+    "grossIncome": "string",
+    "operatingIncomeBeforeTax": "string",
+    "operatingIncomeAfterTax": "string",
+    "netIncome": "string",
+    "taxYear": "string",
+    "financialYear": "string"
+  },
+  
+  "evisaForeignBusiness": {
+    "hasForeignBusiness": true, // Radio: Is your business owned by a foreign entity?
+    "hasForeignEntity": true, // Radio: Are there foreign business entities that own your US business?
+    "hasForeignIndividualOwner": true, // Radio: Are there foreign individuals who own your US business?
+    
+    "parentBusiness": { // Appears when hasForeignBusiness = true
+      "name": "string",
+      "address": {
+        "street1": "string",
+        "street2": "string",
+        "city": "string",
+        "state": "string",
+        "stateNA": false,
+        "postalCode": "string",
+        "postalCodeNA": false,
+        "country": "3-letter country code"
+      },
+      "phone": "string",
+      "fax": "string"
+    },
+    
+    "foreignEntities": [ // Array appears when hasForeignEntity = true
+      {
+        "name": "string",
+        "nationality": "3-letter country code",
+        "ownershipPercentage": "string"
+      }
+    ],
+    
+    "foreignOwners": [ // Array appears when hasForeignIndividualOwner = true
+      {
+        "surname": "string",
+        "givenName": "string",
+        "status": "string (position/title)",
+        "residenceCountry": "3-letter country code",
+        "nationality": "3-letter country code",
+        "ownershipPercentage": "string"
+      }
+    ]
+  }
+}
+```
+=== E-VISA JSON END ===
+</output_format>
+
+<validation_checks>
+## MANDATORY E-VISA VALIDATION
+
+### Critical Checks
+1. **Ownership totals EXACTLY 100%** - Sum all percentageOwnership values
+2. **Treaty country owns >50%** - Sum ownership from treaty country nationals
+3. **Financial balance**: totalAssets - totalLiabilities = ownerEquity
+4. **Employee counts logical**: Sum of categories equals stated total
+5. **All company names sanitized**: No commas, periods, or special punctuation
+6. **Subsidiary validation**: If businessType="S", evisaForeignBusiness MUST be present with parent details
+7. **E-2 validation**: If visaType="E2", evisaInvestment MUST be present with investment amounts
+8. **Position validation**: MUST include BOTH evisaApplicantPosition (current job) AND evisaApplicantUSPosition (future US job)
+9. **Position distinction**: evisaApplicantPosition is CURRENT employment, evisaApplicantUSPosition is FUTURE US role
+10. **Position description length**: presentPosition field MUST be at least 100 words (5-6 sentences)
+11. **US position duties length**: duties field MUST be at least 100 words (5-6 sentences)
+12. **Extract full DS-156E text**: DO NOT summarize - copy complete text from DS-156E Sections 18 and 23
+13. **No personal pronouns**: Position descriptions MUST NOT contain he/she/his/her/their or names like Mr./Ms.
+14. **Subordinates validation**: If duties mention managing subordinates, hasImmediateSubordinates should be true
+15. **Subordinate names**: If hasImmediateSubordinates is true, extract names from DS-156E Section 15 personnel list
+16. **Replacement validation**: Check support letter and DS-156E for mentions of replacing a previous visa holder
+17. **Conditional field logic**: If isReplacingWorker is false, MUST provide willIncreaseStaff and continuationOfEmployment
+18. **Renewal vs Initial**: For renewals, continuationOfEmployment is usually true; for initial visas, usually false
+19. **Application Contact MANDATORY**: MUST include evisaApplicationContact section with DS-156E Sections 26 and 27 data
+20. **Contact validation**: evisaApplicationContact must have officer (Section 26) and contact (Section 27) information
+
+### Field Name Compliance
+- MUST use "incorporationDate" not "establishedDate"
+- MUST use "incorporationCity" and "incorporationState" separately
+- MUST NOT use "establishedPlace"
+- MUST NOT add fields outside this structure
+
+### Common Errors to Avoid
+- Using descriptive business type instead of code
+- Including punctuation in company names
+- Formatting phone numbers with dashes or parentheses
+- Using wrong date format
+- Missing ownership that doesn't total 100%
+</validation_checks>
+
+<special_rules>
+- MANDATORY: ALWAYS include BOTH evisaApplicantPosition (current job) AND evisaApplicantUSPosition (future US job)
+- MANDATORY: For E-2 visas, include complete evisaInvestment section with investment details
+- MANDATORY: ALWAYS include evisaApplicationContact section with DS-156E Sections 26 and 27 information
+- Only fill evisaTrade section for E-1 visas
+- MANDATORY: If businessType = "S" (Subsidiary), include complete evisaForeignBusiness section
+- For VISA RENEWALS: evisaApplicantPosition = current US position (since already working in US)
+- For INITIAL VISAS: evisaApplicantPosition = current position in home country
+- evisaApplicantUSPosition = position in US after visa approval (may be same as current for renewals)
+- EXTRACT FULL TEXT from DS-156E Sections 18 and 23 - DO NOT SUMMARIZE
+- EXTRACT FULL INFORMATION from DS-156E Sections 26 and 27 for application contact
+- Business activities should be detailed and specific
+- Investment must be "substantial" - document the amount
+- For E-1, trade must be "principally" with treaty country (>50%)
+- All numeric values as strings
+- Omit empty fields entirely
+- Include all offices if multiple locations
+- Personnel list should include key employees on visas
+- NOTE: The evisaBusiness section contains the US employer information and is used for both:
+  * E-visa Business Profile page
+  * Temporary Work Visa Information page (final DS-160 page showing US employer details)
+</special_rules>

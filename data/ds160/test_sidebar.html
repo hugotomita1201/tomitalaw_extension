@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Sidebar</title>
+    <link rel="stylesheet" href="../../sidebar/sidebar.css">
+    <link rel="stylesheet" href="../../sidebar/components.css">
+    <style>
+        body {
+            width: 400px;
+            height: 600px;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <!-- Tab Navigation -->
+    <div class="tab-navigation"></div>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+        <div id="ds160-content">
+            <!-- Data Viewer Section -->
+            <div id="dataSection" class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span>📋</span>
+                        <span>Extracted Data</span>
+                        <button id="viewRawBtn" class="btn btn-sm btn-ghost" style="margin-left: auto;">
+                            <span style="font-size: 12px;">{ }</span> Raw
+                        </button>
+                        <button id="expandAllBtn" class="btn btn-sm btn-ghost">Expand All</button>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div id="editableDataViewer" class="editable-data-viewer"></div>
+                    <pre id="dataPreview" class="data-preview" style="display: none;"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock chrome storage API for testing
+        window.chrome = {
+            storage: {
+                local: {
+                    get: (keys, callback) => callback({}),
+                    set: (data, callback) => callback && callback()
+                }
+            }
+        };
+
+        // Test data with nested countriesVisited
+        const testData = {
+            personal: {
+                givenName: "John",
+                surname: "Smith",
+                dateOfBirth: "1990-01-15",
+                nationality: "USA"
+            },
+            countriesVisited: {
+                hasVisited: true,
+                countries: ["Japan", "UK", "France", "Germany", "Canada"]
+            },
+            previousTravel: {
+                hasBeenToUS: true,
+                visits: [
+                    {
+                        arrivalDate: "21-JUL-2019",
+                        departureDate: "28-JUL-2019",
+                        purpose: "Tourism"
+                    }
+                ]
+            },
+            education: {
+                institutions: [
+                    {
+                        name: "Tokyo University",
+                        degree: "Bachelor of Science"
+                    }
+                ]
+            }
+        };
+    </script>
+    <script type="module">
+        // Load sidebar.js with mock data
+        import('./sidebar_test.js').then(() => {
+            // Simulate loading DS-160 data
+            window.currentData = testData;
+            if (window.displayEditableData) {
+                window.displayEditableData(testData);
+            }
+        });
+    </script>
+</body>
+</html>

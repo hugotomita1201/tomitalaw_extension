@@ -1,0 +1,682 @@
+{
+  "personal": {
+    "surname": "YAMAMOTO",
+    "givenName": "TAKESHI",
+    "middleName": "",
+    "fullNameNative": "山本武",
+    "otherNames": ["YAMAMOTO TAKESHI"],
+    "gender": "Male",
+    "maritalStatus": "Married",
+    "dateOfBirth": "15-MAR-1985",
+    "birthCity": "Tokyo",
+    "birthState": "Tokyo",
+    "birthCountry": "JPN",
+    "nationality": "JPN",
+    "otherNationalities": [],
+    "permanentResidentCountry": "",
+    "nationalId": "123456789012",
+    "usSocialSecurity": "",
+    "usTaxId": "",
+    "telecodeSurname": "",
+    "telecodeGivenName": ""
+  },
+  
+  "travel": {
+    "purposeOfTrip": "E",
+    "otherPurposeDetail": "E-2",
+    "purposeSpecify": "",
+    "petitionNumber": "EAC2023456789",
+    "tripPayer": "Company",
+    "arrivalDate": "01-FEB-2025",
+    "arrivalCity": "Los Angeles",
+    "arrivalFlightNumber": "JL061",
+    "departureDate": "01-FEB-2028",
+    "departureCity": "",
+    "stayAddress": {
+      "street1": "789 Business Park Drive",
+      "street2": "Suite 100",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zipCode": "90012"
+    },
+    "principalApplicant": null
+  },
+  
+  "travelCompanions": [],
+  
+  "travelGroup": {
+    "isTravelingAsPartOfGroup": false,
+    "groupName": ""
+  },
+  
+  "previousTravel": {
+    "hasBeenToUS": true,
+    "lastVisit": {
+      "arrivalDate": "15-JUN-2022",
+      "stayLength": "14",
+      "stayLengthUnit": "D"
+    },
+    "hasUSDriverLicense": false,
+    "driverLicenseNumber": "",
+    "driverLicenseState": "",
+    "hasUSVisa": true,
+    "currentVisa": {
+      "number": "123456789",
+      "issueDate": "01-MAR-2020",
+      "expirationDate": "28-FEB-2025"
+    },
+    "hasSameTypeVisa": true,
+    "hasSameCountryVisa": true,
+    "hasBeenTenPrinted": true,
+    "hasLostVisa": false,
+    "lostVisaDetails": "",
+    "hasCanceledVisa": false,
+    "canceledVisaDetails": "",
+    "hasBeenRefused": false,
+    "refusedDetails": "",
+    "hasImmigrationPetition": false,
+    "immigrationPetitionDetails": ""
+  },
+  
+  "contact": {
+    "homeAddress": {
+      "street1": "1-2-3 Shibuya",
+      "street2": "Apartment 501",
+      "city": "Tokyo",
+      "state": "Tokyo",
+      "postalCode": "150-0002",
+      "country": "JPN"
+    },
+    "mailingAddress": {
+      "sameAsHome": true
+    },
+    "phoneNumbers": {
+      "primary": "+81-3-1234-5678",
+      "secondary": "+81-90-1234-5678",
+      "work": "+81-3-9876-5432"
+    },
+    "email": "takeshi.yamamoto@example.com",
+    "socialMedia": [
+      {
+        "platform": "FCBK",
+        "identifier": "takeshi.yamamoto.123"
+      },
+      {
+        "platform": "LNKD",
+        "identifier": "takeshi-yamamoto"
+      }
+    ]
+  },
+  
+  "usContact": {
+    "organizationName": "Tech Solutions Inc.",
+    "contactPerson": {
+      "surname": "SMITH",
+      "givenName": "JOHN"
+    },
+    "relationship": "Business Partner",
+    "address": {
+      "street1": "123 Market Street",
+      "street2": "Suite 500",
+      "city": "San Francisco",
+      "state": "CA",
+      "zipCode": "94105"
+    },
+    "phone": "+1-415-555-0100",
+    "email": "john.smith@techsolutions.com"
+  },
+  
+  "passport": {
+    "type": "Regular",
+    "number": "TK1234567",
+    "bookNumber": "",
+    "issueCountry": "JPN",
+    "issueCity": "Tokyo",
+    "issueState": "Tokyo",
+    "issueDate": "01-MAR-2020",
+    "expirationDate": "28-FEB-2030"
+  },
+  
+  "family": {
+    "father": {
+      "surname": "YAMAMOTO",
+      "givenName": "ICHIRO",
+      "dateOfBirth": "10-JAN-1955",
+      "isInUS": false
+    },
+    "mother": {
+      "surname": "YAMAMOTO",
+      "givenName": "HANAKO",
+      "dateOfBirth": "15-MAY-1957",
+      "isInUS": false
+    },
+    "spouse": {
+      "surname": "YAMAMOTO",
+      "givenName": "YUKI",
+      "dateOfBirth": "20-AUG-1987",
+      "nationality": "JPN",
+      "cityOfBirth": "Osaka",
+      "countryOfBirth": "JPN",
+      "address": {
+        "street1": "1-2-3 Shibuya",
+        "street2": "Apartment 501",
+        "city": "Tokyo",
+        "state": "Tokyo",
+        "postalCode": "150-0002",
+        "country": "JPN"
+      }
+    },
+    "hasImmediateRelativesInUS": false,
+    "hasOtherRelativesInUS": false
+  },
+  
+  "workEducation": {
+    "presentOccupation": "Chief Technology Officer",
+    "presentEmployer": {
+      "name": "Tech Solutions Japan K.K.",
+      "address": {
+        "street1": "456 International Plaza",
+        "street2": "Tower B, Floor 20",
+        "city": "Tokyo",
+        "state": "Tokyo",
+        "postalCode": "100-0001",
+        "country": "JPN"
+      },
+      "phone": "+81-3-1234-5678",
+      "startDate": "01-JUN-2020",
+      "monthlyIncome": "1500000",
+      "duties": "Oversee technology strategy, manage development teams, architect enterprise solutions"
+    },
+    "previousEmployers": [
+      {
+        "employerName": "Previous Tech Corp",
+        "employerStreetAddress1": "789 Tech Avenue",
+        "employerStreetAddress2": "",
+        "employerCity": "Tokyo",
+        "employerState": "Tokyo",
+        "employerPostalCode": "100-0005",
+        "employerCountry": "JPN",
+        "employerPhone": "+81-3-5555-1234",
+        "jobTitle": "Senior Software Engineer",
+        "supervisorSurname": "TANAKA",
+        "supervisorGivenName": "HIROSHI",
+        "startDate": "01-APR-2015",
+        "endDate": "31-MAY-2020",
+        "duties": "Software development and system architecture"
+      }
+    ],
+    "education": {
+      "highest": "Master's Degree",
+      "schools": [
+        {
+          "name": "Tokyo Institute of Technology",
+          "address": {
+            "street1": "2-12-1 Ookayama",
+            "street2": "",
+            "city": "Tokyo",
+            "state": "Tokyo",
+            "postalCode": "152-8550",
+            "country": "JPN"
+          },
+          "courseOfStudy": "Computer Science",
+          "degreeDate": "31-MAR-2009"
+        }
+      ]
+    },
+    "additionalWork": [],
+    "languages": ["Japanese", "English"]
+  },
+  
+  "security": {
+    "hasCommunicableDisease": false,
+    "hasPhysicalDisorder": false,
+    "hasDrugAddiction": false,
+    "hasBeenArrested": false,
+    "hasViolatedDrugLaw": false,
+    "hasEngagedInTerrorism": false,
+    "hasEngagedInEspionage": false,
+    "hasEngagedInGenocide": false,
+    "hasEngagedInTorture": false,
+    "hasEngagedInExtrajudicialKillings": false,
+    "hasUsedChildSoldiers": false,
+    "hasViolatedReligiousFreedom": false,
+    "hasEngagedInPopulationControls": false,
+    "hasEngagedInOrganTransplant": false,
+    "hasProvidedTerroristSupport": false,
+    "hasBeenMemberOfTerroristOrg": false,
+    "hasRelativesInTerroristOrg": false,
+    "hasSoughtImmigrationBenefit": false,
+    "hasBeenDeported": false,
+    "hasWithheldCustody": false
+  },
+  
+  "evisaClassification": {
+    "visaType": "E2",
+    "treatyCountry": "JPN",
+    "principalApplicant": true
+  },
+  
+  "evisaBusiness": {
+    "businessName": "Tech Solutions Inc.",
+    "businessType": "C",
+    "businessTypeOther": "",
+    "incorporationDate": "15-MAR-2015",
+    "incorporationCity": "San Francisco",
+    "incorporationState": "CA",
+    "incorporationCountry": "USA",
+    "businessAddress": {
+      "street1": "123 Market Street",
+      "street2": "Suite 500",
+      "city": "San Francisco",
+      "state": "CA",
+      "postalCode": "94105",
+      "country": "USA"
+    },
+    "businessPhone": "+1-415-555-0100",
+    "businessFax": "+1-415-555-0101",
+    "businessEmail": "info@techsolutions.com",
+    "businessWebsite": "www.techsolutions.com",
+    "numberOfEmployees": "250",
+    "annualRevenue": "$50,000,000",
+    "businessActivities": "Software development and consulting services specializing in enterprise solutions",
+    "percentageForeignOwnership": "75",
+    "stockExchangeListed": false,
+    "stockExchangeName": "",
+    "offices": [
+      {
+        "type": "H",
+        "typeOther": "",
+        "name": "Tech Solutions Headquarters",
+        "address": {
+          "street1": "123 Market Street",
+          "street2": "Suite 500",
+          "city": "San Francisco",
+          "state": "California",
+          "stateNA": false,
+          "postalCode": "94105",
+          "postalCodeNA": false,
+          "country": "USA"
+        },
+        "phone": "+1-415-555-0100",
+        "fax": "+1-415-555-0101"
+      },
+      {
+        "type": "B",
+        "typeOther": "",
+        "name": "Tech Solutions East Coast Office",
+        "address": {
+          "street1": "456 Broadway",
+          "street2": "",
+          "city": "New York",
+          "state": "New York",
+          "stateNA": false,
+          "postalCode": "10013",
+          "postalCodeNA": false,
+          "country": "USA"
+        },
+        "phone": "+1-212-555-0200",
+        "fax": "+1-212-555-0201"
+      }
+    ],
+    "natureOfBusiness": ["Services/Technology", "Exports from U.S."]
+  },
+  
+  "evisaEmployee": {
+    "positionTitle": "Chief Technology Officer",
+    "dutiesDescription": "Oversee technology strategy, manage development teams, architect enterprise solutions, coordinate with international offices",
+    "startDate": "01-JUN-2020",
+    "yearsExperience": "15",
+    "salary": "$180,000",
+    "educationLevel": "Master's Degree",
+    "fieldOfStudy": "Computer Science",
+    "specialQualifications": "AWS Certified Solutions Architect, PMP Certification, 10+ years enterprise architecture",
+    "previousUSEmployment": false,
+    "previousEmployer": "",
+    "previousPosition": "",
+    "previousDates": ""
+  },
+  
+  "evisaInvestment": {
+    "totalInvestment": "$5,000,000",
+    "sourceOfFunds": "Parent company investment, bank financing, and retained earnings",
+    "investmentDate": "01-JAN-2020",
+    "investmentType": "Equipment, software licenses, office lease, working capital, employee salaries",
+    "ownsRealEstate": true,
+    "realEstateValue": "$2,000,000",
+    "realEstateLocation": "San Francisco, CA - Office Building"
+  },
+  
+  "evisaTrade": {
+    "goodsServices": "Enterprise software solutions and IT consulting services",
+    "tradeWithUS": true,
+    "annualTradeVolume": "$30,000,000",
+    "percentageTradeUS": "60",
+    "usCompanies": [
+      {
+        "name": "Fortune 500 Tech Corp",
+        "address": "789 Fifth Avenue, New York, NY 10022",
+        "relationship": "Primary client - enterprise software licensing"
+      },
+      {
+        "name": "US Financial Services Inc",
+        "address": "321 Wall Street, New York, NY 10005",
+        "relationship": "Major client - custom software development"
+      },
+      {
+        "name": "American Retail Chain",
+        "address": "555 Commerce Drive, Chicago, IL 60601",
+        "relationship": "Client - e-commerce platform services"
+      }
+    ],
+    "importFromUS": true,
+    "exportToUS": true,
+    "importDescription": "Software licenses, cloud services, technical equipment",
+    "exportDescription": "Custom software solutions, consulting services, technical support"
+  },
+  
+  "evisaOwnership": {
+    "owners": [
+      {
+        "name": "Global Tech Holdings Ltd",
+        "nationality": "JPN",
+        "percentageOwnership": "35",
+        "position": "Parent Company"
+      },
+      {
+        "name": "Yamamoto Takeshi",
+        "nationality": "JPN",
+        "percentageOwnership": "25",
+        "position": "CEO/CTO"
+      },
+      {
+        "name": "Tanaka Hiroshi",
+        "nationality": "JPN",
+        "percentageOwnership": "15",
+        "position": "Chairman"
+      },
+      {
+        "name": "US Investors Group",
+        "nationality": "USA",
+        "percentageOwnership": "25",
+        "position": "Minority Investors"
+      }
+    ],
+    "majorityOwnedByTreatyCountry": true,
+    "ownershipStructure": "C-Corporation majority owned by Japanese nationals and entities"
+  },
+  
+  "evisaFinancial": {
+    "currentAssets": "3500000",
+    "fixedAssets": "2500000",
+    "totalAssets": "6000000",
+    "currentLiabilities": "1200000",
+    "longTermLiabilities": "800000",
+    "totalLiabilities": "2000000",
+    "ownerEquity": "4000000",
+    "netWorth": "4000000",
+    "grossIncome": "50000000",
+    "operatingIncomeBeforeTax": "6500000",
+    "operatingIncomeAfterTax": "5000000",
+    "netIncome": "5000000",
+    "taxYear": "2023",
+    "financialYear": "2023"
+  },
+  
+  "evisaForeignBusiness": {
+    "hasForeignBusiness": true,
+    "hasForeignEntity": true,
+    "hasForeignIndividualOwner": true,
+    
+    "parentBusiness": {
+      "name": "Global Tech Holdings Ltd",
+      "address": {
+        "street1": "456 International Plaza",
+        "street2": "Tower B, Floor 20",
+        "city": "Tokyo",
+        "state": "Tokyo",
+        "stateNA": false,
+        "postalCode": "100-0001",
+        "postalCodeNA": false,
+        "country": "JPN"
+      },
+      "phone": "+81-3-1234-5678",
+      "fax": "+81-3-1234-5679"
+    },
+    
+    "foreignEntities": [
+      {
+        "name": "Asia Pacific Investment Group",
+        "nationality": "JPN",
+        "ownershipPercentage": "35"
+      },
+      {
+        "name": "Tokyo Venture Partners",
+        "nationality": "JPN",
+        "ownershipPercentage": "15"
+      }
+    ],
+    
+    "foreignOwners": [
+      {
+        "surname": "Tanaka",
+        "givenName": "Hiroshi",
+        "status": "Chairman and Major Shareholder",
+        "residenceCountry": "JPN",
+        "nationality": "JPN",
+        "ownershipPercentage": "15"
+      },
+      {
+        "surname": "Yamamoto",
+        "givenName": "Takeshi",
+        "status": "CEO/CTO and Shareholder",
+        "residenceCountry": "JPN",
+        "nationality": "JPN",
+        "ownershipPercentage": "25"
+      }
+    ]
+  },
+  
+  "evisaFinanceTrade": {
+    "financialYear": "2023",
+    "yearType": "F",
+    "yearType2": "F",
+    "assetsType": "C",
+    "totalAssets": "6000000",
+    "totalLiabilities": "2000000",
+    "ownerEquity": "4000000",
+    "operatingIncomeBeforeTax": "6500000",
+    "operatingIncomeAfterTax": "5000000",
+    "grossInternationalTradeYear": "2023",
+    "grossInternationalTrade": "15000000",
+    "treatyCountryImports": "3200000",
+    "treatyCountryImportTransactions": "150",
+    "treatyCountryExports": "4500000",
+    "treatyCountryExportTransactions": "200",
+    "thirdCountryImports": "1800000",
+    "thirdCountryImportTransactions": "75",
+    "thirdCountryExports": "1700000",
+    "thirdCountryExportTransactions": "85",
+    "domesticProductionValue": "2300000",
+    "domesticProductionTransactions": "500",
+    
+    "financialStatement": {
+      "cash": "2500000",
+      "receivables": "850000",
+      "inventory": "450000",
+      "otherCurrentAssets": "200000",
+      "land": "0",
+      "building": "3500000",
+      "machinery": "1200000",
+      "otherPropertyAssets": "300000",
+      "liabilities": "2100000",
+      "debt": "1500000",
+      "revenues": "12500000",
+      "costs": "8500000",
+      "income": "4000000",
+      "tax": "1200000"
+    },
+    
+    "tradeInformation": {
+      "goodsSoldValue": "8500000",
+      "exportedValue": "6200000",
+      "principalTradeService": "Software development and technology consulting services",
+      "servicesToUSA": "Enterprise software solutions and cloud infrastructure services",
+      "importsFromUS": "3200000",
+      "importsFromOther": "1800000",
+      "exportsToUS": "4500000",
+      "exportsToOther": "1700000",
+      "domesticProductionTransactions": "2300000"
+    }
+  },
+  
+  "evisaUSPersonnel": {
+    "personnel": [
+      {
+        "surname": "Smith",
+        "givenName": "John David",
+        "position": "Chief Executive Officer",
+        "division": "Executive Management",
+        "nationality": "USA",
+        "usStatus": "USC",
+        "usStatusOther": "",
+        "visaType": "",
+        "visaIssueDate": "",
+        "visaIssuePlace": "",
+        "alienNumber": "",
+        "alienNumberUnknown": true
+      },
+      {
+        "surname": "Johnson",
+        "givenName": "Sarah Marie",
+        "position": "Chief Technology Officer",
+        "division": "Technology",
+        "nationality": "CAN",
+        "usStatus": "LPR",
+        "usStatusOther": "",
+        "visaType": "",
+        "visaIssueDate": "",
+        "visaIssuePlace": "",
+        "alienNumber": "A123456789",
+        "alienNumberUnknown": false
+      },
+      {
+        "surname": "Chen",
+        "givenName": "Michael",
+        "position": "Vice President of Operations",
+        "division": "Operations",
+        "nationality": "CHIN",
+        "usStatus": "H1B",
+        "usStatusOther": "",
+        "visaType": "H1B",
+        "visaIssueDate": "15-JAN-2023",
+        "visaIssuePlace": "Beijing",
+        "alienNumber": "A987654321",
+        "alienNumberUnknown": false
+      }
+    ]
+  },
+  
+  "evisaApplicantPosition": {
+    "applicantType": "E",
+    "presentPosition": "As Chief Technology Officer, I oversee all technology strategy and implementation for our E-2 treaty enterprise. My responsibilities include: leading a team of 25 software engineers and developers; architecting enterprise software solutions for US clients; managing technology partnerships with major US corporations; directing R&D initiatives for new product development; ensuring compliance with US data security and privacy regulations; implementing AI and machine learning solutions to improve business operations; managing annual technology budget of $3.5 million; reporting directly to the CEO and Board of Directors on technology initiatives and ROI.",
+    "employerName": "Tech Solutions Inc.",
+    "yearsWithEmployer": "8",
+    "employerAddress": {
+      "street1": "123 Market Street",
+      "street2": "Suite 500",
+      "city": "San Francisco",
+      "state": "CA",
+      "stateNA": false,
+      "postalCode": "94105",
+      "postalCodeNA": false,
+      "country": "USA"
+    },
+    "education": {
+      "school": "Tokyo Institute of Technology",
+      "degree": "Master of Science",
+      "major": "Computer Science",
+      "year": "2014"
+    },
+    "hasOtherEducation": true,
+    "otherEducationExplanation": "Professional certifications in AWS Solutions Architecture and Project Management. Completed executive leadership program at Harvard Business School. Additional specialized training in machine learning and artificial intelligence from Stanford Online. Various industry-specific certifications including PMP, Scrum Master, and Six Sigma Black Belt."
+  },
+  
+  "evisaApplicantUSPosition": {
+    "title": "Chief Technology Officer - U.S. Operations",
+    "duties": "Lead technology strategy and operations for U.S. subsidiary. Manage development teams across three U.S. offices. Architect enterprise solutions for Fortune 500 clients. Direct product development for North American market. Oversee technology partnerships with major U.S. corporations including Microsoft, Amazon, and Google. Implement AI and machine learning solutions for business optimization. Ensure compliance with U.S. data security regulations including SOC 2, HIPAA, and GDPR. Manage annual technology budget of $8.5 million. Report to Board of Directors on technology ROI and strategic initiatives. Establish and maintain relationships with U.S. venture capital firms for potential funding rounds. Represent company at major U.S. technology conferences and industry events.",
+    "salary": 275000,
+    "benefits": 85000
+  },
+  
+  "evisaApplicationContact": {
+    "officer": {
+      "surname": "YAMAMOTO",
+      "givenName": "TAKESHI",
+      "position": "Chief Technology Officer"
+    },
+    "contact": {
+      "surname": "JOHNSON",
+      "givenName": "SARAH"
+    },
+    "address": {
+      "street1": "123 Market Street",
+      "street2": "Suite 500",
+      "city": "San Francisco",
+      "state": "CA",
+      "stateNA": false,
+      "postalCode": "94105",
+      "postalCodeNA": false,
+      "country": "USA"
+    },
+    "phone": "+1-415-555-0100",
+    "fax": "+1-415-555-0101",
+    "faxNA": false,
+    "email": "visa-support@techsolutions.com",
+    "emailNA": false
+  },
+  "evisaEmployeeCounts": {
+    "yearType": "F",
+    "treatyNationals": {
+      "managerial": {
+        "thisYear": "5",
+        "nextYear": "8"
+      },
+      "specialized": {
+        "thisYear": "3",
+        "nextYear": "5"
+      },
+      "other": {
+        "thisYear": "2",
+        "nextYear": "4"
+      }
+    },
+    "usCitizensLPR": {
+      "managerial": {
+        "thisYear": "10",
+        "nextYear": "12"
+      },
+      "specialized": {
+        "thisYear": "15",
+        "nextYear": "18"
+      },
+      "other": {
+        "thisYear": "25",
+        "nextYear": "30"
+      }
+    },
+    "thirdCountryNationals": {
+      "managerial": {
+        "thisYear": "2",
+        "nextYear": "3"
+      },
+      "specialized": {
+        "thisYear": "4",
+        "nextYear": "5"
+      },
+      "other": {
+        "thisYear": "6",
+        "nextYear": "8"
+      }
+    }
+  }
+}
