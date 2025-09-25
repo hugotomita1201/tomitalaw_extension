@@ -138,21 +138,30 @@ The extension uses versioned prompts to guide ChatGPT in generating properly for
 
 #### DS-160 Prompts
 - Location: `data/ds160/ds160_prompt_combined_v*.txt`
-- Current version: v5 (most comprehensive with full examples)
-- Key features: JSON optimization rules, complete field examples, multi-visa support
+- Current version: v5 (hybrid v4 structure + v5 inference improvements)
+- Key features: JSON optimization rules, inference guidance, multi-visa support
+- Critical: Preserves array structures for auto-boolean logic while adding smart inference
 
-#### Visa Scheduler Prompts  
+#### DS-160 v4 vs v5 Evolution
+- **v4**: Literal extraction, basic structure, working auto-boolean logic
+- **v5 Original**: Smart inference but broke array structures (visits → string)
+- **v5 Current**: Hybrid approach preserving v4 arrays + v5 intelligence
+- **Result**: Best of both - smart inference with reliable auto-boolean fields
+
+#### Visa Scheduler Prompts
 - Location: `data/visa/visa_scheduler_prompt_v*.txt`
 - Current version: v1 (created from VISA_SCHEDULER_0913.rtf)
 - Key features: Main applicant vs dependent logic, document delivery rules
 
 #### JSON Optimization Rules (Critical for ChatGPT)
 ```javascript
-// Rules to prevent bloated outputs
+// Rules to prevent bloated outputs and API cutoffs
 - OMIT all empty fields (no "", null, "N/A")
 - OMIT security section if all values are false
 - OMIT entire sections if not applicable
 - Use exact field names from content scripts
+- Preserve array structures: visits: [], licenses: [], etc.
+- Add inference guidance: "infer appropriate category", "round to whole number"
 ```
 
 ### External APIs
@@ -204,6 +213,64 @@ The extension uses versioned prompts to guide ChatGPT in generating properly for
 }
 ```
 
+## Critical Bug Fixes (Recent)
+
+### Month Dropdown Override Bug (Fixed)
+**Problem**: All previous travel visits showed first visit's month instead of individual months (8,8,7,3,1 → all showing 8).
+
+**Root Cause**: Conflicting processing systems - dynamic handler (lines 1318-1325) overriding correct static field mappings.
+
+**Solution**: Removed conflicting dynamic handler entirely. Static mappings handle this correctly.
+
+```javascript
+// REMOVED conflicting code:
+if (fieldId.includes('PREV_US_VISIT') && fieldId.includes('Month')) {
+  const match = fieldId.match(/ctl(\d+)/);
+  if (match) {
+    const index = parseInt(match[1]);
+    const visit = data.previousTravel?.visits?.[index];
+    return this.getMonthNumber(visit?.arrivalDate || visit?.entryDate);
+  }
+}
+```
+
+### Additional Email Radio Button Fix
+**Problem**: Radio button showing "No" despite additionalEmails data being present.
+
+**Solution**: Updated radio button logic to check both `otherEmails` and `additionalEmails` arrays:
+
+```javascript
+'ctl00_SiteContentPlaceHolder_FormView1_rblAddEmail_0':
+  data.contact?.hasOtherEmails === 'YES' ||
+  (data.contact?.otherEmails && data.contact?.otherEmails.length > 0) ||
+  (data.contact?.additionalEmails && data.contact?.additionalEmails.length > 0),
+```
+
+### Array Structure Preservation in Prompt Schema
+**Critical Issue**: During v5 prompt standardization, accidentally converted array structures to string descriptions, breaking auto-boolean logic.
+
+**Problem**: Changed `"visits": []` to `"visits": "Array of..."` broke `hasBeenToUS` and other auto-boolean fields.
+
+**Solution**: Restored v4 array structures while keeping v5 inference improvements - hybrid approach.
+
+## Enhanced Prompt Engineering (v5 Improvements)
+
+### Inference vs Literal Extraction Balance
+Updated DS-160 v5 prompt with embedded inference guidance for better ChatGPT decision-making:
+
+```
+"occupation": "string or N/A - infer appropriate category from job description (e.g., Business for sales/management roles)",
+"gender": "M or F - infer from given name if not explicitly stated",
+"jobTitle": "string or N/A - job title ONLY do not include description",
+"monthlyIncome": "string or N/A - round to nearest whole number"
+```
+
+### Schema Standardization Process
+1. Audit for inconsistent formats (// comments, DEFAULT VALUES, plain fields)
+2. Convert // comment fields to embedded descriptions
+3. Preserve array structures for auto-boolean logic
+4. Add field-specific constraints (character limits, number formatting)
+
 ## Known Issues and Solutions
 
 ### Missing Icon Files
@@ -237,6 +304,10 @@ Fixed in getMonthNumber() to handle both DD/MM/YYYY and MM/DD/YYYY formats corre
    - ESTA denial checkbox (Security and Background section)
    - Petition numbers (Temporary Work Visa section)
    - Country dropdowns (should show full country names)
+   - Previous travel months (each visit should show correct individual month)
+   - Additional email radio button (should select "Yes" when additionalEmails present)
+   - Job title field (should be short title, not description, max 70 chars)
+   - Monthly income (should be whole number, no decimals)
 
 ### Visa Scheduling Testing
 1. Navigate to scheduling sites:
@@ -249,12 +320,44 @@ Fixed in getMonthNumber() to handle both DD/MM/YYYY and MM/DD/YYYY formats corre
 
 ## Debugging
 
-### View DS-160 Crash Logs
+### Field Mapping Conflict Detection
+When fields show incorrect values despite correct JSON data:
+
+1. **Check for Dynamic Handler Conflicts**: Search for field processing in both static mappings and dynamic handlers
+2. **Two-Pass System**: Remember that some fields are processed twice with 3.5s delay
+3. **Auto-Boolean Logic**: Verify array structures are preserved (not string descriptions)
+
 ```javascript
-// In browser console
+// Debug conflicting field processing
+console.log('Static mapping:', fieldMappings['fieldId']);
+console.log('Dynamic handler active:', /* check handler code */);
+```
+
+### View DS-160 Crash Logs and Recovery
+```javascript
+// In browser console - view detailed crash logs
 TwoPassFiller.showCrashLogs()
-// Clear logs
+
+// Clear crash recovery data
 TwoPassFiller.clearLogs()
+
+// Check current filling state
+TwoPassFiller.getState()
+
+// View localStorage recovery data
+localStorage.getItem('ds160_crash_recovery')
+```
+
+### Prompt Schema Validation
+```javascript
+// Test array structure preservation
+const testData = JSON.parse(promptOutput);
+console.log('hasBeenToUS logic:', testData.previousTravel?.visits?.length > 0);
+console.log('Array type check:', Array.isArray(testData.previousTravel?.visits));
+
+// Validate field constraints
+console.log('Job title length:', testData.employment?.jobTitle?.length);
+console.log('Salary format:', testData.employment?.monthlyIncome);
 ```
 
 ### Check Extension Logs
@@ -273,4 +376,42 @@ window.VisaFormFiller.mapCountry('USA')  // Should return 'UNITEDSTATES'
 
 // View current data in storage
 chrome.storage.local.get(['ds160Data', 'visaData'], console.log)
+
+// Check radio button states
+const radioYes = document.getElementById('ctl00_SiteContentPlaceHolder_FormView1_rblAddEmail_0');
+console.log('Radio Yes checked:', radioYes?.checked);
 ```
+
+## Development Insights (Latest)
+
+### Field Mapping Conflict Prevention
+- **Always check both static mappings AND dynamic handlers** when adding new fields
+- Dynamic handlers should complement, not override static mappings
+- Use descriptive comments to indicate handler purpose and avoid conflicts
+
+### Prompt Engineering Best Practices
+1. **Test schema changes incrementally** - don't change multiple sections at once
+2. **Preserve working array structures** - auto-boolean logic depends on them
+3. **Add constraints explicitly** - ChatGPT needs specific formatting guidance
+4. **Balance inference vs literal** - some fields need smart inference, others need exact extraction
+
+### Auto-Boolean Logic Dependencies
+These fields automatically set based on array presence/length:
+```javascript
+hasBeenToUS: data.previousTravel?.visits?.length > 0
+hasDriversLicense: data.personal?.licenses?.length > 0
+hasEmployerHistory: data.employment?.previousEmployers?.length > 0
+```
+**Critical**: Arrays must remain `[]` not `"Array of..."` descriptions
+
+### Common Regression Patterns
+1. **Month dropdowns**: Watch for dynamic handler conflicts with static mappings
+2. **Radio buttons**: Ensure all data source variations are checked (otherEmails vs additionalEmails)
+3. **Field constraints**: Job titles, salaries, and other user-input fields need explicit formatting rules
+4. **Array structures**: Schema changes can accidentally break auto-boolean logic
+
+### Version Control Strategy
+- Test changes on single sample before updating prompt
+- Keep v4 as fallback reference for working array structures
+- Document all field mapping changes in CLAUDE.md
+- Use descriptive commit messages with version numbers

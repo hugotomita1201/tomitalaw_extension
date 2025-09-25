@@ -61,8 +61,8 @@ When processing visa renewal applications with multiple documents:
     "givenName": "string",
     "fullNameNative": "string or omit",
     "otherNames": [],
-    "gender": "MALE or FEMALE",
-    "maritalStatus": "SINGLE, MARRIED, DIVORCED, WIDOWED, or SEPARATED",
+    "gender": "MALE/FEMALE - infer from given name if not explicitly stated",
+    "maritalStatus": "SINGLE/MARRIED/DIVORCED/WIDOWED/SEPARATED - infer from spouse information if present",
     "dateOfBirth": "DD-MMM-YYYY",
     "birthCity": "string",
     "birthState": "string or omit",
@@ -80,36 +80,36 @@ When processing visa renewal applications with multiple documents:
     "purposeOfTrip": "B, F, H, J, A, E, etc.",
     "otherPurposeDetail": "string (e.g., 'H-1B', 'L-1', 'E-2', 'E2-EX', 'E2-SP', 'E2-CH', 'E1-EX')",
     "purposeSpecify": "string for Government officials",
-    "petitionNumber": "string", //required here AND in temporary work section
+    "petitionNumber": "string - Required here AND in temporaryWork section",
     "principalApplicant": {
       "surname": "string",
       "givenName": "string",
       "petitionNumber": "string",
       "companyName": "string (for E-visa spouse/child only)"
     },
-    "principalVisaIssued": true,  // For E2-EX/E1-EX: Has the principal treaty investor already been issued a visa?
-    "evisaPrincipal": {  // Only fill if principalVisaIssued = true
+    "principalVisaIssued": "true/false - For E2-EX/E1-EX: Has the principal treaty investor already been issued a visa?",
+    "evisaPrincipal": {  // Object - Only fill if principalVisaIssued = true
       "surname": "string - Principal treaty investor's surname from DS-156E Section 15",
       "givenName": "string - Principal treaty investor's given name from DS-156E Section 15",
       "dateOfBirth": "DD-MMM-YYYY - Principal's DOB if available, omit if not found"
     },
-    "specificTravelPlans": false,
-    "intendedArrivalDate": "DD-MMM-YYYY",
+    "specificTravelPlans": "true/false - set true only if detailed itinerary provided in documents",
+    "intendedArrivalDate": "DD-MMM-YYYY - default to 01-JAN-2026 if no travel date provided",
     "arrivalFlightNumber": "string",
     "arrivalCity": "string",
-    "intendedDepartureDate": "DD-MMM-YYYY",
+    "intendedDepartureDate": "DD-MMM-YYYY - calculate from intendedArrivalDate + lengthOfStay if not provided",
     "departureFlightNumber": "string",
     "departureCity": "string",
     "lengthOfStay": "string",
-    "lengthOfStayNumber": "string",
-    "lengthOfStayUnit": "Y/M/W/D",
+    "lengthOfStayNumber": "string - default to 3 if not specified, infer from visa type: tourist=2-4 weeks, business=1-2 weeks, work=duration from petition",
+    "lengthOfStayUnit": "Y/M/W/D - default to Y for work visas, W for business/tourist, infer from context",
     "usStreetAddress": "string",
     "usStreetAddress2": "string",
     "usCity": "string",
     "usState": "2-letter state code",
     "usZipCode": "string",
-    "tripPayer": "SELF, COMPANY, PRESENT_EMPLOYER, etc."
-    "payerInfo": {  // If OTHER_PERSON
+    "tripPayer": "SELF/COMPANY/PRESENT_EMPLOYER/OTHER_PERSON/OTHER_COMPANY - default to PRESENT_EMPLOYER if payer info unavailable",
+    "payerInfo": {  // Object - Include if tripPayer is OTHER_PERSON
       "surname": "string or N/A",
       "givenName": "string or N/A",
       "phone": "string or N/A",
@@ -123,7 +123,7 @@ When processing visa renewal applications with multiple documents:
       "postalCode": "string or N/A",
       "country": "string or N/A"
     },
-    "companyInfo": {  // If COMPANY or OTHER_COMPANY
+    "companyInfo": {  // Object - Include if tripPayer is COMPANY or OTHER_COMPANY
       "name": "string or N/A",
       "relationship": "string or N/A",
       "street1": "string or N/A",
@@ -135,7 +135,7 @@ When processing visa renewal applications with multiple documents:
     }
   },
   
-  "travelCompanions": [],  // Array of {surname: "", givenName: "", relationship: ""}
+  "travelCompanions": [],  // Array: {surname: "", givenName: "", relationship: ""}
   
   "travelGroup": {
     "traveling": false,
@@ -177,7 +177,7 @@ When processing visa renewal applications with multiple documents:
     "homePostalCode": "string",
     "homeCountry": "3-letter country code",
     "mailingAddressSameAsHome": true,
-    "mailingAddress": {  // If different from home
+    "mailingAddress": {  // Object - Include if mailingAddressSameAsHome is false
       "street": "string or N/A",
       "apt": "string or N/A",
       "city": "string or N/A",
@@ -213,7 +213,7 @@ When processing visa renewal applications with multiple documents:
   
   "passport": {
     "type": "REGULAR, OFFICIAL, DIPLOMATIC, or OTHER",
-    "otherTypeExplanation": "string or N/A",  // Required if type is OTHER
+    "otherTypeExplanation": "string - Required if passport type is OTHER, omit otherwise",
     "number": "string",
     "bookNumber": "string",
     "issuingAuthority": "3-letter country code",
@@ -245,8 +245,8 @@ When processing visa renewal applications with multiple documents:
       "inUS": false,
       "status": "string or N/A"
     },
-    "relativesInUS": [],  // Array of {surname: "", givenName: "", relationship: "", status: ""}
-    "spouse": {  // If married
+    "relativesInUS": [],  // Array: {surname: "", givenName: "", relationship: "", status: ""}
+    "spouse": {  // Object - Include if maritalStatus is MARRIED
       "surname": "string or N/A",
       "givenName": "string or N/A",
       "dateOfBirth": "DD-MMM-YYYY or N/A",
@@ -254,7 +254,7 @@ When processing visa renewal applications with multiple documents:
       "city": "string or N/A",
       "country": "string or N/A",
       "addressType": "SAME_AS_HOME, SAME_AS_MAILING, SAME_AS_US_CONTACT, DO_NOT_KNOW, or OTHER",
-      "address": {  // Only include if addressType is OTHER
+      "address": {  // Object - Only include if addressType is OTHER
         "street1": "string",
         "street2": "string or N/A",
         "city": "string",
@@ -266,8 +266,8 @@ When processing visa renewal applications with multiple documents:
   },
   
   "workEducation": {
-    "primaryOccupation": "AGRICULTURE, BUSINESS, COMPUTER SCIENCE, EDUCATION, GOVERNMENT, HOMEMAKER, MEDICAL, MILITARY, NOT EMPLOYED, RETIRED, STUDENT, or OTHER",
-    "primaryOccupationOther": "string",  // Required if primaryOccupation is "OTHER"
+    "primaryOccupation": "AGRICULTURE/BUSINESS/COMPUTER SCIENCE/EDUCATION/GOVERNMENT/HOMEMAKER/MEDICAL/MILITARY/NOT EMPLOYED/RETIRED/STUDENT/OTHER - infer from employment context: corporate work=BUSINESS, academic=EDUCATION, govt=GOVERNMENT",
+    "primaryOccupationOther": "string - Required if primaryOccupation is OTHER, omit otherwise",
     "presentEmployer": {
       "name": "string or N/A",
       "address": {
@@ -280,11 +280,11 @@ When processing visa renewal applications with multiple documents:
       },
       "phone": "string or N/A",
       "startDate": "DD-MMM-YYYY or N/A",
-      "monthlyIncome": "string or N/A",
-      "duties": "string or N/A", //Needs to be 3-5 sentences derived from support letter/ws
+      "monthlyIncome": "string or N/A - round to nearest whole number",
+      "duties": "string - 3-5 sentences derived from support letter or employment documents",
       "supervisorSurname": "string or N/A",
       "supervisorGivenName": "string or N/A",
-      "jobTitle": "string or N/A"
+      "jobTitle": "string or N/A - job title ONLY do not include description"
     },
     "previousEmployers": [],  // Array of employer objects with same structure as presentEmployer (including supervisorSurname, supervisorGivenName, jobTitle)
     "education": {
@@ -362,8 +362,8 @@ When processing visa renewal applications with multiple documents:
     }
   },
   
-  "temporaryWork": {  // For temporary work visas (H, L, O, P, Q, R)
-    "petitionNumber": "string", //don't forget this one!
+  "temporaryWork": {  // Object - Always include this section even if visa type not specified
+    "petitionNumber": "string - Required for all temporary work visa applications",
     "petitionerName": "string",
     "intendedEmployer": {
       "name": "string",
@@ -374,10 +374,10 @@ When processing visa renewal applications with multiple documents:
       "zipCode": "string",
       "phone": "string"
     },
-    "monthlyIncome": "string" //remember it's monthly, not yearly
+    "monthlyIncome": "string - Monthly amount, not yearly"
   },
   
-  "crewVisa": { // Only for C-1/D visa types
+  "crewVisa": {  // Object - Only for C-1/D visa types
     "jobTitle": "string",
     "vesselCompanyName": "string",
     "companyPhone": "string",
@@ -390,7 +390,7 @@ When processing visa renewal applications with multiple documents:
     "vesselWork": false
   },
   
-  // === E-VISA SECTIONS (ONLY FOR E-1/E-2 VISAS) ===
+  // E-VISA SECTIONS - Only include for E-1/E-2 visa applications
   
   "evisaClassification": {
     "visaType": "E1 or E2",
@@ -583,16 +583,6 @@ When processing visa renewal applications with multiple documents:
       "postalCode": "string",
       "country": "3-letter code"
     },
-    "employerAddress": {
-      "street1": "string",
-      "street2": "string",
-      "city": "string",
-      "state": "string",
-      "stateNA": false,
-      "postalCode": "string",
-      "postalCodeNA": false,
-      "country": "3-letter code"
-    },
     "education": {
       "school": "string",
       "degree": "string",
@@ -737,10 +727,7 @@ When processing visa renewal applications with multiple documents:
 
 When documents don't provide specific information, use these defaults:
 
-- **intendedArrivalDate**: "01-JAN-2026" (if no travel date provided)
-- **lengthOfStayNumber**: "3" (if duration not specified)
-- **lengthOfStayUnit**: "Y" (if duration unit not specified)
-- **tripPayer**: "PRESENT_EMPLOYER" (if payer information unavailable)
+(All default values have been embedded directly in field descriptions above)
 
 ## COMPLETE EXAMPLE WITH COMPREHENSIVE SAMPLE DATA
 
