@@ -55,11 +55,12 @@ git push origin main
 ## Architecture
 
 ### Core Structure
-This is a Chrome Extension (Manifest V3) with a modular architecture for form automation and utilities:
+This is a Chrome Extension (Manifest V3) with a modular architecture for form automation, immigration letter generation, and utilities:
 
 - **background.js**: Service worker handling messaging between components
 - **sidebar/**: Persistent side panel UI with tab-based modules
 - **content/modules/**: Page-specific content scripts for form filling
+- **prompts_and_templates/**: Organized prompt and template library for ChatGPT integration
 - **data/**: Sample JSON data and databases (22,209 business postal codes)
 - **scripts/injected.js**: Scripts injected into page context for direct DOM access
 
@@ -137,7 +138,7 @@ const getSecurityValue = (value) => value === true || value === 'true';
 The extension uses versioned prompts to guide ChatGPT in generating properly formatted JSON:
 
 #### DS-160 Prompts
-- Location: `data/ds160/ds160_prompt_combined_v*.txt`
+- Location: `prompts_and_templates/form_prompts/ds160_prompt_combined_v5.txt` (also in `data/ds160/`)
 - Current version: v5 (hybrid v4 structure + v5 inference improvements)
 - Key features: JSON optimization rules, inference guidance, multi-visa support
 - Critical: Preserves array structures for auto-boolean logic while adding smart inference
@@ -149,9 +150,9 @@ The extension uses versioned prompts to guide ChatGPT in generating properly for
 - **Result**: Best of both - smart inference with reliable auto-boolean fields
 
 #### Visa Scheduler Prompts
-- Location: `data/visa/visa_scheduler_prompt_v*.txt`
-- Current version: v1 (created from VISA_SCHEDULER_0913.rtf)
-- Key features: Main applicant vs dependent logic, document delivery rules
+- Location: `prompts_and_templates/form_prompts/visa_scheduler_prompt_v1.txt`
+- Current version: v1 (created from VISA_SCHEDULER_0913.rtf, now with passport/phone validation)
+- Key features: Main applicant vs dependent logic, document delivery rules, passport format validation, Japanese phone number formatting
 
 #### JSON Optimization Rules (Critical for ChatGPT)
 ```javascript
@@ -163,6 +164,38 @@ The extension uses versioned prompts to guide ChatGPT in generating properly for
 - Preserve array structures: visits: [], licenses: [], etc.
 - Add inference guidance: "infer appropriate category", "round to whole number"
 ```
+
+### Form Prompt Usage Guidelines
+
+#### DS-160 Prompt (ChatGPT Integration)
+**Purpose**: Extract structured JSON from immigration documents for DS-160 form filling
+**Usage**: Upload documents → ChatGPT processes with ds160_prompt_combined_v5.txt → JSON output → Extension fills form
+
+**Key Requirements**:
+- Omit all empty fields to prevent API cutoffs
+- Preserve array structures for auto-boolean logic (`visits: []` not `"visits": "Array..."`)
+- Use exact field names matching extension mappings
+- Default security fields to false when missing
+
+#### Visa Scheduler Prompt (ChatGPT Integration)
+**Purpose**: Extract Atlas-format JSON for visa appointment scheduling systems
+**Usage**: Upload documents → ChatGPT processes with visa_scheduler_prompt_v1.txt → JSON output → Extension fills forms
+
+**Critical Validations**:
+- Passport format validation (Japanese: 2 letters + 7 digits exactly)
+- Phone number formatting (remove leading 0 from Japanese numbers)
+- Japanese address translation (must be in kanji/kana)
+- Document delivery uses main applicant address only
+
+#### Letter Agent Prompt (Immigration Letters)
+**Purpose**: Generate immigration support letters using organized template library
+**Usage**: Upload documents → ChatGPT selects template → Extracts data → Timeline verification → Canvas letter
+
+**Workflow Features**:
+- Automatic template selection from 10 available templates
+- Mandatory timeline sanity check (Section 2.7)
+- Canvas-based letter generation for user review
+- Red flags checklist and quality assurance
 
 ### External APIs
 
@@ -252,6 +285,78 @@ if (fieldId.includes('PREV_US_VISIT') && fieldId.includes('Month')) {
 **Problem**: Changed `"visits": []` to `"visits": "Array of..."` broke `hasBeenToUS` and other auto-boolean fields.
 
 **Solution**: Restored v4 array structures while keeping v5 inference improvements - hybrid approach.
+
+## Immigration Letter Templates System
+
+The extension now includes a comprehensive immigration letter template library for TomitaLaw Office letter generation.
+
+### Template Library Location
+All templates are organized in `prompts_and_templates/`:
+```
+prompts_and_templates/
+├── main_prompts/          # Core AI agent prompts
+│   └── letter_agent_prompt.md
+├── form_prompts/          # Form automation prompts
+│   ├── ds160_prompt_combined_v5.txt
+│   └── visa_scheduler_prompt_v1.txt
+├── letter_templates/      # Immigration letter templates (10 total)
+│   ├── l1a_blanket_manager_renewal_template.md
+│   ├── l1a_blanket_manager_application_template.md
+│   ├── l1b_renewal_letter_template.md
+│   ├── l1b_blanket_application_template.md
+│   ├── e2_manager_template.md
+│   ├── e2_executive_template.md
+│   ├── e2_essential_skills_template.md
+│   ├── e2_corporate_registration_private_company_template.md
+│   ├── e2_corporate_registration_public_company_template.md
+│   └── h1b_template.md
+└── README.md             # Template library documentation
+```
+
+### Template Architecture
+- **Instruction-Based Format**: Templates use instruction-based approach instead of placeholder-based (`[FIELD_NAME]`)
+- **Concrete Examples**: Each template includes complete example output for consistent generation
+- **Timeline Logic**: Mandatory timeline verification prevents employment overlaps between countries
+- **Legal Compliance**: Each template includes visa-specific regulatory requirements
+
+### Letter Agent Integration
+The `letter_agent_prompt.md` orchestrates the entire letter generation workflow:
+1. Document analysis and template selection
+2. Data extraction from supporting documents
+3. Timeline logic verification (Section 2.7)
+4. Canvas-based letter generation
+5. Quality assurance and red flags checklist
+
+### Template Types
+- **L1A Manager**: Renewal and initial applications with executive capacity requirements
+- **L1B Specialized Knowledge**: Renewal and initial with technical expertise focus
+- **E2 Treaty Investor**: Manager, Executive, Essential Skills, and Corporate Registration variants
+- **H1B Specialty Occupation**: USCIS petition format with OOH references
+
+### Recent Template System Improvements (September 2025)
+
+#### Passport Number Validation (Critical Fix)
+**Problem**: OCR misreading passport numbers causing visa application errors (e.g., "TZ1240013" instead of "TZ1240137").
+
+**Solution Implemented**:
+- Added comprehensive passport format validation to visa scheduler prompt
+- Japanese passports: Strict 2 letters + 7 digits validation
+- Multi-country support with country-specific format verification
+- OCR error guidance: 3↔8, 1↔7, 0↔O, 5↔S, I↔1
+- Smart flagging only when genuinely uncertain after double-checking
+
+#### Japanese Phone Number Formatting Fix
+**Problem**: Japanese phone numbers including domestic leading zeros (080→08079470566).
+
+**Solution**:
+- Updated visa scheduler prompt with clear instruction: "For Japanese phone numbers, remove the leading 0 (080→80, 090→90, 070→70)"
+- Enhanced field descriptions to specify "without country code or leading 0"
+- Updated examples to show correct format: "8079470566" instead of "08079470566"
+
+#### Template Organization
+- Consolidated all prompts into organized `prompts_and_templates/` structure
+- Eliminated duplicate visa scheduler prompts
+- Created comprehensive README with template index and usage guidelines
 
 ## Enhanced Prompt Engineering (v5 Improvements)
 
