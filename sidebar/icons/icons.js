@@ -114,6 +114,13 @@ const Icons = {
     <path d="M3 3v5h5"></path>
     <path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"></path>
     <path d="M12 7v5l4 2"></path>
+  </svg>`,
+
+  // RefreshCw Icon (for DS-160 Retrieval)
+  refreshCw: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="23 4 23 10 17 10"></polyline>
+    <polyline points="1 20 1 14 7 14"></polyline>
+    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
   </svg>`
 };
 

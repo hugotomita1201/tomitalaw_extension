@@ -32,6 +32,14 @@ prompts_and_templates/
 - Document delivery address rules
 - Multi-site scheduling support
 
+### ds160_retrieval_prompt_v1.txt
+**Purpose:** ChatGPT prompt for DS-160 Retrieval Helper credential extraction
+**Features:**
+- 30-day DS-160 expiration tracking support
+- Batch extraction for multiple applicants
+- Family application handling (principal + dependents)
+- Field validation (10-char application ID, uppercase formatting)
+
 ### ds160_prompt_combined_v5.txt
 **Purpose:** ChatGPT prompt for DS-160 visa application form automation
 **Features:**

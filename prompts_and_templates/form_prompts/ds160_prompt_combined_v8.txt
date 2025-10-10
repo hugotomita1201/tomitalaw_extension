@@ -1,0 +1,1314 @@
+# DS-160 Combined Prompt v8 - Validate First, Generate Last
+# Analyze and validate documents BEFORE generating JSON
+
+## WORKFLOW OVERVIEW
+
+This prompt operates in TWO STAGES with a fundamentally different approach:
+
+**STAGE 1: DOCUMENT ANALYSIS & VALIDATION** (Validate EVERYTHING first, NO JSON yet)
+- Analyze all uploaded documents thoroughly
+- Build complete life timeline of applicant
+- Run comprehensive 8-category audit on RAW DATA
+- Flag ALL issues (extraction, logic, conflicts)
+- Iterate with user to resolve every issue
+- Output: Validated data summary + timeline + all issues resolved
+
+**STAGE 2: GENERATE FINAL JSON** (Only after Stage 1 complete)
+- Re-read JSON schema carefully
+- Generate accurate JSON from validated data in ONE CLEAN SHOT
+- Output to Canvas in proper format
+- Quick final verification
+- Done - JSON is correct the first time!
+
+**Why this approach is better:**
+- Validate SOURCE DATA before committing to JSON structure
+- Resolve conflicts BEFORE creating JSON (not after)
+- Final JSON is accurate from the start (no back-and-forth editing)
+- Cleaner workflow: Analyze → Validate → Generate
+
+For E-1/E-2 visas, also extract specialized E-visa sections from DS-156E form.
+
+---
+
+# ═══════════════════════════════════════════════════════════
+# STAGE 1: DOCUMENT ANALYSIS & VALIDATION
+# ═══════════════════════════════════════════════════════════
+
+## ⚠️ CRITICAL: NO JSON IN STAGE 1
+
+**Stage 1 is for validating RAW DATA only:**
+- Do NOT generate JSON yet
+- Do NOT output to Canvas yet
+- Focus on understanding the person's complete history
+- Validate ALL data from source documents
+- Flag ALL issues and work with user to resolve them
+- Only proceed to Stage 2 after ALL validation complete
+
+**Stage 1 Task:** Analyze documents → Build timeline → Audit data → Flag issues → Iterate with user → Validate everything → STOP and ask to proceed to Stage 2
+
+---
+
+## STEP 1: UNDERSTAND CONTEXT & DOCUMENT INVENTORY
+
+**PART A: UNDERSTAND THE APPLICATION CONTEXT & GOALS**
+
+Before diving into details, first understand the BIG PICTURE:
+
+**What is the overall goal of this application?**
+- Is this a RENEWAL (applicant had this visa before)?
+- Is this an INITIAL application (first time applying)?
+- Is this a CHANGE OF STATUS (already in US, changing visa type)?
+- What visa type are we working with (H-1B, L-1A, L-1B, E-2, etc.)?
+
+**What is the purpose of each document?**
+- Which documents are PRIMARY sources (current/active information for THIS application)?
+- Which documents are REFERENCE sources (previous visa data, historical information)?
+- Which documents show CHANGES (new employer, new passport, address change, etc.)?
+
+**Example context analysis:**
+```
+🎯 APPLICATION CONTEXT
+
+Goal: H-1B RENEWAL application
+- Applicant previously had H-1B visa (2019-2022)
+- Now applying for renewal with SAME employer
+- Need to show employment continuity
+
+Document Purposes:
+1. "DS-160 Renewal Worksheet" → PRIMARY data source for this application
+2. "Original DS-160 from 2019.json" → REFERENCE for previous visa details
+3. "New passport issued 2023" → CURRENT passport (old one expired)
+4. "Employment letter 2024-09-20" → CURRENT employment verification
+5. "I-129 petition receipt" → Current petition information
+```
+
+This context helps you understand:
+- What data is most important (renewal worksheet = primary, old DS-160 = reference)
+- Why certain documents exist (new passport because old one expired)
+- What the applicant's situation is (same employer = employment continuity case)
+
+---
+
+**PART B: DETAILED DOCUMENT INVENTORY**
+
+Now create detailed inventory of ALL uploaded documents:
+
+Create a document list showing:
+- Document type (passport, employment letter, petition, worksheet, etc.)
+- Document date (when was it created/issued?)
+- Who is it about (main applicant, spouse, etc.)
+- Relevance to application
+- Completeness (are all pages present?)
+
+**Example output:**
+```
+📄 DOCUMENT INVENTORY
+
+1. Passport - Indian passport, issue date 2018-03-15, expires 2028-03-14
+2. Employment Letter - Yamada Consulting, dated 2024-09-20 (4 months old)
+3. I-129 Petition - Receipt dated 2024-08-15
+4. DS-160 Worksheet - Filled by applicant, undated
+5. Education Transcripts - University degrees 2015-2018, 2018-2019
+6. Marriage Certificate - Spouse information, dated 2021-06-10
+```
+
+**Check for:**
+- Missing documents (passport copy missing? employment letter outdated?)
+- Document recency (letters > 6 months old should be flagged)
+- Document conflicts (dates don't align between documents?)
+
+---
+
+## STEP 2: COMPLETE DATA EXTRACTION
+
+**Extract ALL information from documents into working notes (NOT JSON format yet):**
+
+Go through each document page by page and note:
+- Personal information (name, DOB, nationality, etc.)
+- Passport details (number, issue/expiry, country)
+- Contact information (addresses, phones, emails)
+- Family information (parents, spouse, relatives in US)
+- Education history (all schools attended with dates)
+- Employment history (all jobs with dates, duties, salary)
+- US travel history (all visits with dates and purposes)
+- Visa information (previous visas, types, numbers)
+- Any other relevant data
+
+**IMPORTANT:**
+- Don't skip anything - extract EVERY piece of information
+- Note which document each piece of data comes from
+- Flag if information is unclear, illegible, or contradictory
+- Check later pages of forms (DS-156E page 3+ for sections 18-27)
+- Watch for OCR errors in scanned documents (0↔O, 1↔I, 3↔8, 5↔S)
+
+**Common extraction oversights to avoid:**
+- Middle names in passport
+- Secondary phone numbers
+- Previous addresses
+- Additional email addresses
+- All social media platforms
+- Complete employment duties (not just job title)
+- All degrees/certificates
+- Complete travel history (not just recent trips)
+
+---
+
+## STEP 3: BUILD COMPLETE LIFE TIMELINE
+
+Create a chronological table showing the applicant's ENTIRE life from birth to present:
+
+**Timeline Table Format:**
+```
+📋 COMPLETE LIFE TIMELINE
+═══════════════════════════════════════════════════════════
+
+FROM DATE    TO DATE      CATEGORY      LOCATION    ACTIVITY/INSTITUTION
+────────────────────────────────────────────────────────────────────────
+[Birth]      2010-03-31   Education     Japan       Elementary School
+2010-04-01   2013-03-31   Education     Japan       Middle School
+2013-04-01   2016-03-31   Education     Japan       High School
+2016-04-01   2020-03-31   Education     USA         University XYZ
+2020-05-01   2022-08-31   Employment    Japan       Company ABC
+2022-09-01   Present      Employment    USA         Company DEF
+
+US VISITS:
+2018-06-10   2018-06-24   US Visit      USA         Tourism (14 days)
+2019-12-15   2020-01-05   US Visit      USA         Visit family (21 days)
+
+GAPS IDENTIFIED:
+• 2020-04-01 to 2020-04-30 (1 month) - Between graduation and first job
+```
+
+**Critical Timeline Analysis:**
+- Identify ALL gaps > 3 months (what was person doing?)
+- Identify overlapping periods (simultaneously in 2 places?)
+- Verify dates progress logically (no periods ending before they start)
+- Check age appropriateness (in college at age 10? Flag it!)
+- Mark any periods that need clarification
+
+---
+
+## STEP 4: EIGHT-CATEGORY COMPREHENSIVE AUDIT
+
+Run ALL eight audit categories on the RAW DATA. Flag EVERY issue found.
+
+---
+
+### AUDIT CATEGORY 0: EXTRACTION COMPLETENESS
+
+**Purpose:** Verify nothing was omitted from source documents.
+
+🔍 **All Documents Reviewed:**
+- Did you read every page of every document?
+- Are there additional pages/sections you may have skipped?
+- DS-156E forms: Did you check pages 3+ for sections 18-27?
+- Attachments: Are there supporting documents attached?
+
+🔍 **Required Data Present:**
+- Personal: surname, givenName, dateOfBirth, nationality
+- Passport: number, issue date, expiration date, issuing country
+- Contact: complete address, phone number, email
+- Current employment: employer name, address, job title, salary, start date, duties
+- Education: at least high school (if college exists, HS must exist too)
+
+🔍 **Common Missing Data:**
+- Middle names from passport
+- All phone numbers (home, mobile, work)
+- All email addresses
+- Social media accounts (all platforms mentioned)
+- Complete address details (apartment numbers, postal codes)
+- All employment duties (not just title)
+- Previous employers (if any)
+- All US visits (not just recent)
+- Family member details (dates of birth, locations)
+
+**Flag Format:**
+```
+🚨 CRITICAL: Passport number not found in any document - Cannot proceed without passport details.
+
+⚠️ REVIEW: Employment duties only show job title, no detailed description - Need complete duties for visa application.
+
+ℹ️ VERIFY: Only found one phone number, but application asks for home/mobile/work - Are there other contact numbers?
+```
+
+---
+
+### AUDIT CATEGORY 1: TIMELINE INTEGRITY
+
+**Check for:**
+
+🔍 **Unexplained Gaps (> 3 months):**
+- Between education periods
+- Between employment periods
+- Between end of education and start of employment
+- Recent gaps (last 2 years) more critical than older gaps
+
+🔍 **Overlapping Periods:**
+- Employed in two places simultaneously
+- Attending school while employed full-time in different location
+- In US while supposedly employed/studying elsewhere
+
+🔍 **Impossible Sequences:**
+- End date before start date
+- Graduated before enrolled
+- Worked before legal working age
+- Dates that don't make chronological sense
+
+🔍 **Logical Date Issues:**
+- Start dates on weekends/holidays (unusual for school/work)
+- Employment ending/starting mid-month without explanation
+- School year dates that don't follow typical academic calendar
+
+**Flag Format:**
+```
+🚨 CRITICAL: Employment gap from 2019-03-15 to 2020-01-10 (9.8 months) - What was applicant doing during this period?
+
+⚠️ REVIEW: Attended university in USA 2018-2020 while also employed in Japan 2019-2021 - Physically impossible? Verify if remote work or part-time.
+
+ℹ️ VERIFY: Employment ended 2021-12-15 (Wednesday, mid-month) - Unusual termination date, verify accuracy.
+```
+
+---
+
+### AUDIT CATEGORY 2: EDUCATION LOGIC
+
+**Check for:**
+
+🔍 **Missing High School:**
+- If college present, high school MUST exist
+- If graduate school present, both college AND high school must exist
+
+🔍 **Education Progression:**
+- Typical order: Elementary → Middle School → High School → College → Graduate School
+- Flag any skipped levels
+- Flag reverse order (grad school before college?)
+
+🔍 **School Year Date Logic:**
+- High school: typically ages 15-18 (3 years)
+- College/University: typically ages 18-22 (4 years for bachelor's)
+- Graduate school: typically ages 22-25 (2-3 years for master's)
+- Calculate expected age from birth date + education dates
+- Flag if person was age 12 in college or age 30 in high school
+
+🔍 **Degree Completion Timelines:**
+- Bachelor's degree: 4 years typical, 3-6 years acceptable range
+- Master's degree: 2 years typical, 1-3 years acceptable range
+- PhD: 4-7 years typical
+- Flag if completed too quickly or too slowly
+
+🔍 **Enrollment vs Graduation Dates:**
+- Graduation must be AFTER enrollment
+- Duration must make sense for degree type
+- Check for gaps within same institution
+
+🔍 **School Year Alignment:**
+- Japanese schools: April-March academic year
+- US schools: August/September-May/June academic year
+- Flag dates that don't align with expected academic calendars
+
+**Flag Format:**
+```
+🚨 CRITICAL: College education present but high school missing - Required by DS-160 logic.
+
+⚠️ REVIEW: Applicant attended university 2015-2019 (ages 16-20 based on birthdate 1999-04-15) - started college at age 16, younger than typical. Verify accuracy.
+
+ℹ️ VERIFY: Bachelor's degree completed in 3 years (2016-2019) - faster than typical 4-year timeline. Common for some programs but verify.
+```
+
+---
+
+### AUDIT CATEGORY 3: EMPLOYMENT LOGIC
+
+**Check for:**
+
+🔍 **Employment Overlaps:**
+- Cannot work two full-time jobs simultaneously (especially in different countries)
+- Part-time/consulting overlaps may be OK but should be noted
+
+🔍 **Employment Gaps:**
+- Gaps > 3 months between jobs require explanation
+- Recent gaps (within last 2 years) more concerning
+- Gaps between US employment periods especially important
+
+🔍 **Job Title vs Job Duties:**
+- Job title should match described duties
+- "Manager" title but duties are all technical work? Flag it
+- "Engineer" title but duties are all management? Flag it
+
+🔍 **Salary Progression:**
+- Salary should generally increase over time
+- Large decreases (e.g., $100k → $40k) need explanation
+- Salary should be realistic for position/industry/location
+
+🔍 **US Employment Authorization:**
+- Any US employment MUST have corresponding valid visa during that period
+- Cross-check against previous visa dates
+- If US employment exists but no visa record: **CRITICAL FLAG**
+
+🔍 **Employment Duration Realism:**
+- Very short tenures (< 6 months) at multiple jobs: flag as pattern
+- Employment continuing to "present" should match current date
+
+🔍 **Location Logic:**
+- If employed in USA, should have US address during that period
+- If employed remotely from different country, should be explicitly noted
+
+**Flag Format:**
+```
+🚨 CRITICAL: US employment from 2018-06-01 to 2020-08-31 but no previous visa record - Was applicant authorized to work? This is unauthorized employment.
+
+⚠️ REVIEW: Salary decreased from $85,000 (previous employer) to $52,000 (current employer) - Unusual decrease, verify accuracy or get explanation.
+
+ℹ️ VERIFY: Three jobs in 18 months (2020-2022) with 4-6 month tenures each - Pattern of short tenures, USCIS may question job stability.
+```
+
+---
+
+### AUDIT CATEGORY 4: US PRESENCE CORRELATION
+
+**Check for correlation-based logical inconsistencies:**
+
+🔍 **Driver's License Expectations:**
+
+**Criteria triggering DL expectation:**
+- Attended US college/university for 2+ years
+- Worked in US for 1+ year
+- Multiple extended US visits totaling 1+ year cumulative
+- Has US address for extended period
+
+**If DL expected but not present:**
+```
+⚠️ REVIEW: Attended US university for 4 years (2016-2020) but no US driver's license mentioned - Who lives in US for 4 years without driving? Verify accuracy.
+```
+
+**If DL NOT expected (short visits only):**
+```
+✅ No DL expected: Only short US visits (total 45 days), DL absence is normal.
+```
+
+🔍 **SSN Expectations:**
+
+**Criteria triggering SSN expectation:**
+- ANY US employment (even part-time, internships, on-campus work)
+- Renewal applicant with previous work visa (H1B, L1, E2, etc.)
+- Long-term US presence with evidence of US ties
+
+**If SSN expected but missing:**
+```
+🚨 CRITICAL: US employment history exists but no SSN mentioned - Person cannot work in US without SSN unless working illegally. Verify and obtain SSN.
+```
+
+**If SSN NOT expected:**
+```
+✅ No SSN expected: No US employment, tourist visa only, SSN absence is normal.
+```
+
+🔍 **US Address/Phone Correlation:**
+- If studied/worked in US for extended period, should have US address during that time
+- If current US employment, should have current US address
+- US phone number expected for anyone with extended US ties
+
+**Flag Format:**
+```
+ℹ️ VERIFY: 4 years US college attendance but no US phone number mentioned - Typically students get US phone. Verify if applicant had US number.
+```
+
+---
+
+### AUDIT CATEGORY 5: VISA/TRAVEL CONSISTENCY
+
+**Check for:**
+
+🔍 **Previous Visa vs Travel History:**
+- If has previous visa, should have visit records
+- Visit dates should align with visa validity period
+- Multiple visits should be in chronological order (oldest first)
+
+🔍 **Visa Validity Periods:**
+- Entry dates should be within visa validity period
+- No overstays: length of stay should match reasonable duration
+- If stayed 5 years but only had 6-month visa: **FLAG IMMEDIATELY**
+
+🔍 **Overstay Detection:**
+- Compare intended departure vs next entry date (if multiple visits)
+- Compare length of stay with actual time between entry/exit
+- Flag any indication of overstay
+
+🔍 **Visit Pattern Logic:**
+- Frequent short visits (10+ visits in 2 years): flag as unusual pattern
+- Very long single visits (> 6 months on tourist visa): verify visa type allowed this
+- Gaps between visits should make sense
+
+🔍 **Previous Visa Information Completeness:**
+- If has previous visa, must have: visa number, issue date, expiration date, visa type
+- If renewal, previous visa type should typically match new application type
+
+**Flag Format:**
+```
+⚠️ REVIEW: Previous visa holder but no US visit history mentioned - If person had visa, they must have visited US. Verify visit records.
+
+🚨 CRITICAL: Visit from 2018-06-01 with length of stay "180 days" but tourist visa - Tourist visas rarely allow 6-month stays. Verify visa type was actually B-2 and stay was authorized.
+
+ℹ️ VERIFY: 12 separate US visits between 2019-2022 (average 4 visits per year) - Unusually high visit frequency. USCIS may question ties to US vs home country.
+```
+
+---
+
+### AUDIT CATEGORY 6: DOCUMENT CROSS-REFERENCE
+
+**Check for consistency across all documents:**
+
+🔍 **Passport Information:**
+- Passport number consistent across all documents
+- Issue/expiration dates match passport copy
+- Name spelling consistent (surname, given name)
+- Date of birth consistent everywhere
+
+🔍 **Employment Letter vs Petition:**
+- Job title matches between employment letter and petition
+- Salary matches (or explanation if different due to date)
+- Start date consistent
+- Employer name/address consistent
+
+🔍 **Address Consistency:**
+- Home address consistent across documents
+- US address (if applicable) consistent
+- If address changed, should be noted with dates
+
+🔍 **Date Formatting:**
+- Check for MM/DD/YYYY vs DD/MM/YYYY confusion (is 03/05/2020 March 5 or May 3?)
+- Verify dates are interpreted correctly from source documents
+
+🔍 **Document Recency:**
+- Employment letters > 6 months old: flag as potentially outdated
+- Bank statements > 3 months old: flag as potentially outdated
+- Passport expiring within 6 months of travel: flag for renewal
+
+**Document Priority for Conflicts:**
+1. Current passport (for personal info)
+2. Most recent employment letter (for job details)
+3. Most recent petition (for petition numbers)
+4. Original DS-160 from renewal worksheet (baseline)
+
+**Flag Format:**
+```
+⚠️ REVIEW: Passport shows birthdate as 1990-04-15 but renewal worksheet shows 1990-04-16 - One-day discrepancy, likely typo. Using passport date (authoritative source).
+
+🚨 CRITICAL: Employment letter (dated 2024-09-20) shows job title "Senior Engineer" but petition (dated 2024-08-15) shows "Engineering Manager" - Which is correct for current position?
+
+ℹ️ VERIFY: Employment letter is dated 2024-01-15 (9 months old) - May be outdated. Verify current salary/title haven't changed.
+```
+
+---
+
+### AUDIT CATEGORY 7: RED FLAGS (USCIS Scrutiny Items)
+
+**Items that will trigger extra USCIS scrutiny:**
+
+🔍 **Security Questions:**
+- Any "yes" answer to security questions (disease, crime, drugs, terrorism)
+- Must be explained thoroughly
+- May require additional documentation
+
+🔍 **Previous Visa Denials:**
+- Any previous visa denials must be explained
+- Must show why this application is different
+- Need documentation of changed circumstances
+
+🔍 **Criminal History:**
+- Any disclosed arrests, convictions, or charges
+- Even minor offenses must be documented fully
+- Need court records, disposition, rehabilitation evidence
+
+🔍 **Immigration Violations:**
+- Previous overstays
+- Previous unauthorized work
+- Previous visa violations
+- Any deportation or removal history
+
+🔍 **Employment Authorization Issues:**
+- Any US work without proper visa
+- Any H1B/L1/E2 holder who worked for different employer without transfer
+- Student visa holders who worked off-campus without authorization
+
+🔍 **Ties to Home Country:**
+- Long US presence with minimal home country ties: USCIS may see as immigrant intent
+- Frequent job changes: may question stability
+- Unclear return plans: may question temporary intent
+
+**Flag Format:**
+```
+🚨 CRITICAL: Previous visa denial mentioned - MUST explain previous denial thoroughly and show changed circumstances.
+
+🚨 CRITICAL: Security question answered YES for "Have you ever been arrested?" - MUST provide complete documentation: arrest record, court disposition, rehabilitation evidence.
+
+⚠️ REVIEW: Applicant has been in US for cumulative 5+ years over last 6 years - USCIS may question immigrant intent for non-immigrant visa. Ensure strong ties to home country are documented.
+```
+
+---
+
+## STEP 5: FLAG SEVERITY SYSTEM
+
+Categorize all flagged issues by severity:
+
+**🚨 CRITICAL** - Must be fixed or explained before proceeding to JSON generation
+- Unauthorized employment
+- Timeline contradictions/impossibilities
+- Missing required information for visa type
+- Previous visa violations
+- Document conflicts with no clear resolution
+- Extraction errors or omissions
+
+**⚠️ REVIEW REQUIRED** - Unusual/suspicious, likely needs explanation
+- Unexpected absence of DL/SSN given US presence
+- Salary decreases or unusual patterns
+- Employment/education gaps > 3 months
+- Job title/duties mismatches
+- Frequent job changes
+- Document inconsistencies with reasonable explanation
+- Unusual but potentially legitimate patterns
+
+**ℹ️ VERIFY** - Minor inconsistencies to double-check
+- Date formatting differences
+- Old documents (> 6 months)
+- Slightly unusual but plausible patterns
+- Fields that could be more complete
+
+---
+
+## STEP 6: PRESENT FINDINGS & OBTAIN USER INPUT
+
+After completing all audits, present a comprehensive report:
+
+```
+📊 STAGE 1 AUDIT COMPLETE
+
+═══════════════════════════════════════════════════════════
+
+📋 COMPLETE LIFE TIMELINE
+[Show timeline table here]
+
+═══════════════════════════════════════════════════════════
+
+🔍 AUDIT FINDINGS SUMMARY
+
+Total Issues Found: [X]
+- 🚨 CRITICAL: [X] issues
+- ⚠️ REVIEW REQUIRED: [X] items
+- ℹ️ VERIFY: [X] items
+
+═══════════════════════════════════════════════════════════
+
+🚨 CRITICAL ISSUES (Must Resolve Before JSON Generation)
+
+1. [Category]: [Issue description]
+   Finding: [Detailed description]
+   Impact: [Why this is critical]
+   Action Required: [What needs to be done]
+
+[Continue for all CRITICAL items]
+
+═══════════════════════════════════════════════════════════
+
+⚠️ REVIEW REQUIRED (Unusual/Needs Explanation)
+
+1. [Category]: [Issue description]
+   Finding: [Detailed description]
+   Why Flagged: [Reasoning]
+   Recommendation: [Suggested action]
+
+[Continue for all REVIEW items]
+
+═══════════════════════════════════════════════════════════
+
+ℹ️ VERIFY (Minor Items to Confirm)
+
+1. [Category]: [Issue description]
+   Finding: [Brief description]
+   Suggestion: [What to check]
+
+[Continue for all VERIFY items]
+
+═══════════════════════════════════════════════════════════
+
+📥 PLEASE PROVIDE:
+
+To resolve these issues, I need:
+- [List specific information needed]
+- [Additional documents needed]
+- [Clarifications needed]
+
+Please provide the information above, and I will update my working data and re-audit.
+```
+
+---
+
+## STEP 7: ITERATE WITH USER
+
+**Process user input to resolve all flagged issues:**
+
+**User may provide:**
+1. **Missing Information**: "SSN is 123-45-6789", "Phone is 8179470566"
+2. **Corrections**: "Date should be 2020-05-15 not 2020-05-01"
+3. **Explanations for Gaps**: "Was freelancing 2019-2020", "Taking care of parent"
+4. **New Employment/Education Details**: "Add employer ABC from Mar-Dec 2019"
+5. **Additional Documents**: User uploads new letters, updated info
+6. **Context/Clarifications**: "Lived in NYC, used subway, no car needed"
+7. **Verification**: "Yes this is accurate, leave as-is"
+
+**For each piece of user input:**
+1. **Update working data** with new information
+2. **Note the source** (user provided, new document, etc.)
+3. **Re-run affected audit categories** to verify issue is resolved
+4. **Check for new issues** introduced by the update
+5. **Update timeline** if needed
+6. **Present updated findings** showing progress
+
+**Continue iterating until:**
+- All CRITICAL issues resolved
+- All REVIEW items explained or verified
+- All VERIFY items confirmed
+- Timeline is complete and accurate
+- No contradictions remain
+- All data validated and ready for JSON generation
+
+**Example iteration:**
+```
+✅ Updated Working Data
+
+- Added SSN: 123456789
+- Added employment gap explanation: "Freelance web development for ABC Corp, March-December 2019"
+- Verified DL absence: Lived in NYC, used public transit
+
+Re-audit results:
+- 🚨 CRITICAL: 5 → 2 (resolved SSN and employment gap issues)
+- ⚠️ REVIEW: 3 → 2 (verified DL absence as legitimate)
+- ℹ️ VERIFY: 2 → 2 (unchanged)
+
+Remaining issues:
+[List remaining issues that still need resolution]
+```
+
+---
+
+## STEP 8: FINAL DATA VALIDATION SIGN-OFF
+
+After all iterations, perform final validation check:
+
+**Final Validation Checklist:**
+
+✓ **All CRITICAL issues resolved**
+- No extraction omissions
+- No timeline contradictions
+- No missing required fields
+- No unresolved conflicts
+
+✓ **All REVIEW items explained or verified**
+- Unusual patterns documented
+- Gaps explained
+- Correlations checked
+
+✓ **All VERIFY items confirmed**
+- Minor inconsistencies resolved
+- Data double-checked
+
+✓ **Timeline complete and accurate**
+- No unexplained gaps
+- No overlaps
+- Dates verified from source documents
+- Age/timeline logic correct
+
+✓ **Data ready for JSON generation**
+- All information validated
+- All conflicts resolved
+- All formatting notes captured
+- Ready to map to schema
+
+**Final Sign-Off:**
+
+```
+✅✅✅ STAGE 1 VALIDATION COMPLETE ✅✅✅
+
+All data has been validated and is ready for JSON generation.
+
+📊 VALIDATION STATISTICS:
+- Total issues initially flagged: [X]
+- Issues resolved: [X]
+- User inputs received: [X]
+- Iterations completed: [X]
+- Documents reviewed: [X]
+
+📋 VALIDATED DATA SUMMARY:
+[Brief summary of key validated information]
+
+🎯 DATA STATUS: READY FOR JSON GENERATION
+
+═══════════════════════════════════════════════════════════
+
+Would you like me to proceed to Stage 2 and generate the final JSON?
+
+Reply 'yes' to generate JSON, or 'review' if you want to review the validated data summary first.
+```
+
+**CRITICAL:** Do NOT proceed to Stage 2 until user says "yes"
+
+---
+
+# ═══════════════════════════════════════════════════════════
+# STAGE 2: GENERATE FINAL JSON
+# ═══════════════════════════════════════════════════════════
+
+## ⚠️ CRITICAL: GENERATE JSON FROM VALIDATED DATA
+
+**Stage 2 is for creating accurate JSON in ONE CLEAN SHOT:**
+- All data has been validated in Stage 1
+- No back-and-forth editing needed
+- Map validated data to schema fields
+- Format according to rules
+- Output to Canvas
+- Quick final check
+- Done!
+
+**Stage 2 Task:** Re-read schema → Generate JSON from validated data → Output to Canvas → Final verification → Declare ready
+
+---
+
+## STEP 1: SCHEMA RE-REFERENCE
+
+Before generating JSON, you MUST carefully use the exact JSON schema below:
+
+---
+
+## JSON FORMAT:
+
+```json
+{
+  "personal": {
+    "surname": "string",
+    "givenName": "string",
+    "fullNameNative": "string or omit",
+    "otherNames": [],
+    "gender": "MALE/FEMALE - infer from given name if not explicitly stated",
+    "maritalStatus": "SINGLE/MARRIED/DIVORCED/WIDOWED/SEPARATED - infer from spouse information if present",
+    "dateOfBirth": "DD-MMM-YYYY",
+    "birthCity": "string",
+    "birthState": "string or omit",
+    "birthCountry": "3-letter country code",
+    "nationality": "3-letter country code",
+    "otherNationalities": [],
+    "permanentResident": false,
+    "permanentResidentExplanation": "string if permanentResident is true",
+    "nationalId": "string or omit",
+    "usSocialSecurity": "string or omit",
+    "usTaxId": "string or omit"
+  },
+
+  "travel": {
+    "purposeOfTrip": "B, F, H, J, A, E, etc.",
+    "otherPurposeDetail": "string (e.g., 'H-1B', 'L-1', 'E-2', 'E2-EX', 'E2-SP', 'E2-CH', 'E1-EX')",
+    "purposeSpecify": "string for Government officials",
+    "petitionNumber": "string - Required here AND in temporaryWork section",
+    "principalApplicant": {
+      "surname": "string",
+      "givenName": "string",
+      "petitionNumber": "string",
+      "companyName": "string (for E-visa spouse/child only)"
+    },
+    "principalVisaIssued": "true/false - For E2-EX/E1-EX: Has the principal treaty investor already been issued a visa?",
+    "evisaPrincipal": {  // Object - Only fill if principalVisaIssued = true
+      "surname": "string - Principal treaty investor's surname from DS-156E Section 15",
+      "givenName": "string - Principal treaty investor's given name from DS-156E Section 15",
+      "dateOfBirth": "DD-MMM-YYYY - Principal's DOB if available, omit if not found"
+    },
+    "specificTravelPlans": "true/false - set true ONLY if documents provide detailed itinerary with actual flight numbers/dates",
+    "intendedArrivalDate": "DD-MMM-YYYY - use actual date from documents; if no date provided AND specificTravelPlans is false, use placeholder: 01-JAN-2026",
+    "arrivalFlightNumber": "string",
+    "arrivalCity": "string",
+    "intendedDepartureDate": "DD-MMM-YYYY - calculate from intendedArrivalDate + lengthOfStay if not provided",
+    "departureFlightNumber": "string",
+    "departureCity": "string",
+    "lengthOfStay": "string",
+    "lengthOfStayNumber": "string - Use this precedence: 1) Exact value from documents if specified, 2) Infer from visa type if not specified: tourist=3-4 weeks, business=1-2 weeks, work visas=3 years, 3) If unable to infer, use placeholder: 3",
+    "lengthOfStayUnit": "Y/M/W/D - default to Y for work visas, W for business/tourist, infer from context",
+    "usStreetAddress": "string",
+    "usStreetAddress2": "string",
+    "usCity": "string",
+    "usState": "2-letter state code",
+    "usZipCode": "string",
+    "tripPayer": "SELF/COMPANY/PRESENT_EMPLOYER/OTHER_PERSON/OTHER_COMPANY - Default logic if not specified: work visas (H/L/E/O)=PRESENT_EMPLOYER, tourist/business (B)=SELF, student (F/M)=SELF",
+    "payerInfo": {  // Object - Include if tripPayer is OTHER_PERSON
+      "surname": "string or N/A",
+      "givenName": "string or N/A",
+      "phone": "string or N/A",
+      "email": "string or N/A",
+      "relationship": "string or N/A",
+      "sameAddress": true,
+      "street1": "string or N/A",
+      "street2": "string or N/A",
+      "city": "string or N/A",
+      "state": "string or N/A",
+      "postalCode": "string or N/A",
+      "country": "string or N/A"
+    },
+    "companyInfo": {  // Object - Include if tripPayer is COMPANY or OTHER_COMPANY
+      "name": "string or N/A",
+      "relationship": "string or N/A",
+      "street1": "string or N/A",
+      "street2": "string or N/A",
+      "city": "string or N/A",
+      "state": "string or N/A",
+      "zipCode": "string or N/A",
+      "country": "string or N/A"
+    }
+  },
+
+  "travelCompanions": [],  // Array: {surname: "", givenName: "", relationship: ""}
+
+  "travelGroup": {
+    "traveling": false,
+    "name": "string or N/A"
+  },
+
+  "previousTravel": {
+    "hasBeenToUS": false,
+    "visits": [],  // Array: {arrivalDate: "DD-MMM-YYYY", lengthOfStayNumber: "14", lengthOfStayUnit": "D/W/M/Y"} - CRITICAL: Sort OLDEST FIRST (chronological order) to allow appending new trips
+    "driverLicense": {
+      "hasLicense": false,
+      "licenses": []  // Array: {state: "2-letter code", number: "string"}
+    },
+    "previousVisa": {
+      "hasVisa": false,
+      "issueDate": "DD-MMM-YYYY or N/A",
+      "visaNumber": "string or N/A",
+      "sameType": false,
+      "sameCountry": true,
+      "tenPrinted": false,
+      "lost": false,
+      "lostExplanation": "string or N/A",
+      "cancelled": false,
+      "cancelledExplanation": "string or N/A"
+    },
+    "visaRefused": false,
+    "visaRefusedExplanation": "string if true",
+    "estaDenied": false,
+    "estaDeniedExplanation": "string if true",
+    "immigrantPetition": false,
+    "immigrantPetitionExplanation": "string if true"
+  },
+
+  "contact": {
+    "homeStreet": "string",
+    "homeApt": "string",
+    "homeCity": "string",
+    "homeState": "string",
+    "homePostalCode": "string",
+    "homeCountry": "3-letter country code",
+    "mailingAddressSameAsHome": true,
+    "mailingAddress": {  // Object - Include if mailingAddressSameAsHome is false
+      "street": "string or N/A",
+      "apt": "string or N/A",
+      "city": "string or N/A",
+      "state": "string or N/A",
+      "postalCode": "string or N/A",
+      "country": "3-letter country code"
+    },
+    "homePhone": "string",
+    "secondaryPhone": "string",
+    "workPhone": "string",
+    "email": "string",
+    "socialMedia": [],  // Array: {platform: "FACEBOOK/TWITTER/etc", handle: "username"}
+    "additionalEmails": []  // Array of email strings
+  },
+
+  "usContact": {
+    "contactPerson": {
+      "surname": "string",
+      "givenName": "string"
+    },
+    "organizationName": "string",
+    "relationship": "string",
+    "address": {
+      "street1": "string or N/A",
+      "street2": "string or N/A",
+      "city": "string or N/A",
+      "state": "string or N/A",
+      "zipCode": "string or N/A"
+    },
+    "phone": "string",
+    "email": "string"
+  },
+
+  "passport": {
+    "type": "REGULAR, OFFICIAL, DIPLOMATIC, or OTHER",
+    "otherTypeExplanation": "string - Required if passport type is OTHER, omit otherwise",
+    "number": "string",
+    "bookNumber": "string",
+    "issuingAuthority": "3-letter country code",
+    "issueCountry": "3-letter country code",
+    "issueCity": "string",
+    "issueState": "string",
+    "issueDate": "DD-MMM-YYYY",
+    "expirationDate": "DD-MMM-YYYY",
+    "lostPassport": {
+      "hasLost": false,
+      "number": "string or N/A",
+      "country": "string or N/A",
+      "explanation": "string or N/A"
+    }
+  },
+
+  "family": {
+    "father": {
+      "surname": "string or N/A",
+      "givenName": "string or N/A",
+      "dateOfBirth": "DD-MMM-YYYY or N/A",
+      "inUS": false,
+      "status": "string or N/A"
+    },
+    "mother": {
+      "surname": "string or N/A",
+      "givenName": "string or N/A",
+      "dateOfBirth": "DD-MMM-YYYY or N/A",
+      "inUS": false,
+      "status": "string or N/A"
+    },
+    "relativesInUS": [],  // Array: {surname: "", givenName: "", relationship: "", status: ""}
+    "spouse": {  // Object - Include if maritalStatus is MARRIED
+      "surname": "string or N/A",
+      "givenName": "string or N/A",
+      "dateOfBirth": "DD-MMM-YYYY or N/A",
+      "nationality": "string or N/A",
+      "city": "string or N/A",
+      "country": "string or N/A",
+      "addressType": "SAME_AS_HOME, SAME_AS_MAILING, SAME_AS_US_CONTACT, DO_NOT_KNOW, or OTHER",
+      "address": {  // Object - Only include if addressType is OTHER
+        "street1": "string",
+        "street2": "string or N/A",
+        "city": "string",
+        "state": "string or N/A",
+        "postalCode": "string or N/A",
+        "country": "3-letter country code"
+      }
+    }
+  },
+
+  "workEducation": {
+    "primaryOccupation": "AGRICULTURE/BUSINESS/COMPUTER SCIENCE/EDUCATION/GOVERNMENT/HOMEMAKER/MEDICAL/MILITARY/NOT EMPLOYED/RETIRED/STUDENT/OTHER - infer from employment context: corporate work=BUSINESS, academic=EDUCATION, govt=GOVERNMENT",
+    "primaryOccupationOther": "string - Required if primaryOccupation is OTHER, omit otherwise",
+    "presentEmployer": {
+      "name": "string or N/A",
+      "address": {
+        "street1": "string or N/A",
+        "street2": "string or N/A",
+        "city": "string or N/A",
+        "state": "string or N/A",
+        "postalCode": "string or N/A",
+        "country": "string or N/A"
+      },
+      "phone": "string or N/A",
+      "startDate": "DD-MMM-YYYY or N/A",
+      "monthlyIncome": "string or N/A - round to nearest whole number",
+      "duties": "string - 3-5 sentences derived from support letter or employment documents",
+      "supervisorSurname": "string or N/A",
+      "supervisorGivenName": "string or N/A",
+      "jobTitle": "string or N/A - job title ONLY do not include description"
+    },
+    "previousEmployers": [],  // Array of employer objects with same structure as presentEmployer (including supervisorSurname, supervisorGivenName, jobTitle)
+    "education": {
+      "institutions": []  // Array: {name: "", address: {}, courseOfStudy: "", fromDate: "DD-MMM-YYYY", toDate: "DD-MMM-YYYY"} - CRITICAL: Sort OLDEST FIRST (High School → College → Grad School) to allow appending recent education
+    },
+    "languages": [],  // Array of language names
+    "clanTribe": {
+      "belongsToClan": false,
+      "clanName": "string or N/A"
+    },
+    "countriesVisited": {
+      "hasVisited": false,
+      "countries": []  // Array of country codes
+    },
+    "organizationMembership": {
+      "hasMembership": false,
+      "organizations": []  // Array of organization names
+    },
+    "specializedSkills": {
+      "hasSkills": false,
+      "explanation": "string or N/A"
+    },
+    "militaryService": {
+      "hasServed": false,
+      "details": []  // Array: {country: "3-letter code", branch: "string", rank: "string", specialty: "string", startDate: "DD-MMM-YYYY", endDate: "DD-MMM-YYYY"}
+    },
+    "insurgentOrganization": {
+      "hasInvolvement": false,
+      "explanation": "string or N/A"
+    }
+  },
+
+  "security": {
+    "part1": {
+      "disease": false,
+      "diseaseExplain": "string",
+      "disorder": false,
+      "disorderExplain": "string",
+      "drugUser": false,
+      "drugUserExplain": "string"
+    },
+    "part2": {
+      "arrested": false,
+      "arrestedExplain": "string",
+      "controlledSubstances": false,
+      "prostitution": false,
+      "moneyLaundering": false,
+      "humanTrafficking": false,
+      "assistedTrafficking": false,
+      "traffickingRelated": false
+    },
+    "part3": {
+      "illegalActivity": false,
+      "terroristActivity": false,
+      "terroristSupport": false,
+      "terroristOrg": false,
+      "terroristRelated": false,
+      "genocide": false,
+      "torture": false,
+      "extrajudicialViolence": false,
+      "childSoldier": false,
+      "religiousFreedom": false,
+      "populationControls": false,
+      "organTransplant": false
+    },
+    "part4": {
+      "immigrationFraud": false,
+      "deportation": false,
+      "deportationExplain": "string"
+    },
+    "part5": {
+      "childCustody": false,
+      "votingViolation": false,
+      "renounceExpenses": false
+    }
+  },
+
+  "temporaryWork": {  // Object - Always include this section even if visa type not specified
+    "petitionNumber": "string - Required for all temporary work visa applications",
+    "petitionerName": "string",
+    "intendedEmployer": {
+      "name": "string",
+      "address1": "string",
+      "address2": "string",
+      "city": "string",
+      "state": "2-letter state code",
+      "zipCode": "string",
+      "phone": "string"
+    },
+    "monthlyIncome": "string - Monthly amount, not yearly"
+  }
+}
+```
+
+*[Note: E-visa sections omitted here for brevity but must be included for E-1/E-2 applications. See full schema at end of file for complete evisaClassification, evisaBusiness, evisaApplicationContact, evisaOwnership, evisaFinanceTrade, evisaEmployeeCounts, evisaUSPersonnel, evisaApplicantPosition, evisaApplicantUSPosition, evisaEmployee, evisaInvestment, evisaForeignBusiness, evisaFinancial, and evisaTrade sections]*
+
+---
+
+## STEP 2: MAP VALIDATED DATA TO SCHEMA
+
+**Systematically map your validated data to schema fields:**
+
+1. **Personal Information Section**
+   - Map name, DOB, nationality, marital status, etc.
+   - Format dates as DD-MMM-YYYY
+
+2. **Passport Section**
+   - Map passport number, dates, issuing country
+   - Format dates as DD-MMM-YYYY
+
+3. **Travel Section**
+   - Map travel plans, US address, intended dates
+   - Determine tripPayer based on visa type
+
+4. **Contact Section**
+   - Map addresses, phones, emails, social media
+   - Format phones as digits only
+   - Include all additionalEmails and social media platforms
+
+5. **US Contact Section**
+   - Map US contact person/organization details
+   - Format phones as digits only
+
+6. **Family Section**
+   - Map parents, spouse, relatives in US
+   - Format dates as DD-MMM-YYYY
+
+7. **Work/Education Section**
+   - Map current employment with complete details
+   - Format company names: letters and spaces only, no punctuation
+   - Format phones as digits only
+   - Map education institutions: **sort oldest first (chronological)**
+   - Map languages and countries visited
+
+8. **Previous Travel Section (if applicable)**
+   - Map previous visa information
+   - Map US visits: **sort oldest first (chronological)**
+   - Map driver's license info
+
+9. **Temporary Work Section (if applicable)**
+   - Map petitioner name, intended employer details
+   - Format company names and phones correctly
+
+10. **E-visa Sections (if applicable)**
+    - Map evisa specific sections for E-1/E-2 visas
+
+**CRITICAL Formatting Rules:**
+- Dates: DD-MMM-YYYY (e.g., "15-JAN-2020")
+- Phone numbers: digits only, no dashes/spaces (e.g., "8179470566")
+- Company names: LETTERS AND SPACES ONLY, no punctuation (e.g., "ABC COMPANY INC")
+- Postal codes: can have dashes (e.g., "532-0011")
+- Boolean values: true/false (not "true"/"false" with quotes)
+- Arrays: proper [] bracket notation, sorted chronologically where required
+
+---
+
+## STEP 3: GENERATE JSON
+
+**Generate the complete JSON structure:**
+
+Follow these rules:
+1. Use exact field names from schema
+2. Maintain correct nesting structure
+3. Apply conditional logic (omit fields when conditions not met)
+4. Sort arrays chronologically where required (education, visits)
+5. Format all data according to rules
+6. Ensure valid JSON syntax (proper quotes, commas, brackets)
+
+**Conditional Logic Examples:**
+- If hasBeenToUS = false, omit visits array entirely
+- If hasVisa = false, omit visa details
+- If boolean field = false, omit corresponding explanation field
+- Only include evisa sections for E-1/E-2 visa types
+
+---
+
+## STEP 4: OUTPUT TO CANVAS
+
+**Output the JSON to Canvas with proper formatting:**
+
+1. **Canvas Title:** "DS-160 Application Data"
+
+2. **Canvas Content:** Wrap JSON in ```json code block
+   - Use 2-space indentation for nested objects/arrays
+   - Each key-value pair on its own line
+   - Proper formatting for readability
+   - Valid JSON syntax
+
+3. **Canvas contains ONLY the JSON code block**
+   - No validation text
+   - No changelog
+   - No timeline
+   - Just clean JSON for easy copying
+
+**Example Canvas structure:**
+```json
+{
+  "personal": {
+    "surname": "SMITH",
+    "givenName": "JOHN",
+    "dateOfBirth": "15-JAN-1990"
+  },
+  ...
+}
+```
+
+---
+
+## STEP 5: QUICK FINAL VERIFICATION
+
+After generating JSON, perform a quick final check:
+
+**Final Verification Checklist:**
+
+✓ **Schema Compliance**
+- All field names match schema exactly
+- No invented fields
+- Correct data types
+- Arrays properly formatted
+
+✓ **Validated Data Included**
+- All validated data from Stage 1 is in JSON
+- Nothing omitted
+- Nothing changed
+
+✓ **Formatting Correct**
+- Dates in DD-MMM-YYYY format
+- Phones digits only
+- Company names no punctuation
+- Booleans true/false without quotes
+
+✓ **Conditional Logic Applied**
+- Fields omitted when conditions not met
+- Arrays sorted chronologically
+
+✓ **Valid JSON Syntax**
+- Proper quotes, commas, brackets
+- No trailing commas
+- Properly nested
+
+---
+
+## STEP 6: OUTPUT SUMMARY BELOW CANVAS
+
+**Output validation summary OUTSIDE Canvas as regular text:**
+
+```
+---
+
+✅✅✅ STAGE 2 COMPLETE - JSON READY ✅✅✅
+
+═══════════════════════════════════════════════════════════
+
+📋 DATA SOURCES USED:
+[List key documents used with dates]
+
+🔍 VALIDATION STATUS:
+✓ All data validated in Stage 1
+✓ All issues resolved
+✓ JSON generated from validated data
+✓ Schema compliance verified
+✓ Formatting rules applied
+
+📊 FINAL STATISTICS:
+- Total fields in JSON: [X]
+- Documents analyzed: [X]
+- Issues resolved in Stage 1: [X]
+- Data sources: [X]
+
+═══════════════════════════════════════════════════════════
+
+🎯 JSON STATUS: READY FOR SUBMISSION
+
+The JSON in the Canvas above is:
+✓ 100% schema-compliant
+✓ 100% validated and accurate
+✓ 100% properly formatted
+✓ Ready to be used for DS-160 form filling
+
+You can now click the "Copy" button at the top of Canvas to get clean JSON.
+
+═══════════════════════════════════════════════════════════
+
+📝 NOTES/CAVEATS (if any):
+[Any important notes about the application or data]
+```
+
+---
+
+## VALIDATION COMPLETE
+
+**The JSON has been generated from fully validated data and is ready to use.**
+
+User can now:
+- Click "Copy" button in Canvas for clean JSON
+- Review the JSON one final time
+- Use JSON with Chrome extension for form filling
+- Ask for specific changes if needed
+
+---

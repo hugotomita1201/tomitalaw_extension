@@ -151,6 +151,232 @@ This will be intelligently merged into your main data.' rows="8"></textarea>
       </div> <!-- End module-content -->
     </template>
 
+    <!-- DS-160 Retrieval Template -->
+    <template id="ds160-retrieval-template">
+      <div class="module-content">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="icon">🔄</span>
+              DS-160 Retrieval Helper
+            </h2>
+            <p class="text-sm text-muted">Keep applications active (30-day expiration tracking)</p>
+          </div>
+
+          <div class="card-content">
+            <!-- Search and Sort -->
+            <div class="flex gap-2 mb-4">
+              <input
+                type="text"
+                id="retrieval-search"
+                class="form-input flex-1"
+                placeholder="Search by Application ID, Surname, or Notes..."
+              >
+              <select id="retrieval-sort" class="form-input" style="width: auto; min-width: 180px;">
+                <option value="urgent-first">Most Urgent First</option>
+                <option value="urgent-last">Least Urgent First</option>
+                <option value="app-id">Application ID</option>
+                <option value="surname">Surname</option>
+                <option value="date-added">Date Added</option>
+              </select>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mb-4">
+              <button class="btn btn-primary w-full mb-2" id="retrieval-add-new">
+                + Add New
+              </button>
+              <div class="flex gap-2">
+                <button class="btn btn-outline flex-1" id="retrieval-import">
+                  📥 Import JSON
+                </button>
+                <button class="btn btn-outline flex-1" id="retrieval-export">
+                  📤 Export JSON
+                </button>
+              </div>
+            </div>
+
+            <!-- Hidden file input for JSON import -->
+            <input
+              type="file"
+              id="retrieval-file-input"
+              accept=".json"
+              style="display: none;"
+            >
+
+            <!-- Applications List -->
+            <div id="retrieval-list-container">
+              <div id="retrieval-list" class="applications-list">
+                <!-- Applications will be dynamically inserted here -->
+                <div class="empty-state">
+                  <p class="text-muted">No applications stored yet.</p>
+                  <p class="text-sm text-muted">Click "Add New" or "Import JSON" to get started.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Add/Edit Form (hidden by default) -->
+            <div id="retrieval-form" class="form-section" style="display: none;">
+              <div class="separator-horizontal"></div>
+              <h3 class="font-semibold mb-3" id="form-title">Add New Application</h3>
+
+              <div class="form-group">
+                <label for="form-appId" class="form-label">Application ID *</label>
+                <input
+                  type="text"
+                  id="form-appId"
+                  class="form-input"
+                  placeholder="AA00EX69LD"
+                  maxlength="10"
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="form-surname" class="form-label">Surname *</label>
+                <input
+                  type="text"
+                  id="form-surname"
+                  class="form-input"
+                  placeholder="YAGI"
+                >
+                <p class="text-xs text-muted">First 5 letters will be used for security question</p>
+              </div>
+
+              <div class="form-group">
+                <label for="form-year" class="form-label">Year of Birth *</label>
+                <input
+                  type="text"
+                  id="form-year"
+                  class="form-input"
+                  placeholder="1968"
+                  maxlength="4"
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="form-mother" class="form-label">Mother's Mother's Given Name *</label>
+                <input
+                  type="text"
+                  id="form-mother"
+                  class="form-input"
+                  placeholder="KAZUKO"
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="form-notes" class="form-label">Notes (optional)</label>
+                <input
+                  type="text"
+                  id="form-notes"
+                  class="form-input"
+                  placeholder="E-2 Renewal, L-1A Initial, etc."
+                >
+              </div>
+
+              <div class="flex gap-2 mt-4">
+                <button class="btn btn-primary flex-1" id="form-save">
+                  💾 Save
+                </button>
+                <button class="btn btn-outline flex-1" id="form-cancel">
+                  Cancel
+                </button>
+              </div>
+            </div>
+
+            <!-- Import Form (hidden by default) -->
+            <div id="import-form" class="form-section" style="display: none;">
+              <div class="separator-horizontal"></div>
+              <h3 class="font-semibold mb-3">Import Applications</h3>
+
+              <!-- Option 1: Paste JSON -->
+              <div class="form-group">
+                <label class="form-label">Option 1: Paste JSON</label>
+                <textarea
+                  id="import-json-text"
+                  class="textarea"
+                  placeholder='{"applications": [...]}'
+                  rows="8"
+                ></textarea>
+                <button class="btn btn-primary w-full mt-2" id="import-from-paste">
+                  📋 Import from Pasted JSON
+                </button>
+              </div>
+
+              <div class="separator-horizontal"></div>
+
+              <!-- Option 2: Upload File -->
+              <div class="form-group">
+                <label class="form-label">Option 2: Upload JSON File</label>
+                <button class="btn btn-outline w-full" id="import-from-file-btn">
+                  📁 Choose File
+                </button>
+              </div>
+
+              <button class="btn btn-ghost w-full mt-2" id="import-cancel">
+                Cancel
+              </button>
+            </div>
+
+            <!-- Instructions -->
+            <div class="info-section mt-4">
+              <h3 class="font-semibold mb-2">How to Use:</h3>
+              <ol class="text-sm text-muted">
+                <li>Add applications using "Add New" or "Import JSON"</li>
+                <li>Navigate to DS-160 retrieval page (ceac.state.gov/genniv)</li>
+                <li>Click "Auto-Fill" on any application</li>
+                <li>Solve the captcha manually</li>
+                <li>Click "Retrieve Application" and save to update timestamp</li>
+              </ol>
+
+              <div class="mt-3 p-3" style="background: #fff3cd; border-radius: 6px; border-left: 4px solid #ffc107;">
+                <p class="text-sm" style="margin: 0; color: #856404;">
+                  <strong>⏰ 30-Day Expiration:</strong> Applications expire if not accessed within 30 days.
+                  Color coding shows urgency:
+                  <span style="color: #28a745;">●</span> Safe (0-14 days),
+                  <span style="color: #ffc107;">●</span> Warning (15-25 days),
+                  <span style="color: #dc3545;">●</span> Critical (26-30 days)
+                </p>
+              </div>
+            </div>
+
+            <!-- Advanced: Edit JSON -->
+            <div class="separator-horizontal"></div>
+            <button class="btn btn-ghost w-full" id="retrieval-edit-json">
+              🔧 Advanced: Edit JSON
+            </button>
+
+            <!-- Edit JSON Form (hidden by default) -->
+            <div id="edit-json-form" class="form-section" style="display: none;">
+              <div class="separator-horizontal"></div>
+              <h3 class="font-semibold mb-3">Edit Raw JSON</h3>
+              <p class="text-sm text-muted mb-3">
+                ⚠️ Advanced users only. Edit raw JSON data for mass operations.
+              </p>
+
+              <textarea
+                id="edit-json-text"
+                class="textarea"
+                rows="15"
+                style="font-family: monospace; font-size: 12px;"
+              ></textarea>
+
+              <div class="flex gap-2 mt-3">
+                <button class="btn btn-primary flex-1" id="edit-json-save">
+                  💾 Save
+                </button>
+                <button class="btn btn-destructive flex-1" id="edit-json-clear">
+                  🗑️ Clear All
+                </button>
+                <button class="btn btn-outline flex-1" id="edit-json-cancel">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
     <!-- Postal Code Lookup Template -->
     <template id="postal-template">
       <div class="module-content">
@@ -473,6 +699,8 @@ This will be intelligently merged into your main data.' rows="8"></textarea>
   </script>
   <script src="modules/text-extractor/text-extractor-service.js"></script>
   <script src="modules/text-extractor/text-extractor-ui.js"></script>
+  <script src="modules/retrieval/retrieval-service.js"></script>
+  <script src="modules/retrieval/retrieval-handlers.js"></script>
   <script type="module" src="sidebar.js"></script>
 </body>
 </html>

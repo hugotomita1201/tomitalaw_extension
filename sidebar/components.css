@@ -544,3 +544,155 @@
   padding-top: 8px;
   padding-bottom: 8px;
 }
+/* DS-160 Retrieval Module Styles */
+.applications-list {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.app-item {
+  padding: 12px;
+  margin-bottom: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #f8f9fa;
+  transition: all 0.2s ease;
+}
+
+.app-item:hover {
+  background: #e9ecef;
+  border-color: #007bff;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.app-id {
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.app-surname {
+  color: #666;
+  font-size: 13px;
+  margin-left: 8px;
+}
+
+.app-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: white;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.app-details {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.app-notes {
+  font-size: 11px;
+  color: #999;
+  font-style: italic;
+  margin-bottom: 8px;
+}
+
+.app-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+}
+
+.form-section {
+  margin-top: 16px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.separator-horizontal {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 16px 0;
+}
+
+/* DS-160 Retrieval Module - Maximize Space */
+#retrieval-template .card {
+  margin: 0;
+}
+
+#retrieval-template .card-header {
+  padding: 10px 12px;
+  padding-bottom: 3px;
+}
+
+#retrieval-template .card-content {
+  padding: 8px;
+  padding-top: 3px;
+}
+
+#retrieval-template .module-content {
+  padding: 0 !important;
+}
+
+/* Responsive button wrapping for narrow sidebars */
+#retrieval-template .btn.w-full {
+  min-width: 100px;
+}
+
+#retrieval-template .flex.gap-2 {
+  flex-wrap: wrap;
+}
+
+#retrieval-template .btn.flex-1 {
+  flex: 1 1 auto;
+  min-width: 140px; /* Wrap to next line if narrower than this */
+}

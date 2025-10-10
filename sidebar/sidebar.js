@@ -27,6 +27,7 @@ function initializeTabs() {
   // Map module IDs to icon names
   const moduleIcons = {
     'ds160': 'fileText',
+    'ds160-retrieval': 'refreshCw',
     'visa': 'calendar',
     'postal': 'mapPin',
     'photo': 'camera',
@@ -138,6 +139,9 @@ function setupModuleHandlers(module) {
     case 'ds160':
       setupDS160Handlers();
       break;
+    case 'ds160-retrieval':
+      setupRetrievalHandlers();
+      break;
     case 'visa':
       setupVisaHandlers();
       break;
@@ -152,6 +156,36 @@ function setupModuleHandlers(module) {
       break;
     // Add more cases as modules are added
   }
+}
+
+// Preprocess JSON from ChatGPT to handle various formatting issues
+function preprocessChatGPTJson(text) {
+  let cleaned = text.trim();
+
+  // Remove code block markers if present (```json ... ```)
+  if (cleaned.startsWith('```json')) {
+    cleaned = cleaned.replace(/^```json\s*\n?/, '').replace(/\n?```\s*$/, '');
+  } else if (cleaned.startsWith('```')) {
+    cleaned = cleaned.replace(/^```\s*\n?/, '').replace(/\n?```\s*$/, '');
+  }
+
+  // Handle Canvas Copy button quote wrapping
+  // Canvas wraps entire JSON in quotes: "{ \"field\": \"value\" }"
+  if (cleaned.startsWith('"') && cleaned.endsWith('"')) {
+    // Check if it's actually a wrapped JSON object
+    try {
+      // Try to parse as string first
+      const possiblyWrapped = JSON.parse(cleaned);
+      if (typeof possiblyWrapped === 'string') {
+        // It was wrapped - use the unwrapped version
+        cleaned = possiblyWrapped;
+      }
+    } catch (e) {
+      // Not wrapped, continue with original
+    }
+  }
+
+  return cleaned.trim();
 }
 
 // DS-160 specific handlers
@@ -770,7 +804,8 @@ function setupDS160Handlers() {
       // Try to parse core data field
       if (coreData) {
         try {
-          const parsedData = JSON.parse(coreData);
+          const cleanedData = preprocessChatGPTJson(coreData);
+          const parsedData = JSON.parse(cleanedData);
           finalData = { ...finalData, ...parsedData };
           
           // Check if this is actually E-visa data
@@ -791,7 +826,8 @@ function setupDS160Handlers() {
       // Try to parse E-visa data field
       if (evisaData) {
         try {
-          const parsedData = JSON.parse(evisaData);
+          const cleanedData = preprocessChatGPTJson(evisaData);
+          const parsedData = JSON.parse(cleanedData);
           finalData = { ...finalData, ...parsedData };
           
           // Check what type of data this is
@@ -1088,9 +1124,10 @@ function setupVisaHandlers() {
         showStatus('Please paste your data first', 'error');
         return;
       }
-      
+
       try {
-        currentData = JSON.parse(input);
+        const cleanedInput = preprocessChatGPTJson(input);
+        currentData = JSON.parse(cleanedInput);
         
         // Save to storage
         chrome.storage.local.set({ visaData: currentData }, () => {

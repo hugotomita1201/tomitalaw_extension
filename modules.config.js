@@ -26,6 +26,17 @@ export const MODULES = [
     active: true
   },
   {
+    id: 'ds160-retrieval',
+    name: 'DS-160 Retrieval',
+    description: 'Auto-fill DS-160 application retrieval forms with 30-day expiration tracking',
+    contentScript: 'ds160-retrieval-content.js',
+    domains: [
+      'https://ceac.state.gov/genniv/*'
+    ],
+    dataKey: 'ds160RetrievalData',
+    active: true
+  },
+  {
     id: 'postal',
     name: 'Postal Lookup',
     description: 'Japanese postal code to address lookup',

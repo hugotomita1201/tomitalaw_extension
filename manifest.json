@@ -26,7 +26,10 @@
   "content_scripts": [
     {
       "matches": ["https://ceac.state.gov/*"],
-      "js": ["content/modules/ds160-content.js"],
+      "js": [
+        "content/modules/ds160-content.js",
+        "content/modules/ds160-retrieval-content.js"
+      ],
       "run_at": "document_idle"
     },
     {

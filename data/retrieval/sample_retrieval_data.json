@@ -1,0 +1,26 @@
+{
+  "exportDate": "2025-10-09T00:00:00.000Z",
+  "applications": [
+    {
+      "applicationId": "AA00EX69LD",
+      "surname": "YAGI",
+      "yearOfBirth": "1968",
+      "motherMotherName": "KAZUKO",
+      "notes": "E-2 Renewal - Executive Vice President"
+    },
+    {
+      "applicationId": "AA00EX70MN",
+      "surname": "TANAKA",
+      "yearOfBirth": "1975",
+      "motherMotherName": "HARUKO",
+      "notes": "L-1A Initial - Plant Manager"
+    },
+    {
+      "applicationId": "AA00EX71OP",
+      "surname": "NAKAMURA",
+      "yearOfBirth": "1982",
+      "motherMotherName": "YUKI",
+      "notes": "H-1B Extension - Software Engineer"
+    }
+  ]
+}

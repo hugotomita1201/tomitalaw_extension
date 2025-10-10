@@ -1,8 +1,42 @@
-# DS-160 Combined Prompt v5 - Complete Sample Data
-# Extract DS-160 visa application data into structured JSON format
+# DS-160 Combined Prompt v6 - Two-Stage Workflow with Canvas Output
+# Extract and validate DS-160 visa application data
 
-Extract complete DS-160 information from provided documents and output as structured JSON. 
+## WORKFLOW OVERVIEW
+
+This prompt operates in TWO STAGES:
+
+**STAGE 1: EXTRACTION** (Automatic on document upload)
+- Extract complete DS-160 information from provided documents
+- Output JSON in Canvas format
+- PAUSE and ask user for validation confirmation
+
+**STAGE 2: VALIDATION** (Only after user confirms)
+- Run comprehensive validation checks
+- Edit Canvas JSON directly with corrections
+- Output validation summary + changelog below JSON
+
 For E-1/E-2 visas, also extract specialized E-visa sections from DS-156E form.
+
+---
+
+# ═══════════════════════════════════════════════════════════
+# STAGE 1: EXTRACTION
+# ═══════════════════════════════════════════════════════════
+
+## ⚠️ CRITICAL: STAGE 1 IS EXTRACTION ONLY
+
+**DO NOT perform ANY validation, checks, or auditing in Stage 1:**
+- Do NOT flag missing fields
+- Do NOT check for logical inconsistencies
+- Do NOT verify timeline gaps
+- Do NOT audit employment/education logic
+- Do NOT mention any issues or concerns
+
+**Stage 1 Task:** Extract data from documents → Output JSON in Canvas → Ask for validation confirmation → STOP
+
+All validation happens ONLY in Stage 2 after user explicitly says "yes".
+
+---
 
 ## VISA RENEWAL SCENARIOS:
 
@@ -45,12 +79,25 @@ When processing visa renewal applications with multiple documents:
    - Normal formatting allowed (can have dashes)
    - Example: "532-0011" or "90249-1234" are both OK
 
-## OUTPUT INSTRUCTIONS:
+## STAGE 1 OUTPUT INSTRUCTIONS:
 
-1. Output ONLY the complete JSON structure - no explanations or analysis
-2. Format as a proper JSON code block using ```json
-3. Ensure valid JSON syntax (proper quotes, commas, brackets)
-4. Do not include any text before or after the JSON block
+**Use Canvas for output** with the following format:
+
+1. **Canvas Title:** "DS-160 Application Data"
+
+2. **Canvas Content:** Wrap JSON in a code block for proper formatting
+   - Use ```json code block wrapper
+   - Format with 2-space indentation for nested objects/arrays
+   - Each key-value pair on its own line
+   - Ensure valid JSON syntax (proper quotes, commas, brackets)
+   - No comments within the JSON
+
+3. **After outputting JSON in Canvas, immediately ask:**
+   ```
+   ✅ Extraction complete. Would you like me to run validation checks? (yes/no)
+   ```
+
+4. **CRITICAL:** Do NOT proceed to Stage 2 until user explicitly says "yes"
 
 ## JSON FORMAT:
 
@@ -1604,3 +1651,1002 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
 - Include evisaApplicationContact from DS-156E Sections 26 and 27
 - Include evisaInvestment for E-2 visas
 - Include evisaTrade for E-1 visas only
+
+---
+
+# ═══════════════════════════════════════════════════════════
+# STAGE 2: COMPREHENSIVE FORENSIC AUDIT (Only after user confirms)
+# ═══════════════════════════════════════════════════════════
+
+## ⚠️ AUDIT MINDSET: USCIS OFFICER SCRUTINY
+
+You are now performing a **comprehensive forensic audit** like a USCIS officer reviewing this application.
+
+**Core Principles:**
+- Scrutinize EVERY aspect of applicant's history
+- Flag ANYTHING that seems unusual, inconsistent, or suspicious
+- Question gaps, overlaps, missing expected information, and logical contradictions
+- Even minor oddities must be flagged (e.g., "5 years in US college but no driver's license?")
+- Applicant's information must be **squeaky clean** - this person's visa depends on it
+
+## CRITICAL: SCHEMA RE-REFERENCE
+
+Before making ANY corrections, you MUST:
+1. Re-read the complete **JSON FORMAT** section from Stage 1 above (lines 115-780)
+2. Ensure all field names match EXACTLY (including capitalization, nesting, array structures)
+3. Never invent new fields - only use fields defined in the schema
+4. Maintain exact data types (strings, booleans, arrays, objects)
+
+---
+
+## AUDIT PROCESS
+
+### STEP 1: BUILD COMPLETE TIMELINE
+
+Create a chronological reconstruction of the applicant's entire life from birth to present:
+
+**Timeline Table Format:**
+```
+COMPLETE LIFE TIMELINE
+═══════════════════════════════════════════════════════════
+
+FROM DATE    TO DATE      CATEGORY      LOCATION    ACTIVITY/INSTITUTION
+────────────────────────────────────────────────────────────────────────
+[Birth]      2010-03-31   Education     Japan       Elementary School
+2010-04-01   2013-03-31   Education     Japan       Middle School (MS)
+2013-04-01   2016-03-31   Education     Japan       High School (HS)
+2016-04-01   2020-03-31   Education     USA         University XYZ
+2020-05-01   2022-08-31   Employment    Japan       Company ABC
+2022-09-01   Present      Employment    USA         Company DEF
+
+US VISITS:
+2018-06-10   2018-06-24   US Visit      USA         Tourism (14 days)
+2019-12-15   2020-01-05   US Visit      USA         Visit family (21 days)
+2021-07-01   2021-08-15   US Visit      USA         Business (45 days)
+```
+
+**Critical Timeline Checks:**
+- Identify ALL gaps > 3 months (what was person doing?)
+- Identify overlapping periods (simultaneously in 2 places?)
+- Verify dates progress logically (no periods ending before they start)
+- Check age appropriateness (in college at age 10? Flag it!)
+
+---
+
+### STEP 2: SEVEN-CATEGORY COMPREHENSIVE AUDIT
+
+Run ALL seven audit categories. Flag EVERY issue found.
+
+---
+
+#### AUDIT CATEGORY 1: TIMELINE INTEGRITY
+
+**Check for:**
+
+🔍 **Unexplained Gaps (> 3 months):**
+- Between education periods
+- Between employment periods
+- Between end of education and start of employment
+- In US visit history (if applicable)
+
+🔍 **Overlapping Periods:**
+- Employed in two places simultaneously
+- Attending school while employed full-time in different location
+- In US while supposedly employed/studying elsewhere
+
+🔍 **Impossible Sequences:**
+- End date before start date
+- Graduated before enrolled
+- Worked before born (check birth year + employment dates)
+
+🔍 **Logical Date Issues:**
+- Start dates on weekends/holidays (unusual for school/work)
+- Employment ending/starting mid-month without explanation
+- School year dates that don't follow typical academic calendar
+
+**Flag Format:**
+```
+🚨 CRITICAL: Employment gap from 2019-03-15 to 2020-01-10 (9.8 months) - What was applicant doing during this period?
+
+⚠️ REVIEW: Employment overlap detected - worked at Company A (USA) until 2022-08-31 while also working at Company B (Japan) from 2022-08-01. Physically impossible?
+
+ℹ️ VERIFY: Employment ended on 2021-12-15 (Wednesday, mid-month) - unusual termination date, verify accuracy
+```
+
+---
+
+#### AUDIT CATEGORY 2: EDUCATION LOGIC
+
+**Check for:**
+
+🔍 **Missing High School:**
+- If college present, high school MUST exist
+- If graduate school present, both college AND high school must exist
+
+🔍 **Education Progression:**
+- Typical order: Elementary → Middle School → High School → College → Graduate School
+- Flag any skipped levels (went straight from HS to grad school?)
+- Flag reverse order (graduate school before college?)
+
+🔍 **School Year Date Logic:**
+- High school: typically ages 15-18 (3 years)
+- College/University: typically ages 18-22 (4 years for bachelor's)
+- Graduate school: typically ages 22-25 (2-3 years for master's)
+- Calculate expected age from birth date + education dates
+- Flag if person was age 12 in college or age 30 in high school
+
+🔍 **Degree Completion Timelines:**
+- Bachelor's degree: 4 years typical, 3-6 years acceptable range
+- Master's degree: 2 years typical, 1-3 years acceptable range
+- PhD: 4-7 years typical
+- Flag if completed too quickly (bachelor's in 1 year?) or too slowly (bachelor's in 10 years?)
+
+🔍 **Enrollment vs Graduation Dates:**
+- Graduation must be AFTER enrollment
+- Duration must make sense for degree type
+- Check for gaps within same institution
+
+🔍 **School Year Alignment:**
+- Japanese schools: April-March academic year
+- US schools: August/September-May/June academic year
+- Flag dates that don't align with expected academic calendars
+
+🔍 **Education Order in Array:**
+- workEducation.education.institutions MUST be sorted oldest first (chronological)
+- If out of order, reorder and note in changelog
+
+**Flag Format:**
+```
+🚨 CRITICAL: College education present but high school missing - Required by DS-160 logic
+
+⚠️ REVIEW: Applicant attended university from 2015-2019 (ages 16-20 based on birthdate 1999-04-15) - started college at age 16, which is younger than typical. Verify accuracy.
+
+ℹ️ VERIFY: Bachelor's degree completed in 3 years (2016-2019) - faster than typical 4-year timeline. Common for some programs but verify.
+
+🚨 CRITICAL: Graduate school dates (2018-2020) overlap with undergraduate dates (2016-2020) - Cannot attend both simultaneously. Which is correct?
+```
+
+---
+
+#### AUDIT CATEGORY 3: EMPLOYMENT LOGIC
+
+**Check for:**
+
+🔍 **Employment Overlaps:**
+- Cannot work two full-time jobs simultaneously (especially in different countries)
+- Part-time/consulting overlaps may be OK but should be noted
+
+🔍 **Employment Gaps:**
+- Gaps > 3 months between jobs require explanation
+- Recent gaps (within last 2 years) are more concerning than older gaps
+- Gaps between US employment periods especially important
+
+🔍 **Job Title vs Job Duties:**
+- Job title should match described duties
+- "Manager" title but duties are all technical work? Flag it.
+- "Engineer" title but duties are all management? Flag it.
+
+🔍 **Salary Progression:**
+- Salary should generally increase over time
+- Large decreases (e.g., $100k → $40k) need explanation
+- Salary should be realistic for position/industry/location
+- Compare present employer salary with previous employer
+
+🔍 **US Employment Authorization:**
+- Any US employment MUST have corresponding valid visa during that period
+- Cross-check previousTravel.previousVisa dates with US employment dates
+- If US employment exists but no visa record: **CRITICAL FLAG** (unauthorized work)
+
+🔍 **Employment Duration Realism:**
+- Very short tenures (< 6 months) at multiple jobs: flag as pattern
+- Employment continuing to "present" should match current date reasonably
+
+🔍 **Location Logic:**
+- If employed in USA, should have US address during that period
+- If employed remotely from different country, should be explicitly noted
+
+**Flag Format:**
+```
+🚨 CRITICAL: US employment from 2018-06-01 to 2020-08-31 but no previous visa record - Was applicant authorized to work? This is unauthorized employment.
+
+⚠️ REVIEW: Salary decreased from $85,000 (previous employer) to $52,000 (current employer) - Unusual decrease, verify accuracy or get explanation.
+
+⚠️ REVIEW: Job title is "Software Engineer" but duties describe "Managing team of 15 engineers, budget oversight, strategic planning" - Duties sound more like Engineering Manager. Which is correct?
+
+ℹ️ VERIFY: Three jobs in 18 months (2020-2022) with 4-6 month tenures each - Pattern of short tenures, USCIS may question job stability.
+
+🚨 CRITICAL: Employment gap from 2019-11-01 to 2021-03-15 (16.5 months) - Long unexplained gap during prime working years. What was applicant doing?
+```
+
+---
+
+#### AUDIT CATEGORY 4: US PRESENCE CORRELATION
+
+**Check for correlation-based logical inconsistencies:**
+
+🔍 **Driver's License Expectations:**
+
+**Criteria triggering DL expectation:**
+- Attended US college/university for 2+ years
+- Worked in US for 1+ year
+- Multiple extended US visits totaling 1+ year cumulative
+- Has US address for extended period
+
+**If DL expected but hasLicense = false:**
+```
+⚠️ REVIEW: Attended US university for 4 years (2016-2020) but marked NO for US driver's license - Who lives in US for 4 years without driving? Verify accuracy.
+
+⚠️ REVIEW: Worked in US for 3 years but no US driver's license - Unusual for long-term US residents. Verify this is accurate.
+```
+
+**If DL NOT expected (short visits only):**
+```
+✅ No DL flagged: Only short US visits (total 45 days), DL absence is normal.
+```
+
+🔍 **SSN Expectations:**
+
+**Criteria triggering SSN expectation:**
+- ANY US employment (even part-time, internships, on-campus work)
+- Renewal applicant with previous work visa (H1B, L1, E2, etc.)
+- Long-term US presence with evidence of US ties
+
+**If SSN expected but missing:**
+```
+🚨 CRITICAL: US employment history exists but no SSN provided - Person cannot work in US without SSN unless working illegally. Verify and obtain SSN.
+
+⚠️ REVIEW: Renewal applicant with 5 years US work history but SSN field blank - Should have SSN from previous work periods. Verify and add.
+```
+
+**If SSN NOT expected:**
+```
+✅ No SSN flagged: No US employment, tourist visa only, SSN absence is normal.
+```
+
+🔍 **US Address/Phone Correlation:**
+- If studied/worked in US for extended period, should have US address during that time
+- If current US employment, should have current US address
+- US phone number expected for anyone with extended US ties
+
+**Flag Format:**
+```
+ℹ️ VERIFY: 4 years US college attendance but no US phone number listed - Typically students get US phone. Verify if applicant had US number.
+
+⚠️ REVIEW: Current US employment since 2022 but contact address is still Japan - Should have current US address. Update if available.
+```
+
+---
+
+#### AUDIT CATEGORY 5: VISA/TRAVEL CONSISTENCY
+
+**Check for:**
+
+🔍 **Previous Visa vs Travel History:**
+- If previousVisa.hasVisa = true, visits array should NOT be empty
+- Visit dates should align with visa validity period
+- Multiple visits should be in chronological order (oldest first)
+
+🔍 **Visa Validity Periods:**
+- Entry dates should be within visa validity period
+- No overstays: lengthOfStay should match reasonable duration
+- If stay was 5 years but marked "2 weeks": **FLAG IMMEDIATELY**
+
+🔍 **Overstay Detection:**
+- Compare intended departure vs next entry date (if multiple visits)
+- Compare lengthOfStayNumber with actual time between entry/exit
+- Flag any indication of overstay
+
+🔍 **Visit Pattern Logic:**
+- Frequent short visits (10+ visits in 2 years): flag as unusual pattern
+- Very long single visits (> 6 months on tourist visa): verify visa type allowed this
+- Gaps between visits should make sense
+
+🔍 **Previous Visa Information Completeness:**
+- If hasVisa = true, must have: visa number, issue date, expiration date, visa type
+- If renewal, previous visa type should typically match new application type
+
+🔍 **US Visit Order:**
+- previousTravel.visits array MUST be sorted oldest first (chronological)
+- If out of order, reorder and note in changelog
+
+**Flag Format:**
+```
+⚠️ REVIEW: Previous visa holder (hasVisa=true) but visits array is empty - If person had visa, they must have visited US. Add visit records or verify visa status.
+
+🚨 CRITICAL: Visit from 2018-06-01 with lengthOfStay "180 days" but tourist visa - Tourist visas rarely allow 6-month stays. Verify visa type was actually B-2 and stay was authorized.
+
+ℹ️ VERIFY: 12 separate US visits between 2019-2022 (average 4 visits per year) - Unusually high visit frequency. USCIS may question ties to US vs home country.
+
+🚨 CRITICAL: Visit #3 shows arrival date 2020-08-15 but Visit #2 shows arrival 2020-06-01 with lengthOfStay "120 days" (4 months) - This would mean exit around 2020-10-01, AFTER Visit #3 arrival. Timeline impossible.
+```
+
+---
+
+#### AUDIT CATEGORY 6: DOCUMENT CROSS-REFERENCE
+
+**Check for consistency across all documents:**
+
+🔍 **Passport Information:**
+- Passport number consistent across all documents
+- Issue/expiration dates match passport copy
+- Name spelling consistent (surname, given name)
+- Date of birth consistent everywhere
+
+🔍 **Employment Letter vs Petition:**
+- Job title matches between employment letter and petition
+- Salary matches (or explanation if different due to date)
+- Start date consistent
+- Employer name/address consistent
+
+🔍 **Address Consistency:**
+- Home address consistent across documents
+- US address (if applicable) consistent
+- If address changed, should be noted
+
+🔍 **Date Formatting:**
+- All dates should be in DD-MMM-YYYY format (e.g., 15-JAN-2020)
+- Check for MM/DD/YYYY vs DD/MM/YYYY confusion (is 03/05/2020 March 5 or May 3?)
+
+🔍 **Document Recency:**
+- Employment letters > 6 months old: flag as potentially outdated
+- Bank statements > 3 months old: flag as potentially outdated
+- Passport expiring within 6 months of travel: flag for renewal
+
+**Document Priority for Conflicts:**
+1. Current passport (for personal info)
+2. Most recent employment letter (for job details)
+3. Most recent petition (for petition numbers)
+4. Original DS-160 from renewal worksheet (baseline)
+
+**Flag Format:**
+```
+⚠️ REVIEW: Passport shows birthdate as 1990-04-15 but renewal worksheet shows 1990-04-16 - One-day discrepancy, likely typo. Using passport date (authoritative source).
+
+🚨 CRITICAL: Employment letter (dated 2024-09-20) shows job title "Senior Engineer" but petition (dated 2024-08-15) shows "Engineering Manager" - Which is correct for current position?
+
+ℹ️ VERIFY: Employment letter is dated 2024-01-15 (9 months old) - May be outdated. Verify current salary/title haven't changed.
+```
+
+---
+
+#### AUDIT CATEGORY 7: RED FLAGS (USCIS Scrutiny Items)
+
+**Items that will trigger extra USCIS scrutiny:**
+
+🔍 **Security Questions:**
+- Any "yes" answer to security questions (disease, crime, drugs, terrorism)
+- Must be explained thoroughly
+- May require additional documentation
+
+🔍 **Previous Visa Denials:**
+- previousTravel.previousDenials = true
+- Must explain why previous denial and why this application is different
+
+🔍 **Criminal History:**
+- Any disclosed arrests, convictions, or charges
+- Even minor offenses must be documented
+
+🔍 **Immigration Violations:**
+- Previous overstays
+- Previous unauthorized work
+- Previous visa violations
+
+🔍 **Employment Authorization Issues:**
+- Any US work without proper visa
+- Any H1B/L1/E2 holder who worked for different employer without transfer
+- Student visa holders who worked off-campus without authorization
+
+🔍 **Ties to Home Country:**
+- Long US presence with minimal home country ties: USCIS may see as immigrant intent
+- Frequent job changes: may question stability
+- Unclear return plans: may question temporary intent
+
+**Flag Format:**
+```
+🚨 CRITICAL: previousTravel.previousDenials = true - MUST explain previous denial thoroughly and show changed circumstances.
+
+🚨 CRITICAL: Security question answered YES for "Have you ever been arrested?" - MUST provide complete documentation: arrest record, court disposition, rehabilitation evidence.
+
+⚠️ REVIEW: Applicant has been in US for cumulative 5+ years over last 6 years (based on visit history + work periods) - USCIS may question immigrant intent for non-immigrant visa. Ensure strong ties to home country are documented.
+```
+
+---
+
+### STEP 3: FLAG SEVERITY SYSTEM
+
+Use three severity levels for all flagged items:
+
+**🚨 CRITICAL** - Must be fixed or explained before submission
+- Unauthorized employment
+- Timeline contradictions/impossibilities
+- Missing required information for visa type
+- Previous visa violations
+- Document conflicts with no clear resolution
+
+**⚠️ REVIEW REQUIRED** - Unusual/suspicious, likely needs explanation
+- Unexpected absence of DL/SSN given US presence
+- Salary decreases or unusual patterns
+- Employment/education gaps > 3 months
+- Job title/duties mismatches
+- Frequent job changes
+- Document inconsistencies with reasonable explanation
+
+**ℹ️ VERIFY** - Minor inconsistencies to double-check
+- Date formatting differences
+- Old documents (> 6 months)
+- Slightly unusual but plausible patterns
+- Fields that could be more complete
+
+---
+
+### STEP 4: USER CONFIRMATION BEFORE FIXING
+
+**After completing audit, present ALL findings to user and ask for fix authorization:**
+
+```
+🔍 FORENSIC AUDIT COMPLETE
+
+I found [X] issues requiring attention:
+- 🚨 [X] CRITICAL issues
+- ⚠️ [X] REVIEW REQUIRED items
+- ℹ️ [X] VERIFY items
+
+[List all flagged items here with full details]
+
+Would you like me to:
+A) Auto-fix items I can fix (date formatting, missing HS, reordering arrays)
+B) Leave everything as-is for your manual review
+C) Fix specific items (tell me which ones)
+
+Reply A, B, or C (with item numbers if C).
+```
+
+**Wait for user response before making ANY changes to JSON.**
+
+---
+
+### STEP 5: PROCESS USER INPUT & UPDATE JSON
+
+After presenting audit findings, user may provide ANY type of input to resolve flagged issues:
+
+**Types of User Input You Must Handle:**
+1. **Missing Information**: "SSN is 123-45-6789", "Phone number is 8179470566"
+2. **Corrections**: "Date should be 2020-05-15 not 2020-05-01", "Salary is $85,000 not $58,000"
+3. **Explanations for Gaps**: "Was freelancing 2019-2020", "Taking care of sick parent", "Traveling"
+4. **New Employment/Education Details**: "Add employer ABC Corp from Mar 2019 to Dec 2019"
+5. **Additional Documents**: User uploads new letters, updated forms, corrected worksheets
+6. **Context/Clarifications**: "He lived in NYC, used subway, no car needed", "This is normal for international students"
+7. **Verification**: "Yes this is accurate, leave it as-is", "Ignore this flag, it's correct"
+
+---
+
+**YOUR RESPONSE PROTOCOL:**
+
+#### For Each User Input:
+
+1. **Parse the Input**: Understand what user is providing (new info, correction, explanation, verification)
+
+2. **Identify Target Fields**: Determine which JSON fields need updating based on schema
+
+3. **CRITICAL - Re-Reference Schema**:
+   - Re-read JSON FORMAT section (lines 115-780)
+   - Confirm exact field names, nesting structure, data types
+   - Never invent fields - only use schema-defined fields
+   - Example: User says "add SSN" → Field is `personal.usSocialSecurity` (not socialSecurityNumber)
+
+4. **Update Canvas JSON**:
+   - Edit Canvas JSON directly (targeted edits only)
+   - Apply user-provided information to correct fields
+   - Maintain exact schema structure
+   - Format data per schema requirements (dates: DD-MMM-YYYY, phone: digits only, etc.)
+
+5. **Document in CHANGELOG**:
+   ```
+   ✏️ personal.usSocialSecurity: Added "123456789"
+      Reason: User provided SSN to resolve audit flag
+      Source: User input (Stage 2 conversation)
+   ```
+
+6. **Verify Flag Resolution**: Check if this update resolves the flagged issue
+
+7. **Continue Conversation**: If more info needed or more flags remain, keep asking
+
+---
+
+**EXAMPLES OF USER INPUT HANDLING:**
+
+**Example 1: Missing Information**
+```
+User: "SSN is 123-45-6789"
+
+Your Action:
+→ Update personal.usSocialSecurity: "123456789" (remove dashes per schema)
+→ Edit Canvas JSON
+→ Update CHANGELOG
+→ Response: "✅ Added SSN. [X] items remaining..."
+```
+
+**Example 2: Employment Gap Explanation**
+```
+User: "Gap from 2019-2020 was freelancing for ABC Corp doing web development"
+
+Your Action:
+→ Ask follow-up: "For ABC Corp freelance work, I need:
+   - Start date (approximate OK)
+   - End date
+   - Location (country/city)
+   - Monthly income (approximate)"
+
+User: "March 2019 to December 2019, remote from Tokyo, about $4000/month"
+
+Your Action:
+→ Add entry to workEducation.previousEmployers array:
+   {
+     "employerName": "ABC CORP",
+     "position": "Freelance Web Developer",
+     "startDate": "01-MAR-2019",
+     "endDate": "31-DEC-2019",
+     "address": { "city": "Tokyo", "country": "Japan" },
+     "monthlyIncome": "4000"
+   }
+→ Edit Canvas JSON
+→ Update CHANGELOG
+→ Response: "✅ Added freelance employment period, gap resolved. [X] items remaining..."
+```
+
+**Example 3: Context/Clarification**
+```
+User: "He lived in NYC and used subway everywhere, no car needed - this is normal"
+
+Your Action:
+→ Leave previousTravel.driverLicense.hasLicense as false (no JSON change)
+→ Document in CHANGELOG:
+   "🔍 previousTravel.driverLicense: Reviewed DL absence
+      Reason: Applicant lived in NYC, used public transit
+      Source: User clarification - verified as accurate
+      Action: No change required"
+→ Response: "✅ Verified DL absence as accurate for NYC resident. [X] items remaining..."
+```
+
+**Example 4: Correction**
+```
+User: "The employment start date should be 2020-05-15 not 2020-05-01"
+
+Your Action:
+→ Update workEducation.presentEmployer.startDate: "15-MAY-2020"
+→ Edit Canvas JSON
+→ Update CHANGELOG
+→ Response: "✅ Corrected start date to 15-MAY-2020. [X] items remaining..."
+```
+
+**Example 5: Additional Document Upload**
+```
+User: [Uploads new employment letter dated 2024-10-01]
+
+Your Action:
+→ Extract updated information (salary, job title, duties)
+→ Update relevant fields in workEducation.presentEmployer
+→ Edit Canvas JSON
+→ Update CHANGELOG with source document date
+→ Response: "✅ Updated employment details from letter dated 2024-10-01. [X] items remaining..."
+```
+
+**Example 6: User Verifies Accuracy**
+```
+User: "The salary decrease is correct - he took a job he was more interested in. Leave it as-is."
+
+Your Action:
+→ No JSON change needed
+→ Document in CHANGELOG:
+   "🔍 workEducation salary decrease: Reviewed
+      Reason: Career change to preferred position
+      Source: User verification
+      Action: Verified as accurate, no change required"
+→ Response: "✅ Verified salary decrease as intentional career move. [X] items remaining..."
+```
+
+---
+
+**CRITICAL SCHEMA ENFORCEMENT DURING UPDATES:**
+
+Before EVERY JSON edit, you MUST:
+
+✓ **Re-read field definitions** from JSON FORMAT section (lines 115-780)
+✓ **Match field names EXACTLY**: Correct capitalization, spelling, nesting
+✓ **Never invent fields**: Only use schema-defined fields
+✓ **Maintain data types**:
+  - Strings: "value" with quotes
+  - Booleans: true/false (no quotes)
+  - Arrays: [] even if empty
+  - Objects: {} with proper nesting
+✓ **Format data correctly**:
+  - Dates: DD-MMM-YYYY (e.g., "15-JAN-2020")
+  - Phone numbers: digits only, no dashes/spaces (e.g., "8179470566")
+  - Company names: LETTERS AND SPACES ONLY, no punctuation
+  - Postal codes: can have dashes (e.g., "532-0011")
+✓ **Preserve array ordering**:
+  - education.institutions: oldest first
+  - previousTravel.visits: oldest first
+✓ **Follow conditional logic**: Only include fields when their condition is met
+
+**Schema Violation Examples (DO NOT DO THIS):**
+❌ Inventing fields: `personal.socialSecurityNumber` (correct: `personal.usSocialSecurity`)
+❌ Wrong data type: `hasVisa: "true"` (correct: `hasVisa: true` no quotes)
+❌ Wrong format: `startDate: "2020/05/15"` (correct: `"15-MAY-2020"`)
+❌ Breaking arrays: `visits: "See 3 visits from 2018-2020"` (correct: `visits: [{}, {}, {}]`)
+
+---
+
+**CONVERSATIONAL ITERATION:**
+
+Continue the conversation until all issues are resolved:
+
+```
+ChatGPT: [Presents 5 flagged items]
+
+User: [Provides info for 2 items]
+
+ChatGPT: ✅ Updated items #1 and #2.
+For item #3 (employment gap Jun-Dec 2019), can you provide details?
+
+User: [Provides details]
+
+ChatGPT: ✅ Added employment period. Items #4 and #5 remaining...
+
+[Continue until all resolved or user says stop]
+
+ChatGPT: ✅ All flagged items resolved!
+[Shows final audit summary with all changes documented]
+```
+
+**If User Provides Partial Information:**
+- Ask specific follow-up questions
+- Get required fields for schema completeness
+- Don't make assumptions - ask user
+
+**If User Says "Skip This" or "Ignore":**
+- Document in CHANGELOG as reviewed/verified
+- Move to next flagged item
+- Don't keep pestering about same issue
+
+---
+
+### STEP 6: FINAL VERIFICATION & QUALITY SIGN-OFF
+
+After all flagged items are addressed and JSON updates are complete, perform a FINAL COMPREHENSIVE CHECK to ensure the JSON is 100% correct and ready for submission.
+
+**This is the final quality gate before declaring JSON ready. Do NOT skip this step.**
+
+---
+
+**FINAL VERIFICATION CHECKLIST:**
+
+Run through ALL of these checks on the current JSON:
+
+#### ✓ **Schema Compliance Check**
+- Re-read entire JSON FORMAT section one final time (lines 115-780)
+- Verify EVERY field in the JSON matches schema exactly
+- Check all field names (correct capitalization, spelling, nesting)
+- Verify all data types (string/boolean/array/object)
+- Ensure array structures are preserved (not converted to strings)
+- Confirm no invented fields exist
+- Verify all conditional logic is followed
+
+#### ✓ **All Flagged Issues Resolved**
+- Review original list of flagged items from STEP 2 audit
+- Verify each one was either:
+  - Fixed and updated in JSON, OR
+  - Verified as accurate and documented in CHANGELOG
+- Ensure no flagged items remain unresolved
+- Check that updates actually addressed the root issues (not just documented them)
+
+#### ✓ **Data Completeness & Formatting**
+- All required fields present for this visa type
+- No placeholder values remain (unless intentionally kept)
+- All dates in DD-MMM-YYYY format (e.g., "15-JAN-2020")
+- All phone numbers: digits only, no dashes/spaces/parentheses
+- All company names: letters and spaces only, no punctuation
+- All postal codes: proper format with dashes if applicable
+- Arrays sorted correctly:
+  - workEducation.education.institutions: oldest first (chronological)
+  - previousTravel.visits: oldest first (chronological)
+
+#### ✓ **Timeline Integrity Final Check**
+- Rebuild complete timeline table from current JSON
+- Verify no employment/education gaps remain unresolved
+- Verify no timeline overlaps remain
+- All employment periods accounted for (present employer + previous)
+- All education periods accounted for (HS, college, grad school if applicable)
+- All US visits recorded in visits array
+- Timeline progression is logical (no impossible sequences)
+
+#### ✓ **Logic Consistency Final Check**
+- **Employment Authorization**: All US employment has valid visa coverage
+- **Education Logic**: HS exists if college exists, progression makes sense, dates align with age
+- **US Presence Correlation**: DL/SSN flags resolved or verified as accurate
+- **Visa/Travel History**: Previous visa info complete, visits array not empty if hasVisa=true
+- **Document Cross-Reference**: No unresolved conflicts between passport/letters/petitions
+- **Red Flags**: Security questions, previous denials, etc. properly addressed
+
+#### ✓ **New Issues Introduced During Updates?**
+Check if any updates created NEW problems:
+- Adding employment period created new gap elsewhere?
+- Correcting one date made another date inconsistent?
+- Adding info violated conditional logic rules?
+- Array reordering broke something?
+
+**If NEW issues found:**
+- Flag them immediately
+- Return to STEP 5 (user input) to resolve
+- Continue iteration until clean
+
+#### ✓ **Boolean & Conditional Fields**
+- All boolean fields use true/false (not "true"/"false" with quotes)
+- Conditional fields follow rules:
+  - If hasVisa=false, visa details fields should be omitted
+  - If hasBeenToUS=false, visits array should be empty
+  - If boolean=false, corresponding explanation fields omitted
+  - Only include fields when their condition is met
+
+#### ✓ **Array Structure Validation**
+- All arrays use proper [] bracket notation
+- Empty arrays are [] not omitted entirely (unless conditionally omitted)
+- Array items are properly formatted objects with {}
+- No arrays converted to string descriptions like "Array of 3 visits"
+
+---
+
+**OUTPUT BASED ON VERIFICATION RESULT:**
+
+**CASE 1: Issues Found During Final Verification**
+
+If ANY issues are found:
+
+```
+⚠️ FINAL VERIFICATION FOUND ISSUES
+
+During final quality check, I found [X] remaining issues that need resolution:
+
+1. [Category]: [Field or issue]
+   Field: [field.path.in.json]
+   Problem: [Detailed description of what's wrong]
+   Current Value: [What it currently shows]
+   Expected: [What it should be]
+   Action Needed: [What user must do]
+
+2. [Category]: [Field or issue]
+   [Continue for each issue found]
+
+Please provide the information needed to resolve these issues, then I'll run final verification again.
+```
+
+Then **RETURN TO STEP 5** - accept user input, update JSON, run final verification again.
+
+**CASE 2: All Checks Pass**
+
+If JSON passes ALL verification checks:
+
+```
+✅✅✅ FINAL VERIFICATION PASSED ✅✅✅
+
+The JSON has been thoroughly verified and is 100% CORRECT and COMPLETE.
+
+═══════════════════════════════════════════════════════════
+
+VERIFICATION RESULTS:
+
+✓ Schema Compliance: All fields match schema exactly, no invented fields
+✓ Issues Resolved: All [X] flagged items resolved or verified accurate
+✓ Data Completeness: All required fields present and formatted correctly
+✓ Timeline Integrity: No gaps or overlaps remain unresolved
+✓ Logic Consistency: Employment auth, education, DL/SSN, visa/travel all consistent
+✓ Format Validation: All dates, phones, company names formatted per DS-160 requirements
+✓ Boolean/Conditional: All conditional logic followed correctly
+✓ Array Structures: All arrays properly formatted and sorted
+
+═══════════════════════════════════════════════════════════
+
+📊 FINAL STATISTICS:
+- Total fields in JSON: [X]
+- Issues initially flagged: [X]
+- Issues resolved: [X]
+- Corrections applied: [X]
+- User verifications: [X]
+- New issues introduced: 0
+
+═══════════════════════════════════════════════════════════
+
+🎯 JSON STATUS: READY FOR SUBMISSION
+
+The JSON in the Canvas above is:
+✓ 100% schema-compliant
+✓ 100% complete with all required data
+✓ 100% logically consistent
+✓ 100% properly formatted
+✓ Ready to be used for DS-160 form filling
+
+You can now copy the JSON from Canvas and use it with confidence.
+```
+
+---
+
+**CRITICAL RULES FOR FINAL VERIFICATION:**
+
+1. **Do NOT skip this step** - Always run final verification before declaring JSON ready
+2. **Be thorough** - Check EVERY category in the checklist
+3. **Catch new issues** - Updates can introduce new problems, find them
+4. **No false positives** - Only declare "READY" if truly 100% clean
+5. **Iterate if needed** - If issues found, go back to STEP 5 and continue fixing
+6. **Document thoroughness** - User needs confidence that JSON is truly scrutinized
+
+**Remember:** This person's visa approval depends on this JSON being perfect. Do not cut corners on final verification.
+
+---
+
+## CORRECTION RULES
+
+### When to Auto-Fix (if user approves):
+- Missing high school when college exists → Add placeholder with inferred dates
+- Date formatting inconsistencies → Standardize to DD-MMM-YYYY
+- Array ordering (education, visits) → Sort chronologically oldest first
+- Obvious typos in field values (not field names)
+- Missing calculated fields (lengthOfStay conversions)
+
+### When to Flag Only (NEVER auto-fix without explicit user approval):
+- Employment/education gaps
+- Missing SSN/DL with US presence
+- Salary/job title inconsistencies
+- Timeline overlaps or contradictions
+- Document conflicts
+- Any ambiguous situation
+
+### Document All Changes:
+- Which field changed
+- Old value → New value
+- Reason for change
+- Source document used
+
+---
+
+## CANVAS EDITING INSTRUCTIONS
+
+When making corrections (after user approval):
+
+1. **Edit the existing Canvas JSON block directly** - do NOT regenerate entire JSON
+2. **Make targeted field updates** - only change what user approved
+3. **Preserve all formatting** - maintain 2-space indentation, ```json code block wrapper, and structure
+4. **Keep Canvas clean** - Canvas contains ONLY JSON, no validation text
+5. **Output audit report OUTSIDE Canvas** - timeline, validation findings, and changelog go as regular text below Canvas
+
+---
+
+## STAGE 2 OUTPUT FORMAT
+
+After completing forensic audit and applying approved corrections:
+
+**CRITICAL - Two-Part Output:**
+
+**PART 1: Update Canvas (JSON ONLY)**
+- Edit the Canvas to contain ONLY the JSON code block with approved corrections
+- Remove any previous validation text from Canvas if present
+- Canvas must be clean JSON only so user can click "Copy" button for clean JSON
+- No timeline, no validation summary, no changelog in Canvas
+
+**PART 2: Output Validation Report OUTSIDE Canvas (Regular Text)**
+- Timeline table
+- Audit findings organized by severity
+- Changelog documenting all changes
+- All of this goes BELOW the Canvas as regular chat text
+
+---
+
+**Output Format:**
+
+**IN CANVAS (editable JSON):**
+```json
+{
+  [JSON with approved corrections - properly indented with 2 spaces]
+}
+```
+
+**OUTSIDE CANVAS (regular text below Canvas):**
+
+---
+
+📋 COMPLETE LIFE TIMELINE
+═══════════════════════════════════════════════════════════
+
+FROM DATE    TO DATE      CATEGORY      LOCATION    ACTIVITY/INSTITUTION
+────────────────────────────────────────────────────────────────────────
+[Timeline table showing all education, employment, US visits chronologically]
+
+US VISITS SUMMARY:
+[List all US visits with dates and durations]
+
+TIMELINE GAPS IDENTIFIED:
+• [Date range]: [Duration] - [What was happening?]
+
+TIMELINE OVERLAPS IDENTIFIED:
+• [Date range]: [Description of overlap issue]
+
+═══════════════════════════════════════════════════════════
+
+🔍 FORENSIC AUDIT FINDINGS
+═══════════════════════════════════════════════════════════
+
+📊 AUDIT SUMMARY:
+✅ Passed: [X] checks
+ℹ️ Verify: [X] minor items
+⚠️ Review Required: [X] items
+🚨 Critical: [X] issues
+
+---
+
+🚨 CRITICAL ISSUES (Must Fix/Explain)
+
+1. [Category]: [Field or issue]
+   Finding: [Detailed description]
+   Impact: [Why this is critical]
+   Action Required: [What must be done]
+
+[Continue for all CRITICAL items]
+
+---
+
+⚠️ REVIEW REQUIRED (Unusual/Suspicious)
+
+1. [Category]: [Field or issue]
+   Finding: [Detailed description]
+   Why Flagged: [Reasoning]
+   Recommendation: [Suggested action]
+
+[Continue for all REVIEW items]
+
+---
+
+ℹ️ VERIFY (Minor Inconsistencies)
+
+1. [Category]: [Field or issue]
+   Finding: [Brief description]
+   Suggestion: [What to check]
+
+[Continue for all VERIFY items]
+
+---
+
+📝 CHANGELOG
+═══════════════════════════════════════════════════════════
+
+CORRECTIONS APPLIED:
+✏️ [Field name]: [Old value] → [New value]
+   Reason: [Why changed]
+   Source: [Which document]
+   User Approved: [Yes/No]
+
+[Continue for all corrections made]
+
+UNABLE TO FIX (Manual Review Needed):
+🚩 [Field/Issue]: [Description]
+   Reason: [Why couldn't auto-fix]
+   Action Required: [What user must do]
+
+[Continue for all items that couldn't be fixed]
+
+═══════════════════════════════════════════════════════════
+
+✅ FORENSIC AUDIT COMPLETE
+
+The JSON has been updated with approved corrections. Please:
+1. Review all CRITICAL issues and address before submission
+2. Verify REVIEW REQUIRED items and add explanations as needed
+3. Double-check VERIFY items for accuracy
+4. Ask me to make additional changes if needed
+
+This application has been scrutinized with USCIS officer-level thoroughness.
+```
+
+---
+
+## VALIDATION COMPLETE
+
+Remember: Your job is to catch EVERYTHING. Even if something seems minor, flag it. Better to over-flag than miss something that USCIS will catch later.

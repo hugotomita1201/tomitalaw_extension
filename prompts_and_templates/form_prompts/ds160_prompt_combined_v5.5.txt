@@ -1,7 +1,7 @@
-# DS-160 Combined Prompt v5 - Complete Sample Data
+# DS-160 Combined Prompt v5.5 - Enhanced Formatting + Schema Updates
 # Extract DS-160 visa application data into structured JSON format
 
-Extract complete DS-160 information from provided documents and output as structured JSON. 
+Extract complete DS-160 information from provided documents and output as structured JSON.
 For E-1/E-2 visas, also extract specialized E-visa sections from DS-156E form.
 
 ## VISA RENEWAL SCENARIOS:
@@ -10,22 +10,40 @@ When processing visa renewal applications with multiple documents:
 
 1. **Document Identification**:
    - ORIGINAL DS-160: Complete previous application data
-   - RENEWAL WORKSHEET: Contains only updated/changed information  
+   - RENEWAL WORKSHEET: Contains only updated/changed information
    - ADDITIONAL DOCUMENTS: New support letters, updated petitions, revised employment docs
 
-2. **Processing Rules**:
+2. **Processing Rules - Field Update Logic**:
    - Start with original DS-160 as base template
-   - REPLACE (don't merge) any fields found in renewal worksheet
+   - **Single-value fields**: REPLACE with renewal worksheet value
+     * Examples: passport, address, salary, presentEmployer, phone numbers
+   - **Array fields**: APPEND to original (preserve + add new)
+     * previousEmployers: Keep old employers, add new from renewal
+     * visits: Keep old US visits, add new visits from renewal
+     * additionalEmails/otherPhones: Keep old, add new
+     * education.institutions: Usually complete in original, but append if new schools added
+   - **Boolean fields**: Use newest value from renewal worksheet
    - Extract new information from additional documents (petition numbers, employer details, etc.)
-   - Common renewal updates: passport, current employer, address, salary, travel dates
 
 3. **Critical Updates to Prioritize**:
    - Previous US travel: Use most recent visa information
-   - Employment: Replace entire employment section if updated
+   - Employment changes:
+     * Move old DS-160's presentEmployer → previousEmployers array
+     * Extract new presentEmployer from renewal worksheet/documents
+     * Preserve any previousEmployers from old DS-160 (append, don't replace)
+     * Sort previousEmployers chronologically (oldest first)
    - Petition numbers: Use newest petition/receipt numbers from documents
    - Contact information: Update all addresses/phones/emails if changed
 
-4. **IMPORTANT**: When a field appears in renewal worksheet, completely REPLACE the original value. Do not combine or merge old and new data.
+4. **Intra-Company Transfer Detection** (applies to all visa types):
+   - If old DS-160's presentEmployer has non-US country (JPN, GBR, etc.):
+     * Move that foreign employer → previousEmployers array
+     * Find US employer from: temporaryWork, renewal worksheet, or support documents
+     * Extract US employer → presentEmployer object
+   - Common for: L-1, E-2, H-1B, O-1 (any transfer from foreign office to US office)
+   - Foreign employer sources: evisaApplicantPosition (E-visa), old presentEmployer, support letters
+
+5. **IMPORTANT**: Follow the field update logic in Section 2 - REPLACE single-value fields, APPEND array fields, use newest boolean values.
 
 ## CRITICAL FORMATTING RULES:
 
@@ -36,14 +54,59 @@ When processing visa renewal applications with multiple documents:
    - Example: "NISSIN FOODS USA CO INC" not "NISSIN FOODS (U.S.A.) CO., INC."
 
 2. **Phone Numbers**:
-   - DIGITS ONLY (no formatting)
-   - Remove all: dashes, spaces, parentheses, plus signs
-   - Example: "8332606486" not "833-260-6486" or "+1 (833) 260-6486"
-   - Include country code as pure digits: "81661234567" not "+81-6-6123-4567"
+   - Remove all dashes, spaces, and parentheses for all numbers
+   - **US numbers**: Include `1` country code, NO `+` sign (e.g., `13107835484` not `3107835484` or `+13107835484`)
+   - **Japanese numbers**: Include `+81`, drop leading `0` from prefix (e.g., `090-1234-5678` → `+819012345678`)
+   - **All other countries**: Include `+` with country code, follow country-specific international dialing rules
 
 3. **Postal Codes**:
    - Normal formatting allowed (can have dashes)
    - Example: "532-0011" or "90249-1234" are both OK
+
+4. **Street Address Format**:
+   - Building/house number MUST come FIRST, then street name
+   - Correct: "3-14-7 Shibuya", "123 Main Street"
+   - Wrong: "Shibuya 3-14-7", "Main Street 123"
+   - Japanese addresses: Use romaji with number first format
+
+5. **Secondary Unit Designators (USPS Standard)**:
+   - Use USPS standard abbreviations with period, NO space before number
+   - Format: `ABBREVIATION.NUMBER` (e.g., APT.701, STE.355E)
+   - Common designators:
+     - Apartment → APT.701
+     - Suite → STE.355E
+     - Unit → UNIT.5
+     - Building → BLDG.A
+     - Floor → FL.20
+     - Room → RM.302
+     - Office → OFC.100
+     - Penthouse → PH.1
+     - Space → SPC.15
+     - Department → DEPT.5
+   - Additional: Basement → BSMT., Lobby → LBBY., Trailer → TRLR., Front → FRNT., Rear → REAR., Upper → UPPR., Lower → LOWR., Side → SIDE., Slip → SLIP., Pier → PIER., Stop → STOP., Hangar → HNGR., Key → KEY., Lot → LOT.
+   - Japanese unit numbers: "701号室" → APT.701, "502号" → APT.502
+   - Building name + unit: "PARK TOWER 502号室" → homeStreet: "PARK TOWER", homeApt: "APT.502"
+
+6. **Japanese Address Suffixes (English/Romaji)**:
+   - DS-160 uses English/romaji for all non-US addresses
+   - Remove administrative suffixes (form fields already labeled):
+   - **City field** - Remove city-level suffixes:
+     - "-shi" → "Osaka-shi" becomes "Osaka"
+     - "-ku" → "Shibuya-ku" becomes "Shibuya"
+     - "-cho" or "-machi" → "Fuchu-cho" becomes "Fuchu"
+     - "-mura", "-gun" → remove
+   - **State field** - Remove prefecture-level suffixes:
+     - "-to" → "Tokyo-to" becomes "Tokyo"
+     - "-fu" → "Osaka-fu" becomes "Osaka"
+     - "-ken" → "Kanagawa-ken" becomes "Kanagawa"
+     - "Hokkaido" stays "Hokkaido"
+   - **Complete example**: Source "パークタワー 502号室, 3-14-7 渋谷, 渋谷区, 東京都" → homeStreet: "3-14-7 SHIBUYA PARK TOWER", homeApt: "APT.502", homeCity: "Shibuya", homeState: "Tokyo"
+
+7. **Spouse Maiden Name Format**:
+   - If spouse has a maiden name, include it in surname field with parentheses
+   - Format: `CURRENT_NAME MAIDEN NAME PREVIOUS_NAME`
+   - Example: "YAMAMOTO MAIDEN NAME TANAKA"
+   - Only applies if maiden name/previous name information is available in source documents
 
 ## OUTPUT INSTRUCTIONS:
 
@@ -60,22 +123,22 @@ When processing visa renewal applications with multiple documents:
     "surname": "string",
     "givenName": "string",
     "fullNameNative": "string or omit",
-    "otherNames": [],
+    "otherNames": [],  // Array: {surname: "", givenName: ""}
     "gender": "MALE/FEMALE - infer from given name if not explicitly stated",
     "maritalStatus": "SINGLE/MARRIED/DIVORCED/WIDOWED/SEPARATED - infer from spouse information if present",
-    "dateOfBirth": "DD-MMM-YYYY",
+    "dateOfBirth": "DD-MMM-YYYY or omit if not in documents",
     "birthCity": "string",
     "birthState": "string or omit",
     "birthCountry": "3-letter country code",
     "nationality": "3-letter country code",
-    "otherNationalities": [],
+    "otherNationalities": [],  // Array of 3-letter country codes
     "permanentResident": false,
     "permanentResidentExplanation": "string if permanentResident is true",
     "nationalId": "string or omit",
     "usSocialSecurity": "string or omit",
     "usTaxId": "string or omit"
   },
-  
+
   "travel": {
     "purposeOfTrip": "B, F, H, J, A, E, etc.",
     "otherPurposeDetail": "string (e.g., 'H-1B', 'L-1', 'E-2', 'E2-EX', 'E2-SP', 'E2-CH', 'E1-EX')",
@@ -110,56 +173,56 @@ When processing visa renewal applications with multiple documents:
     "usZipCode": "string",
     "tripPayer": "SELF/COMPANY/PRESENT_EMPLOYER/OTHER_PERSON/OTHER_COMPANY - Default logic if not specified: work visas (H/L/E/O)=PRESENT_EMPLOYER, tourist/business (B)=SELF, student (F/M)=SELF",
     "payerInfo": {  // Object - Include if tripPayer is OTHER_PERSON
-      "surname": "string or N/A",
-      "givenName": "string or N/A",
-      "phone": "string or N/A",
-      "email": "string or N/A",
-      "relationship": "string or N/A",
+      "surname": "string or omit",
+      "givenName": "string or omit",
+      "phone": "string or omit - No dashes/spaces/parens. US: 1 prefix, no + (e.g., 13107835484). Japan: +81, drop leading 0 (e.g., +819012345678). Other: + with country code",
+      "email": "string or omit",
+      "relationship": "string or omit",
       "sameAddress": true,
-      "street1": "string or N/A",
-      "street2": "string or N/A",
-      "city": "string or N/A",
-      "state": "string or N/A",
-      "postalCode": "string or N/A",
-      "country": "string or N/A"
+      "street1": "string or omit",
+      "street2": "string or omit",
+      "city": "string or omit",
+      "state": "string or omit",
+      "postalCode": "string or omit",
+      "country": "string or omit"
     },
     "companyInfo": {  // Object - Include if tripPayer is COMPANY or OTHER_COMPANY
-      "name": "string or N/A",
-      "relationship": "string or N/A",
-      "street1": "string or N/A",
-      "street2": "string or N/A",
-      "city": "string or N/A",
-      "state": "string or N/A",
-      "zipCode": "string or N/A",
-      "country": "string or N/A"
+      "name": "string or omit",
+      "relationship": "string or omit",
+      "street1": "string or omit",
+      "street2": "string or omit",
+      "city": "string or omit",
+      "state": "string or omit",
+      "zipCode": "string or omit",
+      "country": "string or omit"
     }
   },
-  
+
   "travelCompanions": [],  // Array: {surname: "", givenName: "", relationship: ""}
-  
+
   "travelGroup": {
     "traveling": false,
-    "name": "string or N/A"
+    "name": "string or omit"
   },
-  
+
   "previousTravel": {
     "hasBeenToUS": false,
-    "visits": [],  // Array: {arrivalDate: "DD-MMM-YYYY", lengthOfStayNumber: "14", lengthOfStayUnit: "D/W/M/Y"} - CRITICAL: Sort OLDEST FIRST (chronological order) to allow appending new trips
+    "visits": [],  // Array: {arrivalDate: "DD-MMM-YYYY", lengthOfStayNumber: "14", lengthOfStayUnit: "D/W/M/Y"} - CRITICAL: Extract ALL previous US visits from worksheet. Sort OLDEST FIRST (chronological order) to allow appending new trips
     "driverLicense": {
       "hasLicense": false,
-      "licenses": []  // Array: {state: "2-letter code", number: "string"}
+      "licenses": []  // Array: {state: "2-letter code", number: "string (w/ only letters/digits, no dashes)"} - Extract ALL driver's licenses from worksheet (multiple states)
     },
     "previousVisa": {
       "hasVisa": false,
       "issueDate": "DD-MMM-YYYY or N/A",
-      "visaNumber": "string or N/A",
+      "visaNumber": "string or omit",
       "sameType": false,
       "sameCountry": true,
       "tenPrinted": false,
       "lost": false,
-      "lostExplanation": "string or N/A",
+      "lostExplanation": "string or omit",
       "cancelled": false,
-      "cancelledExplanation": "string or N/A"
+      "cancelledExplanation": "string or omit"
     },
     "visaRefused": false,
     "visaRefusedExplanation": "string if true",
@@ -168,7 +231,7 @@ When processing visa renewal applications with multiple documents:
     "immigrantPetition": false,
     "immigrantPetitionExplanation": "string if true"
   },
-  
+
   "contact": {
     "homeStreet": "string",
     "homeApt": "string",
@@ -178,21 +241,21 @@ When processing visa renewal applications with multiple documents:
     "homeCountry": "3-letter country code",
     "mailingAddressSameAsHome": true,
     "mailingAddress": {  // Object - Include if mailingAddressSameAsHome is false
-      "street": "string or N/A",
-      "apt": "string or N/A",
-      "city": "string or N/A",
-      "state": "string or N/A",
-      "postalCode": "string or N/A",
+      "street": "string or omit",
+      "apt": "string or omit",
+      "city": "string or omit",
+      "state": "string or omit",
+      "postalCode": "string or omit",
       "country": "3-letter country code"
     },
-    "homePhone": "string",
-    "secondaryPhone": "string",
-    "workPhone": "string",
+    "homePhone": "string - No dashes/spaces/parens. US: 1 prefix, no + (e.g., 13107835484). Japan: +81, drop leading 0 (e.g., +819012345678). Other: + with country code",
+    "secondaryPhone": "string - No dashes/spaces/parens. US: 1 prefix, no + (e.g., 13107835484). Japan: +81, drop leading 0 (e.g., +819012345678). Other: + with country code",
+    "workPhone": "string - No dashes/spaces/parens. US: 1 prefix, no + (e.g., 13107835484). Japan: +81, drop leading 0 (e.g., +819012345678). Other: + with country code",
     "email": "string",
-    "socialMedia": [],  // Array: {platform: "FACEBOOK/TWITTER/etc", handle: "username"}
-    "additionalEmails": []  // Array of email strings
+    "socialMedia": [],  // Array: {platform: "FACEBOOK/TWITTER/etc", handle: "username"} - Extract ALL social media accounts from worksheet
+    "additionalEmails": []  // Array of email strings - Extract ALL additional emails from worksheet
   },
-  
+
   "usContact": {
     "contactPerson": {
       "surname": "string",
@@ -201,99 +264,100 @@ When processing visa renewal applications with multiple documents:
     "organizationName": "string",
     "relationship": "string",
     "address": {
-      "street1": "string or N/A",
-      "street2": "string or N/A",
-      "city": "string or N/A",
-      "state": "string or N/A",
-      "zipCode": "string or N/A"
+      "street1": "string or omit",
+      "street2": "string or omit",
+      "city": "string or omit",
+      "state": "string or omit",
+      "zipCode": "string or omit"
     },
-    "phone": "string",
+    "phone": "string - No dashes/spaces/parens. US: 1 prefix, no + (e.g., 13107835484). Japan: +81, drop leading 0 (e.g., +819012345678). Other: + with country code",
     "email": "string"
   },
-  
+
   "passport": {
     "type": "REGULAR, OFFICIAL, DIPLOMATIC, or OTHER",
     "otherTypeExplanation": "string - Required if passport type is OTHER, omit otherwise",
-    "number": "string",
+    "number": "string or omit if not in documents",
     "bookNumber": "string",
     "issuingAuthority": "3-letter country code",
     "issueCountry": "3-letter country code",
     "issueCity": "string",
     "issueState": "string",
-    "issueDate": "DD-MMM-YYYY",
-    "expirationDate": "DD-MMM-YYYY",
+    "issueDate": "DD-MMM-YYYY or omit if not in documents",
+    "expirationDate": "DD-MMM-YYYY or omit if not in documents",
     "lostPassport": {
       "hasLost": false,
-      "number": "string or N/A",
-      "country": "string or N/A",
-      "explanation": "string or N/A"
+      "number": "string or omit",
+      "country": "string or omit",
+      "explanation": "string or omit"
     }
   },
-  
+
   "family": {
     "father": {
-      "surname": "string or N/A",
-      "givenName": "string or N/A",
+      "surname": "string or omit",
+      "givenName": "string or omit",
       "dateOfBirth": "DD-MMM-YYYY or N/A",
       "inUS": false,
-      "status": "string or N/A"
+      "status": "string or omit"
     },
     "mother": {
-      "surname": "string or N/A",
-      "givenName": "string or N/A",
+      "surname": "string or omit",
+      "givenName": "string or omit",
       "dateOfBirth": "DD-MMM-YYYY or N/A",
       "inUS": false,
-      "status": "string or N/A"
+      "status": "string or omit"
     },
-    "relativesInUS": [],  // Array: {surname: "", givenName: "", relationship: "", status: ""}
+    "relativesInUS": [],  // Array: {surname: "", givenName: "", relationship: "", status: ""} - Extract ALL relatives in US from worksheet
     "spouse": {  // Object - Include if maritalStatus is MARRIED
-      "surname": "string or N/A",
-      "givenName": "string or N/A",
+      "surname": "string or omit - If maiden name known, format as: CURRENT_NAME MAIDEN NAME PREVIOUS_NAME",
+      "givenName": "string or omit",
       "dateOfBirth": "DD-MMM-YYYY or N/A",
-      "nationality": "string or N/A",
-      "city": "string or N/A",
-      "country": "string or N/A",
+      "nationality": "string or omit - 3-letter country code",
+      "city": "string or omit - Place of birth city",
+      "birthState": "string or omit - Place of birth state/province (if applicable)",
+      "country": "string or omit - Place of birth country (3-letter code)",
       "addressType": "SAME_AS_HOME, SAME_AS_MAILING, SAME_AS_US_CONTACT, DO_NOT_KNOW, or OTHER",
       "address": {  // Object - Only include if addressType is OTHER
         "street1": "string",
-        "street2": "string or N/A",
+        "street2": "string or omit",
         "city": "string",
-        "state": "string or N/A",
-        "postalCode": "string or N/A",
+        "state": "string or omit",
+        "postalCode": "string or omit",
         "country": "3-letter country code"
       }
     }
   },
-  
+
   "workEducation": {
-    "primaryOccupation": "AGRICULTURE/BUSINESS/COMPUTER SCIENCE/EDUCATION/GOVERNMENT/HOMEMAKER/MEDICAL/MILITARY/NOT EMPLOYED/RETIRED/STUDENT/OTHER - infer from employment context: corporate work=BUSINESS, academic=EDUCATION, govt=GOVERNMENT",
+    "primaryOccupation": "AGRICULTURE/BUSINESS/COMPUTER SCIENCE/EDUCATION/GOVERNMENT/HOMEMAKER/MEDICAL/MILITARY/NOT EMPLOYED/RETIRED/STUDENT/OTHER - infer from what the employer does",
     "primaryOccupationOther": "string - Required if primaryOccupation is OTHER, omit otherwise",
-    "presentEmployer": {
-      "name": "string or N/A",
+    "presentEmployer": {  // Object - Employer where applicant CURRENTLY works (at time of DS-160 submission), NOT the employer they are applying to. Even if same company (renewal/transfer), use CURRENT employer. NOTE: for renewals, the current employer and the one that the person is applying to may be the same since its a RENEWAL
+      "name": "string or omit", CRITICAL FOR RENEWALS: MAKE SURE THAT CURRENT EMPLOYER IS THE MOST UP TO DATE CURRENT EMPLOYER FROM THE VISA RENEWAL WORKSHEET, NOT FROM THE ORIGINAL DS160 WORKSHEET
       "address": {
-        "street1": "string or N/A",
-        "street2": "string or N/A",
-        "city": "string or N/A",
-        "state": "string or N/A",
-        "postalCode": "string or N/A",
-        "country": "string or N/A"
+        "street1": "string or omit",
+        "street2": "string or omit",
+        "city": "string or omit",
+        "state": "string or omit",
+        "postalCode": "string or omit",
+        "country": "string or omit"
       },
-      "phone": "string or N/A",
+      "phone": "string or omit - No dashes/spaces/parens. US: 1 prefix, no + (e.g., 13107835484). Japan: +81, drop leading 0 (e.g., +819012345678). Other: + with country code",
       "startDate": "DD-MMM-YYYY or N/A",
-      "monthlyIncome": "string or N/A - round to nearest whole number",
+      "monthlyIncome": "string or omit - round to nearest whole number",
       "duties": "string - 3-5 sentences derived from support letter or employment documents",
-      "supervisorSurname": "string or N/A",
-      "supervisorGivenName": "string or N/A",
-      "jobTitle": "string or N/A - job title ONLY do not include description"
+      "supervisorSurname": "string or omit",
+      "supervisorGivenName": "string or omit",
+      "jobTitle": "string or omit - job title ONLY do not include description"
     },
-    "previousEmployers": [],  // Array of employer objects with same structure as presentEmployer (including supervisorSurname, supervisorGivenName, jobTitle)
+    "previousEmployers": [],  // Array: {name: "", address: {street1: "", street2: "", city: "", state: "", postalCode: "", country: ""}, phone: "", startDate: "DD-MMM-YYYY", endDate: "DD-MMM-YYYY", monthlyIncome: "", duties: "", supervisorSurname: "", supervisorGivenName: "", jobTitle: ""} - CRITICAL: FOR RENEWALS, YOU MUST INCLUDE THE PREVIOUS PRESENT EMPLOYER ON THE ORIGINAL DS160 WORKSHEET AS A PREVIOUS EMPLOYER FOR RENEWALS. Also, Extract ALL previous employers from worksheet (e.g., 67.1, 67.2, 67.3, 67.4...). Sort OLDEST FIRST (chronological order) to allow appending recent jobs 
     "education": {
-      "institutions": []  // Array: {name: "", address: {}, courseOfStudy: "", fromDate: "DD-MMM-YYYY", toDate: "DD-MMM-YYYY"} - CRITICAL: Sort OLDEST FIRST (High School → College → Grad School) to allow appending recent education
+      "institutions": []  // Array: {name: "", address: {street1: "", street2: "", city: "", state: "", postalCode: "", country: ""}, courseOfStudy: "", fromDate: "DD-MMM-YYYY", toDate: "DD-MMM-YYYY"} - CRITICAL: Extract ALL education institutions from worksheet (high school, college, grad school, etc.). Sort OLDEST FIRST to allow appending recent education
     },
     "languages": [],  // Array of language names
     "clanTribe": {
       "belongsToClan": false,
-      "clanName": "string or N/A"
+      "clanName": "string or omit"
     },
     "countriesVisited": {
       "hasVisited": false,
@@ -305,7 +369,7 @@ When processing visa renewal applications with multiple documents:
     },
     "specializedSkills": {
       "hasSkills": false,
-      "explanation": "string or N/A"
+      "explanation": "string or omit"
     },
     "militaryService": {
       "hasServed": false,
@@ -313,10 +377,10 @@ When processing visa renewal applications with multiple documents:
     },
     "insurgentOrganization": {
       "hasInvolvement": false,
-      "explanation": "string or N/A"
+      "explanation": "string or omit"
     }
   },
-  
+
   "security": {
     "part1": {
       "disease": false,
@@ -361,7 +425,7 @@ When processing visa renewal applications with multiple documents:
       "renounceExpenses": false
     }
   },
-  
+
   "temporaryWork": {  // Object - Always include this section even if visa type not specified
     "petitionNumber": "string - Required for all temporary work visa applications",
     "petitionerName": "string",
@@ -372,36 +436,36 @@ When processing visa renewal applications with multiple documents:
       "city": "string",
       "state": "2-letter state code",
       "zipCode": "string",
-      "phone": "string"
+      "phone": "string - No dashes/spaces/parens. US: 1 prefix, no + (e.g., 13107835484). Japan: +81, drop leading 0 (e.g., +819012345678). Other: + with country code"
     },
-    "monthlyIncome": "string - Monthly amount, not yearly"
+    "monthlyIncome": "string - Monthly amount, not yearly - round to nearest whole number"
   },
-  
+
   "crewVisa": {  // Object - Only for C-1/D visa types
     "jobTitle": "string",
     "vesselCompanyName": "string",
-    "companyPhone": "string",
+    "companyPhone": "string - No dashes/spaces/parens. US: 1 prefix, no + (e.g., 13107835484). Japan: +81, drop leading 0 (e.g., +819012345678). Other: + with country code",
     "positionThroughAgency": false,
     "agencyInfo": {
       "name": "string",
       "address": "string",
-      "phone": "string"
+      "phone": "string - No dashes/spaces/parens. US: 1 prefix, no + (e.g., 13107835484). Japan: +81, drop leading 0 (e.g., +819012345678). Other: + with country code"
     },
     "vesselWork": false
   },
-  
+
   // E-VISA SECTIONS - Only include for E-1/E-2 visa applications
-  
+
   "evisaClassification": {
     "visaType": "E1 or E2",
     "treatyCountry": "3-letter country code",
     "principalApplicant": true,
     "principalName": {
-      "surname": "string or N/A",
-      "givenName": "string or N/A"
+      "surname": "string or omit",
+      "givenName": "string or omit"
     }
   },
-  
+
   "evisaBusiness": {
     "businessName": "string",
     "businessType": "S",
@@ -418,7 +482,7 @@ When processing visa renewal applications with multiple documents:
       "postalCode": "string",
       "country": "3-letter country code"
     },
-    "businessPhone": "string",
+    "businessPhone": "string - No dashes/spaces/parens. US: 1 prefix, no + (e.g., 13107835484). Japan: +81, drop leading 0 (e.g., +819012345678). Other: + with country code",
     "businessFax": "string",
     "businessEmail": "string",
     "businessWebsite": "string",
@@ -446,16 +510,16 @@ When processing visa renewal applications with multiple documents:
       }
     ]
   },
-  
+
   "evisaApplicationContact": {
-    "officer": {
-      "surname": "string",
-      "givenName": "string",
-      "position": "string"
+    "officer": {  // Object - Person to contact if necessary (company officer/principal applicant) - extract from personal.surname and personal.givenName
+      "surname":  "string - Applicant/company officer surname",
+      "givenName":  "string - Applicant/company officer given name"
+      "position": "string - Position (e.g., CEO)"
     },
-    "contact": {
-      "surname": "string",
-      "givenName": "string"
+    "contact": {  // Object - Preparer of form (attorney/paralegal) - use attorney info from E-visa Preparer Information section 
+      "surname": "string - Attorney surname (e.g., HIGA)",
+      "givenName": "string - Attorney given name (e.g., ERIKO)",
     },
     "address": {
       "street1": "string",
@@ -467,19 +531,19 @@ When processing visa renewal applications with multiple documents:
       "postalCodeNA": false,
       "country": "3-letter country code"
     },
-    "phone": "string",
+    "phone": "string - No dashes/spaces/parens. US: 1 prefix, no + (e.g., 13107835484). Japan: +81, drop leading 0 (e.g., +819012345678). Other: + with country code",
     "fax": "string",
     "faxNA": false,
     "email": "string",
     "emailNA": false
   },
-  
+
   "evisaOwnership": {
-    "owners": [],  // Array: {name: "", nationality: "3-letter code", percentageOwnership: "", position: ""}
+    "owners": [],  // Array: {name: "", nationality: "3-letter code", percentageOwnership: "", position: ""} - Extract ALL business owners from DS-156E Section 11
     "majorityOwnedByTreatyCountry": true,
     "ownershipStructure": "string"
   },
-  
+
   "evisaFinanceTrade": {
     "yearType": "F or C",
     "yearType2": "F or C",
@@ -501,7 +565,7 @@ When processing visa renewal applications with multiple documents:
     "thirdCountryExportTransactions": "string",
     "domesticProductionValue": "string",
     "domesticProductionTransactions": "string",
-    
+
     "financialStatement": {
       "cash": "string",
       "receivables": "string",
@@ -518,7 +582,7 @@ When processing visa renewal applications with multiple documents:
       "income": "string",
       "tax": "string"
     },
-    
+
     "tradeInformation": {
       "goodsSoldValue": "string",
       "exportedValue": "string",
@@ -531,7 +595,7 @@ When processing visa renewal applications with multiple documents:
       "domesticProductionTransactions": "string"
     }
   },
-  
+
   "evisaEmployeeCounts": {
     "yearType": "F or C",
     "treatyNationals": {
@@ -550,7 +614,7 @@ When processing visa renewal applications with multiple documents:
       "other": {"thisYear": "string", "nextYear": "string"}
     }
   },
-  
+
   "evisaUSPersonnel": {
     "personnel": [
       {
@@ -569,7 +633,7 @@ When processing visa renewal applications with multiple documents:
       }
     ]
   },
-  
+
   "evisaApplicantPosition": {
     "applicantType": "M",
     "presentPosition": "string (FULL TEXT from DS-156E Section 18)",
@@ -577,7 +641,7 @@ When processing visa renewal applications with multiple documents:
     "yearsWithEmployer": "string",
     "employerAddress": {
       "street1": "string",
-      "street2": "string or N/A",
+      "street2": "string or omit",
       "city": "string",
       "state": "string",
       "postalCode": "string",
@@ -592,7 +656,7 @@ When processing visa renewal applications with multiple documents:
     "hasOtherEducation": false,
     "otherEducationExplanation": "string"
   },
-  
+
   "evisaApplicantUSPosition": {
     "title": "string",
     "duties": "string (FULL TEXT from DS-156E Section 23)",
@@ -602,13 +666,13 @@ When processing visa renewal applications with multiple documents:
     "immediateSubordinates": [],  // Array of subordinate names from DS-156E Section 15
     "isReplacingWorker": false,
     "replacedWorker": {
-      "name": "string or N/A",
-      "visaType": "string or N/A"
+      "name": "string or omit",
+      "visaType": "string or omit"
     },
     "willIncreaseStaff": false,
     "continuationOfEmployment": true
   },
-  
+
   "evisaEmployee": {
     "positionTitle": "string",
     "dutiesDescription": "string",
@@ -623,7 +687,7 @@ When processing visa renewal applications with multiple documents:
     "previousPosition": "string",
     "previousDates": "string"
   },
-  
+
   "evisaInvestment": {
     "investmentType": "E",
     "fairMarketValue": "string",
@@ -647,7 +711,7 @@ When processing visa renewal applications with multiple documents:
     "hasPromissoryNote": false,
     "hasOtherDocs": false
   },
-  
+
   "evisaForeignBusiness": {
     "hasForeignBusiness": true,
     "hasForeignEntity": true,
@@ -664,7 +728,7 @@ When processing visa renewal applications with multiple documents:
         "postalCodeNA": false,
         "country": "3-letter country code"
       },
-      "phone": "string",
+      "phone": "string - No dashes/spaces/parens. US: 1 prefix, no + (e.g., 13107835484). Japan: +81, drop leading 0 (e.g., +819012345678). Other: + with country code",
       "fax": "string"
     },
     "foreignEntities": [
@@ -685,7 +749,7 @@ When processing visa renewal applications with multiple documents:
       }
     ]
   },
-  
+
   "evisaFinancial": {
     "currentAssets": "string",
     "fixedAssets": "string",
@@ -702,7 +766,7 @@ When processing visa renewal applications with multiple documents:
     "taxYear": "string",
     "financialYear": "string"
   },
-  
+
   "evisaTrade": {
     "goodsServices": "string",
     "tradeWithUS": true,
@@ -750,7 +814,11 @@ When information is not in documents:
 This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay special attention to:
 - Example demonstrates all field types - omit entire sections if not applicable
 - Company names without punctuation
-- Phone numbers as pure digits only
+- Phone numbers with proper formatting (US: 1 prefix no +, Japan: +81 drop leading 0)
+- Street addresses with building number first
+- Secondary unit designators (APT.701 format)
+- Japanese addresses without suffixes (Shibuya not Shibuya-ku, Tokyo not Tokyo-to)
+- Spouse maiden name format and place of birth fields
 - Proper formatting for all field types
 - Complete E-visa sections for E-2 application
 
@@ -778,7 +846,7 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
     "usSocialSecurity": "123456789",
     "usTaxId": "987654321"
   },
-  
+
   "travel": {
     "purposeOfTrip": "E",
     "otherPurposeDetail": "E-2",
@@ -792,7 +860,7 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
     },
     "principalVisaIssued": false,
     "evisaPrincipal": {
-      "surname": "NAKAMURA", 
+      "surname": "NAKAMURA",
       "givenName": "Takeshi",
       "dateOfBirth": "15-MAR-1978"
     },
@@ -807,7 +875,7 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
     "lengthOfStayNumber": "3",
     "lengthOfStayUnit": "Y",
     "usStreetAddress": "1234 Wilshire Boulevard",
-    "usStreetAddress2": "Suite 567",
+    "usStreetAddress2": "STE.567",
     "usCity": "Los Angeles",
     "usState": "CA",
     "usZipCode": "90017",
@@ -815,13 +883,13 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
     "payerInfo": {
       "surname": "SUZUKI",
       "givenName": "Hiroshi",
-      "phone": "81354567890",
+      "phone": "+81354567890",
       "email": "hsuzuki@nakamuratrading.co.jp",
       "relationship": "Business partner",
       "sameAddress": false,
-      "street1": "3-15-2 Shibuya",
-      "street2": "Yamada Building 8F",
-      "city": "Tokyo",
+      "street1": "3-15-2 Shibuya Yamada Building",
+      "street2": "FL.8",
+      "city": "Shibuya",
       "state": "Tokyo",
       "postalCode": "150-0002",
       "country": "JPN"
@@ -830,14 +898,14 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
       "name": "NAKAMURA TRADING USA INC",
       "relationship": "Owned company",
       "street1": "1234 Wilshire Boulevard",
-      "street2": "Suite 567",
+      "street2": "STE.567",
       "city": "Los Angeles",
       "state": "CA",
       "zipCode": "90017",
       "country": "USA"
     }
   },
-  
+
   "travelCompanions": [
     {
       "surname": "NAKAMURA",
@@ -845,17 +913,17 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
       "relationship": "Spouse"
     },
     {
-      "surname": "NAKAMURA", 
+      "surname": "NAKAMURA",
       "givenName": "Kenta",
       "relationship": "Child"
     }
   ],
-  
+
   "travelGroup": {
     "traveling": true,
     "name": "Japan Business Delegation 2024"
   },
-  
+
   "previousTravel": {
     "hasBeenToUS": true,
     "visits": [
@@ -888,26 +956,26 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
       "tenPrinted": true
     }
   },
-  
+
   "contact": {
-    "homeStreet": "2-15-8 Roppongi",
-    "homeApt": "Mansion Hills 1205",
-    "homeCity": "Tokyo",
+    "homeStreet": "2-15-8 Roppongi Mansion Hills",
+    "homeApt": "APT.1205",
+    "homeCity": "Minato",
     "homeState": "Tokyo",
     "homePostalCode": "106-0032",
     "homeCountry": "JPN",
     "mailingAddressSameAsHome": false,
     "mailingAddress": {
-      "street": "1-3-5 Marunouchi",
-      "apt": "Tokyo Station Building 20F",
-      "city": "Tokyo",
+      "street": "1-3-5 Marunouchi Tokyo Station Building",
+      "apt": "FL.20",
+      "city": "Chiyoda",
       "state": "Tokyo",
       "postalCode": "100-0005",
       "country": "JPN"
     },
-    "homePhone": "81354567890",
-    "secondaryPhone": "81901234567",
-    "workPhone": "81332211234",
+    "homePhone": "+81354567890",
+    "secondaryPhone": "+81901234567",
+    "workPhone": "+81332211234",
     "email": "tnakamura@nakamuratrading.co.jp",
     "socialMedia": [
       {
@@ -924,7 +992,7 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
       "t.nakamura@example.com"
     ]
   },
-  
+
   "usContact": {
     "contactPerson": {
       "surname": "JOHNSON",
@@ -934,7 +1002,7 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
     "relationship": "Business partner and legal representative",
     "address": {
       "street1": "5678 Century Boulevard",
-      "street2": "Floor 25",
+      "street2": "FL.25",
       "city": "Los Angeles",
       "state": "CA",
       "zipCode": "90045"
@@ -942,7 +1010,7 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
     "phone": "13107654321",
     "email": "mjohnson@californiabusiness.com"
   },
-  
+
   "passport": {
     "type": "REGULAR",
     "number": "TK9876543",
@@ -960,7 +1028,7 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
       "explanation": "Previous passport was lost during travel in 2019, reported to Japanese consulate and replaced"
     }
   },
-  
+
   "family": {
     "father": {
       "surname": "NAKAMURA",
@@ -991,37 +1059,30 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
       }
     ],
     "spouse": {
-      "surname": "NAKAMURA",
+      "surname": "NAKAMURA MAIDEN NAME TANAKA",
       "givenName": "Yuki",
       "dateOfBirth": "22-NOV-1982",
       "nationality": "JPN",
-      "city": "Tokyo",
+      "city": "Osaka",
+      "birthState": "Osaka",
       "country": "JPN",
-      "addressType": "SAME_AS_HOME",
-      "address": {
-        "street1": "2-15-8 Roppongi",
-        "street2": "Mansion Hills 1205",
-        "city": "Tokyo",
-        "state": "Tokyo",
-        "postalCode": "106-0032",
-        "country": "JPN"
-      }
+      "addressType": "SAME_AS_HOME"
     }
   },
-  
+
   "workEducation": {
     "primaryOccupation": "BUSINESS",
     "presentEmployer": {
       "name": "NAKAMURA TRADING CO LTD",
       "address": {
-        "street1": "1-3-5 Marunouchi",
-        "street2": "Tokyo Station Building 20F",
-        "city": "Tokyo",
+        "street1": "1-3-5 Marunouchi Tokyo Station Building",
+        "street2": "FL.20",
+        "city": "Chiyoda",
         "state": "Tokyo",
         "postalCode": "100-0005",
         "country": "JPN"
       },
-      "phone": "81332211234",
+      "phone": "+81332211234",
       "startDate": "01-APR-2005",
       "monthlyIncome": "2500000",
       "duties": "Chief Executive Officer responsible for overall company strategy, international expansion, and US market development. Manages 150 employees across 5 departments including import-export operations, logistics, and business development.",
@@ -1033,14 +1094,13 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
       {
         "name": "MITSUBISHI CORPORATION",
         "address": {
-          "street1": "3-1-1 Marunouchi",
-          "street2": "Mitsubishi Building",
-          "city": "Tokyo",
+          "street1": "3-1-1 Marunouchi Mitsubishi Building",
+          "city": "Chiyoda",
           "state": "Tokyo",
           "postalCode": "100-8086",
           "country": "JPN"
         },
-        "phone": "81332101111",
+        "phone": "+81332101111",
         "startDate": "01-APR-2000",
         "endDate": "31-MAR-2005",
         "monthlyIncome": "800000",
@@ -1048,25 +1108,6 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
         "supervisorSurname": "SUZUKI",
         "supervisorGivenName": "Kenji",
         "jobTitle": "Senior Manager"
-      },
-      {
-        "name": "TOYOTA MOTOR CORPORATION",
-        "address": {
-          "street1": "1 Toyota-cho",
-          "street2": "Corporate Headquarters",
-          "city": "Toyota",
-          "state": "Aichi",
-          "postalCode": "471-8571",
-          "country": "JPN"
-        },
-        "phone": "81565282121",
-        "startDate": "01-APR-1997",
-        "endDate": "31-MAR-2000",
-        "monthlyIncome": "450000",
-        "duties": "Market Research Analyst for North American automotive market",
-        "supervisorSurname": "YAMAMOTO",
-        "supervisorGivenName": "Takashi",
-        "jobTitle": "Market Research Analyst"
       }
     ],
     "education": {
@@ -1075,8 +1116,7 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
           "name": "UNIVERSITY OF TOKYO",
           "address": {
             "street1": "7-3-1 Hongo",
-            "street2": "Bunkyo-ku",
-            "city": "Tokyo",
+            "city": "Bunkyo",
             "state": "Tokyo",
             "postalCode": "113-0033",
             "country": "JPN"
@@ -1084,75 +1124,30 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
           "courseOfStudy": "Economics",
           "fromDate": "01-APR-1996",
           "toDate": "31-MAR-2000"
-        },
-        {
-          "name": "STANFORD UNIVERSITY GRADUATE SCHOOL OF BUSINESS",
-          "address": {
-            "street1": "655 Knight Way",
-            "street2": "Stanford Graduate School of Business",
-            "city": "Stanford",
-            "state": "CA",
-            "postalCode": "94305",
-            "country": "USA"
-          },
-          "courseOfStudy": "Master of Business Administration",
-          "fromDate": "01-SEP-2002",
-          "toDate": "15-JUN-2004"
         }
       ]
     },
-    "languages": ["Japanese", "English", "Mandarin Chinese", "Korean"],
+    "languages": ["Japanese", "English", "Mandarin Chinese"],
     "countriesVisited": {
       "hasVisited": true,
-      "countries": ["USA", "CHN", "KOR", "THA", "SGP", "MYS", "IDN", "VNM", "PHL", "TWN", "HKG", "GBR", "DEU", "FRA"]
+      "countries": ["USA", "CHN", "KOR", "THA", "SGP"]
     },
     "organizationMembership": {
       "hasMembership": true,
       "organizations": [
         "Japan Business Federation",
-        "Tokyo Chamber of Commerce and Industry", 
-        "Japan External Trade Organization",
-        "Asia-Pacific Business Council",
-        "US-Japan Business Council"
-      ]
-    },
-    "specializedSkills": {
-      "hasSkills": true,
-      "explanation": "Expert in international trade finance, cross-border investment structuring, supply chain management, and US-Japan business relations. Certified in project management and holds advanced certifications in international business law."
-    },
-    "militaryService": {
-      "hasServed": true,
-      "details": [
-        {
-          "country": "JPN",
-          "branch": "Japan Self-Defense Forces",
-          "rank": "Lance Corporal",
-          "specialty": "Communications and logistics",
-          "startDate": "01-APR-1996",
-          "endDate": "31-MAR-1998"
-        }
+        "Tokyo Chamber of Commerce and Industry"
       ]
     }
   },
-  
-  "security": {
-    "part1": {
-      "disorder": true,
-      "disorderExplain": "Mild anxiety disorder diagnosed in 2010, successfully managed with medication and therapy, no impact on daily activities or work performance"
-    },
-    "part2": {
-      "arrested": true,
-      "arrestedExplain": "Traffic violation in Tokyo in 2018 for exceeding speed limit, paid fine of 50000 yen, no criminal record"
-    }
-  },
-  
+
   "temporaryWork": {
     "petitionNumber": "ABC1234567890",
     "petitionerName": "NAKAMURA TRADING USA INC",
     "intendedEmployer": {
       "name": "NAKAMURA TRADING USA INC",
       "address1": "1234 Wilshire Boulevard",
-      "address2": "Suite 567",
+      "address2": "STE.567",
       "city": "Los Angeles",
       "state": "CA",
       "zipCode": "90017",
@@ -1160,7 +1155,7 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
     },
     "monthlyIncome": "25000"
   },
-  
+
   "evisaClassification": {
     "visaType": "E2",
     "treatyCountry": "JPN",
@@ -1170,7 +1165,7 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
       "givenName": "Takeshi"
     }
   },
-  
+
   "evisaBusiness": {
     "businessName": "NAKAMURA TRADING USA INC",
     "businessType": "S",
@@ -1181,7 +1176,7 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
     "incorporationCountry": "USA",
     "businessAddress": {
       "street1": "1234 Wilshire Boulevard",
-      "street2": "Suite 567",
+      "street2": "STE.567",
       "city": "Los Angeles",
       "state": "CA",
       "postalCode": "90017",
@@ -1193,385 +1188,44 @@ This example shows EVERY SINGLE FIELD populated with realistic sample data. Pay 
     "businessWebsite": "www.nakamuratrading.com",
     "numberOfEmployees": "25",
     "annualRevenue": "15000000",
-    "businessActivities": "Import and distribution of Japanese consumer goods, electronics, and automotive parts to US retailers and wholesalers. Export of US agricultural products and technology to Asian markets.",
-    "percentageForeignOwnership": "75",
-    "stockExchangeListed": false,
-    "stockExchangeName": "Company is privately held",
-    "offices": [
-      {
-        "type": "H",
-        "typeOther": "Headquarters and main distribution center",
-        "name": "NAKAMURA TRADING USA INC HEADQUARTERS",
-        "address": {
-          "street1": "1234 Wilshire Boulevard",
-          "street2": "Suite 567",
-          "city": "Los Angeles",
-          "state": "CA",
-          "stateNA": false,
-          "postalCode": "90017",
-          "postalCodeNA": false,
-          "country": "USA"
-        }
-      },
-      {
-        "type": "W",
-        "typeOther": "Warehouse and logistics facility",
-        "name": "NAKAMURA TRADING WAREHOUSE",
-        "address": {
-          "street1": "5678 Industrial Way",
-          "street2": "Building B",
-          "city": "Carson",
-          "state": "CA",
-          "stateNA": false,
-          "postalCode": "90746",
-          "postalCodeNA": false,
-          "country": "USA"
-        }
-      }
-    ]
+    "businessActivities": "Import and distribution of Japanese consumer goods",
+    "percentageForeignOwnership": "75"
   },
-  
+
   "evisaApplicationContact": {
     "officer": {
       "surname": "NAKAMURA",
-      "givenName": "Takeshi",
-      "position": "Chief Executive Officer"
+      "givenName": "TAKESHI",
+      "position": "CEO"
     },
     "contact": {
-      "surname": "SMITH",
-      "givenName": "Jennifer"
+      "surname": "HIGA",
+      "givenName": "ERIKO"
     },
     "address": {
-      "street1": "1234 Wilshire Boulevard",
-      "street2": "Suite 567",
-      "city": "Los Angeles",
+      "street1": "11835 W OLYMPIC BLVD",
+      "street2": "STE.355E",
+      "city": "LOS ANGELES",
       "state": "CA",
-      "stateNA": false,
-      "postalCode": "90017",
-      "postalCodeNA": false,
+      "postalCode": "90064",
       "country": "USA"
     },
-    "phone": "13107654321",
-    "fax": "13107654322",
-    "faxNA": false,
-    "email": "info@nakamuratrading.com",
-    "emailNA": false
+    "phone": "13103246890",
+    "fax": "13103246902",
+    "email": "erikohiga@tomitalawoffice.net"
   },
-  
+
   "evisaOwnership": {
     "owners": [
       {
         "name": "NAKAMURA TAKESHI",
         "nationality": "JPN",
         "percentageOwnership": "75",
-        "position": "Chief Executive Officer and Majority Shareholder"
-      },
-      {
-        "name": "NAKAMURA TRADING CO LTD",
-        "nationality": "JPN", 
-        "percentageOwnership": "20",
-        "position": "Parent Company"
-      },
-      {
-        "name": "JOHNSON MICHAEL",
-        "nationality": "USA",
-        "percentageOwnership": "5",
-        "position": "Local Business Partner"
+        "position": "Chief Executive Officer"
       }
     ],
     "majorityOwnedByTreatyCountry": true,
-    "ownershipStructure": "75% owned by Japanese national Takeshi Nakamura, 20% owned by Japanese parent company Nakamura Trading Co Ltd, 5% owned by US business partner Michael Johnson"
-  },
-  
-  "evisaFinanceTrade": {
-    "yearType": "C",
-    "yearType2": "C", 
-    "assetsType": "C",
-    "financialYear": "2023",
-    "totalAssets": "5500000",
-    "totalLiabilities": "2200000",
-    "ownerEquity": "3300000",
-    "operatingIncomeBeforeTax": "1800000",
-    "operatingIncomeAfterTax": "1350000",
-    "grossInternationalTradeYear": "2023",
-    "treatyCountryImports": "8500000",
-    "treatyCountryImportTransactions": "145",
-    "treatyCountryExports": "3200000",
-    "treatyCountryExportTransactions": "67",
-    "thirdCountryImports": "1500000",
-    "thirdCountryImportTransactions": "23",
-    "thirdCountryExports": "800000",
-    "thirdCountryExportTransactions": "12",
-    "domesticProductionValue": "0",
-    "domesticProductionTransactions": "0",
-    
-    "financialStatement": {
-      "cash": "850000",
-      "receivables": "1200000",
-      "inventory": "2100000",
-      "otherCurrentAssets": "350000",
-      "land": "0",
-      "building": "600000",
-      "machinery": "300000",
-      "otherPropertyAssets": "100000",
-      "liabilities": "2200000",
-      "debt": "1500000",
-      "revenues": "12000000",
-      "costs": "9500000",
-      "income": "1350000",
-      "tax": "450000"
-    },
-    
-    "tradeInformation": {
-      "goodsSoldValue": "12000000",
-      "exportedValue": "4000000",
-      "principalTradeService": "Import and wholesale distribution of Japanese consumer electronics, automotive parts, and specialty foods",
-      "servicesToUSA": "2500000",
-      "importsFromUS": "3200000",
-      "importsFromOther": "10000000",
-      "exportsToUS": "0",
-      "exportsToOther": "4000000",
-      "domesticProductionTransactions": "0"
-    }
-  },
-  
-  "evisaEmployeeCounts": {
-    "yearType": "C",
-    "treatyNationals": {
-      "managerial": {"thisYear": "3", "nextYear": "5"},
-      "specialized": {"thisYear": "8", "nextYear": "12"},
-      "other": {"thisYear": "2", "nextYear": "3"}
-    },
-    "usCitizensLPR": {
-      "managerial": {"thisYear": "2", "nextYear": "3"},
-      "specialized": {"thisYear": "5", "nextYear": "8"},
-      "other": {"thisYear": "5", "nextYear": "8"}
-    },
-    "thirdCountryNationals": {
-      "managerial": {"thisYear": "0", "nextYear": "0"},
-      "specialized": {"thisYear": "0", "nextYear": "1"},
-      "other": {"thisYear": "0", "nextYear": "0"}
-    }
-  },
-  
-  "evisaUSPersonnel": {
-    "personnel": [
-      {
-        "surname": "JOHNSON",
-        "givenName": "Michael",
-        "position": "Operations Manager",
-        "division": "Logistics and Distribution",
-        "nationality": "USA",
-        "usStatus": "US Citizen",
-        "usStatusOther": "Born in California",
-        "visaType": "Not applicable",
-        "visaIssueDate": "Not applicable",
-        "visaIssuePlace": "Not applicable",
-        "alienNumber": "Not applicable",
-        "alienNumberUnknown": false
-      },
-      {
-        "surname": "GARCIA",
-        "givenName": "Maria",
-        "position": "Sales Manager",
-        "division": "Sales and Marketing",
-        "nationality": "USA",
-        "usStatus": "US Permanent Resident",
-        "usStatusOther": "Green card holder since 2018",
-        "visaType": "Not applicable",
-        "visaIssueDate": "Not applicable", 
-        "visaIssuePlace": "Not applicable",
-        "alienNumber": "A123456789",
-        "alienNumberUnknown": false
-      },
-      {
-        "surname": "TANAKA",
-        "givenName": "Hiroshi",
-        "position": "Import Specialist",
-        "division": "International Trade",
-        "nationality": "JPN",
-        "usStatus": "H-1B",
-        "usStatusOther": "Specialty occupation worker",
-        "visaType": "H-1B",
-        "visaIssueDate": "15-MAR-2023",
-        "visaIssuePlace": "Tokyo",
-        "alienNumber": "A987654321",
-        "alienNumberUnknown": false
-      }
-    ]
-  },
-  
-  "evisaApplicantPosition": {
-    "applicantType": "M",
-    "presentPosition": "Chief Executive Officer of Nakamura Trading Co Ltd, responsible for overall corporate strategy, international business development, and oversight of all operations including import-export activities, supply chain management, and market expansion initiatives across Asia-Pacific region",
-    "employerName": "NAKAMURA TRADING CO LTD",
-    "yearsWithEmployer": "19",
-    "employerAddress": {
-      "street1": "1-3-5 Marunouchi",
-      "street2": "Tokyo Station Building 20F",
-      "city": "Tokyo",
-      "state": "Tokyo",
-      "stateNA": false,
-      "postalCode": "100-0005",
-      "postalCodeNA": false,
-      "country": "JPN"
-    },
-    "education": {
-      "school": "STANFORD UNIVERSITY GRADUATE SCHOOL OF BUSINESS",
-      "degree": "Master of Business Administration",
-      "major": "International Business and Finance",
-      "year": "2004"
-    },
-    "hasOtherEducation": true,
-    "otherEducationExplanation": "Bachelor of Economics from University of Tokyo (2000), Certificate in International Trade Finance from Japan External Trade Organization (2001)"
-  },
-  
-  "evisaApplicantUSPosition": {
-    "title": "Chief Executive Officer",
-    "duties": "Lead overall strategic direction and daily operations of Nakamura Trading USA Inc. Develop and execute business plans for US market expansion. Manage relationships with key suppliers in Japan and distributors throughout the United States. Oversee import operations, compliance with US trade regulations, and quality control processes. Direct sales and marketing efforts targeting US retail and wholesale customers. Supervise staff of 25 employees across multiple departments including purchasing, logistics, sales, and administration. Establish partnerships with US companies for export opportunities to Asian markets.",
-    "salary": "300000",
-    "benefits": "Health insurance, dental coverage, retirement plan contributions, paid vacation, company car allowance",
-    "hasImmediateSubordinates": true,
-    "immediateSubordinates": [
-      "Michael Johnson - Operations Manager",
-      "Maria Garcia - Sales Manager", 
-      "Jennifer Smith - Administrative Manager",
-      "David Kim - Finance Manager"
-    ],
-    "isReplacingWorker": false,
-    "replacedWorker": {
-      "name": "Position is newly created",
-      "visaType": "Not applicable"
-    },
-    "willIncreaseStaff": true,
-    "continuationOfEmployment": true
-  },
-  
-  "evisaEmployee": {
-    "positionTitle": "Chief Executive Officer",
-    "dutiesDescription": "Executive leadership and strategic management of US subsidiary operations",
-    "startDate": "01-MAY-2024",
-    "yearsExperience": "24",
-    "salary": "300000",
-    "educationLevel": "Masters Degree",
-    "fieldOfStudy": "Business Administration and International Finance",
-    "specialQualifications": "MBA from Stanford University, 24 years experience in international trade, fluent in Japanese and English, extensive knowledge of US-Japan business relations and trade regulations",
-    "previousUSEmployment": false,
-    "previousEmployer": "No prior US employment",
-    "previousPosition": "Not applicable",
-    "previousDates": "Not applicable"
-  },
-  
-  "evisaInvestment": {
-    "investmentType": "E",
-    "fairMarketValue": "2500000",
-    "financialYear": "2024",
-    "yearType": "C",
-    "cashInitial": "1200000",
-    "cashTotal": "1500000",
-    "inventoryInitial": "300000",
-    "inventoryTotal": "800000",
-    "equipmentInitial": "150000",
-    "equipmentTotal": "200000",
-    "propertyInitial": "0",
-    "propertyTotal": "0",
-    "otherInitial": "0",
-    "otherTotal": "0",
-    "sourceOfFunds": "C",
-    "fundsFrom": "P",
-    "fundsAmount": "2500000",
-    "hasWireTransfers": true,
-    "hasBankStatements": true,
-    "hasPromissoryNote": false,
-    "hasOtherDocs": true
-  },
-  
-  "evisaForeignBusiness": {
-    "hasForeignBusiness": true,
-    "hasForeignEntity": true,
-    "hasForeignIndividualOwner": true,
-    "parentBusiness": {
-      "name": "NAKAMURA TRADING CO LTD",
-      "address": {
-        "street1": "1-3-5 Marunouchi",
-        "street2": "Tokyo Station Building 20F",
-        "city": "Tokyo",
-        "state": "Tokyo",
-        "stateNA": false,
-        "postalCode": "100-0005",
-        "postalCodeNA": false,
-        "country": "JPN"
-      },
-      "phone": "81332211234",
-      "fax": "81332211235"
-    },
-    "foreignEntities": [
-      {
-        "name": "NAKAMURA TRADING CO LTD",
-        "nationality": "JPN",
-        "ownershipPercentage": "20"
-      },
-      {
-        "name": "ASIA PACIFIC TRADING PARTNERS",
-        "nationality": "SGP",
-        "ownershipPercentage": "5"
-      }
-    ],
-    "foreignOwners": [
-      {
-        "surname": "NAKAMURA",
-        "givenName": "Takeshi",
-        "status": "Individual investor and business owner",
-        "residenceCountry": "JPN",
-        "nationality": "JPN", 
-        "ownershipPercentage": "75"
-      }
-    ]
-  },
-  
-  "evisaFinancial": {
-    "currentAssets": "4500000",
-    "fixedAssets": "1000000",
-    "totalAssets": "5500000",
-    "currentLiabilities": "1200000",
-    "longTermLiabilities": "1000000",
-    "totalLiabilities": "2200000",
-    "ownerEquity": "3300000",
-    "netWorth": "3300000",
-    "grossIncome": "12000000",
-    "operatingIncomeBeforeTax": "1800000",
-    "operatingIncomeAfterTax": "1350000",
-    "netIncome": "1350000",
-    "taxYear": "2023",
-    "financialYear": "2023"
-  },
-  
-  "evisaTrade": {
-    "goodsServices": "Consumer electronics, automotive parts, specialty foods, and technology products",
-    "tradeWithUS": true,
-    "annualTradeVolume": "12000000",
-    "percentageTradeUS": "65",
-    "usCompanies": [
-      {
-        "name": "BEST BUY CO INC",
-        "address": "7601 Penn Avenue South, Richfield, MN 55423",
-        "relationship": "Major retail customer for consumer electronics"
-      },
-      {
-        "name": "AUTOZONE INC",
-        "address": "123 South Front Street, Memphis, TN 38103", 
-        "relationship": "Distributor for Japanese automotive parts"
-      },
-      {
-        "name": "SYSCO CORPORATION",
-        "address": "1390 Enclave Parkway, Houston, TX 77077",
-        "relationship": "Food service distributor for specialty Japanese products"
-      }
-    ],
-    "importFromUS": true,
-    "exportToUS": false,
-    "importDescription": "Agricultural products including soybeans, corn, and wheat for distribution in Asian markets through parent company network",
-    "exportDescription": "Not applicable - focus is on importing to US market"
+    "ownershipStructure": "75% owned by Japanese national Takeshi Nakamura"
   }
 }
 ```
