@@ -564,18 +564,21 @@ When processing visa renewal applications with multiple documents:
   },
 
   // E-VISA SECTIONS - Only include for E-1/E-2 visa applications
+  // Worksheet-Fillable Fields: evisaClassification, evisaApplicationContact, evisaApplicantPosition
+  // User will provide: visa type (E1/E2), principal applicant status (true/false), applicant type (M/E/S)
+  // Extract other fields from worksheet using source mappings in inline comments below
 
   "evisaClassification": {
-    "visaType": "E1 or E2",
-    "treatyCountry": "3-letter country code",
-    "principalApplicant": true,
+    "visaType": "E1 or E2 - User will specify in chat",
+    "treatyCountry": "3-letter country code - Extract from personal.nationality (e.g., JPN for Japanese nationals)",
+    "principalApplicant": "true/false - User will specify in chat (true=main applicant, false=spouse/child dependent)",
     "principalName": {
-      "surname": "string or omit",
-      "givenName": "string or omit"
+      "surname": "string - Use personal.surname",
+      "givenName": "string - Use personal.givenName"
     }
   },
 
-  "evisaBusiness": {
+  "evisaBusiness": { //
     "businessName": "string",
     "businessType": "S",
     "businessTypeOther": "string",
@@ -624,7 +627,7 @@ When processing visa renewal applications with multiple documents:
     "officer": {  // Object - Person to contact if necessary (company officer/principal applicant) - extract from personal.surname and personal.givenName
       "surname":  "string - Applicant/company officer surname",
       "givenName":  "string - Applicant/company officer given name"
-      "position": "string - Position (e.g., CEO)"
+      "position": "string - Extract from presentEmployer.jobTitle (e.g., CEO, President, Manager)"
     },
     "contact": {  // Object - Preparer of form (attorney/paralegal) - use attorney info from E-visa Preparer Information section 
       "surname": "string - Attorney surname (e.g., HIGA)",
@@ -744,26 +747,26 @@ When processing visa renewal applications with multiple documents:
   },
 
   "evisaApplicantPosition": {
-    "applicantType": "M",
-    "presentPosition": "string (FULL TEXT from DS-156E Section 18)",
-    "employerName": "string",
-    "yearsWithEmployer": "string",
+    "applicantType": "M", // M=Manager, E=Executive, S=Specialized Knowledge - User will specify in chat
+    "presentPosition": "string - Extract FULL TEXT from DS-156E Section 18. FALLBACK: If not available, use presentEmployer.duties (3-5 sentences)",
+    "employerName": "string - Extract from presentEmployer.name",
+    "yearsWithEmployer": "string - Calculate from presentEmployer.startDate to current date (e.g., '27' for April 1998 to May 2025)",
     "employerAddress": {
-      "street1": "string",
-      "street2": "string or omit",
-      "city": "string",
-      "state": "string",
-      "postalCode": "string",
-      "country": "3-letter code"
+      "street1": "string - From presentEmployer.address.street1",
+      "street2": "string or omit - From presentEmployer.address.street2",
+      "city": "string - From presentEmployer.address.city",
+      "state": "string - From presentEmployer.address.state",
+      "postalCode": "string - From presentEmployer.address.postalCode",
+      "country": "3-letter code - From presentEmployer.address.country"
     },
     "education": {
-      "school": "string",
-      "degree": "string",
-      "major": "string",
-      "year": "string"
+      "school": "string - From education.institutions[most recent].name",
+      "degree": "string - Infer from level (High School Diploma, Bachelor's Degree, Master's Degree, etc.)",
+      "major": "string - From education.institutions[most recent].courseOfStudy",
+      "year": "string - Extract year from toDate (e.g., '1998' from '03-MAR-1998')"
     },
-    "hasOtherEducation": false,
-    "otherEducationExplanation": "string"
+    "hasOtherEducation": false, // true if education.institutions.length > 1
+    "otherEducationExplanation": "string - List additional institutions if hasOtherEducation = true"
   },
 
   "evisaApplicantUSPosition": {

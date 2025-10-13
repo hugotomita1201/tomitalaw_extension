@@ -85,9 +85,23 @@ class VisaSchedulingFiller {
     const path = window.location.pathname;
     const title = document.title.toLowerCase();
     const url = window.location.href;
-    
-    // Check for payment page
-    if (url.includes('ayobaspremium') || title.includes('ayobas premium') || path.includes('payment')) {
+
+    // Check for passport delivery pages (pds subdomain)
+    if (url.includes('pds.ayobaspremium.jp')) {
+      if (path.includes('delivery_address')) {
+        return 'passport_delivery';
+      } else if (path.includes('choose_interview_loc')) {
+        // Interview location selection page
+        return 'passport_delivery_interview_loc';
+      } else if (path.includes('kmjcheckout')) {
+        // Payment/checkout page (after delivery address)
+        return 'passport_delivery_checkout';
+      } else if (path === '/' || path.startsWith('/?')) {
+        // Root page with UID entry
+        return 'passport_delivery_uid';
+      }
+    } else if (url.includes('ayobaspremium') || title.includes('ayobas premium') || path.includes('payment')) {
+      // Regular Ayobas payment page
       return 'payment';
     } else if (url.includes('atlasauth.b2clogin.com') || title.includes('user details')) {
       return 'signup';
@@ -112,7 +126,7 @@ class VisaSchedulingFiller {
     } else if (path.includes('document_delivery') || title.includes('document delivery') || title.includes('delivery options')) {
       return 'document_delivery';
     }
-    
+
     return 'unknown';
   }
 
@@ -233,6 +247,49 @@ class VisaSchedulingFiller {
           break;
         case 'document_delivery':
           this.fillDocumentDelivery(data);
+          break;
+        case 'passport_delivery_uid':
+          // Fill UID entry page (first page)
+          this.fillUIDEntryPage(data.passportReturn);
+          break;
+        case 'passport_delivery_interview_loc':
+          // Fill interview location selection page (second page)
+          this.fillInterviewLocationPage(data.passportReturn);
+          break;
+        case 'passport_delivery':
+          // Fill BOTH delivery address page and modal
+          this.fillDeliveryAddressPage(data.passportReturn);
+
+          // Try to fill modal if visible (with delay for modal to appear)
+          setTimeout(() => {
+            this.fillPassportDeliveryModal(data.passportReturn);
+          }, 1000);
+          break;
+        case 'passport_delivery_checkout':
+          // Fill checkout/payment page (uses same fields as regular payment page)
+          if (data.passportReturn && data.passportReturn.mainApplicant) {
+            // Transform passport return data structure to match payment page expectations
+            const main = data.passportReturn.mainApplicant;
+            const applicant = data.passportReturn.applicants ? data.passportReturn.applicants[0] : {};
+
+            const transformedData = {
+              // Names from applicants array (use native names for payment page, fallback to romaji)
+              name_first: applicant.first_name_native || applicant.first_name_romaji || '',
+              name_last: applicant.last_name_native || applicant.last_name_romaji || '',
+              // Address from mainApplicant
+              postal_code: main.postal_code,
+              region: main.region,
+              city: main.city,
+              street: main.address,  // Map 'address' → 'street'
+              street2: main.apartment || '',  // Map 'apartment' → 'street2'
+              phone: main.phone,
+              email: main.email
+            };
+
+            this.fillPaymentPage(transformedData);
+          } else {
+            this.fillPaymentPage(data);
+          }
           break;
         default:
           // Try to fill any matching fields
@@ -472,6 +529,162 @@ class VisaSchedulingFiller {
     }
     
     this.showNotification('Payment form filled (except amount & receipt)');
+  }
+
+  // Fill passport delivery UID entry page (pds.ayobaspremium.jp root)
+  fillUIDEntryPage(data) {
+    if (!data || !data.mainApplicant) {
+      this.showNotification('⚠️ No passport return data found');
+      return;
+    }
+
+    const main = data.mainApplicant;
+    if (!main.uid) {
+      this.showNotification('⚠️ Main applicant UID missing');
+      return;
+    }
+
+    // Fill UID field
+    this.fillField('txt_ref_id', main.uid);
+
+    console.log(`Filled UID entry page with UID: ${main.uid}`);
+    this.showNotification('✓ UID filled - Click continue to proceed');
+  }
+
+  // Fill interview location selection page
+  fillInterviewLocationPage(data) {
+    if (!data || !data.mainApplicant) {
+      this.showNotification('⚠️ No passport return data found');
+      return;
+    }
+
+    const main = data.mainApplicant;
+    if (!main.interview_location) {
+      this.showNotification('⚠️ Interview location missing');
+      return;
+    }
+
+    // Fill interview location dropdown
+    this.fillField('sel_interview_loc', main.interview_location);
+
+    console.log(`Filled interview location: ${main.interview_location}`);
+    this.showNotification('✓ Interview location filled - Click continue to proceed');
+  }
+
+  // Fill passport delivery address page (pds.ayobaspremium.jp)
+  fillDeliveryAddressPage(data) {
+    if (!data || !data.mainApplicant) {
+      this.showNotification('⚠️ No passport return data found');
+      return;
+    }
+
+    const main = data.mainApplicant;
+    if (!main.uid) {
+      this.showNotification('⚠️ Main applicant UID missing');
+      return;
+    }
+
+    const uid = main.uid;
+
+    // Fill delivery address fields with UID suffix
+    this.fillField(`postal_code_${uid}`, main.postal_code);
+    this.fillField(`region_${uid}`, main.region);
+    this.fillField(`city_${uid}`, main.city);
+    this.fillField(`address_${uid}`, main.address);
+    this.fillField(`phone_${uid}`, main.phone);
+    this.fillField(`email_${uid}`, main.email);
+
+    console.log(`Filled delivery address fields for UID: ${uid}`);
+    this.showNotification('✓ Delivery address filled');
+  }
+
+  // Fill passport delivery modal (#dialog_shopping)
+  fillPassportDeliveryModal(data) {
+    if (!data || !data.applicants) {
+      console.log('No passport return applicants data found');
+      return;
+    }
+
+    // Check if modal is visible (Bootstrap modal check)
+    const modal = document.querySelector('#dialog_shopping');
+    const isVisible = modal && (
+      modal.classList.contains('in') ||  // Bootstrap 3
+      modal.classList.contains('show') || // Bootstrap 4+
+      (modal.style.display && modal.style.display !== 'none')
+    );
+
+    if (!isVisible) {
+      console.log('Passport delivery modal not visible yet');
+      this.showNotification('⚠️ Please open the delivery modal first');
+      return;
+    }
+
+    const applicants = data.applicants;
+    if (applicants.length === 0) {
+      this.showNotification('⚠️ No applicants to fill');
+      return;
+    }
+
+    console.log(`Filling modal for ${applicants.length} applicant(s)`);
+
+    // Fill main applicant (first 5 fields)
+    this.fillApplicantFields(applicants[0], 0);
+
+    // Fill dependents with delay for DOM updates
+    for (let i = 1; i < applicants.length; i++) {
+      setTimeout(() => {
+        this.clickAddApplicantButton();
+        setTimeout(() => {
+          this.fillApplicantFields(applicants[i], i);
+        }, 500); // Wait for new fields to appear
+      }, i * 1000); // Stagger button clicks
+    }
+
+    this.showNotification(`✓ Filling ${applicants.length} applicant(s) in modal`);
+  }
+
+  // Fill applicant fields in modal by position
+  fillApplicantFields(applicant, index) {
+    const startIdx = index * 5;
+    const inputs = Array.from(document.querySelectorAll('#dialog_shopping input[type="text"]:not([type="hidden"])')).filter(input => input.offsetParent !== null);
+
+    if (inputs.length < startIdx + 5) {
+      console.error(`Not enough input fields for applicant ${index + 1}`);
+      return;
+    }
+
+    console.log(`Filling applicant ${index + 1}: ${applicant.first_name_romaji} ${applicant.last_name_romaji}`);
+
+    // Fill in order: Passport, DS160, UID, Last name, First name
+    inputs[startIdx + 0].value = applicant.passport_number || '';
+    inputs[startIdx + 1].value = applicant.ds160_confirmation || '';
+    inputs[startIdx + 2].value = applicant.uid || '';
+    inputs[startIdx + 3].value = applicant.last_name_romaji || '';
+    inputs[startIdx + 4].value = applicant.first_name_romaji || '';
+
+    // Trigger events for each field
+    for (let i = 0; i < 5; i++) {
+      const input = inputs[startIdx + i];
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+      input.dispatchEvent(new Event('blur', { bubbles: true }));
+    }
+  }
+
+  // Click "Add Additional Applicants" button
+  clickAddApplicantButton() {
+    // Find green "Add Additional Applicants" button
+    const buttons = Array.from(document.querySelectorAll('button, .btn, .btn-success'));
+    const addButton = buttons.find(btn =>
+      btn.textContent && btn.textContent.includes('Add Additional Applicants')
+    );
+
+    if (addButton) {
+      addButton.click();
+      console.log('Clicked "Add Additional Applicants" button');
+    } else {
+      console.error('Add Additional Applicants button not found');
+    }
   }
 
   // Fill contact information

@@ -74,6 +74,7 @@ Active modules:
 - **DS-160**: Auto-fills US visa application forms on ceac.state.gov
 - **DS-160 Retrieval Helper**: 30-day expiration tracking for DS-160 applications
 - **Visa Scheduling**: Auto-fills scheduling forms on multiple visa sites
+- **Passport Return Delivery**: Auto-fills Ayobas Premium passport delivery forms at pds.ayobaspremium.jp
 - **Photo Checker**: AI validation using GPT-4 Vision
 - **Postal Lookup**: Japanese postal code conversion
 - **Text Extractor**: AI-powered text extraction from documents
@@ -133,6 +134,101 @@ DS-160 uses non-standard codes - must use `mapCountry()` function:
 Security questions default to false when missing to comply with State Department requirements:
 ```javascript
 const getSecurityValue = (value) => value === true || value === 'true';
+```
+
+#### Passport Return Delivery (content/modules/visa-content.js)
+Integrated into the visa scheduling module for passport return delivery via Ayobas Premium after visa interview appointments.
+
+**Purpose**: After visa interviews at US embassies/consulates, applicants must arrange return delivery of their passports via Ayobas Premium (`pds.ayobaspremium.jp`). This feature automates form filling for both the delivery address page and the applicant credentials modal.
+
+**Architecture - Smart JSON Detection**:
+- **Detection**: Automatically detects passport return format by checking for `mainApplicant` and `applicants` properties
+- **Storage**: Stored separately as `visaData.passportReturn` (vs `visaData.scheduling` for visa scheduling data)
+- **UI**: Shows dedicated "Passport Delivery Form" area with Auto-Fill button (not person selector)
+
+**Two-Part Form Filling**:
+1. **Delivery Address Page** (`fillDeliveryAddressPage()` lines 480-505):
+   - Fields use UID-suffixed IDs: `postal_code_858015779`, `region_858015779`, etc.
+   - Fills: postal code, region, city, address, phone, email
+   - UID extracted from `mainApplicant.uid`
+
+2. **Applicant Modal** (`fillPassportDeliveryModal()` lines 507-544):
+   - Modal ID: `#dialog_shopping`
+   - Fields have NO IDs/names - filled by position index
+   - Each applicant: 5 consecutive fields (Passport#, DS-160, UID, Last name, First name)
+   - Multiple applicants: Clicks "Add Additional Applicants" button with staggered timeouts
+
+**Key Implementation Details**:
+- **Page Detection**: URL contains `pds.ayobaspremium.jp` + path includes `delivery_address`
+- **Modal Visibility Check**: Verifies `modal.offsetParent` before attempting to fill
+- **Field Order** (modal): `inputs[startIdx + 0]` through `inputs[startIdx + 4]` for each applicant
+- **Event Dispatching**: Triggers `input`, `change`, and `blur` events for form validation
+- **Staggered DOM Updates**: 500ms delay after clicking "Add Additional Applicants", 1000ms between applicants
+
+**Data Structure**:
+```json
+{
+  "mainApplicant": {
+    "uid": "858015779",
+    "postal_code": "270-2216",
+    "region": "千葉県",
+    "city": "松戸市",
+    "address": "串崎新田145-7",
+    "phone": "9066565238",
+    "email": "d-odagiri@hanewfoods.com"
+  },
+  "applicants": [
+    {
+      "passport_number": "TT3389779",
+      "ds160_confirmation": "AA00EXBSND",
+      "uid": "858015779",
+      "last_name_romaji": "Odagiri",
+      "first_name_romaji": "Daijiro",
+      "relationship": "Primary Applicant"
+    }
+  ]
+}
+```
+
+**ChatGPT Integration** (prompts_and_templates/form_prompts/passport_return_prompt_v1.txt):
+- Single-stage extraction from appointment confirmations and worksheets
+- Extracts delivery address + applicant credentials
+- Validation rules: Passport format, DS-160 exactly 10 chars, phone without leading 0
+- Japanese postal code format (XXX-XXXX with hyphen)
+- Proper name capitalization (Firstname Lastname, not UPPERCASE)
+
+**Workflow**:
+1. User uploads appointment confirmation + visa applicant worksheet to ChatGPT
+2. ChatGPT processes with `passport_return_prompt_v1.txt` → outputs JSON
+3. User pastes JSON in extension sidebar → Auto-detected as passport return format
+4. User navigates to `pds.ayobaspremium.jp/ap/delivery_address`
+5. User clicks "Auto-Fill Passport Delivery" → Fills both page and modal
+6. Extension fills delivery address fields, then attempts modal fill after 1s delay
+
+**Critical Functions**:
+- `detectPageType()` (lines 83-120): Returns `'passport_delivery'` for pds.ayobaspremium.jp
+- `fillDeliveryAddressPage()` (lines 480-505): Fills main page with UID-suffixed field IDs
+- `fillPassportDeliveryModal()` (lines 507-544): Orchestrates modal filling with applicant loop
+- `fillApplicantFields()` (lines 546-572): Fills 5 consecutive fields by position for one applicant
+- `clickAddApplicantButton()` (lines 574-588): Finds and clicks "Add Additional Applicants" button
+
+**Sidebar UI** (sidebar/sidebar.html lines 640-662):
+- `passportReturnArea`: Dedicated UI area shown when passport return data detected
+- Shows applicant count and delivery address summary
+- "Auto-Fill Passport Delivery" button sends full `currentData` object to content script
+- "Edit Data" button returns to JSON input view
+
+**Smart Detection Logic** (sidebar/sidebar.js lines 1132-1161):
+```javascript
+const isPassportReturn = parsedData.mainApplicant && parsedData.applicants;
+
+if (isPassportReturn) {
+  currentData = { passportReturn: parsedData };
+  showPassportReturnArea(parsedData);  // Show dedicated UI
+} else {
+  currentData = { scheduling: parsedData };
+  showPersonSelector();  // Show person selector for visa scheduling
+}
 ```
 
 #### DS-160 Retrieval Helper (sidebar/modules/retrieval/)
@@ -249,6 +345,19 @@ The extension uses a two-tier prompt architecture with versioned detailed prompt
 - Location: `prompts_and_templates/form_prompts/visa_scheduler_prompt_v1.txt`
 - Current version: v1 (created from VISA_SCHEDULER_0913.rtf, now with passport/phone validation)
 - Key features: Main applicant vs dependent logic, document delivery rules, passport format validation, Japanese phone number formatting
+
+#### Passport Return Prompts
+- Location: `prompts_and_templates/form_prompts/passport_return_prompt_v1.txt`
+- Current version: v1
+- Purpose: Extract passport delivery credentials for Ayobas Premium Passport Return system
+- Size: 382 lines
+- Key features:
+  - **Single-stage extraction** from appointment confirmations and worksheets
+  - **Delivery address extraction**: Postal code, region, city, address, phone, email
+  - **Applicant credentials extraction**: Passport#, DS-160, UID, Names in Romaji
+  - **Family application support**: Multiple applicants with relationship tracking
+  - **Japanese data handling**: Postal codes (XXX-XXXX format), phone formatting (remove leading 0), address in kanji/kana
+  - **Validation rules**: Passport format by country, DS-160 exactly 10 characters, phone without leading 0
 
 #### Letter Agent System (Immigration Letters)
 - **Master Prompt**: `prompts_and_templates/main_prompts/letter_agent_prompt.md`
@@ -399,6 +508,65 @@ The extension uses a two-tier prompt architecture with versioned detailed prompt
 - **Family application support**: Principal + spouse + children with relationship notes
 - **Security answer**: Extension hardcodes "HUGO" (not motherMotherName) for form filling
 - **Character limits**: Strict validation (10-char applicationId, 50-char motherMotherName)
+
+#### Passport Return Prompt (ChatGPT Integration)
+**Purpose**: Extract passport delivery credentials for Ayobas Premium Passport Return system
+**Usage**: Upload documents → ChatGPT processes with passport_return_prompt_v1.txt → JSON output → Extension fills delivery form + modal
+
+**Single-Stage Workflow**:
+- Analyze source documents (appointment confirmations, visa applicant worksheets)
+- Extract delivery address (postal code, region, city, address, phone, email)
+- Extract applicant credentials (Passport#, DS-160, UID, Names in Romaji)
+- Output JSON code block with `{"mainApplicant": {...}, "applicants": [...]}`
+
+**Key Requirements**:
+- **UID**: 8-9 numeric digits from appointment confirmation (e.g., "858015779")
+- **Postal code**: Japanese format with hyphen (e.g., "270-2216")
+- **Phone**: Remove leading 0 from Japanese numbers ("090-6656-5238" → "9066565238")
+- **Passport number**: Country-specific format, UPPERCASE (Japanese: 2 letters + 7 digits)
+- **DS-160**: Exactly 10 alphanumeric characters, UPPERCASE (e.g., "AA00EXBSND")
+- **Names**: Proper capitalization ("Odagiri" not "ODAGIRI")
+- **Address**: Keep in Japanese (千葉県, 松戸市, etc.)
+
+**Data Structure**:
+```json
+{
+  "mainApplicant": {
+    "uid": "858015779",
+    "postal_code": "270-2216",
+    "region": "千葉県",
+    "city": "松戸市",
+    "address": "串崎新田145-7",
+    "phone": "9066565238",
+    "email": "d-odagiri@hanewfoods.com"
+  },
+  "applicants": [
+    {
+      "passport_number": "TT3389779",
+      "ds160_confirmation": "AA00EXBSND",
+      "uid": "858015779",
+      "last_name_romaji": "Odagiri",
+      "first_name_romaji": "Daijiro",
+      "relationship": "Primary Applicant"
+    }
+  ]
+}
+```
+
+**Critical Validations**:
+- Passport format varies by country (Japanese: 2 letters + 7 digits exactly)
+- Phone formatting: Remove leading 0 from Japanese numbers for Ayobas system
+- Japanese address must remain in kanji/kana (not romanized)
+- Separate street address from apartment/floor numbers (address field gets street only)
+
+**Workflow**:
+1. Upload appointment confirmation PDF + visa applicant worksheet to ChatGPT
+2. ChatGPT extracts delivery address from main applicant
+3. ChatGPT extracts credentials for each family member (passport#, DS-160, UID, names)
+4. Output complete JSON with mainApplicant and applicants array
+5. User pastes in extension → Auto-detected as passport return format → Shows "Auto-Fill Passport Delivery" UI
+6. User navigates to `pds.ayobaspremium.jp/ap/delivery_address` and clicks Auto-Fill
+7. Extension fills delivery address page + applicant modal automatically
 
 #### Letter Agent Prompt (Immigration Letters)
 **Purpose**: Generate immigration support letters using organized template library

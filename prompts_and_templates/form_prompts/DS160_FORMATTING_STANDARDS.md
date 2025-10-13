@@ -1,7 +1,7 @@
 # DS-160 Data Formatting Standards
 
-**Version:** 1.10
-**Last Updated:** October 8, 2025
+**Version:** 1.17
+**Last Updated:** October 10, 2025
 **Purpose:** Master reference for DS-160 form data formatting rules. Use this document when creating prompts for DS-160 and other immigration forms.
 
 ---
@@ -837,6 +837,174 @@ Include these instructions in prompts:
 ---
 
 ## Change Log
+
+### Version 1.17 (October 10, 2025)
+- **PASSPORT RETURN PROMPT - FICTIONAL DATA REPLACEMENT**: Replaced all real case data with fictional examples to prevent data leakage and hallucination
+  - **Problem #1**: Prompt used real client data (Odagiri 小田桐) as examples → privacy violation and data leakage
+  - **Problem #2**: ChatGPT pattern-matched example kanji instead of extracting from worksheet → produced wrong kanji (小田切 instead of 小田桐)
+  - **Root Cause**: Homophone collision - when real case surname matched example romaji, ChatGPT used example kanji from prompt instead of worksheet kanji
+  - **Solution**: Complete replacement with clearly fictional but format-correct data
+  - **Fictional Example Data**:
+    * Name: Yamada Hanako (山田 花子) - classic Japanese "Jane Doe" equivalent
+    * UID: 100000001 (clearly sequential test number)
+    * Passport: TK0000001 (TK prefix not used in real Japanese passports)
+    * DS-160: AA00SAMPLE (clearly example format)
+    * Address: 丸の内1-1-1, 千代田区, 東京都 100-0001 (common example address in Tokyo)
+    * Phone: 9012345678 (090 prefix with sequential digits)
+    * Email: example@example.com
+  - **Changes Made** (passport_return_prompt_v1.txt):
+    * Lines 21-46: First JSON example in CRITICAL OUTPUT FORMAT
+    * Lines 149, 155, 162, 175: Romaji and native name examples
+    * Lines 192-215: Appointment confirmation example fields
+    * Lines 219-246: Worksheet example fields
+    * Lines 255-264: Phone formatting examples
+    * Lines 268-278: Address formatting examples
+    * Lines 287-292: Name formatting examples
+    * Lines 300-345: MULTIPLE APPLICANTS family example (3 people)
+    * Lines 378-418: EXAMPLE EXTRACTION section (source + output)
+  - **Added Critical Kanji Extraction Warnings** (lines 166-170):
+    * "Japanese kanji MUST be extracted EXACTLY from source document character-by-character"
+    * "NEVER infer kanji from romaji - same pronunciation maps to different kanji (同音異字)"
+    * "Example: 'Odagiri' could be 小田桐 OR 小田切 - completely different names!"
+    * "Double-check: Does worksheet kanji match your JSON output exactly?"
+  - **Updated Validation Checklist** (line 369):
+    * Added: "✅ Native names (kanji): Character-by-character match with worksheet (NEVER infer from romaji)"
+  - **Impact**:
+    * Zero data leakage risk - all examples now clearly fictional
+    * Prevents hallucination - examples won't collide with real case names
+    * Stronger anti-homophone guidance - ChatGPT warned about 同音異字 errors
+    * Character-by-character verification required before JSON output
+- Files updated:
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/passport_return_prompt_v1.txt (comprehensive example data replacement + kanji warnings)
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/ds160_formatting_standards.md (version 1.16 → 1.17)
+
+### Version 1.16 (October 10, 2025)
+- **MASTER PROMPT UPDATE**: Added Passport Return Delivery prompt reference to USCIS Master Prompt v5
+  - **Purpose**: Integrate passport return delivery workflow into ChatGPT's multi-form USCIS routing system
+  - **Changes Made** (uscis_master_prompt_v5.md):
+    * Added `passport_return_prompt_v1.txt` to knowledge files list (line 53)
+    * Added "Passport Return" to Critical Systems Separation section (line 60)
+    * Clarifies schema: `mainApplicant` and `applicants` array structure
+  - **Impact**: ChatGPT now knows to check passport_return_prompt_v1.txt for schema reference alongside DS-160 and Visa Scheduler
+  - **Schema Separation**: Prevents mixing of DS-160 (personal, travel, work), Visa Scheduler (atlas_ fields), and Passport Return (mainApplicant, applicants) formats
+  - **Workflow Integration**: Completes multi-form architecture for all TomitaLaw Office workflows
+- Files updated:
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/main_prompts/uscis_master_prompt_v5.md (lines 53, 60)
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/ds160_formatting_standards.md (version 1.15 → 1.16)
+
+### Version 1.15 (October 10, 2025)
+- **APARTMENT/ROOM NUMBER SUPPORT**: Added support for apartment/room number field in passport delivery checkout page
+  - **Problem**: Worksheet has "部屋番号" (Room Number) field, but prompt wasn't extracting it and code was hardcoding street2 to empty
+  - **Use Case**: When applicants have apartment/floor numbers (e.g., "301号室", "6階", "13F"), the payment page "Apartment name and room number" field should be filled
+  - **Solution**: Added apartment field extraction + code mapping
+  - **Prompt Changes** (passport_return_prompt_v1.txt):
+    * Added `apartment` field to mainApplicant schema (optional field, line 82-86)
+    * Added extraction guidance: "Worksheet '18. 住所（日本）' → 部屋番号 field"
+    * Added examples: "301号室", "6階", "13F", "マンション東京 502号"
+    * Updated Address Formatting section (lines 261-266) to clarify apartment extraction
+    * Updated first JSON example to include apartment: "301号室" (line 29)
+    * Note: Omit field if worksheet "部屋番号" is blank
+  - **Code Changes** (visa-content.js line 284):
+    * Changed `street2: ''` to `street2: main.apartment || ''`
+    * Added comment: "Map 'apartment' → 'street2'"
+  - **Behavior**:
+    * When worksheet "部屋番号" has data → payment page apartment field fills
+    * When worksheet "部屋番号" is blank → payment page apartment field remains empty (current behavior maintained)
+    * Graceful fallback with `|| ''` prevents errors if field missing
+  - **Module**: Visa Scheduling (passport return delivery feature)
+- Files updated:
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/passport_return_prompt_v1.txt (lines 82-86, 29, 261-266)
+  - /Users/hugo/tomitalaw_extension/content/modules/visa-content.js (line 284)
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/ds160_formatting_standards.md (version 1.14 → 1.15)
+
+### Version 1.14 (October 10, 2025)
+- **NATIVE NAME SUPPORT**: Added support for both Romaji and Native (Japanese) names in passport return delivery workflow
+  - **Problem**: Modal popup and payment page need DIFFERENT name formats - modal uses Romaji (for credential entry), payment page uses Native Japanese kanji/kana
+  - **Root Cause**: ChatGPT prompt only extracted Romaji names (`first_name_romaji`, `last_name_romaji`), and code transformation used Romaji for payment page
+  - **Solution**: Updated both prompt and code to support dual name formats
+  - **Prompt Changes** (passport_return_prompt_v1.txt):
+    * Added `first_name_native` and `last_name_native` field definitions (lines 149-161)
+    * Added field usage notes: "Romaji for modal popup, Native for payment/checkout page"
+    * Added examples for Japanese kanji/kana names (e.g., "小田切" Odagiri, "大次郎" Daijiro, "花子" Hanako)
+    * Added note for non-Japanese applicants: "omit this field or use same as romaji"
+    * Updated all JSON examples (lines 32-42, 295-327, 376-400) to include native name fields
+  - **Code Changes** (visa-content.js lines 276-278):
+    * Changed `name_first` to use `applicant.first_name_native || applicant.first_name_romaji || ''`
+    * Changed `name_last` to use `applicant.last_name_native || applicant.last_name_romaji || ''`
+    * Added comment: "use native names for payment page, fallback to romaji"
+  - **Fallback Strategy**: If native names missing (e.g., non-Japanese applicant), automatically falls back to Romaji
+  - **Impact**:
+    * Modal popup correctly uses Romaji for credential entry (Passport#, DS-160, UID, "Odagiri", "Daijiro")
+    * Payment page correctly uses Native names (First Name: "大次郎", Last Name: "小田切")
+    * Non-Japanese applicants gracefully fall back to Romaji for both pages
+  - **Module**: Visa Scheduling (passport return delivery feature)
+- Files updated:
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/passport_return_prompt_v1.txt (lines 149-161, 32-42, 295-327, 376-400)
+  - /Users/hugo/tomitalaw_extension/content/modules/visa-content.js (lines 276-278)
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/ds160_formatting_standards.md (version 1.13 → 1.14)
+
+### Version 1.13 (October 10, 2025)
+- **PASSPORT DELIVERY CHECKOUT PAGE**: Added support for passport delivery checkout/payment page with data transformation
+  - **Problem #1**: Checkout page at `https://pds.ayobaspremium.jp/ap/kmjcheckout` was not filling - page detection returned 'unknown'
+  - **Problem #2**: After initial fix, only postal_code/region/city/phone filled - names and address line 1 were empty
+  - **Root Cause #1**: Page detection logic only checked for `/delivery_address`, `/choose_interview_loc`, and `/` paths - missed `/ap/kmjcheckout`
+  - **Root Cause #2**: Data structure mismatch - passport return has `first_name_romaji`/`last_name_romaji` in applicants[0] and `address` in mainApplicant, but payment page expects `name_first`/`name_last` and `street`
+  - **Solution**: Added detection + data transformation before calling `fillPaymentPage()`
+  - **Code Changes**:
+    - detectPageType() (line 96-98): Added condition `path.includes('kmjcheckout')` → returns `'passport_delivery_checkout'`
+    - fillForm() switch (lines 268-293): Added case for `'passport_delivery_checkout'` with data transformation:
+      ```javascript
+      const transformedData = {
+        name_first: applicants[0].first_name_romaji,
+        name_last: applicants[0].last_name_romaji,
+        postal_code: mainApplicant.postal_code,
+        region: mainApplicant.region,
+        city: mainApplicant.city,
+        street: mainApplicant.address,  // Map 'address' → 'street'
+        street2: '',
+        phone: mainApplicant.phone,
+        email: mainApplicant.email
+      };
+      ```
+  - **Fields Filled**: name_first, name_last, postal_code, region, city, street, phone (email/reemail skipped per payment page logic, chbx_confirm auto-checked)
+  - **Impact**: Completes 4-page passport delivery workflow (UID → Interview Location → Delivery Address → Checkout Payment)
+  - **Module**: Visa Scheduling (passport return delivery feature)
+- Files updated: /Users/hugo/tomitalaw_extension/content/modules/visa-content.js (lines 96-98, 268-293)
+
+### Version 1.12 (October 10, 2025)
+- **PASSPORT DELIVERY FIX**: Fixed field position mismatch in passport delivery modal filling
+  - **Problem**: Modal fields were being filled in wrong positions - Last name field showed "Daijiro" (first name value), First name field was empty
+  - **Root Cause**: Hidden `type="text"` input field was being counted by selector but wasn't visible on screen, throwing off position indexing (6 inputs counted instead of 5 visible)
+  - **Solution**: Filter input selector to only visible inputs using `offsetParent !== null` check
+  - **Code Change** (visa-content.js line 620 in fillApplicantFields function):
+    ```javascript
+    // Before:
+    const inputs = document.querySelectorAll('#dialog_shopping input[type="text"]:not([type="hidden"])');
+
+    // After:
+    const inputs = Array.from(document.querySelectorAll('#dialog_shopping input[type="text"]:not([type="hidden"])')).filter(input => input.offsetParent !== null);
+    ```
+  - **Impact**: Passport delivery modal now correctly fills all 5 fields per applicant (Passport#, DS-160, UID, Last name, First name) in proper positions
+  - **Module**: Visa Scheduling (passport return delivery feature)
+- File updated: /Users/hugo/tomitalaw_extension/content/modules/visa-content.js (line 620)
+
+### Version 1.11 (October 10, 2025)
+- **E-VISA INLINE COMMENTS**: Added source mapping guidance for worksheet-fillable E-visa sections
+  - **Problem**: ChatGPT unable to fill E-visa fields using only biographical worksheet (no DS-156E form/corporate docs)
+  - **Solution**: Added comprehensive inline comments with source mappings to 3 worksheet-fillable sections
+  - **evisaClassification** (lines 571-576):
+    * treatyCountry: "Extract from personal.nationality"
+    * principalName: "Use personal.surname and personal.givenName"
+    * User provides: visaType (E1/E2), principalApplicant status (true/false)
+  - **evisaApplicationContact** (line 627):
+    * officer.position: "Extract from presentEmployer.jobTitle (e.g., CEO, President, Manager)"
+  - **evisaApplicantPosition** (lines 746-767):
+    * Comprehensive mappings for all fields to presentEmployer.* and education.institutions[most recent].*
+    * Added fallback: presentPosition uses presentEmployer.duties if DS-156E Section 18 missing
+    * Added calculation: yearsWithEmployer = calculate from startDate to current date
+  - **Header added** (lines 566-570): User provides visa type/applicant type in chat, extract other fields from worksheet
+  - **Impact**: ChatGPT can now correctly fill 3 E-visa sections using worksheet data with proper fallback strategies
+- Files updated: ds160_prompt_combined_v5.6.txt (lines 566-767), DS160_FORMATTING_STANDARDS.md (version 1.10 → 1.11)
 
 ### Version 1.10 (October 8, 2025)
 - **DATA CONSISTENCY VALIDATION FOR RENEWALS**: Added automatic conflict detection for renewal cases

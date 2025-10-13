@@ -1107,8 +1107,12 @@ function setupVisaHandlers() {
         : JSON.stringify(result.visaData, null, 2);
       updateFieldCount();
       updatePersonSelector();
-      
-      if (hasPersonData()) {
+
+      // Check if this is passport return data
+      if (currentData.passportReturn) {
+        showPassportReturnArea(currentData.passportReturn);
+        showStatus('Ready to fill passport return form', 'success');
+      } else if (hasPersonData()) {
         showPersonSelector();
         showStatus('Ready to fill form', 'success');
       }
@@ -1127,19 +1131,37 @@ function setupVisaHandlers() {
 
       try {
         const cleanedInput = preprocessChatGPTJson(input);
-        currentData = JSON.parse(cleanedInput);
-        
-        // Save to storage
-        chrome.storage.local.set({ visaData: currentData }, () => {
-          showStatus('Data loaded and saved successfully!', 'success');
-          updateFieldCount();
-          updatePersonSelector();
-          
-          // Show person selector if data has person info
-          if (hasPersonData()) {
-            showPersonSelector();
-          }
-        });
+        const parsedData = JSON.parse(cleanedInput);
+
+        // Smart detection: Check if this is passport return data
+        const isPassportReturn = parsedData.mainApplicant && parsedData.applicants;
+
+        if (isPassportReturn) {
+          // Passport return format detected
+          currentData = { passportReturn: parsedData };
+
+          // Save to storage
+          chrome.storage.local.set({ visaData: currentData }, () => {
+            const applicantCount = parsedData.applicants ? parsedData.applicants.length : 0;
+            showStatus(`Passport return data loaded! (${applicantCount} applicant${applicantCount !== 1 ? 's' : ''})`, 'success');
+            showPassportReturnArea(parsedData);
+          });
+        } else {
+          // Visa scheduling format
+          currentData = { scheduling: parsedData };
+
+          // Save to storage
+          chrome.storage.local.set({ visaData: currentData }, () => {
+            showStatus('Visa scheduling data loaded successfully!', 'success');
+            updateFieldCount();
+            updatePersonSelector();
+
+            // Show person selector if data has person info
+            if (hasPersonData()) {
+              showPersonSelector();
+            }
+          });
+        }
       } catch (e) {
         showStatus('Invalid JSON format. Please check your data.', 'error');
         console.error('JSON parse error:', e);
@@ -1385,6 +1407,85 @@ function setupVisaHandlers() {
     });
     
     return div;
+  }
+
+  // Passport Return helper functions
+  function showPassportReturnArea(passportData) {
+    document.getElementById('passportReturnArea').style.display = 'block';
+    document.getElementById('personSelectionArea').style.display = 'none';
+    document.getElementById('dataInputArea').style.display = 'none';
+
+    // Update summary
+    const summaryDiv = document.getElementById('passportReturnSummary');
+    if (summaryDiv && passportData) {
+      const applicantCount = passportData.applicants ? passportData.applicants.length : 0;
+      const mainApp = passportData.mainApplicant || {};
+      summaryDiv.innerHTML = `
+        <strong>${applicantCount} Applicant${applicantCount !== 1 ? 's' : ''}</strong><br>
+        <small>Delivery: ${mainApp.city || 'N/A'}, ${mainApp.region || 'N/A'} ${mainApp.postal_code || ''}</small><br>
+        <small>Email: ${mainApp.email || 'N/A'}</small>
+      `;
+    }
+  }
+
+  function hidePassportReturnArea() {
+    document.getElementById('passportReturnArea').style.display = 'none';
+    document.getElementById('dataInputArea').style.display = 'block';
+  }
+
+  // Passport Return button handlers
+  const fillPassportReturnBtn = document.getElementById('fillPassportReturnBtn');
+  const editPassportDataBtn = document.getElementById('editPassportDataBtn');
+
+  if (fillPassportReturnBtn) {
+    fillPassportReturnBtn.addEventListener('click', async () => {
+      if (!currentData || !currentData.passportReturn) {
+        showStatus('No passport return data loaded', 'error');
+        return;
+      }
+
+      // Get current tab
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+      // Check if we're on the passport delivery page
+      if (!tab.url || !tab.url.includes('pds.ayobaspremium.jp')) {
+        showStatus('Please navigate to pds.ayobaspremium.jp first', 'error');
+        return;
+      }
+
+      // Show loading
+      document.getElementById('loadingSpinner').style.display = 'block';
+      fillPassportReturnBtn.disabled = true;
+
+      // Send message to content script with full currentData
+      chrome.tabs.sendMessage(tab.id, {
+        action: 'fillForm',
+        module: 'visa',
+        data: currentData  // Send full object with passportReturn property
+      }, (response) => {
+        // Hide loading
+        document.getElementById('loadingSpinner').style.display = 'none';
+        fillPassportReturnBtn.disabled = false;
+
+        if (chrome.runtime.lastError) {
+          console.error('Error:', chrome.runtime.lastError);
+          showStatus('Error: ' + chrome.runtime.lastError.message, 'error');
+        } else {
+          showStatus('Passport delivery form filled!', 'success');
+        }
+      });
+    });
+  }
+
+  if (editPassportDataBtn) {
+    editPassportDataBtn.addEventListener('click', () => {
+      hidePassportReturnArea();
+      // Put the passport return JSON back in the input field
+      if (currentData && currentData.passportReturn) {
+        dataInput.value = JSON.stringify(currentData.passportReturn, null, 2);
+      }
+      showStatus('Edit your data and click Load Data again', 'info');
+    });
   }
 }
 

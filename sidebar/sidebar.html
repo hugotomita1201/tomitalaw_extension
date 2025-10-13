@@ -614,11 +614,11 @@ This will be intelligently merged into your main data.' rows="8"></textarea>
     <template id="visa-template">
       <div class="module-content">
         <div class="module-header">
-          <h2>🗽 US Visa Scheduling Auto-Filler</h2>
+          <h2>🗽 US Visa Scheduling Auto-Filler/Passport Delivery</h2>
           <p>Fill your visa appointment forms instantly</p>
         </div>
         
-        <!-- Person Selection Area (hidden until data is loaded) -->
+        <!-- Person Selection Area (hidden until visa scheduling data is loaded) -->
         <div id="personSelectionArea" class="card" style="display: none;">
           <div class="card-title">
             <span class="icon">👤</span>
@@ -632,6 +632,30 @@ This will be intelligently merged into your main data.' rows="8"></textarea>
               🚀 Auto-Fill Selected Person
             </button>
             <button id="editDataBtn" class="btn btn-secondary">
+              ✏️ Edit Data
+            </button>
+          </div>
+        </div>
+
+        <!-- Passport Return Area (hidden until passport return data is loaded) -->
+        <div id="passportReturnArea" class="card" style="display: none;">
+          <div class="card-title">
+            <span class="icon">📦</span>
+            Passport Delivery Form
+          </div>
+          <div style="font-size: 13px; margin-bottom: 15px;">
+            <div id="passportReturnSummary" style="padding: 10px; background: #f8f9fa; border-radius: 5px; margin-bottom: 10px;">
+              <!-- Summary will be inserted here -->
+            </div>
+            <p style="color: #666; font-size: 12px;">
+              Navigate to the delivery address page and click Auto-Fill to fill both the delivery address and applicant modal.
+            </p>
+          </div>
+          <div class="button-group">
+            <button id="fillPassportReturnBtn" class="btn btn-primary">
+              🚀 Auto-Fill Passport Delivery
+            </button>
+            <button id="editPassportDataBtn" class="btn btn-secondary">
               ✏️ Edit Data
             </button>
           </div>
