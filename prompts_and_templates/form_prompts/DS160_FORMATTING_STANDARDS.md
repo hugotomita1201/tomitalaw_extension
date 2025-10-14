@@ -1,6 +1,6 @@
 # DS-160 Data Formatting Standards
 
-**Version:** 1.26
+**Version:** 1.27
 **Last Updated:** October 13, 2025
 **Purpose:** Master reference for DS-160 form data formatting rules. Use this document when creating prompts for DS-160 and other immigration forms.
 
@@ -1471,6 +1471,53 @@ Include these instructions in prompts:
 ---
 
 **END OF DOCUMENT**
+
+### Version 1.27 (October 13, 2025)
+- **L1A AND L1B TEMPLATE ENHANCEMENT**: Added critical instructions to prevent background history compression in both L1A Manager and L1B Specialized Knowledge templates
+  - **Context**: Both templates had detailed background history examples but were MISSING the critical instruction that explicitly prohibits compression
+  - **Issue Identified**: Same pattern as E2 Executive before v1.23 fix - examples present but no explicit anti-compression instruction
+  - **Root Cause**: ChatGPT follows instructions more than examples - without explicit "each 2-6 year period requires its own detailed paragraph" instruction, ChatGPT might ignore detailed examples and produce compressed output
+  - **Analysis Results**:
+    * **L1A Manager Template**: ✅ Had 5-period example (Mr. Eirai) BUT ❌ Missing critical instruction
+    * **L1B Template**: ✅ Had 4-period example (Mr. Manago with $5M/$8.5M quantified achievements) BUT ❌ Missing critical instruction
+  - **Solution Implemented**: Added identical critical instruction to both templates (same wording as E2 templates):
+    * **L1A Manager** (line 513): "🚨 CRITICAL: Each distinct position/role period (typically 2-6 years) requires its own detailed paragraph. DO NOT condense or group multiple positions into summary paragraphs. See detailed examples below for required level of detail."
+    * **L1B Template** (line 638): Same critical instruction added
+  - **Placement**: Both added after "### Formatting Standards" header, before existing preface text (consistent with E2 Executive/Essential Skills pattern)
+  - **Impact**: All 5 immigration letter templates now have consistent protection against background history compression
+  - **Template Consistency Table After Fix**:
+    | Template | Critical Instruction | Detailed Examples | Status |
+    |----------|---------------------|-------------------|---------|
+    | E2 Manager | ✅ (line 671) | ✅ (7 paragraphs) | ✅ Protected |
+    | E2 Executive | ✅ (line 528, v1.23) | ✅ (5 paragraphs) | ✅ Protected |
+    | E2 Essential Skills | ✅ (line 456, v1.24) | ✅ (7 paragraphs, v1.26) | ✅ Protected |
+    | **L1A Manager** | ✅ (line 513, v1.27) | ✅ (5 periods) | ✅ Protected |
+    | **L1B Specialized Knowledge** | ✅ (line 638, v1.27) | ✅ (4 periods) | ✅ Protected |
+  - **Result**: Both instructions AND examples now work together to prevent ChatGPT from producing 200-300 word summaries instead of 800-1200 word detailed background histories
+- Files updated:
+  - l1a_manager_application_template.md (line 513)
+  - l1b_blanket_application_template.md (line 638)
+- Template consistency: All 5 templates (E2 Manager, E2 Executive, E2 Essential Skills, L1A Manager, L1B Specialized Knowledge) now have explicit anti-compression instructions paired with detailed examples
+
+### Version 1.26 (October 13, 2025)
+- **E2 ESSENTIAL SKILLS TEMPLATE ENHANCEMENT**: Added detailed 7-paragraph background history example to support critical instruction
+  - **Context**: Version 1.24 added critical instruction at line 456 stating "See detailed examples below for required level of detail," but NO detailed multi-paragraph examples existed
+  - **User Discovery**: User identified gap - "but the essential skills template doesn't have a detailed example like the e2 manager?"
+  - **Problem**: Critical instruction referenced non-existent examples, risking background history compression despite the warning
+  - **Solution**: Created comprehensive 7-paragraph fictional example (lines 482-498)
+  - **Example Character**: Ms. Yuki Kobayashi - Marketing and Business Development Professional
+  - **Career Timeline**: April 1999 - Present (25 years of progression)
+  - **Example Structure**:
+    * 7 employment periods showing clear progression: Marketing Coordinator → Senior Marketing Specialist → Marketing Manager → Deputy Director → Director → Senior Director → Vice President
+    * Each paragraph: Dates, title, company, responsibilities, team sizes (3→8→15→22→45→75 staff), revenue figures (3.2B→67B→127B yen), achievements
+    * Fictional companies: Global Electronics Corporation, Pacific Industries Limited, Summit Technology Corporation, Zenith Industries International
+    * Proper format: "From [month year] to [month year], [Name] held the position of..."
+  - **Placement**: After existing short metric snippets (line 480), before "## Content Development Strategy" section
+  - **Decision**: Only added background history example (not opening/employer/education examples) because other sections already have specific placeholder templates with low variation
+  - **Impact**: E2 Essential Skills template now matches pattern of E2 Manager and E2 Executive templates - critical instruction at line 456 correctly references detailed examples that now exist
+  - **Result**: All three E2 templates (Manager, Executive, Essential Skills) now have consistent protection against background history compression with both explicit instructions AND detailed examples
+- File updated: e2_essential_skills_template.md (lines 482-498)
+- Template consistency: Critical instruction (line 456) + Detailed 7-paragraph example (lines 482-498) = Complete anti-compression protection
 
 ### Version 1.5 (October 13, 2025)
 - **CRITICAL DATA PRIVACY FIX**: Replaced all real client data in E2 Manager Template with fictional examples

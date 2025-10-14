@@ -12,6 +12,8 @@
   --accent-foreground: 222 47% 11%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
+  --orange: 24 95% 53%; /* #ff9800 */
+  --orange-foreground: 0 0% 100%;
   --border: 214 32% 91%;
   --input: 214 32% 91%;
   --ring: 219 79% 58%;
@@ -98,6 +100,15 @@
 
 .btn-destructive:hover {
   background-color: hsl(var(--destructive) / 0.9);
+}
+
+.btn-orange {
+  background-color: hsl(var(--orange));
+  color: hsl(var(--orange-foreground));
+}
+
+.btn-orange:hover {
+  background-color: hsl(var(--orange) / 0.9);
 }
 
 /* Button Sizes */

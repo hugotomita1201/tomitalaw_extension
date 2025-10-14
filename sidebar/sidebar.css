@@ -179,23 +179,6 @@ body {
   }
 }
 
-.module-header {
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.module-header h2 {
-  font-size: 18px;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.module-header p {
-  font-size: 13px;
-  color: #666;
-}
-
 /* Input Section */
 .input-section {
   margin-bottom: 20px;
@@ -272,24 +255,6 @@ body {
 
 .btn-secondary:hover {
   background: #5a6268;
-}
-
-.btn-success {
-  background: #28a745;
-  color: white;
-}
-
-.btn-success:hover {
-  background: #218838;
-}
-
-.btn-danger {
-  background: #dc3545;
-  color: white;
-}
-
-.btn-danger:hover {
-  background: #c82333;
 }
 
 .btn-orange {

@@ -415,12 +415,17 @@ This will fill ONLY the sections included in this JSON.' rows="8"></textarea>
     <!-- Postal Code Lookup Template -->
     <template id="postal-template">
       <div class="module-content">
-        <div class="module-header">
-          <h2>Japanese Postal Code Lookup</h2>
-          <p>Convert postal codes to full addresses</p>
-        </div>
-        
-        <div class="input-section">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="icon">🗾</span>
+              Japanese Postal Code Lookup
+            </h2>
+            <p class="card-description">Convert postal codes to full addresses</p>
+          </div>
+
+          <div class="card-content">
+            <div class="input-section">
           <label for="postal-code-input">Enter Japanese Postal Code:</label>
           <div class="postal-input-group">
             <input 
@@ -499,19 +504,23 @@ This will fill ONLY the sections included in this JSON.' rows="8"></textarea>
 
         <div id="postal-error" class="error-message hidden"></div>
 
-        <div class="info-section">
-          <h3>How to Use:</h3>
-          <ol>
-            <li>Enter a Japanese postal code (7 digits)</li>
-            <li>Click "Lookup" to fetch address</li>
-            <li>Click 📋 to copy any field to clipboard</li>
-            <li>Use copied values in your forms</li>
-          </ol>
-          
-          <h3>Data Source:</h3>
-          <p>Powered by ZipCloud API - Official Japanese postal code database</p>
+        <div class="alert alert-info mt-4">
+          <div>
+            <p class="alert-title">How to Use</p>
+            <ol class="text-sm text-muted">
+              <li>Enter a Japanese postal code (7 digits)</li>
+              <li>Click "Lookup" to fetch address</li>
+              <li>Click 📋 to copy any field to clipboard</li>
+              <li>Use copied values in your forms</li>
+            </ol>
+
+            <p class="alert-title mt-2">Data Source</p>
+            <p class="text-sm text-muted">Powered by ZipCloud API - Official Japanese postal code database</p>
+          </div>
         </div>
-      </div>
+          </div> <!-- End card-content -->
+        </div> <!-- End card -->
+      </div> <!-- End module-content -->
     </template>
 
     <!-- Text Extractor Template -->
@@ -589,120 +598,134 @@ This will fill ONLY the sections included in this JSON.' rows="8"></textarea>
     <!-- Photo Checker Template -->
     <template id="photo-template">
       <div class="module-content">
-        <div class="module-header">
-          <h2>📸 DS-160 Photo Checker</h2>
-          <p>AI-powered passport photo validation</p>
-        </div>
-        
-        <!-- Upload Area -->
-        <div class="upload-section">
-          <div class="upload-area" id="photo-upload-area">
-            <input type="file" id="photo-input" accept="image/jpeg,image/jpg" hidden>
-            <div class="upload-placeholder">
-              <span class="upload-icon">📷</span>
-              <p>Click to upload or drag & drop</p>
-              <small>JPEG only, max 240KB</small>
-            </div>
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="icon">📸</span>
+              DS-160 Photo Checker
+            </h2>
+            <p class="card-description">AI-powered passport photo validation</p>
           </div>
-        </div>
-        
-        <!-- Preview -->
-        <div id="photo-preview" class="photo-preview" style="display: none;">
-          <img id="preview-image" />
-          <div id="metadata-display" class="metadata-info"></div>
-        </div>
-        
-        <!-- Loading -->
-        <div id="validation-loading" class="loading" style="display: none;">
-          <div class="spinner"></div>
-          <p>Analyzing photo with AI...</p>
-        </div>
-        
-        <!-- Results -->
-        <div id="validation-results" class="validation-results" style="display: none;">
-          <!-- Results populated dynamically -->
-        </div>
-        
-        <!-- Actions -->
-        <div class="button-group">
-          <button id="photo-validate" class="btn btn-primary" disabled>
-            🔍 Validate Photo
-          </button>
-          <button id="photo-clear" class="btn btn-secondary">
-            🗑️ Clear
-          </button>
-        </div>
 
-        <div class="info-section">
-          <h3>Instructions:</h3>
-          <ol>
-            <li>Upload a passport photo (JPEG format)</li>
-            <li>Photo will be checked against DS-160 requirements</li>
-            <li>AI will analyze composition, quality, and compliance</li>
-            <li>Get instant feedback and recommendations</li>
-          </ol>
-        </div>
-      </div>
+          <div class="card-content">
+            <!-- Upload Area -->
+            <div class="upload-section">
+              <div class="upload-area" id="photo-upload-area">
+                <input type="file" id="photo-input" accept="image/jpeg,image/jpg" hidden>
+                <div class="upload-placeholder">
+                  <span class="upload-icon">📷</span>
+                  <p>Click to upload or drag & drop</p>
+                  <small>JPEG only, max 240KB</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Preview -->
+            <div id="photo-preview" class="photo-preview" style="display: none;">
+              <img id="preview-image" />
+              <div id="metadata-display" class="metadata-info"></div>
+            </div>
+
+            <!-- Loading -->
+            <div id="validation-loading" class="loading" style="display: none;">
+              <div class="spinner"></div>
+              <p>Analyzing photo with AI...</p>
+            </div>
+
+            <!-- Results -->
+            <div id="validation-results" class="validation-results" style="display: none;">
+              <!-- Results populated dynamically -->
+            </div>
+
+            <!-- Actions -->
+            <div class="button-group">
+              <button id="photo-validate" class="btn btn-primary" disabled>
+                🔍 Validate Photo
+              </button>
+              <button id="photo-clear" class="btn btn-secondary">
+                🗑️ Clear
+              </button>
+            </div>
+
+            <div class="alert alert-info mt-4">
+              <div>
+                <p class="alert-title">Instructions</p>
+                <ol class="text-sm text-muted">
+                  <li>Upload a passport photo (JPEG format)</li>
+                  <li>Photo will be checked against DS-160 requirements</li>
+                  <li>AI will analyze composition, quality, and compliance</li>
+                  <li>Get instant feedback and recommendations</li>
+                </ol>
+              </div>
+            </div>
+          </div> <!-- End card-content -->
+        </div> <!-- End card -->
+      </div> <!-- End module-content -->
     </template>
 
     <!-- Visa Scheduling Template -->
     <template id="visa-template">
       <div class="module-content">
-        <div class="module-header">
-          <h2>🗽 US Visa Scheduling Auto-Filler/Passport Delivery</h2>
-          <p>Fill your visa appointment forms instantly</p>
-        </div>
-        
-        <!-- Person Selection Area (hidden until visa scheduling data is loaded) -->
-        <div id="personSelectionArea" class="card" style="display: none;">
-          <div class="card-title">
-            <span class="icon">👤</span>
-            Select Person to Fill
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="icon">🗽</span>
+              US Visa Scheduling Auto-Filler/Passport Delivery
+            </h2>
+            <p class="card-description">Fill your visa appointment forms instantly</p>
           </div>
-          <div id="personRadioList" style="font-size: 13px; line-height: 1.8; margin-bottom: 15px; max-height: 200px; overflow-y: auto;">
-            <!-- Radio buttons will be inserted here dynamically -->
-          </div>
-          <div class="button-group">
-            <button id="fillSelectedPersonBtn" class="btn btn-primary" disabled>
-              🚀 Auto-Fill Selected Person
-            </button>
-            <button id="editDataBtn" class="btn btn-secondary">
-              ✏️ Edit Data
-            </button>
-          </div>
-        </div>
 
-        <!-- Passport Return Area (hidden until passport return data is loaded) -->
-        <div id="passportReturnArea" class="card" style="display: none;">
-          <div class="card-title">
-            <span class="icon">📦</span>
-            Passport Delivery Form
-          </div>
-          <div style="font-size: 13px; margin-bottom: 15px;">
-            <div id="passportReturnSummary" style="padding: 10px; background: #f8f9fa; border-radius: 5px; margin-bottom: 10px;">
-              <!-- Summary will be inserted here -->
+          <div class="card-content">
+            <!-- Person Selection Area (hidden until visa scheduling data is loaded) -->
+            <div id="personSelectionArea" class="card" style="display: none;">
+              <div class="card-title">
+                <span class="icon">👤</span>
+                Select Person to Fill
+              </div>
+              <div id="personRadioList" style="font-size: 13px; line-height: 1.8; margin-bottom: 15px; max-height: 200px; overflow-y: auto;">
+                <!-- Radio buttons will be inserted here dynamically -->
+              </div>
+              <div class="button-group">
+                <button id="fillSelectedPersonBtn" class="btn btn-primary" disabled>
+                  🚀 Auto-Fill Selected Person
+                </button>
+                <button id="editDataBtn" class="btn btn-secondary">
+                  ✏️ Edit Data
+                </button>
+              </div>
             </div>
-            <p style="color: #666; font-size: 12px;">
-              Navigate to the delivery address page and click Auto-Fill to fill both the delivery address and applicant modal.
-            </p>
-          </div>
-          <div class="button-group">
-            <button id="fillPassportReturnBtn" class="btn btn-primary">
-              🚀 Auto-Fill Passport Delivery
-            </button>
-            <button id="editPassportDataBtn" class="btn btn-secondary">
-              ✏️ Edit Data
-            </button>
-          </div>
-        </div>
 
-        <!-- Data Input Area -->
-        <div id="dataInputArea" class="input-section">
-          <label for="visa-data">
-            <span class="icon">📋</span>
-            Paste Your Data (JSON Format)
-          </label>
-          <textarea id="visa-data" class="data-input" placeholder='{
+            <!-- Passport Return Area (hidden until passport return data is loaded) -->
+            <div id="passportReturnArea" class="card" style="display: none;">
+              <div class="card-title">
+                <span class="icon">📦</span>
+                Passport Delivery Form
+              </div>
+              <div style="font-size: 13px; margin-bottom: 15px;">
+                <div id="passportReturnSummary" style="padding: 10px; background: #f8f9fa; border-radius: 5px; margin-bottom: 10px;">
+                  <!-- Summary will be inserted here -->
+                </div>
+                <p style="color: #666; font-size: 12px;">
+                  Navigate to the delivery address page and click Auto-Fill to fill both the delivery address and applicant modal.
+                </p>
+              </div>
+              <div class="button-group">
+                <button id="fillPassportReturnBtn" class="btn btn-primary">
+                  🚀 Auto-Fill Passport Delivery
+                </button>
+                <button id="editPassportDataBtn" class="btn btn-secondary">
+                  ✏️ Edit Data
+                </button>
+              </div>
+            </div>
+
+            <!-- Data Input Area -->
+            <div id="dataInputArea" class="input-section">
+              <label for="visa-data">
+                <span class="icon">📋</span>
+                Paste Your Data (JSON Format)
+              </label>
+              <textarea id="visa-data" class="data-input" placeholder='{
   "applicant": {
     "atlas_first_name": "John",
     "atlas_last_name": "Doe",
@@ -717,34 +740,38 @@ This will fill ONLY the sections included in this JSON.' rows="8"></textarea>
     }
   ]
 }' rows="10"></textarea>
-          <div class="field-count" id="fieldCount"></div>
-          
-          <div class="button-group">
-            <button id="visa-load" class="btn btn-success">
-              Load Data
-            </button>
-            <button id="visa-clear" class="btn btn-danger">
-              Clear
-            </button>
-          </div>
-        </div>
+              <div class="field-count" id="fieldCount"></div>
 
-        <div id="loadingSpinner" style="display: none;">
-          <div class="spinner"></div>
-          <p style="margin-top: 10px; font-size: 13px;">Filling form...</p>
-        </div>
+              <div class="button-group">
+                <button id="visa-load" class="btn btn-primary">
+                  Load Data
+                </button>
+                <button id="visa-clear" class="btn btn-destructive">
+                  Clear
+                </button>
+              </div>
+            </div>
 
-        <div class="info-section">
-          <h3>Supported Pages:</h3>
-          <ul>
-            <li>Signup/Registration</li>
-            <li>Payment Information</li>
-            <li>Personal Information</li>
-            <li>Dependent Management</li>
-            <li>Application Details</li>
-          </ul>
-        </div>
-      </div>
+            <div id="loadingSpinner" style="display: none;">
+              <div class="spinner"></div>
+              <p style="margin-top: 10px; font-size: 13px;">Filling form...</p>
+            </div>
+
+            <div class="alert alert-info mt-4">
+              <div>
+                <p class="alert-title">Supported Pages</p>
+                <ul class="text-sm text-muted">
+                  <li>Signup/Registration</li>
+                  <li>Payment Information</li>
+                  <li>Personal Information</li>
+                  <li>Dependent Management</li>
+                  <li>Application Details</li>
+                </ul>
+              </div>
+            </div>
+          </div> <!-- End card-content -->
+        </div> <!-- End card -->
+      </div> <!-- End module-content -->
     </template>
   </div>
 

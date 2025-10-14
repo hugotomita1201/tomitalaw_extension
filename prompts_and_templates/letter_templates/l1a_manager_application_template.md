@@ -509,6 +509,9 @@ If user indicated this is a transfer case with sample letter provided:
 ## Job History Professional Format Requirements
 
 ### Formatting Standards
+
+🚨 CRITICAL: Each distinct position/role period (typically 2-6 years) requires its own detailed paragraph. DO NOT condense or group multiple positions into summary paragraphs. See detailed examples below for required level of detail.
+
 - **Preface: Make sure that you go into full depth on source documents. Taking shortcuts here is detrimental to the quality of the letter**
 - **Write in smooth, professional paragraph format, not bullets**
 - **Begin each position/period of employment with**: "From [start month/year] to [end month/year], [Name] held the position of [Title] at [Company]" OR "From [start month/year] to [end month/year], [Name] served as [Title] at [Company]"
