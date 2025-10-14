@@ -524,6 +524,9 @@ If user indicated this is a transfer case with sample letter provided:
 ## Job History Professional Format Requirements
 
 ### Formatting Standards
+
+**🚨 CRITICAL: Each distinct position/role period (typically 2-6 years) requires its own detailed paragraph. DO NOT condense or group multiple positions into summary paragraphs. See detailed examples below for required level of detail.**
+
 - **Preface: Make sure that you go into full depth on source documents. Taking shortcuts here is detrimental to the quality of the letter**
 - **Write in smooth, professional paragraph format, not bullets**
 - **Show PROGRESSIVE PROMOTIONS clearly**: "Following [event], Mr./Ms. [Name] began..."; "From [dates], [Name] was **promoted to [Title]**"; "Between [dates], [Name] **was promoted to [Higher Title]**"

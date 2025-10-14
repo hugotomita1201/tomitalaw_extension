@@ -1,7 +1,7 @@
 # DS-160 Data Formatting Standards
 
-**Version:** 1.17
-**Last Updated:** October 10, 2025
+**Version:** 1.26
+**Last Updated:** October 13, 2025
 **Purpose:** Master reference for DS-160 form data formatting rules. Use this document when creating prompts for DS-160 and other immigration forms.
 
 ---
@@ -838,6 +838,232 @@ Include these instructions in prompts:
 
 ## Change Log
 
+### Version 1.25 (October 13, 2025)
+- **EDIT DATA BUTTON FIX**: Fixed Edit Data button to clear opposite textarea when restoring data
+  - **Problem**: After loading partial JSON and clicking "Edit Data", the partial JSON appeared in the main DS-160 field because old data from previous load remained visible in wrong field
+  - **User Report**: "for some reason though after i load just the partial json data, and then click edit json, the partial json gets moved up to the main ds-160 data for some reason"
+  - **Root Cause**: Edit Data button correctly restored data to appropriate textarea based on currentDataType, but didn't clear the OTHER textarea
+  - **Solution**: Added code to clear opposite textarea when restoring data
+  - **Code Changes** (sidebar.js lines 1117-1127):
+    * When restoring to main textarea (currentDataType === 'main'): Clear partialDataInput with `partialDataInput.value = ''`
+    * When restoring to partial textarea (currentDataType === 'partial'): Clear dataInput with `dataInput.value = ''`
+    * Added comments: "Clear the partial field since we're editing main data" and "Clear the main field since we're editing partial data"
+  - **Impact**: Edit Data button now ensures only the correct textarea contains data when returning to input view, eliminating confusion about which field should be used
+  - **Visual Result**: User sees data ONLY in the textarea corresponding to currentDataType - no more data appearing in wrong field
+- Files updated:
+  - /Users/hugo/tomitalaw_extension/sidebar/sidebar.js (lines 1117-1127)
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/DS160_FORMATTING_STANDARDS.md (version 1.24 → 1.25)
+
+### Version 1.24 (October 13, 2025)
+- **E2 ESSENTIAL SKILLS TEMPLATE FIX**: Added critical instruction to prevent background history compression
+  - **Problem**: E2 Essential Skills template had "concise but comprehensive narrative" language (line 461) that could cause ChatGPT to produce compressed summaries instead of detailed multi-paragraph background histories
+  - **User Discovery**: User provided actual E2 Essential Skills letter example (Mr. Kosei Sarai at Nissin Foods) showing **detailed 7-paragraph background history** covering 26 years of career progression (1999-2025):
+    * 7 distinct employment periods at Panasonic and Nissin Foods
+    * Each period with comprehensive details: team sizes (3-88 direct staff + 500 contractors), financial results (2.1B-11.8B yen), geographic assignments (Mexico, Brazil, Argentina, Thailand)
+    * Specific achievements: 100+ units/month milestones, 4x sales growth, returning to profitability, subsidiary consolidation
+    * Each 2-6 year period got its own detailed paragraph - NOT compressed into summaries
+  - **Root Cause**: ChatGPT follows instructions more than examples - "concise" language can lead to 200-300 word summaries instead of 800-1200 word detailed histories
+  - **User Quote**: "well wait. the e2_essential skills template also needs to have a detailed background history. look at the example above."
+  - **Comparison Table**:
+    | Template | Before Fix | After Fix |
+    |----------|-----------|-----------|
+    | **E2 Manager** | ✅ Has critical instruction (line 671) + detailed 7-paragraph examples | ✅ No change needed |
+    | **E2 Executive** | ⚠️ Had examples but missing critical instruction | ✅ Fixed in v1.23 (added line 528) |
+    | **E2 Essential Skills** | ⚠️ Had "concise" language (line 461) causing potential compression | ✅ Fixed in v1.24 (added line 456) |
+  - **Solution**: Added critical instruction at line 456 (after "### Formatting Standards" header, before existing preface):
+    * **🚨 CRITICAL: Each distinct position/role period (typically 2-6 years) requires its own detailed paragraph. DO NOT condense or group multiple positions into summary paragraphs. See detailed examples below for required level of detail.**
+  - **Impact**: E2 Essential Skills template now has same protection as E2 Manager and E2 Executive templates - explicit instruction ensures ChatGPT produces detailed 800-1200 word background histories instead of compressed summaries
+  - **Placement**: Critical instruction appears FIRST (line 456), before existing preface, for maximum visibility
+- File updated: e2_essential_skills_template.md (line 456)
+- Result: All three E2 templates now have consistent protection against background history compression with explicit critical instructions
+
+### Version 1.23 (October 13, 2025)
+- **E2 EXECUTIVE TEMPLATE FIX**: Added critical instruction to prevent background history compression
+  - **Problem**: E2 Executive template had detailed multi-paragraph examples (lines 595-606) but was MISSING the critical instruction that prevents ChatGPT from compressing background history sections into summaries
+  - **Root Cause**: ChatGPT follows instructions more than examples - without explicit "each 2-6 year period requires its own detailed paragraph" instruction, ChatGPT might ignore detailed examples and produce compressed output
+  - **Comparison**:
+    * ✅ **E2 Manager Template**: Has critical instruction (line 671) + detailed 7-paragraph examples → No compression problem
+    * ✅ **E2 Essential Skills Template**: Intentionally uses "concise but comprehensive narrative" format (line 458) → Different format by design, appropriate for Essential Skills category
+    * ⚠️ **E2 Executive Template (BEFORE FIX)**: Had detailed examples but missing critical instruction → Compression risk
+  - **Solution**: Added critical instruction at line 528 (after "### Formatting Standards" header):
+    * **🚨 CRITICAL: Each distinct position/role period (typically 2-6 years) requires its own detailed paragraph. DO NOT condense or group multiple positions into summary paragraphs. See detailed examples below for required level of detail.**
+  - **Impact**: E2 Executive template now has same protection as E2 Manager template - explicit instruction ensures ChatGPT produces detailed 800-1200 word background histories instead of 200-300 word compressed summaries
+  - **Placement**: Critical instruction appears FIRST (line 528), before general preface (line 530), for maximum visibility
+  - **Examples Present**: Template already had good detailed multi-paragraph examples (Mr. Iwashita at Isuzu/ITCA showing 5 distinct employment periods with progressive promotions, supervisory scope, and project leadership)
+- File updated: e2_executive_template.md (line 528)
+- Result: All three E2 templates now have consistent protection against background history compression (E2 Manager and E2 Executive have explicit instructions; E2 Essential Skills intentionally uses shorter format)
+
+### Version 1.22 (October 13, 2025)
+- **DUAL LOAD DATA FUNCTIONALITY**: Added independent Load Data buttons for both main DS-160 and partial JSON sections
+  - **User Request**: "can we make it so that we can load data just with the partial json as well?"
+  - **Purpose**: Enable validation and preview for both main DS-160 JSON and partial JSON data before auto-filling
+  - **Previous Limitation**: Only main DS-160 field had Load Data → Preview → Auto-Fill workflow; partial JSON could only be auto-filled directly without validation
+  - **HTML Changes** (sidebar.html):
+    * Lines 70-78: Moved Load Data + Clear buttons inside main DS-160 section
+      - Button IDs: `ds160-load-main` (blue btn-primary), `ds160-clear-main` (btn-outline)
+      - Buttons now color-coded to match blue main section container
+    * Lines 112-120: Added Load Data + Clear buttons inside partial JSON section
+      - Button IDs: `ds160-load-partial` (orange btn-orange), `ds160-clear-partial` (btn-outline)
+      - Load button uses orange btn-orange to match partial section theme
+    * Line 131: Added data type badge to preview section header
+      - Element ID: `ds160-data-type-badge`, hidden by default
+      - Shows "Main DS-160 Data" (blue badge) or "Partial JSON Data" (orange badge)
+  - **JavaScript Changes** (sidebar.js):
+    * Line 194: Added `currentDataType` variable to track 'main' or 'partial'
+    * Lines 198-213: Updated button element references for new IDs
+    * Lines 800-831: Created `ds160-load-main` button handler
+      - Reads from `ds160-data` textarea
+      - Sets `currentDataType = 'main'`
+      - Saves to chrome.storage with `lastDS160DataType: 'main'`
+    * Lines 833-864: Created `ds160-load-partial` button handler
+      - Reads from `ds160-evisa-data` textarea
+      - Sets `currentDataType = 'partial'`
+      - Saves to chrome.storage with `lastDS160DataType: 'partial'`
+    * Lines 697-703: Updated `displayEditableData()` to show data type badge
+      - Badge text: "Main DS-160 Data" or "Partial JSON Data"
+      - Badge class: `section-badge required` (blue) or `section-badge optional` (orange)
+    * Lines 956-968: Created `ds160-clear-main` button handler
+      - Clears main textarea only
+      - Resets currentData/currentDataType if main was loaded
+    * Lines 970-985: Created `ds160-clear-partial` button handler
+      - Clears partial textarea only
+      - Resets currentData/currentDataType if partial was loaded
+    * Lines 1115-1127: Updated Edit Data button
+      - Restores data to correct textarea based on currentDataType
+      - Main data → main textarea, Partial data → partial textarea
+    * Lines 770-798: Updated saved data loading
+      - Remembers which type was loaded last via `lastDS160DataType`
+      - Auto-clicks correct Load button on module reload
+  - **Visual Result**:
+    * Main section: Blue Load Data + Clear buttons below textarea
+    * Partial section: Orange Load Data + Clear buttons below textarea (Load button matches orange theme)
+    * Preview section: Shows blue "Main DS-160 Data" badge or orange "Partial JSON Data" badge
+    * Clear visual separation: Each section has independent load/clear controls
+  - **Workflow Examples**:
+    * **Main workflow**: Paste complete JSON → Click "Load Data" → Validate → Preview with blue badge → Edit if needed → Click "Auto-Fill DS-160 Form (Main Data)"
+    * **Partial workflow**: Paste section JSON → Click "Load Data" → Validate → Preview with orange badge → Edit if needed → Click "Auto-Fill Partial Section"
+  - **Impact**: Both sections now have complete load → validate → preview → auto-fill capability; users can verify data correctness before filling
+  - **Architecture**: Two independent workflows maintained - no data merging, each button operates on its own textarea and sets currentDataType accordingly
+- Files updated:
+  - /Users/hugo/tomitalaw_extension/sidebar/sidebar.html (lines 70-78, 112-120, 131)
+  - /Users/hugo/tomitalaw_extension/sidebar/sidebar.js (lines 194, 198-213, 697-703, 770-798, 800-864, 956-985, 1115-1127)
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/DS160_FORMATTING_STANDARDS.md (version 1.21 → 1.22)
+
+### Version 1.21 (October 13, 2025)
+- **BUTTON COLOR UPDATE**: Made "Auto-Fill Partial Section" button orange to match partial JSON section theme
+  - **User Request**: "can we make it so the auto fill partial json button is orange?"
+  - **Purpose**: Visual consistency - button now matches the #ff9800 orange accent color used in partial JSON section container
+  - **CSS Changes** (sidebar.css lines 295-304):
+    * Added `.btn-orange` class - Background: #ff9800, color: white
+    * Added `.btn-orange:hover` - Background: #e68900 (darker), translateY(-2px), box-shadow with orange tint
+    * Follows same pattern as other button classes (btn-primary, btn-secondary, btn-success, btn-danger)
+  - **HTML Changes** (sidebar.html line 150):
+    * Changed button class from `btn btn-secondary` to `btn btn-orange`
+    * Button id `ds160-fill-partial` and functionality unchanged
+  - **Visual Result**:
+    * "Auto-Fill DS-160 Form (Main Data)" button: Blue (btn-primary) - matches main section
+    * "Auto-Fill Partial Section" button: Orange (btn-orange) - matches partial section
+    * Consistent theming: Both buttons now visually match their corresponding sections
+  - **Impact**: Improved UI clarity - users can now immediately associate the orange button with the orange partial JSON section
+- Files updated:
+  - /Users/hugo/tomitalaw_extension/sidebar/sidebar.css (lines 295-304)
+  - /Users/hugo/tomitalaw_extension/sidebar/sidebar.html (line 150)
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/DS160_FORMATTING_STANDARDS.md (version 1.20 → 1.21)
+
+### Version 1.20 (October 13, 2025)
+- **UI ENHANCEMENT**: Added visual distinction between main DS-160 JSON and partial JSON workflows
+  - **Problem**: Users couldn't easily distinguish between main DS-160 data field and partial JSON field - both looked the same
+  - **User Request**: "update the UI so that the person can properly see what is the original ds160, and what is the partial json"
+  - **Solution**: Enhanced UI with color-coded containers, icons, badges, and helper text
+  - **CSS Changes** (sidebar.css lines 1289-1373):
+    * Added `.ds160-main-section` - Blue-themed container (background: #f0f7ff, border-left: 4px solid #4A90E2)
+    * Added `.ds160-partial-section` - Orange-themed container (background: #fff8f0, border-left: 4px solid #ff9800)
+    * Added `.section-header-ds160` - Section header with icon styling
+    * Added `.section-helper-text` - Small gray helper text below headers
+    * Added `.section-badge` with `.required` and `.optional` variants
+    * Added `.section-separator-or` - Horizontal divider with centered "OR" text
+  - **HTML Changes** (sidebar.html lines 48-103):
+    * **Main section** (blue container):
+      - Header: 🎯 "Main DS-160 Data" with blue "REQUIRED" badge
+      - Helper text: "Use for complete DS-160 form auto-fill with all sections"
+      - Textarea preserved with same id `ds160-data`
+    * **OR separator**: Horizontal line with centered "OR" text between sections
+    * **Partial section** (orange container):
+      - Header: 📝 "Partial JSON - Section Updates" with orange "OPTIONAL" badge
+      - Helper text: "Use to fill ONLY specific sections (e.g., missing E-visa fields) without affecting existing data"
+      - Textarea preserved with same id `ds160-evisa-data`
+  - **Visual Result**:
+    * Clear separation: Blue main section vs Orange partial section
+    * Icons: 🎯 for main (target/complete form), 📝 for partial (pencil/updates)
+    * Badges: "REQUIRED" (blue) vs "OPTIONAL" (orange)
+    * Helper text explains when to use each field
+    * "OR" separator emphasizes these are alternative workflows
+  - **Impact**: Users can now immediately distinguish the two independent workflows at a glance
+  - **Functionality Preserved**: All existing functionality unchanged - only visual styling enhanced
+- Files updated:
+  - /Users/hugo/tomitalaw_extension/sidebar/sidebar.css (lines 1289-1373)
+  - /Users/hugo/tomitalaw_extension/sidebar/sidebar.html (lines 48-103)
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/DS160_FORMATTING_STANDARDS.md (version 1.19 → 1.20)
+
+### Version 1.19 (October 13, 2025)
+- **EDIT DATA BUTTON FIX**: Fixed Edit Data button to match independent workflow architecture
+  - **Problem**: When user clicked "Edit Data" after loading full DS-160 JSON, E-visa sections automatically appeared in partial JSON field
+  - **Root Cause**: Edit Data button was still using old merge-based logic that separated E-visa fields from core fields
+  - **Old Behavior** (lines 1067-1097):
+    * Iterated through currentData to separate E-visa fields from core fields
+    * Put E-visa fields (evisaClassification, evisaBusiness, etc.) in partial JSON textarea
+    * Put core fields (personal, passport, travel, etc.) in main textarea
+    * User confusion: "Why is E-visa data in partial JSON field when I loaded complete JSON?"
+  - **New Behavior** (lines 1067-1083):
+    * Put ENTIRE currentData back into main field only (no separation)
+    * Clear partial JSON field (it's independent, not derived from currentData)
+    * Simple 16-line implementation vs previous 33-line separation logic
+  - **Impact**: Edit Data now correctly treats partial JSON field as independent - it's only for section-specific fills, not derived from loaded data
+  - **Workflow Preserved**: Two independent workflows remain intact:
+    1. Main JSON → Load Data → Store as currentData → Edit Data puts back entire JSON
+    2. Partial JSON → Paste directly → Auto-Fill Partial Section (never touches currentData)
+- Files updated:
+  - /Users/hugo/tomitalaw_extension/sidebar/sidebar.js (lines 1067-1083)
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/DS160_FORMATTING_STANDARDS.md (version 1.18 → 1.19)
+
+### Version 1.18 (October 13, 2025)
+- **PARTIAL JSON AUTO-FILL FEATURE**: Added section extraction mode to enable independent partial JSON workflow
+  - **Problem**: When ChatGPT forgets to extract a section (e.g., E-visa fields), paralegals must regenerate entire 1300+ line JSON (5+ minutes) instead of just the missing section (30 seconds)
+  - **Root Cause**: Extension was using shallow merge that lost nested properties, and workflow required complete JSON regeneration
+  - **Solution**: Eliminated merge entirely - created two independent auto-fill workflows with separate buttons
+  - **Prompt Changes** (ds160_prompt_combined_v5.6.txt):
+    * Added "SECTION EXTRACTION MODE (Partial JSON)" section (lines 217-280)
+    * Teaches ChatGPT to extract ONLY requested sections when user asks (e.g., "extract E-visa sections only")
+    * Use cases: Missing section, field updates, supplemental data, corrections
+    * Single example showing E-visa section extraction with validation
+    * Note at end: "This partial JSON can be pasted in the extension's 'Partial JSON' field for section-specific auto-fill"
+  - **Extension Code Changes** (sidebar.js):
+    * Removed complex merge logic from Load Data button (lines 738-785)
+    * Simplified to single-field loading: `currentData = parsedData` (no merge)
+    * Added second auto-fill button handler `ds160-fill-partial` (lines 999-1062)
+    * New handler reads from `ds160-evisa-data` textarea independently
+    * Both buttons send JSON directly to content script - no merging at all
+  - **UI Changes** (sidebar.html):
+    * Updated textarea label: "Partial JSON - Section-Specific Fill (Optional):" (line 64)
+    * Updated placeholder text to clarify independent fill behavior (lines 65-84)
+    * Added second button "Auto-Fill Partial Section" with id `ds160-fill-partial` (lines 131-134)
+    * Renamed main button to "Auto-Fill DS-160 Form (Main Data)" for clarity (line 129)
+  - **Architecture**: Two completely independent workflows:
+    1. Main JSON → "Load Data" → Stores as currentData → "Auto-Fill DS-160 Form (Main Data)" button
+    2. Partial JSON → Paste directly → "Auto-Fill Partial Section" button (no Load Data needed)
+  - **Impact**: Paralegals can now quickly fill missing sections without affecting already-filled form fields or regenerating entire JSON
+  - **Workflow Example**:
+    * Upload documents to ChatGPT → Generate complete DS-160 JSON → Fill form
+    * Notice E-visa section is missing
+    * Ask ChatGPT: "extract E-visa sections only"
+    * ChatGPT outputs partial JSON with just evisaClassification, evisaBusiness, etc.
+    * Paste in Partial JSON field → Click "Auto-Fill Partial Section" → Only E-visa fields fill
+- Files updated:
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/ds160_prompt_combined_v5.6.txt (lines 217-280)
+  - /Users/hugo/tomitalaw_extension/sidebar/sidebar.js (lines 738-785, 999-1062)
+  - /Users/hugo/tomitalaw_extension/sidebar/sidebar.html (lines 64, 65-84, 129, 131-134)
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/DS160_FORMATTING_STANDARDS.md (version 1.17 → 1.18)
+
 ### Version 1.17 (October 10, 2025)
 - **PASSPORT RETURN PROMPT - FICTIONAL DATA REPLACEMENT**: Replaced all real case data with fictional examples to prevent data leakage and hallucination
   - **Problem #1**: Prompt used real client data (Odagiri 小田桐) as examples → privacy violation and data leakage
@@ -1245,3 +1471,19 @@ Include these instructions in prompts:
 ---
 
 **END OF DOCUMENT**
+
+### Version 1.5 (October 13, 2025)
+- **CRITICAL DATA PRIVACY FIX**: Replaced all real client data in E2 Manager Template with fictional examples
+  - **Real client removed**: Mr. Koji Ugajin (Isuzu Corporation case)
+  - **Fictional replacement**: Mr. Tanaka (Horizon Electronics Manufacturing Corporation)
+  - **Examples replaced**: 
+    - Lines 764-783: Background history examples (7 employment periods)
+    - Lines 247-258: U.S. Employer format example 
+    - Line 671: Reference to "Ugajin-style" changed to "detailed manufacturing examples"
+    - Lines 786-789: "WRONG" examples updated with fictional data
+  - **Data removed**: Real company (Isuzu, INAC), real school (Kanto Daiichi High School), real projects ("700 Project", "VC60 Project"), real facility (South Carolina Plant), real career dates (1998-2025), real team sizes (25/100/700)
+  - **Fictional data created**: Mr. Tanaka at Horizon Electronics, Sakura Technical High School, "Phoenix Initiative" and "Apex System Upgrade" projects, different dates (2000-2027), different team sizes (20/85/600)
+  - **Company example replaced**: GlobalTech Industries Corporation (GTI) with North Carolina facility investment ($195M) replacing real Isuzu/INAC data
+- File updated: e2_manager_template.md (lines 671, 764-793, 247-258)
+- Result: Zero data leakage risk - all examples now use completely fictional but equally detailed sample data
+

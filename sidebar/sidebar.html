@@ -46,8 +46,15 @@
           <div class="card-content">
             <!-- Data Input Section -->
             <div id="ds160DataInputSection">
-              <label for="ds160-data" class="ds160-label">DS-160 Core Data (JSON format):</label>
-              <textarea id="ds160-data" class="ds160-textarea" placeholder='Paste the main DS-160 JSON data here...
+              <!-- Main DS-160 Data Section -->
+              <div class="ds160-main-section">
+                <div class="section-header-ds160">
+                  <span class="icon">🎯</span>
+                  <span>Main DS-160 Data</span>
+                  <span class="section-badge required">Required</span>
+                </div>
+                <p class="section-helper-text">Use for complete DS-160 form auto-fill with all sections</p>
+                <textarea id="ds160-data" class="ds160-textarea" placeholder='Paste the main DS-160 JSON data here...
 
 Example format:
 {
@@ -60,34 +67,57 @@ Example format:
     "passportNumber": "AB123456"
   }
 }' rows="8"></textarea>
-              
-              <label for="ds160-evisa-data" class="ds160-label ds160-label-secondary">Partial JSON / Updates (Optional):</label>
-              <textarea id="ds160-evisa-data" class="ds160-textarea" placeholder='Paste any partial JSON data to merge with the main data above...
+                <div class="flex gap-2 mt-3">
+                  <button class="btn btn-primary" id="ds160-load-main">
+                    <span class="icon-sm" id="ds160-load-icon"></span>
+                    Load Data
+                  </button>
+                  <button class="btn btn-outline" id="ds160-clear-main">
+                    Clear
+                  </button>
+                </div>
+              </div>
 
-Examples:
-• Missing e-visa job details
-• Additional travel companions  
-• Updated contact information
-• Any section that needs updating
+              <!-- OR Separator -->
+              <div class="section-separator-or">OR</div>
+
+              <!-- Partial JSON Section -->
+              <div class="ds160-partial-section">
+                <div class="section-header-ds160">
+                  <span class="icon">📝</span>
+                  <span>Partial JSON - Section Updates</span>
+                  <span class="section-badge optional">Optional</span>
+                </div>
+                <p class="section-helper-text">Use to fill ONLY specific sections (e.g., missing E-visa fields) without affecting existing data</p>
+                <textarea id="ds160-evisa-data" class="ds160-textarea" placeholder='Paste partial JSON to auto-fill ONLY specific sections...
+
+Use Cases:
+• ChatGPT forgot to extract E-visa sections
+• Need to update just one section without affecting others
+• Add missing fields to already-filled form
 
 Example format:
 {
-  "evisaApplicantUSPosition": {
-    "title": "Software Engineer",
-    "duties": "Develop and maintain software applications"
+  "evisaClassification": {
+    "visaType": "E2",
+    "treatyCountry": "JPN"
+  },
+  "evisaBusiness": {
+    "businessName": "ACME USA INC",
+    "businessType": "S"
   }
 }
 
-This will be intelligently merged into your main data.' rows="8"></textarea>
-          
-              <div class="flex gap-2 mt-4">
-                <button class="btn btn-primary" id="ds160-load">
-                  <span class="icon-sm" id="ds160-load-icon"></span>
-                  Load Data
-                </button>
-                <button class="btn btn-outline" id="ds160-clear-input">
-                  Clear
-                </button>
+This will fill ONLY the sections included in this JSON.' rows="8"></textarea>
+                <div class="flex gap-2 mt-3">
+                  <button class="btn btn-orange" id="ds160-load-partial">
+                    <span class="icon-sm">📝</span>
+                    Load Data
+                  </button>
+                  <button class="btn btn-outline" id="ds160-clear-partial">
+                    Clear
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -98,6 +128,7 @@ This will be intelligently merged into your main data.' rows="8"></textarea>
                 <div class="flex items-center gap-2">
                   <span class="icon" id="ds160-data-icon"></span>
                   <h3 class="font-semibold">Extracted Data</h3>
+                  <span class="section-badge" id="ds160-data-type-badge" style="display: none;"></span>
                 </div>
                 <div class="flex gap-2">
                   <button class="btn btn-sm btn-ghost" id="ds160-copy-json">
@@ -123,7 +154,11 @@ This will be intelligently merged into your main data.' rows="8"></textarea>
               <div class="flex flex-col gap-2 mt-4">
                 <button class="btn btn-primary w-full" id="ds160-fill">
                   <span class="icon-sm" id="ds160-fill-icon"></span>
-                  Auto-Fill DS-160 Form
+                  Auto-Fill DS-160 Form (Main Data)
+                </button>
+                <button class="btn btn-orange w-full" id="ds160-fill-partial">
+                  <span class="icon-sm">📝</span>
+                  Auto-Fill Partial Section
                 </button>
                 <div class="flex gap-2">
                   <button class="btn btn-secondary flex-1" id="ds160-save-changes" style="display: none;">

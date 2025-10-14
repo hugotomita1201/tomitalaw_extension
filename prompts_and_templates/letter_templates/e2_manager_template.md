@@ -244,18 +244,18 @@ Current beneficiary (Mr. Sato) work history shows:
 
 **Example Format:**
 ```
-U.S. Employer: Isuzu North America Corporation ("INAC")
+U.S. Employer: GlobalTech Industries Corporation ("GTI")
 
-Capitalized at $232,780,000 and incorporated in the state of California in 2008, INAC is a wholly-owned U.S. subsidiary of Isuzu, a leading manufacturer of heavy-, medium-, and light-duty trucks, buses, passenger vehicle engines, industrial-use diesel engines, and related parts and accessories, whose shares are publicly traded in the Prime Section of the Tokyo Stock Exchange. INAC owns the following U.S. companies:
+Capitalized at $185,000,000 and incorporated in the state of Delaware in 2010, GTI is a wholly-owned U.S. subsidiary of Horizon Electronics Manufacturing Corporation, a leading manufacturer of advanced electronic components, industrial automation systems, consumer electronics, and related technologies, whose shares are publicly traded on the Tokyo Stock Exchange. GTI owns the following U.S. companies:
 
-• Isuzu Motors America, LLC (100% owned by INAC);
-• Isuzu Technical Center of America, Inc. (100% owned by INAC);
-• Isuzu Global Service Systems, LLC (100% owned by INAC); and
-• Isuzu Commercial Truck of America, Inc. (80% owned by INAC).
+• GlobalTech Solutions America, LLC (100% owned by GTI);
+• GlobalTech Engineering Services, Inc. (100% owned by GTI);
+• GlobalTech Distribution Systems, LLC (100% owned by GTI); and
+• GlobalTech Professional Services, Inc. (85% owned by GTI).
 
-INAC serves as a liaison company for Isuzu and its U.S.-based subsidiaries, customers, and business partners, and handles various administrative functions for its U.S. subsidiaries, including tax & accounting, management information systems (MIS), legal, human resources, and Japan relations departments. In addition, INAC plans and implements engineering production plans and currently coordinates the manufacture of Isuzu brand and GM brand commercial vehicles. INAC's activities in this area include procuring and purchasing the components, overseeing and controlling assembly procedures, and managing distribution and transportation. INAC currently employs approximately 175 employees and had a gross income of $1,837,605,822 for the fiscal year ended March 2025 on a non-consolidated basis.
+GTI serves as a liaison company for Horizon Electronics and its U.S.-based subsidiaries, customers, and business partners, and handles various administrative functions for its U.S. subsidiaries, including tax & accounting, management information systems (MIS), legal, human resources, and Japan relations departments. In addition, GTI plans and implements engineering production initiatives and currently coordinates the procurement, assembly, and distribution of electronic components and automation systems for the North American market. GTI's activities in this area include sourcing and purchasing components, overseeing and controlling assembly procedures, and managing logistics and distribution networks. GTI currently employs approximately 220 employees and had a gross income of $1,450,000,000 for the fiscal year ended December 2025 on a non-consolidated basis.
 
-Notably, Isuzu is investing $280 million in the establishment of a state-of-the-art production facility in South Carolina. This investment was first publicly announced by Prime Minister Shigeru Ishiba during his first in-person summit with President Donald Trump. At the meeting, Prime Minister Ishiba reaffirmed Japan's position as the largest foreign investor in the U.S. and emphasized Japan's commitment to strengthening American manufacturing—one of the core priorities of the Trump administration—and announced Isuzu's new factory construction to highlight Japan's continuing commitment to investment in the U.S. In particular, this project is going to be carried out by INAC, which is establishing the new, state-of-the-art production facility in South Carolina to drive commercial vehicle electrification and strengthen U.S. domestic manufacturing and supply chain capabilities. As officially announced by Isuzu, the project represents a $280 million investment and is expected to create over 700 jobs, with an annual production capacity of approximately 50,000 vehicles by 2030. To advance this initiative, INAC acquired land in Greenville, South Carolina, in December 2024 for the facility's construction. Full-scale operations are targeted to begin by the end of 2026.
+Notably, Horizon Electronics is investing $195 million in the establishment of a state-of-the-art research and production facility in North Carolina. This strategic investment demonstrates the company's commitment to expanding its U.S. operations and strengthening American manufacturing capabilities in advanced electronics and automation technologies. The project represents a significant expansion of GTI's North American presence and is expected to create over 500 high-tech manufacturing and engineering jobs, with an annual production capacity of approximately 200,000 units of advanced automation systems by 2029. To advance this initiative, GTI acquired a 45-acre industrial site in the Research Triangle area of North Carolina in October 2025 for the facility's construction. Full-scale operations are targeted to begin by mid-2027, with the facility focusing on next-generation industrial automation technologies and supporting the company's strategic growth in the North American market.
 ```
 
 **Key Elements:**
@@ -667,14 +667,27 @@ If user indicated this is a transfer case with sample letter provided:
 ## Job History Professional Format Requirements
 
 ### Formatting Standards
-- **Preface: Make sure that you go into full depth on source documents. Taking shortcuts here is detrimental to the quality of the letter**
+
+**🚨 CRITICAL: Each distinct position/role period (typically 2-6 years) requires its own detailed paragraph. DO NOT condense or group multiple positions into summary paragraphs. See detailed manufacturing examples below for required level of detail.**
+
+### Required Elements for Each Employment Period Paragraph:
+
+**For EACH distinct position or role period (2-6 years), write a complete detailed paragraph including:**
+- **Exact date range**: "From [Month Year] to [Month Year]" with month and year precision
+- **Position title and department/division**: Full official title and organizational unit
+- **Team size supervised**: If managerial role, state "approximately X members" or "approximately X subordinates"
+- **Specific daily/regular responsibilities**: Morning meetings, attendance oversight, on-site guidance, assessments, quality monitoring
+- **Key systems or methodologies**: Reference actual systems used (TPM, SQDC, L/STOP, etc. - adapt to company's actual systems)
+- **Notable projects or initiatives**: Specific project names and descriptions from source documents
+- **Progression within the role**: Show how responsibilities expanded or evolved during this period
+- **Strategic/managerial functions**: Business planning, quality management, personnel training, improvement initiatives
+
+**Format Requirements:**
 - **Write in smooth, professional paragraph format, not bullets**
-- **Begin each position/period of employment with**: "From [start month/year] to [end month/year], [Name] held the position of [Title] at [Company]" OR "From [start month/year] to [end month/year], [Name] served as [Title] at [Company]"
+- **Begin each period**: "From [start month/year] to [end month/year], [Name] held the position of [Title] at [Company]" OR "From [start month/year] to [end month/year], [Name] served as [Title] at [Company]"
 - **For current positions**: "Since [start month/year], [Name] has been serving as [Title] at [Company]."
-- **Provide concise but comprehensive narrative** of key responsibilities and notable achievements, grouping related duties into well-flowing sentences
 - **Focus on managerial responsibilities** that demonstrate progressive management capacity
 - **Maintain neutral, legal-professional tone** appropriate for immigration support letter
-- **Eliminate unnecessary day-specific dates**; month and year are sufficient
 - **Use precise, formal terms** for managerial functions
 - **Present achievements integrated smoothly into the narrative**, not as a separate list
 
@@ -744,28 +757,39 @@ If user indicated this is a transfer case with sample letter provided:
 - Every major claim should be backed by material evidence from uploaded documents
 - Focus on MANAGERIAL accomplishments and strategic contributions
 
-### Examples of Strong E2 Manager Work History Integration
+### Examples of Strong E2 Manager Work History Integration (Detailed Manufacturing Example)
 
-**✅ GOOD - Shows Career Foundation and Progression:**
-"Mr. Sato earned a Bachelor of Commerce degree from Meiji University in Tokyo, Japan in March 1992. He began his career with Toyo Communication Equipment Co., Ltd. ("Toyocom") in April 1992. Mr. Sato remained with Toyocom until its merger with SEC in October 2005, at which point he was transferred to Epson Toyocom Corporation ("ETC"). He continued working for ETC until it was merged into SEC in 2012, when he was again transferred to SEC. Throughout these roles, Mr. Sato was engaged in the sales and marketing of microdevices, including quartz crystal products and various semiconductors used in mobile phones and other electronic devices."
+**🚨 CRITICAL: The examples below show the REQUIRED level of detail. Each employment period gets its own paragraph with specific responsibilities, team sizes, projects, and systems. DO NOT condense.**
 
-**✅ GOOD - Shows International Assignment and Cross-Functional Leadership:**
-"From September 2001 to August 2006, Mr. Sato was assigned overseas, first to Toyocom Europe GmbH in Mettmann, Germany, and subsequently—following his transfer to ETC—to Epson Europe Electronics GmbH in Munich, Germany. Both entities functioned as sales affiliates of SEC. In these assignments, he served as Sales and Marketing Manager for quartz crystal devices, working closely with local European staff to provide sales and technical support, as well as to train employees on product knowledge and technical specifications for quartz crystal technologies."
+**✅ EXCELLENT - Education and Early Career Foundation (14 years, one paragraph):**
+"Mr. Tanaka earned a High School Diploma in Electronics Engineering from Sakura Technical High School in March 2000. Immediately thereafter, he joined Horizon Electronics Manufacturing Corporation and has continuously advanced through positions of increasing responsibility and oversight. From April 2000 to September 2014, Mr. Tanaka served in a series of frontline and staff roles within the Production Engineering Department. His responsibilities included circuit board assembly operations such as component placement, soldering inspection, and quality verification; daily equipment calibration and maintenance checks; participation in Total Productive Maintenance (TPM) activities to ensure equipment reliability and workplace efficiency; and continuous improvement initiatives. Over time, his role expanded to supervising small production teams, conducting quality assessments, coordinating work assignments, and participating in process optimization reviews. During this period, he also contributed to the "Phoenix Initiative," a comprehensive production line modernization project, supporting the transition from legacy systems to automated assembly operations."
 
-**✅ GOOD - Shows Management Responsibilities and Strategic Functions:**
-"In 2007, Mr. Sato returned to Japan and assumed the role of Manager of the Sales Department at ETC. Following the consolidation of ETC into SEC, he continued in the same capacity at SEC. From this time through August 2018, he served as Manager, Device Sales Department, Sales and Marketing Division. In these management roles at ETC and SEC, Mr. Sato was responsible for achieving sales targets, as well as for planning and overseeing sales and marketing activities and budgets for microdevice products, including quartz crystal devices and semiconductors."
+**✅ EXCELLENT - Mid-Level Staff Role with Technical Leadership (2 years):**
+"From October 2014 to August 2016, he served as Staff in the Manufacturing Engineering Department. In this role, he conducted production process evaluations, prepared technical analysis reports, verified quality control procedures, coordinated workflow optimization, and participated in cross-departmental planning meetings. Notably, he contributed to the "Apex System Upgrade," a major manufacturing execution system implementation, supporting process validation assessments and ensuring smooth integration between engineering specifications and production capabilities."
 
-**✅ GOOD - Shows Previous U.S. Experience and Executive Leadership:**
-"From August 2019 to August 2020, Mr. Sato was promoted to Director of the Microdevices Sales & Marketing Division, where he led the division's full operation and oversaw expansion of Epson's key microdevice categories: timing devices, semiconductors, and sensing devices. In this executive role, he directed North American sales activities, established short- to long-term marketing strategies, managed financial and operational planning, and provided oversight for 30 professional staff. He regularly reviewed sales and market data to identify structural improvements and collaborated closely with SEC's global teams in Japan, Asia, Europe, and the U.S. to align product development and commercial initiatives."
+**✅ EXCELLENT - First Management Role - Team Leader (5 years):**
+"From September 2016 to July 2021, Mr. Tanaka was promoted to Team Leader in the Assembly Operations Group, Production Engineering Department. He supervised approximately 20 members and assumed responsibility for daily operational management, including conducting shift briefings, overseeing attendance and production schedules, providing technical guidance on the floor, and resolving manufacturing abnormalities. He monitored safety, quality, delivery, and cost (SQDC) performance indicators, led kaizen improvement projects, and contributed to maintaining a stable and efficient production environment."
 
-**✅ GOOD - Current Position:**
-"Since August 2020, Mr. Sato has been serving as Expert in the Sales Department at SEC in Tokyo, Japan. In this senior role, he is responsible for organizing global sales and marketing initiatives for high-value microdevice products, with a focus on the networking infrastructure segment."
+**✅ EXCELLENT - Advanced Management Role - Line Manager (4 years):**
+"From August 2021 to June 2025, he advanced to Line Manager in the Assembly Operations Group, Production Engineering Department, with responsibility for approximately 85 subordinates. His duties included workforce planning and allocation, quality metrics management, coordination of new product introduction (NPI) activities, safety compliance audits, defect analysis and corrective action implementation, and progress monitoring using the L/STOP tracking system. He directed employee training programs, managed labor relations and shift coordination, oversaw continuous improvement proposals, and ensured that monthly operational plans for safety, quality, personnel development, and productivity enhancement were executed effectively."
+
+**✅ EXCELLENT - Senior Management Role - Assistant Manager (10 months):**
+"From July 2025 to April 2026, Mr. Tanaka served as Assistant Manager in the Assembly Operations Group, Production Engineering Department, supervising approximately 600 subordinates across multiple production lines. In this senior leadership position, he was responsible for overseeing comprehensive safety and health programs, implementing enterprise risk management protocols, handling workforce relations and compliance matters, and managing multi-shift workforce allocation and attendance systems. He analyzed and deployed divisional quality performance indicators, directed root cause analysis for quality issues, led personnel development and succession planning initiatives, and championed improvement proposal programs. He also standardized operational excellence practices, implemented lean manufacturing measures, and ensured stable high-volume operations while optimizing safety, quality, delivery, and cost (SQDC) performance across the entire production division."
+
+**✅ EXCELLENT - Current Specialized Role - Technical Specialist (current):**
+"Since May 2026, Mr. Tanaka has served as Technical Specialist in the Production Engineering Department. In this capacity, his role was restructured from direct management to focus on specialized technical leadership responsibilities supporting the establishment of the company's new North American manufacturing facility. His primary duties include designing comprehensive training curricula for production personnel, developing standardized work procedures and documentation, and providing technical advisory support for production line commissioning activities. He also coordinates cross-functional project teams, monitors facility startup progress against milestones, prepares operational readiness assessments, and ensures that manufacturing processes align with the company's global quality and efficiency standards."
+
+**✅ EXCELLENT - Career Summary Closing:**
+"Throughout his career, Mr. Tanaka has consistently demonstrated the ability to progress from hands-on technical assembly operations to advanced leadership roles and ultimately to specialized technical advisory positions within Horizon Electronics Manufacturing Corporation. His current role as Technical Specialist, focused on production standardization, workforce capability development, and new facility readiness, has equipped him with the comprehensive operational expertise necessary to support the successful establishment and operation of the company's expanded North American manufacturing operations."
+
+**❌ WRONG - Too Condensed (groups 14 years into vague summary):**
+"From 2000 to 2014, Mr. Tanaka worked in various manufacturing roles at Horizon Electronics, progressing from assembly operations to supervisory functions" (missing all specific responsibilities, projects, team sizes, systems)
 
 **❌ WRONG - Too Technical, Not Managerial:**
-"He performed day-to-day sales tasks including processing customer orders, preparing quotations, and updating CRM systems" (sounds like staff work)
+"He performed day-to-day assembly tasks including circuit board component placement, soldering operations, and quality inspections" (sounds like staff work, no managerial scope shown)
 
 **❌ WRONG - Vague, No Organizational Details:**
-"He managed the sales team and was responsible for various business activities" (no numbers, no specifics)
+"He managed the production team and was responsible for various manufacturing activities" (no team sizes, no specific systems, no concrete responsibilities)
 
 ## Content Development Strategy
 

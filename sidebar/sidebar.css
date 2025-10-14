@@ -292,6 +292,17 @@ body {
   background: #c82333;
 }
 
+.btn-orange {
+  background: #ff9800;
+  color: white;
+}
+
+.btn-orange:hover {
+  background: #e68900;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
+}
+
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -1284,6 +1295,92 @@ body {
 .ds160-textarea::placeholder {
   color: #999;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* DS-160 Section Containers */
+.ds160-main-section {
+  background: #f0f7ff;
+  border: 1px solid #d0e4ff;
+  border-left: 4px solid #4A90E2;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.ds160-partial-section {
+  background: #fff8f0;
+  border: 1px solid #ffe4c0;
+  border-left: 4px solid #ff9800;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.section-header-ds160 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.section-header-ds160 .icon {
+  font-size: 18px;
+}
+
+.section-helper-text {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.section-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: 8px;
+}
+
+.section-badge.required {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.section-badge.optional {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.section-separator-or {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 24px 0;
+  color: #999;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.section-separator-or::before,
+.section-separator-or::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.section-separator-or::before {
+  margin-right: 12px;
+}
+
+.section-separator-or::after {
+  margin-left: 12px;
 }
 
 /* Button Group Spacing */

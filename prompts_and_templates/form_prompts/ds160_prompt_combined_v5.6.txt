@@ -214,6 +214,70 @@ When processing visa renewal applications with multiple documents:
 3. Ensure valid JSON syntax (proper quotes, commas, brackets)
 4. Do not include any text before or after the JSON block
 
+## SECTION EXTRACTION MODE (Partial JSON)
+
+When user requests extraction of ONLY specific sections (not a complete DS-160), output just those sections as valid JSON.
+
+### Instructions:
+
+If user requests a specific section or subset of fields:
+- Output ONLY the requested sections
+- Still follow ALL formatting rules (company names, phone numbers, addresses, dates)
+- Output in ```json code block
+- Omit empty/false fields
+- Valid JSON syntax required
+
+### Use Cases:
+
+1. **Missing Section**: ChatGPT forgot to include E-visa sections in initial extraction
+2. **Field Updates**: Employment changed, need to update just that section
+3. **Supplemental Data**: Adding data from additional documents
+4. **Corrections**: Fixing specific fields without regenerating entire JSON
+
+### Example:
+
+**User request:** "extract E-visa sections only"
+
+**Output:**
+```json
+{
+  "evisaClassification": {
+    "visaType": "E2",
+    "treatyCountry": "JPN",
+    "principalApplicant": true,
+    "principalName": {
+      "surname": "NAKAMURA",
+      "givenName": "TAKESHI"
+    }
+  },
+  "evisaBusiness": {
+    "businessName": "NAKAMURA TRADING USA INC",
+    "businessType": "S",
+    "incorporationDate": "15-JAN-2024",
+    "businessAddress": {
+      "street1": "1234 WILSHIRE BLVD",
+      "street2": "STE.567",
+      "city": "LOS ANGELES",
+      "state": "California",
+      "postalCode": "90017",
+      "country": "USA"
+    },
+    "businessPhone": "13107654321"
+  },
+  "evisaApplicationContact": {
+    "officer": {
+      "surname": "NAKAMURA",
+      "givenName": "TAKESHI",
+      "position": "CEO"
+    },
+    "phone": "13103246890",
+    "email": "erikohiga@tomitalawoffice.net"
+  }
+}
+```
+
+**Note:** This partial JSON can be pasted in the extension's "Partial JSON" field for section-specific auto-fill without affecting other already-filled fields.
+
 ## JSON FORMAT:
 
 ```json

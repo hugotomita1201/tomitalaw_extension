@@ -191,11 +191,14 @@ function preprocessChatGPTJson(text) {
 // DS-160 specific handlers
 function setupDS160Handlers() {
   let currentData = null;
+  let currentDataType = null; // Track whether 'main' or 'partial' data is loaded
   let modifiedFields = new Set();
   let isRawView = false;
   
-  const loadBtn = document.getElementById('ds160-load');
-  const clearInputBtn = document.getElementById('ds160-clear-input');
+  const loadMainBtn = document.getElementById('ds160-load-main');
+  const loadPartialBtn = document.getElementById('ds160-load-partial');
+  const clearMainBtn = document.getElementById('ds160-clear-main');
+  const clearPartialBtn = document.getElementById('ds160-clear-partial');
   const fillBtn = document.getElementById('ds160-fill');
   const editBtn = document.getElementById('ds160-edit');
   const saveChangesBtn = document.getElementById('ds160-save-changes');
@@ -203,6 +206,7 @@ function setupDS160Handlers() {
   const viewRawBtn = document.getElementById('ds160-view-raw');
   const expandAllBtn = document.getElementById('ds160-expand-all');
   const dataInput = document.getElementById('ds160-data');
+  const partialDataInput = document.getElementById('ds160-evisa-data');
   const dataInputSection = document.getElementById('ds160DataInputSection');
   const dataSection = document.getElementById('ds160DataSection');
   const dataPreview = document.getElementById('ds160DataPreview');
@@ -667,10 +671,10 @@ function setupDS160Handlers() {
   // Display data in editable format
   function displayEditableData(data) {
     if (!data) return;
-    
+
     editableDataViewer.innerHTML = '';
     modifiedFields.clear();
-    
+
     // Create sections based on data structure
     Object.entries(sectionConfig).forEach(([sectionKey, config]) => {
       if (data[sectionKey]) {
@@ -678,7 +682,7 @@ function setupDS160Handlers() {
         editableDataViewer.appendChild(section);
       }
     });
-    
+
     // Handle any additional sections not in config
     Object.keys(data).forEach(key => {
       if (!sectionConfig[key]) {
@@ -689,7 +693,15 @@ function setupDS160Handlers() {
         editableDataViewer.appendChild(section);
       }
     });
-    
+
+    // Update data type badge
+    const badge = document.getElementById('ds160-data-type-badge');
+    if (badge && currentDataType) {
+      badge.textContent = currentDataType === 'main' ? 'Main DS-160 Data' : 'Partial JSON Data';
+      badge.className = currentDataType === 'main' ? 'section-badge required' : 'section-badge optional';
+      badge.style.display = 'inline-block';
+    }
+
     // Show editable viewer, hide text preview
     editableDataViewer.style.display = 'block';
     dataPreview.style.display = 'none';
@@ -755,131 +767,99 @@ function setupDS160Handlers() {
   }
   
   // Load saved data on module load
-  chrome.storage.local.get(['ds160Data', 'lastDS160CoreData', 'lastDS160EvisaData', 'lastDS160Data'], (result) => {
-    const evisaDataInput = document.getElementById('ds160-evisa-data');
-    
+  chrome.storage.local.get(['ds160Data', 'lastDS160CoreData', 'lastDS160EvisaData', 'lastDS160Data', 'lastDS160DataType'], (result) => {
+
     // Load core data
     if (result.lastDS160CoreData) {
       dataInput.value = result.lastDS160CoreData;
       // Load E-visa data if available
-      if (result.lastDS160EvisaData && evisaDataInput) {
-        evisaDataInput.value = result.lastDS160EvisaData;
+      if (result.lastDS160EvisaData && partialDataInput) {
+        partialDataInput.value = result.lastDS160EvisaData;
       }
-      // Trigger load automatically
-      if (loadBtn) {
-        loadBtn.click();
+      // Trigger appropriate load button based on last data type
+      if (result.lastDS160DataType === 'partial' && loadPartialBtn) {
+        loadPartialBtn.click();
+      } else if (loadMainBtn) {
+        loadMainBtn.click();
       }
     } else if (result.lastDS160Data) {
       // Backward compatibility: load old single field data
       dataInput.value = result.lastDS160Data;
       // Trigger load automatically
-      if (loadBtn) {
-        loadBtn.click();
+      if (loadMainBtn) {
+        loadMainBtn.click();
       }
     } else if (result.ds160Data) {
       // Load any saved data
-      dataInput.value = typeof result.ds160Data === 'string' 
-        ? result.ds160Data 
+      dataInput.value = typeof result.ds160Data === 'string'
+        ? result.ds160Data
         : JSON.stringify(result.ds160Data, null, 2);
     }
   });
-  
-  // Load Data button
-  if (loadBtn) {
-    loadBtn.addEventListener('click', () => {
-      const coreData = dataInput.value.trim();
-      const evisaDataInput = document.getElementById('ds160-evisa-data');
-      const evisaData = evisaDataInput ? evisaDataInput.value.trim() : '';
-      
-      // Must have at least one field filled
-      if (!coreData && !evisaData) {
-        showStatus('Please paste data in at least one field', 'error');
+
+  // Load Main Data button - loads from main DS-160 data field
+  if (loadMainBtn) {
+    loadMainBtn.addEventListener('click', () => {
+      const mainData = dataInput.value.trim();
+
+      if (!mainData) {
+        showStatus('Please paste data in the main DS-160 field', 'error');
         return;
       }
-      
-      let finalData = {};
-      let coreLoaded = false;
-      let evisaLoaded = false;
-      
-      // Try to parse core data field
-      if (coreData) {
-        try {
-          const cleanedData = preprocessChatGPTJson(coreData);
-          const parsedData = JSON.parse(cleanedData);
-          finalData = { ...finalData, ...parsedData };
-          
-          // Check if this is actually E-visa data
-          if (parsedData.evisaClassification || parsedData.evisaBusiness || parsedData.evisaInvestment) {
-            evisaLoaded = true;
-          }
-          // Check if this is core DS-160 data
-          if (parsedData.personal || parsedData.travel || parsedData.passport) {
-            coreLoaded = true;
-          }
-        } catch (error) {
-          console.error('Error parsing core data field:', error);
-          showStatus('Error parsing data in first field', 'error');
-          return;
-        }
+
+      try {
+        const cleanedData = preprocessChatGPTJson(mainData);
+        const parsedData = JSON.parse(cleanedData);
+        currentData = parsedData;
+        currentDataType = 'main';
+
+        showStatus('Main DS-160 data loaded successfully!', 'success');
+        displayEditableData(currentData);
+
+        // Save the data for next time
+        chrome.storage.local.set({
+          ds160Data: currentData,
+          lastDS160CoreData: mainData,
+          lastDS160DataType: 'main'
+        });
+      } catch (error) {
+        console.error('Error parsing main data:', error);
+        showStatus('Error parsing JSON data', 'error');
+        return;
       }
-      
-      // Try to parse E-visa data field
-      if (evisaData) {
-        try {
-          const cleanedData = preprocessChatGPTJson(evisaData);
-          const parsedData = JSON.parse(cleanedData);
-          finalData = { ...finalData, ...parsedData };
-          
-          // Check what type of data this is
-          if (parsedData.evisaClassification || parsedData.evisaBusiness || parsedData.evisaInvestment) {
-            evisaLoaded = true;
-          }
-          if (parsedData.personal || parsedData.travel || parsedData.passport) {
-            coreLoaded = true;
-          }
-        } catch (error) {
-          console.error('Error parsing E-visa data field:', error);
-          if (!coreData) {
-            showStatus('Error parsing data in E-visa field', 'error');
-            return;
-          } else {
-            showStatus('Warning: E-visa field data invalid, using first field only', 'warning');
-          }
-        }
+    });
+  }
+
+  // Load Partial Data button - loads from partial JSON field
+  if (loadPartialBtn) {
+    loadPartialBtn.addEventListener('click', () => {
+      const partial = partialDataInput.value.trim();
+
+      if (!partial) {
+        showStatus('Please paste data in the partial JSON field', 'error');
+        return;
       }
-      
-      // Set the final data
-      currentData = finalData;
-      
-      // Show appropriate status message
-      if (coreLoaded && evisaLoaded) {
-        showStatus('Core DS-160 and E-visa data loaded successfully!', 'success');
-      } else if (evisaLoaded) {
-        showStatus('E-visa data loaded successfully!', 'success');
-      } else if (coreLoaded) {
-        showStatus('Core DS-160 data loaded successfully!', 'success');
-      } else {
-        showStatus('Data loaded successfully!', 'success');
+
+      try {
+        const cleanedData = preprocessChatGPTJson(partial);
+        const parsedData = JSON.parse(cleanedData);
+        currentData = parsedData;
+        currentDataType = 'partial';
+
+        showStatus('Partial JSON data loaded successfully!', 'success');
+        displayEditableData(currentData);
+
+        // Save the data for next time
+        chrome.storage.local.set({
+          ds160Data: currentData,
+          lastDS160EvisaData: partial,
+          lastDS160DataType: 'partial'
+        });
+      } catch (error) {
+        console.error('Error parsing partial data:', error);
+        showStatus('Error parsing JSON data', 'error');
+        return;
       }
-      
-      displayEditableData(currentData);
-      
-      // Save the data for next time
-      chrome.storage.local.set({ 
-        ds160Data: currentData,
-        lastDS160CoreData: coreData,
-        lastDS160EvisaData: evisaData
-      });
-      
-      // Update the preview
-      const preview = document.getElementById('ds160DataPreview');
-      if (preview) {
-        preview.textContent = JSON.stringify(currentData, null, 2);
-      }
-      
-      // Show the data section
-      document.getElementById('ds160DataInputSection').style.display = 'none';
-      document.getElementById('ds160DataSection').style.display = 'block';
     });
   }
   
@@ -972,17 +952,35 @@ function setupDS160Handlers() {
     });
   }
   
-  // Clear input button
-  if (clearInputBtn) {
-    clearInputBtn.addEventListener('click', () => {
+  // Clear Main Data button
+  if (clearMainBtn) {
+    clearMainBtn.addEventListener('click', () => {
       dataInput.value = '';
-      const evisaDataInput = document.getElementById('ds160-evisa-data');
-      if (evisaDataInput) {
-        evisaDataInput.value = '';
+      if (currentDataType === 'main') {
+        currentData = null;
+        currentDataType = null;
+        dataSection.style.display = 'none';
+        dataInputSection.style.display = 'block';
       }
-      currentData = null;
-      chrome.storage.local.remove(['ds160Data', 'lastDS160Data', 'lastDS160CoreData', 'lastDS160EvisaData']);
-      showStatus('Data cleared', 'info');
+      chrome.storage.local.remove(['lastDS160CoreData', 'lastDS160Data']);
+      showStatus('Main data cleared', 'info');
+    });
+  }
+
+  // Clear Partial Data button
+  if (clearPartialBtn) {
+    clearPartialBtn.addEventListener('click', () => {
+      if (partialDataInput) {
+        partialDataInput.value = '';
+      }
+      if (currentDataType === 'partial') {
+        currentData = null;
+        currentDataType = null;
+        dataSection.style.display = 'none';
+        dataInputSection.style.display = 'block';
+      }
+      chrome.storage.local.remove(['lastDS160EvisaData']);
+      showStatus('Partial data cleared', 'info');
     });
   }
   
@@ -1046,41 +1044,88 @@ function setupDS160Handlers() {
     });
   }
   
+  // Auto-Fill Partial Section button (for partial JSON field)
+  const fillPartialBtn = document.getElementById('ds160-fill-partial');
+
+  if (fillPartialBtn && partialDataInput) {
+    fillPartialBtn.addEventListener('click', async () => {
+      const partialData = partialDataInput.value.trim();
+
+      if (!partialData) {
+        showStatus('Please paste partial JSON data', 'error');
+        return;
+      }
+
+      try {
+        const cleanedData = preprocessChatGPTJson(partialData);
+        const parsedData = JSON.parse(cleanedData);
+
+        // Get current tab
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+        if (!tab.url || !tab.url.includes('ceac.state.gov')) {
+          showStatus('Please navigate to the DS-160 form first', 'error');
+          return;
+        }
+
+        // Store partial data in chrome storage temporarily
+        await chrome.storage.local.set({ ds160Data: parsedData });
+
+        // Try to inject content script
+        try {
+          await chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            files: ['content/modules/ds160-content.js']
+          });
+        } catch (e) {
+          console.log('DS-160 content script might already be injected:', e);
+        }
+
+        showStatus('Auto-filling partial section...', 'info');
+
+        // Send message to content script
+        setTimeout(() => {
+          chrome.tabs.sendMessage(tab.id, {
+            action: 'fillForm',
+            module: 'ds160',
+            data: parsedData  // Send partial JSON independently
+          }, (response) => {
+            if (chrome.runtime.lastError) {
+              console.error('Error sending message:', chrome.runtime.lastError);
+              showStatus('Error: Could not communicate with the page. Try refreshing.', 'error');
+            } else if (response && response.success) {
+              showStatus('Partial section filled successfully!', 'success');
+            } else {
+              showStatus('Partial section filling completed. Check the page.', 'info');
+            }
+          });
+        }, 100);
+
+      } catch (error) {
+        console.error('Error parsing partial JSON:', error);
+        showStatus('Error parsing partial JSON data', 'error');
+      }
+    });
+  }
+
   // Edit Data button - go back to input
   if (editBtn) {
     editBtn.addEventListener('click', () => {
-      // Separate E-visa and core data for editing
-      const evisaDataInput = document.getElementById('ds160-evisa-data');
-      const evisaFields = ['evisaClassification', 'evisaBusiness', 'evisaInvestment', 'evisaFinanceTrade', 
-                          'evisaEmployeeCounts', 'evisaUSPersonnel', 'evisaApplicantPosition', 
-                          'evisaApplicantUSPosition', 'evisaOwnership', 'evisaForeignBusiness', 
-                          'evisaFinancial', 'evisaTrade', 'evisaApplicationContact', 'evisaEmployee'];
-      
-      let coreDataObj = {};
-      let evisaDataObj = {};
-      
-      // Separate the data
-      for (const key in currentData) {
-        if (evisaFields.includes(key)) {
-          evisaDataObj[key] = currentData[key];
-        } else {
-          coreDataObj[key] = currentData[key];
+      // Restore data to the correct textarea based on currentDataType
+      if (currentData && currentDataType === 'main') {
+        dataInput.value = JSON.stringify(currentData, null, 2);
+        // Clear the partial field since we're editing main data
+        if (partialDataInput) {
+          partialDataInput.value = '';
         }
-      }
-      
-      // Put data in appropriate fields
-      if (Object.keys(coreDataObj).length > 0) {
-        dataInput.value = JSON.stringify(coreDataObj, null, 2);
-      } else {
+      } else if (currentData && currentDataType === 'partial') {
+        if (partialDataInput) {
+          partialDataInput.value = JSON.stringify(currentData, null, 2);
+        }
+        // Clear the main field since we're editing partial data
         dataInput.value = '';
       }
-      
-      if (evisaDataInput && Object.keys(evisaDataObj).length > 0) {
-        evisaDataInput.value = JSON.stringify(evisaDataObj, null, 2);
-      } else if (evisaDataInput) {
-        evisaDataInput.value = '';
-      }
-      
+
       dataSection.style.display = 'none';
       dataInputSection.style.display = 'block';
       showStatus('Edit your JSON data and click Load Data again', 'info');
