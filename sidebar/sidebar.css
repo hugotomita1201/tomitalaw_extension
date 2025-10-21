@@ -1289,10 +1289,32 @@ body {
   font-weight: 600;
   color: #333;
   margin-bottom: 8px;
+  padding: 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  user-select: none;
 }
 
 .section-header-ds160 .icon {
   font-size: 18px;
+}
+
+/* Interactive header states */
+.section-header-ds160:not(.disabled):hover {
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+.section-header-ds160.active {
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(74, 144, 226, 0.3);
+}
+
+.section-header-ds160.disabled {
+  opacity: 0.5;
+  cursor: default !important;
 }
 
 .section-helper-text {

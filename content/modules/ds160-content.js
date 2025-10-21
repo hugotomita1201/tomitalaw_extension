@@ -1370,10 +1370,10 @@ class TwoPassFiller {
     // The same field ID is used on multiple pages for different purposes
     if (fieldId === 'ctl00_SiteContentPlaceHolder_FormView1_tbxCity') {
       const currentPage = this.detectCurrentPage();
-      
+
       if (currentPage === 'evisaApplicationContact') {
         // On E-visa Application Contact page - contact's city
-        return data.evisaApplicationContact?.address?.city || 
+        return data.evisaApplicationContact?.address?.city ||
                data.evisa_application_contact?.address?.city ||
                data.evisaApplicationContact?.city ||
                data.evisa_application_contact?.city;
@@ -1381,7 +1381,48 @@ class TwoPassFiller {
       // For travel and other pages, fall through to fieldMappings
       // which will use data.travel?.usCity
     }
-    
+
+    // Special handling for employer fields on E-visa Applicant Present Position page
+    // These field IDs are shared with Temporary Work Visa section but need different data sources
+    if (currentPageCheck === 'evisaApplicantPosition') {
+      // Employer Name
+      if (fieldId === 'ctl00_SiteContentPlaceHolder_FormView1_tbxEmployerName') {
+        return data.evisaApplicantPosition?.employerName ||
+               data.evisa_applicant_position?.employer_name;
+      }
+
+      // Years With Employer
+      if (fieldId === 'ctl00_SiteContentPlaceHolder_FormView1_tbxYearsWithEmployer') {
+        return data.evisaApplicantPosition?.yearsWithEmployer ||
+               data.evisa_applicant_position?.years_with_employer;
+      }
+
+      // Employer Street Address 1
+      if (fieldId === 'ctl00_SiteContentPlaceHolder_FormView1_tbxEmpStreetAddress1') {
+        return data.evisaApplicantPosition?.employerAddress?.street1 ||
+               data.evisa_applicant_position?.employer_address?.street1;
+      }
+
+      // Employer Street Address 2
+      if (fieldId === 'ctl00_SiteContentPlaceHolder_FormView1_tbxEmpStreetAddress2') {
+        return data.evisaApplicantPosition?.employerAddress?.street2 ||
+               data.evisa_applicant_position?.employer_address?.street2;
+      }
+
+      // Employer City
+      if (fieldId === 'ctl00_SiteContentPlaceHolder_FormView1_tbxEmpCity') {
+        return data.evisaApplicantPosition?.employerAddress?.city ||
+               data.evisa_applicant_position?.employer_address?.city;
+      }
+
+      // Employer Country
+      if (fieldId === 'ctl00_SiteContentPlaceHolder_FormView1_ddlEmpCountry') {
+        return this.mapCountry(data.evisaApplicantPosition?.employerAddress?.country ||
+               data.evisa_applicant_position?.employer_address?.country);
+      }
+    }
+    // For other pages (Temporary Work Visa section, etc.), fall through to fieldMappings
+
     // Helper function to handle missing security fields - defaults to false
     // This allows the JSON to omit the entire security section if all values are false
     const getSecurityValue = (value) => {
@@ -1408,7 +1449,8 @@ class TwoPassFiller {
       'ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_MARITAL_STATUS': this.mapMaritalStatus(data.personal?.maritalStatus),
       
       // Birth Location - These are on Page 1, NOT Page 2!
-      'ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_POB_CITY': data.personal?.birthCity,
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_POB_CITY':
+        data.personal?.birthCity ? data.personal.birthCity.substring(0, 20) : undefined,
       'ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_POB_ST_PROVINCE': data.personal?.birthState,
       'ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_POB_CNTRY': this.mapCountry(data.personal?.birthCountry),
       

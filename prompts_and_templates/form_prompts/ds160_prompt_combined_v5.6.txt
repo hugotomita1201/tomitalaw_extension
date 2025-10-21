@@ -1,4 +1,4 @@
-# DS-160 Combined Prompt v5.5 - Enhanced Formatting + Schema Updates
+# DS-160 Combined Prompt v5.6 - Enhanced Formatting + Schema Updates
 # Extract DS-160 visa application data into structured JSON format
 
 Extract complete DS-160 information from provided documents and output as structured JSON.
@@ -505,8 +505,8 @@ If user requests a specific section or subset of fields:
   "workEducation": {
     "primaryOccupation": "AGRICULTURE/BUSINESS/COMPUTER SCIENCE/EDUCATION/GOVERNMENT/HOMEMAKER/MEDICAL/MILITARY/NOT EMPLOYED/RETIRED/STUDENT/OTHER - infer from what the employer does",
     "primaryOccupationOther": "string - Required if primaryOccupation is OTHER, omit otherwise",
-    "presentEmployer": {  // Object - Employer where applicant CURRENTLY works (at time of DS-160 submission), NOT the employer they are applying to. Even if same company (renewal/transfer), use CURRENT employer. NOTE: for renewals, the current employer and the one that the person is applying to may be the same since its a RENEWAL
-      "name": "string or omit", CRITICAL FOR RENEWALS: MAKE SURE THAT CURRENT EMPLOYER IS THE MOST UP TO DATE CURRENT EMPLOYER FROM THE VISA RENEWAL WORKSHEET, NOT FROM THE ORIGINAL DS160 WORKSHEET
+    "presentEmployer": {  // Object - Employer where applicant CURRENTLY works (at time of DS-160 submission), NOT the employer they are applying to. Even if same company (renewal/transfer), use CURRENT employer. NOTE: for renewals, the current employer and the one that the person is applying to may be the same since its a RENEWAL. CRITICAL FOR RENEWALS: MAKE SURE THAT CURRENT EMPLOYER IS THE MOST UP TO DATE CURRENT EMPLOYER FROM THE VISA RENEWAL WORKSHEET, NOT FROM THE ORIGINAL DS160 WORKSHEET
+      "name": "string or omit",
       "address": {
         "street1": "string or omit",
         "street2": "string or omit",
@@ -690,7 +690,7 @@ If user requests a specific section or subset of fields:
   "evisaApplicationContact": {
     "officer": {  // Object - Person to contact if necessary (company officer/principal applicant) - extract from personal.surname and personal.givenName
       "surname":  "string - Applicant/company officer surname",
-      "givenName":  "string - Applicant/company officer given name"
+      "givenName":  "string - Applicant/company officer given name",
       "position": "string - Extract from presentEmployer.jobTitle (e.g., CEO, President, Manager)"
     },
     "contact": {  // Object - Preparer of form (attorney/paralegal) - use attorney info from E-visa Preparer Information section 

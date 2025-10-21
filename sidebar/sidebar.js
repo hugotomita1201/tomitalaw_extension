@@ -190,8 +190,10 @@ function preprocessChatGPTJson(text) {
 
 // DS-160 specific handlers
 function setupDS160Handlers() {
-  let currentData = null;
-  let currentDataType = null; // Track whether 'main' or 'partial' data is loaded
+  let mainLoadedData = null; // Stores loaded main DS-160 data
+  let partialLoadedData = null; // Stores loaded partial JSON data
+  let currentData = null; // Points to whichever data is currently being viewed
+  let currentDataType = null; // Track whether 'main' or 'partial' data is being viewed
   let modifiedFields = new Set();
   let isRawView = false;
   
@@ -211,6 +213,8 @@ function setupDS160Handlers() {
   const dataSection = document.getElementById('ds160DataSection');
   const dataPreview = document.getElementById('ds160DataPreview');
   const editableDataViewer = document.getElementById('ds160EditableData');
+  const mainSectionHeader = document.getElementById('main-section-header');
+  const partialSectionHeader = document.getElementById('partial-section-header');
   
   // Section configuration with icons and field labels
   // Ordered to match DS-160 form page sequence
@@ -810,11 +814,15 @@ function setupDS160Handlers() {
       try {
         const cleanedData = preprocessChatGPTJson(mainData);
         const parsedData = JSON.parse(cleanedData);
-        currentData = parsedData;
+        mainLoadedData = parsedData; // Store in separate variable
+        currentData = mainLoadedData; // Point to main data for viewing
         currentDataType = 'main';
 
         showStatus('Main DS-160 data loaded successfully!', 'success');
         displayEditableData(currentData);
+
+        // Update header visual state
+        updateSectionHeaderStates();
 
         // Save the data for next time
         chrome.storage.local.set({
@@ -843,11 +851,15 @@ function setupDS160Handlers() {
       try {
         const cleanedData = preprocessChatGPTJson(partial);
         const parsedData = JSON.parse(cleanedData);
-        currentData = parsedData;
+        partialLoadedData = parsedData; // Store in separate variable
+        currentData = partialLoadedData; // Point to partial data for viewing
         currentDataType = 'partial';
 
         showStatus('Partial JSON data loaded successfully!', 'success');
         displayEditableData(currentData);
+
+        // Update header visual state
+        updateSectionHeaderStates();
 
         // Save the data for next time
         chrome.storage.local.set({
@@ -1131,6 +1143,75 @@ function setupDS160Handlers() {
       showStatus('Edit your JSON data and click Load Data again', 'info');
     });
   }
+
+  // Helper function to update section header visual states
+  function updateSectionHeaderStates() {
+    if (!mainSectionHeader || !partialSectionHeader) return;
+
+    // Remove active class from both
+    mainSectionHeader.classList.remove('active');
+    partialSectionHeader.classList.remove('active');
+
+    // Add active class to currently viewed data type
+    if (currentDataType === 'main') {
+      mainSectionHeader.classList.add('active');
+    } else if (currentDataType === 'partial') {
+      partialSectionHeader.classList.add('active');
+    }
+
+    // Update disabled state based on whether data is loaded
+    if (mainLoadedData) {
+      mainSectionHeader.classList.remove('disabled');
+      mainSectionHeader.style.cursor = 'pointer';
+    } else {
+      mainSectionHeader.classList.add('disabled');
+      mainSectionHeader.style.cursor = 'default';
+    }
+
+    if (partialLoadedData) {
+      partialSectionHeader.classList.remove('disabled');
+      partialSectionHeader.style.cursor = 'pointer';
+    } else {
+      partialSectionHeader.classList.add('disabled');
+      partialSectionHeader.style.cursor = 'default';
+    }
+  }
+
+  // Click handler for Main section header - toggle to view main data
+  if (mainSectionHeader) {
+    mainSectionHeader.addEventListener('click', () => {
+      // Only allow clicking if main data is loaded
+      if (!mainLoadedData) {
+        showStatus('No main data loaded. Please load data first.', 'info');
+        return;
+      }
+
+      // Switch to main data view
+      currentData = mainLoadedData;
+      currentDataType = 'main';
+      displayEditableData(currentData);
+      updateSectionHeaderStates();
+      showStatus('Switched to Main DS-160 Data view', 'info');
+    });
+  }
+
+  // Click handler for Partial section header - toggle to view partial data
+  if (partialSectionHeader) {
+    partialSectionHeader.addEventListener('click', () => {
+      // Only allow clicking if partial data is loaded
+      if (!partialLoadedData) {
+        showStatus('No partial data loaded. Please load data first.', 'info');
+        return;
+      }
+
+      // Switch to partial data view
+      currentData = partialLoadedData;
+      currentDataType = 'partial';
+      displayEditableData(currentData);
+      updateSectionHeaderStates();
+      showStatus('Switched to Partial JSON view', 'info');
+    });
+  }
 }
 
 // Visa Scheduling specific handlers
@@ -1193,7 +1274,21 @@ function setupVisaHandlers() {
           });
         } else {
           // Visa scheduling format
-          currentData = { scheduling: parsedData };
+          // Unwrap applicant wrapper if present (for prompt compatibility)
+          let unwrappedData;
+          if (parsedData.applicant) {
+            // Prompt format: {"applicant": {...}, "dependents": [...]}
+            // Unwrap to flat format: {atlas_first_name: "...", dependents: [...]}
+            unwrappedData = {
+              ...parsedData.applicant,
+              dependents: parsedData.dependents || []
+            };
+          } else {
+            // Already flat format (sample data files)
+            unwrappedData = parsedData;
+          }
+
+          currentData = unwrappedData;
 
           // Save to storage
           chrome.storage.local.set({ visaData: currentData }, () => {

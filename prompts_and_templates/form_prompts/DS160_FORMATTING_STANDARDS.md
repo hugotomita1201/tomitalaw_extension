@@ -1,7 +1,7 @@
 # DS-160 Data Formatting Standards
 
-**Version:** 1.27
-**Last Updated:** October 13, 2025
+**Version:** 1.29
+**Last Updated:** October 14, 2025
 **Purpose:** Master reference for DS-160 form data formatting rules. Use this document when creating prompts for DS-160 and other immigration forms.
 
 ---
@@ -837,6 +837,106 @@ Include these instructions in prompts:
 ---
 
 ## Change Log
+
+### Version 1.29 (October 14, 2025)
+- **CRITICAL JSON SYNTAX FIX**: Fixed 3 critical errors in ds160_prompt_combined_v5.6.txt preventing ChatGPT from parsing schema correctly
+  - **Problem**: v5.6 file had JSON syntax errors that broke ChatGPT's ability to generate valid JSON output
+  - **Error #1 (Line 693)**: Missing comma after `givenName` field in `evisaApplicationContact.officer` object
+    * Before: `"givenName": "string - Applicant/company officer given name"` ❌ (no comma)
+    * After: `"givenName": "string - Applicant/company officer given name",` ✅
+  - **Error #2 (Line 509)**: Improper inline text after comma in `presentEmployer.name` field
+    * Before: `"name": "string or omit", CRITICAL FOR RENEWALS: MAKE SURE...` ❌ (breaks JSON structure)
+    * After: Moved renewal instruction to comment on line 508, added comma to line 509 ✅
+  - **Error #3 (Line 1)**: Version header mismatch - header said v5.5 but filename is v5.6
+    * Before: `# DS-160 Combined Prompt v5.5 - Enhanced Formatting + Schema Updates` ❌
+    * After: `# DS-160 Combined Prompt v5.6 - Enhanced Formatting + Schema Updates` ✅
+  - **Impact**: These syntax errors prevented ChatGPT from:
+    * Parsing the schema template correctly
+    * Generating valid JSON output that matches the expected format
+    * Enabling the extension to successfully parse ChatGPT's output for form filling
+  - **Root Cause**: Schema example had invalid JSON structure that violated JSON syntax rules
+  - **Result**: v5.6 prompt now has valid JSON syntax and can be used by ChatGPT to generate correct DS-160 data
+- Files updated:
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/ds160_prompt_combined_v5.6.txt (lines 1, 509, 693)
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/DS160_FORMATTING_STANDARDS.md (version 1.28 → 1.29)
+
+### Version 1.28 (October 14, 2025)
+- **INTERACTIVE SECTION HEADERS**: Added clickable toggle functionality for DS-160 section headers
+  - **User Request**: "can we have that become an interactable button that when we click on it it switches to the information of the auto-fill partial section? and vice versa? so we can see the different json's that are imported."
+  - **Purpose**: Enable toggling between viewing main DS-160 data and partial JSON data after both are loaded, without losing either dataset
+  - **Previous Limitation**: Could only view whichever dataset was loaded LAST - no way to switch between viewing the two different JSONs
+  - **HTML Changes** (sidebar.html):
+    * Line 51: Added `id="main-section-header"` to Main DS-160 Data section header
+    * Line 86: Added `id="partial-section-header"` to Partial JSON section header
+    * IDs enable JavaScript targeting for click event listeners
+  - **JavaScript Changes** (sidebar.js):
+    * Lines 193-196: Changed from single `currentData` to separate storage variables:
+      - `mainLoadedData = null` - Stores loaded main DS-160 data
+      - `partialLoadedData = null` - Stores loaded partial JSON data
+      - `currentData = null` - Points to whichever data is currently being viewed
+      - `currentDataType = null` - Tracks 'main' or 'partial' for active state
+    * Lines 216-217: Added element references for both section headers
+    * Lines 804-839: Updated "Load Main Data" button handler:
+      - Stores in `mainLoadedData` variable (not `currentData` directly)
+      - Sets `currentData = mainLoadedData` and `currentDataType = 'main'`
+      - Calls `updateSectionHeaderStates()` to update visual indicators
+    * Lines 841-876: Updated "Load Partial Data" button handler:
+      - Stores in `partialLoadedData` variable
+      - Sets `currentData = partialLoadedData` and `currentDataType = 'partial'`
+      - Calls `updateSectionHeaderStates()` to update visual indicators
+    * Lines 1147-1178: Created `updateSectionHeaderStates()` helper function:
+      - Manages active/disabled classes on both headers
+      - Adds 'active' class to currently viewed data type
+      - Sets cursor to 'pointer' when data is loaded, 'default' when disabled
+      - Prevents clicks on headers without loaded data
+    * Lines 1180-1196: Added click handler for Main section header:
+      - Checks if `mainLoadedData` exists before allowing click
+      - Switches `currentData = mainLoadedData` and `currentDataType = 'main'`
+      - Refreshes preview with `displayEditableData(currentData)`
+      - Shows status message: "Switched to Main DS-160 Data view"
+    * Lines 1198-1214: Added click handler for Partial section header:
+      - Checks if `partialLoadedData` exists before allowing click
+      - Switches `currentData = partialLoadedData` and `currentDataType = 'partial'`
+      - Refreshes preview with `displayEditableData(currentData)`
+      - Shows status message: "Switched to Partial JSON view"
+  - **CSS Changes** (sidebar.css lines 1284-1318):
+    * Base styles for `.section-header-ds160`:
+      - `display: flex`, `align-items: center`, `gap: 8px`
+      - `transition: all 0.2s ease`, `user-select: none`
+      - `padding: 8px`, `border-radius: 6px`
+    * Hover state `.section-header-ds160:not(.disabled):hover`:
+      - Background: `rgba(255, 255, 255, 0.5)`
+      - Box shadow: `0 2px 4px rgba(0, 0, 0, 0.05)`
+      - Transform: `translateY(-1px)` for subtle lift effect
+    * Active state `.section-header-ds160.active`:
+      - Background: `rgba(255, 255, 255, 0.8)`
+      - Box shadow: `0 2px 6px rgba(0, 0, 0, 0.1)`
+      - Border: `1px solid rgba(74, 144, 226, 0.3)` for visual emphasis
+    * Disabled state `.section-header-ds160.disabled`:
+      - Opacity: `0.5` to indicate non-interactive state
+      - Cursor: `default !important` to prevent misleading pointer cursor
+  - **Visual Feedback**:
+    * Before loading data: Both headers disabled (opacity 0.5, no hover effect)
+    * After loading: Loaded headers become clickable with hover effect
+    * Active header: White background with blue border, clearly distinguished
+    * Status messages: "Switched to Main DS-160 Data view" or "Switched to Partial JSON view"
+  - **Architecture**:
+    * Two independent datasets maintained in memory simultaneously
+    * `currentData` pointer switches between `mainLoadedData` and `partialLoadedData`
+    * Visual state management via `updateSectionHeaderStates()` keeps UI synchronized
+    * No data loss when toggling - both datasets persist until explicitly cleared
+  - **Workflow Example**:
+    1. User loads complete DS-160 JSON → Main header becomes clickable and active
+    2. User loads partial section JSON → Partial header becomes clickable and active
+    3. User clicks Main header → Preview switches to show main data, Main header highlighted
+    4. User clicks Partial header → Preview switches to show partial data, Partial header highlighted
+    5. User can toggle back and forth without re-loading or losing data
+  - **Impact**: Users can now easily compare and verify both main and partial JSONs without needing to re-paste data or lose track of which dataset they're viewing
+- Files updated:
+  - /Users/hugo/tomitalaw_extension/sidebar/sidebar.html (lines 51, 86)
+  - /Users/hugo/tomitalaw_extension/sidebar/sidebar.js (lines 193-196, 216-217, 804-876, 1147-1214)
+  - /Users/hugo/tomitalaw_extension/sidebar/sidebar.css (lines 1284-1318)
+  - /Users/hugo/tomitalaw_extension/prompts_and_templates/form_prompts/DS160_FORMATTING_STANDARDS.md (version 1.27 → 1.28)
 
 ### Version 1.25 (October 13, 2025)
 - **EDIT DATA BUTTON FIX**: Fixed Edit Data button to clear opposite textarea when restoring data
