@@ -961,6 +961,17 @@ body {
   margin-top: 5px;
 }
 
+.postal-note {
+  display: block;
+  font-size: 13px;
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border-left: 3px solid #17a2b8;
+  padding: 8px 12px;
+  margin-top: 10px;
+  border-radius: 4px;
+}
+
 .postal-results {
   background: #f8f9fa;
   border-radius: 8px;
