@@ -1,5 +1,5 @@
 // US Visa Scheduling Auto-Filler Content Script with Dependent Management
-console.log('US Visa Scheduling Auto-Filler v1.0.9 loaded');
+console.log('US Visa Scheduling Auto-Filler v1.1.0 loaded - with auto date format conversion');
 
 class VisaSchedulingFiller {
   constructor() {
@@ -778,6 +778,30 @@ class VisaSchedulingFiller {
     });
   }
 
+  // Detect website language from URL
+  detectWebsiteLanguage() {
+    const url = window.location.href;
+    if (url.includes('/ja/')) return 'ja';
+    if (url.includes('/en-US/') || url.includes('/en-us/') || url.includes('/en/')) return 'en';
+    return document.documentElement.lang?.startsWith('ja') ? 'ja' : 'en';
+  }
+
+  // Convert ISO date to website-specific format
+  formatDateForWebsite(isoDate, language) {
+    if (!isoDate) return '';
+    const match = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!match) return isoDate; // Not ISO format, return as-is
+    const [_, year, month, day] = match;
+    return language === 'ja' ? `${year}/${month}/${day}` : `${month}/${day}/${year}`;
+  }
+
+  // Check if field is a date field
+  isDateField(identifier) {
+    return identifier.includes('date') ||
+           identifier.includes('birthdate') ||
+           identifier.includes('_datepicker_');
+  }
+
   // Core filling functions
   fillField(identifier, value) {
     if (!value || this.filledFields.has(identifier)) return;
@@ -804,7 +828,14 @@ class VisaSchedulingFiller {
         element.checked = value === true || value === 'yes' || value === 'Y';
         element.dispatchEvent(new Event('change', { bubbles: true }));
       } else {
-        element.value = value;
+        // Convert dates if needed
+        let finalValue = value;
+        if (this.isDateField(identifier) && typeof value === 'string') {
+          const language = this.detectWebsiteLanguage();
+          finalValue = this.formatDateForWebsite(value, language);
+          console.log(`[Date Conversion] ${identifier}: ${value} → ${finalValue} (${language})`);
+        }
+        element.value = finalValue;
         element.dispatchEvent(new Event('input', { bubbles: true }));
         element.dispatchEvent(new Event('change', { bubbles: true }));
       }
