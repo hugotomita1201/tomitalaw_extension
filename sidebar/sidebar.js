@@ -1010,22 +1010,22 @@ function setupDS160Handlers() {
   // Auto-Fill DS-160 Form button
   if (fillBtn) {
     fillBtn.addEventListener('click', async () => {
-      if (!currentData) {
-        showStatus('No data loaded', 'error');
+      if (!mainLoadedData) {
+        showStatus('No main data loaded', 'error');
         return;
       }
-      
+
       try {
         // Get current tab
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-        
+
         if (!tab.url || !tab.url.includes('ceac.state.gov')) {
           showStatus('Please navigate to the DS-160 form first', 'error');
           return;
         }
-        
-        // Store data in chrome storage
-        await chrome.storage.local.set({ ds160Data: currentData });
+
+        // Store main data in chrome storage
+        await chrome.storage.local.set({ ds160Data: mainLoadedData });
         
         // Try to inject content script
         try {
@@ -1070,19 +1070,14 @@ function setupDS160Handlers() {
   // Auto-Fill Partial Section button (for partial JSON field)
   const fillPartialBtn = document.getElementById('ds160-fill-partial');
 
-  if (fillPartialBtn && partialDataInput) {
+  if (fillPartialBtn) {
     fillPartialBtn.addEventListener('click', async () => {
-      const partialData = partialDataInput.value.trim();
-
-      if (!partialData) {
-        showStatus('Please paste partial JSON data', 'error');
+      if (!partialLoadedData) {
+        showStatus('No partial data loaded', 'error');
         return;
       }
 
       try {
-        const cleanedData = preprocessChatGPTJson(partialData);
-        const parsedData = JSON.parse(cleanedData);
-
         // Get current tab
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
@@ -1091,8 +1086,8 @@ function setupDS160Handlers() {
           return;
         }
 
-        // Store partial data in chrome storage temporarily
-        await chrome.storage.local.set({ ds160Data: parsedData });
+        // Store partial data in chrome storage
+        await chrome.storage.local.set({ ds160Data: partialLoadedData });
 
         // Try to inject content script
         try {
