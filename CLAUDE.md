@@ -262,7 +262,7 @@ Manages stored DS-160 application credentials with 30-day expiration tracking to
       "applicationId": "AA00EX69LD",  // 10 chars, UPPERCASE
       "surname": "YAGI",  // UPPERCASE, first 5 letters used for security question
       "yearOfBirth": "1968",  // YYYY format
-      "motherMotherName": "KAZUKO",  // UPPERCASE, maternal grandmother's given name
+      "motherMotherName": "HUGO",  // UPPERCASE, answer to "Favorite Childhood Friend" security question
       "notes": "E-2 Renewal",  // Optional
       "dateAdded": "2025-10-09T12:34:56.789Z",
       "lastAccessed": "2025-10-15T08:22:33.123Z"  // Updates when form filled
@@ -272,9 +272,10 @@ Manages stored DS-160 application credentials with 30-day expiration tracking to
 ```
 
 **Security Answer Hardcoding**:
+- Security question: "What is the name of your favorite childhood friend?"
 - Extension hardcodes security answer as "HUGO" (line 58 in ds160-retrieval-content.js)
-- `motherMotherName` field stored for reference but NOT used for form filling
-- Rationale: Simplified testing and consistent behavior
+- `motherMotherName` field stored for reference but NOT used for form filling (always uses "HUGO")
+- Rationale: Consistent answer across all DS-160 applications for office use
 
 **Expiration Calculation** (retrieval-service.js lines 148-181):
 ```javascript
@@ -490,14 +491,14 @@ The extension uses a two-tier prompt architecture with versioned detailed prompt
 
 **Single-Stage Workflow**:
 - Analyze source documents (DS-160 confirmations, passports, intake forms)
-- Extract credentials: applicationId, surname, yearOfBirth, motherMotherName, notes
+- Extract credentials: applicationId, surname, yearOfBirth, motherMotherName (field name for historical reasons), notes
 - Output JSON code block with `{"applications": [...]}`
 
 **Key Requirements**:
 - applicationId: Exactly 10 characters (e.g., "AA00EX69LD"), UPPERCASE
 - surname: UPPERCASE, first 5 letters used for security question
 - yearOfBirth: YYYY format (e.g., "1968")
-- motherMotherName: UPPERCASE, given name only (maternal grandmother)
+- motherMotherName: Always "HUGO" - answer to "Favorite Childhood Friend" security question
 - notes: Optional (visa type, case notes, family role)
 - Omit empty optional fields (no "notes": "" or null)
 - Family applications: Separate entry for each person with unique applicationId
@@ -506,7 +507,8 @@ The extension uses a two-tier prompt architecture with versioned detailed prompt
 - **30-day expiration tracking**: Applications expire if not accessed within 30 days
 - **Batch extraction**: Handle multiple unrelated applicants in single upload
 - **Family application support**: Principal + spouse + children with relationship notes
-- **Security answer**: Extension hardcodes "HUGO" (not motherMotherName) for form filling
+- **Security question**: "What is the name of your favorite childhood friend?" - Answer: "HUGO"
+- **Security answer hardcoded**: Extension always fills "HUGO" (field name `motherMotherName` is legacy)
 - **Character limits**: Strict validation (10-char applicationId, 50-char motherMotherName)
 
 #### Passport Return Prompt (ChatGPT Integration)
@@ -689,7 +691,7 @@ For E-2/E-1 visa applications, the extension auto-fills attorney information in 
       "applicationId": "AA00EX69LD",
       "surname": "YAGI",
       "yearOfBirth": "1968",
-      "motherMotherName": "KAZUKO",
+      "motherMotherName": "HUGO",
       "notes": "E-2 Renewal"
     }
   ]
@@ -698,7 +700,7 @@ For E-2/E-1 visa applications, the extension auto-fills attorney information in 
 - applicationId: Exactly 10 characters, UPPERCASE
 - surname: UPPERCASE (first 5 letters used for security question)
 - yearOfBirth: YYYY format
-- motherMotherName: UPPERCASE, given name only
+- motherMotherName: Always "HUGO" (answer to "Favorite Childhood Friend" security question)
 - notes: Optional (omit if empty, no "notes": "")
 - Storage key: 'ds160_retrieval_applications'
 
@@ -1275,7 +1277,9 @@ Created complete DS-160 Retrieval Helper module to manage stored DS-160 applicat
 6. **Family Support**: Handles principal + spouse + children applications with relationship notes
 
 **Technical Decisions**:
-- **Security Answer Hardcoded**: Extension uses "HUGO" as hardcoded security answer (not motherMotherName) for simplified testing
+- **Security Question**: "What is the name of your favorite childhood friend?"
+- **Security Answer Hardcoded**: Extension uses "HUGO" as hardcoded security answer for consistent office use
+- **Field Name**: `motherMotherName` is legacy field name (historical reasons, always contains "HUGO")
 - **Storage Key**: `'ds160_retrieval_applications'` - completely isolated from other modules
 - **Message Action**: `'fillRetrievalForm'` + `module: 'ds160-retrieval'` for content script routing
 - **Character Limits**: Strict validation (10-char applicationId, YYYY yearOfBirth, UPPERCASE formatting)
