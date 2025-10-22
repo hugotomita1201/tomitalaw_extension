@@ -202,6 +202,7 @@ function setupDS160Handlers() {
   const clearMainBtn = document.getElementById('ds160-clear-main');
   const clearPartialBtn = document.getElementById('ds160-clear-partial');
   const fillBtn = document.getElementById('ds160-fill');
+  const fillPartialBtn = document.getElementById('ds160-fill-partial');
   const editBtn = document.getElementById('ds160-edit');
   const saveChangesBtn = document.getElementById('ds160-save-changes');
   const copyJsonBtn = document.getElementById('ds160-copy-json');
@@ -1066,10 +1067,8 @@ function setupDS160Handlers() {
       }
     });
   }
-  
-  // Auto-Fill Partial Section button (for partial JSON field)
-  const fillPartialBtn = document.getElementById('ds160-fill-partial');
 
+  // Auto-Fill Partial Section button (for partial JSON field)
   if (fillPartialBtn) {
     fillPartialBtn.addEventListener('click', async () => {
       if (!partialLoadedData) {
