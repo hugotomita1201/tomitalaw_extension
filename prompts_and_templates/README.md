@@ -32,7 +32,9 @@ prompts_and_templates/
 - Document delivery address rules
 - Multi-site scheduling support
 
-### ds160_retrieval_prompt_v1.txt
+### ds160_retrieval_prompt_v1.txt (DEPRECATED)
+**Status:** ⚠️ Deprecated - Moved to `deprecated/ds160_retrieval_prompt_v1.txt`
+**Reason:** No longer used for DS-160 retrieval extraction workflow
 **Purpose:** ChatGPT prompt for DS-160 Retrieval Helper credential extraction
 **Features:**
 - 30-day DS-160 expiration tracking support
