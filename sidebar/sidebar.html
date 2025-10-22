@@ -128,6 +128,13 @@ This will fill ONLY the sections included in this JSON.' rows="8"></textarea>
                 <div class="flex items-center gap-2">
                   <span class="icon" id="ds160-data-icon"></span>
                   <h3 class="font-semibold">Extracted Data</h3>
+
+                  <!-- Dataset switcher tabs (only visible when both datasets loaded) -->
+                  <div id="ds160-data-switcher" class="data-switcher" style="display: none;">
+                    <button class="switcher-tab" id="switch-to-main">Main</button>
+                    <button class="switcher-tab" id="switch-to-partial">Partial</button>
+                  </div>
+
                   <span class="section-badge" id="ds160-data-type-badge" style="display: none;"></span>
                 </div>
                 <div class="flex gap-2">

@@ -1393,6 +1393,38 @@ body {
   color: #f57c00;
 }
 
+/* Dataset switcher tabs */
+.data-switcher {
+  display: flex;
+  gap: 4px;
+  background: #f0f0f0;
+  padding: 3px;
+  border-radius: 6px;
+  margin-left: 8px;
+}
+
+.switcher-tab {
+  padding: 4px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #666;
+  transition: all 0.2s;
+}
+
+.switcher-tab:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.switcher-tab.active {
+  background: white;
+  color: #4A90E2;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
 .section-separator-or {
   display: flex;
   align-items: center;

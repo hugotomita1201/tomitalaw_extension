@@ -215,7 +215,10 @@ function setupDS160Handlers() {
   const editableDataViewer = document.getElementById('ds160EditableData');
   const mainSectionHeader = document.getElementById('main-section-header');
   const partialSectionHeader = document.getElementById('partial-section-header');
-  
+  const dataSwitcher = document.getElementById('ds160-data-switcher');
+  const switchToMainBtn = document.getElementById('switch-to-main');
+  const switchToPartialBtn = document.getElementById('switch-to-partial');
+
   // Section configuration with icons and field labels
   // Ordered to match DS-160 form page sequence
   const sectionConfig = {
@@ -1198,6 +1201,17 @@ function setupDS160Handlers() {
     if (fillPartialBtn) {
       fillPartialBtn.style.display = partialLoadedData ? 'flex' : 'none';
     }
+
+    // Show switcher tabs only when BOTH datasets are loaded
+    if (dataSwitcher) {
+      dataSwitcher.style.display = (mainLoadedData && partialLoadedData) ? 'flex' : 'none';
+    }
+
+    // Update active tab styling
+    if (switchToMainBtn && switchToPartialBtn) {
+      switchToMainBtn.classList.toggle('active', currentDataType === 'main');
+      switchToPartialBtn.classList.toggle('active', currentDataType === 'partial');
+    }
   }
 
   // Click handler for Main section header - toggle to view main data
@@ -1229,6 +1243,34 @@ function setupDS160Handlers() {
       }
 
       // Switch to partial data view
+      currentData = partialLoadedData;
+      currentDataType = 'partial';
+      displayEditableData(currentData);
+      updateSectionHeaderStates();
+      updateButtonVisibility();
+      showStatus('Switched to Partial JSON view', 'info');
+    });
+  }
+
+  // Click handler for switcher tab - Switch to Main
+  if (switchToMainBtn) {
+    switchToMainBtn.addEventListener('click', () => {
+      if (!mainLoadedData) return;
+
+      currentData = mainLoadedData;
+      currentDataType = 'main';
+      displayEditableData(currentData);
+      updateSectionHeaderStates();
+      updateButtonVisibility();
+      showStatus('Switched to Main DS-160 Data view', 'info');
+    });
+  }
+
+  // Click handler for switcher tab - Switch to Partial
+  if (switchToPartialBtn) {
+    switchToPartialBtn.addEventListener('click', () => {
+      if (!partialLoadedData) return;
+
       currentData = partialLoadedData;
       currentDataType = 'partial';
       displayEditableData(currentData);
