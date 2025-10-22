@@ -1,5 +1,5 @@
 // US Visa Scheduling Auto-Filler Content Script with Dependent Management
-console.log('US Visa Scheduling Auto-Filler v1.1.0 loaded - with auto date format conversion');
+console.log('US Visa Scheduling Auto-Filler v1.1.1 loaded - with auto date format conversion');
 
 class VisaSchedulingFiller {
   constructor() {
@@ -781,8 +781,11 @@ class VisaSchedulingFiller {
   // Detect website language from URL
   detectWebsiteLanguage() {
     const url = window.location.href;
-    if (url.includes('/ja/')) return 'ja';
-    if (url.includes('/en-US/') || url.includes('/en-us/') || url.includes('/en/')) return 'en';
+    // Check for Japanese: /ja/, /ja-JP/, /ja-JA/, etc.
+    if (url.includes('/ja/') || url.includes('/ja-')) return 'ja';
+    // Check for English: /en-US/, /en-us/, /en/, etc.
+    if (url.includes('/en-US/') || url.includes('/en-us/') || url.includes('/en/') || url.includes('/en-')) return 'en';
+    // Fallback to document language attribute
     return document.documentElement.lang?.startsWith('ja') ? 'ja' : 'en';
   }
 
