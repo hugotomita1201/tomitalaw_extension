@@ -1134,16 +1134,18 @@ function setupDS160Handlers() {
       // Restore data to the correct textarea based on currentDataType
       if (currentData && currentDataType === 'main') {
         dataInput.value = JSON.stringify(currentData, null, 2);
-        // Clear the partial field since we're editing main data
-        if (partialDataInput) {
-          partialDataInput.value = '';
+        // Restore the partial field if it exists in memory
+        if (partialDataInput && partialLoadedData) {
+          partialDataInput.value = JSON.stringify(partialLoadedData, null, 2);
         }
       } else if (currentData && currentDataType === 'partial') {
         if (partialDataInput) {
           partialDataInput.value = JSON.stringify(currentData, null, 2);
         }
-        // Clear the main field since we're editing partial data
-        dataInput.value = '';
+        // Restore the main field if it exists in memory
+        if (mainLoadedData) {
+          dataInput.value = JSON.stringify(mainLoadedData, null, 2);
+        }
       }
 
       dataSection.style.display = 'none';
