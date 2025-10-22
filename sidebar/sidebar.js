@@ -823,6 +823,7 @@ function setupDS160Handlers() {
 
         // Update header visual state
         updateSectionHeaderStates();
+        updateButtonVisibility();
 
         // Save the data for next time
         chrome.storage.local.set({
@@ -860,6 +861,7 @@ function setupDS160Handlers() {
 
         // Update header visual state
         updateSectionHeaderStates();
+        updateButtonVisibility();
 
         // Save the data for next time
         chrome.storage.local.set({
@@ -968,6 +970,7 @@ function setupDS160Handlers() {
   if (clearMainBtn) {
     clearMainBtn.addEventListener('click', () => {
       dataInput.value = '';
+      mainLoadedData = null; // Clear the stored main data
       if (currentDataType === 'main') {
         currentData = null;
         currentDataType = null;
@@ -975,6 +978,8 @@ function setupDS160Handlers() {
         dataInputSection.style.display = 'block';
       }
       chrome.storage.local.remove(['lastDS160CoreData', 'lastDS160Data']);
+      updateSectionHeaderStates();
+      updateButtonVisibility();
       showStatus('Main data cleared', 'info');
     });
   }
@@ -985,6 +990,7 @@ function setupDS160Handlers() {
       if (partialDataInput) {
         partialDataInput.value = '';
       }
+      partialLoadedData = null; // Clear the stored partial data
       if (currentDataType === 'partial') {
         currentData = null;
         currentDataType = null;
@@ -992,6 +998,8 @@ function setupDS160Handlers() {
         dataInputSection.style.display = 'block';
       }
       chrome.storage.local.remove(['lastDS160EvisaData']);
+      updateSectionHeaderStates();
+      updateButtonVisibility();
       showStatus('Partial data cleared', 'info');
     });
   }
@@ -1177,6 +1185,19 @@ function setupDS160Handlers() {
     }
   }
 
+  // Helper function to update button visibility based on loaded data
+  function updateButtonVisibility() {
+    // Show main button only if main data is loaded
+    if (fillBtn) {
+      fillBtn.style.display = mainLoadedData ? 'flex' : 'none';
+    }
+
+    // Show partial button only if partial data is loaded
+    if (fillPartialBtn) {
+      fillPartialBtn.style.display = partialLoadedData ? 'flex' : 'none';
+    }
+  }
+
   // Click handler for Main section header - toggle to view main data
   if (mainSectionHeader) {
     mainSectionHeader.addEventListener('click', () => {
@@ -1191,6 +1212,7 @@ function setupDS160Handlers() {
       currentDataType = 'main';
       displayEditableData(currentData);
       updateSectionHeaderStates();
+      updateButtonVisibility();
       showStatus('Switched to Main DS-160 Data view', 'info');
     });
   }
@@ -1209,6 +1231,7 @@ function setupDS160Handlers() {
       currentDataType = 'partial';
       displayEditableData(currentData);
       updateSectionHeaderStates();
+      updateButtonVisibility();
       showStatus('Switched to Partial JSON view', 'info');
     });
   }
