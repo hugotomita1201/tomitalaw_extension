@@ -6,9 +6,10 @@ export class PostalCodeService {
   constructor() {
     // ZipCloud API for regular postal codes
     this.zipCloudUrl = 'https://zipcloud.ibsnet.co.jp/api/search';
-    
-    // Local business codes cache
+
+    // Local database caches
     this.businessCodes = null;
+    this.romajiCodes = null;
   }
 
   /**
@@ -119,16 +120,120 @@ export class PostalCodeService {
   }
 
   /**
+   * Load romaji codes database
+   * @returns {Object} Romaji codes indexed by postal code
+   */
+  async loadRomajiCodes() {
+    if (!this.romajiCodes) {
+      try {
+        const response = await fetch(chrome.runtime.getURL('data/postal/romaji-codes.json'));
+        this.romajiCodes = await response.json();
+        console.log(`Loaded ${Object.keys(this.romajiCodes).length} romaji postal codes`);
+      } catch (error) {
+        console.error('Failed to load romaji codes:', error);
+        this.romajiCodes = {};
+      }
+    }
+    return this.romajiCodes;
+  }
+
+  /**
+   * Lookup postal code in local romaji codes database
+   * @param {string} postalCode - Normalized 7-digit postal code
+   * @returns {Object} Romaji address data or not found
+   */
+  async lookupRomajiCode(postalCode) {
+    const codes = await this.loadRomajiCodes();
+    const romajiData = codes[postalCode];
+
+    if (romajiData) {
+      return {
+        success: true,
+        source: 'JapanPostRomaji',
+        data: {
+          fullAddress: `${romajiData.prefecture} ${romajiData.city} ${romajiData.town}`.trim(),
+          prefecture: romajiData.prefecture,
+          city: romajiData.city,
+          street: romajiData.town,
+          postalCode: this.formatPostalCode(postalCode),
+          addressLine1: `${romajiData.prefecture} ${romajiData.city}`.trim(),
+          addressLine2: romajiData.town,
+          isRomaji: true,
+          raw: romajiData
+        }
+      };
+    }
+
+    return {
+      success: false,
+      notFound: true
+    };
+  }
+
+  /**
+   * Dual lookup - fetch both Japanese and Romaji addresses
+   * @param {string} postalCode - Japanese postal code
+   * @returns {Object} Combined result with both Japanese and Romaji addresses
+   */
+  async lookupDual(postalCode) {
+    try {
+      // Normalize postal code
+      const normalized = this.normalizePostalCode(postalCode);
+      if (!normalized) {
+        return {
+          success: false,
+          error: 'Invalid postal code format. Please enter 7 digits.'
+        };
+      }
+
+      // Parallel fetch from both sources
+      console.log('Fetching dual format addresses for:', normalized);
+      const [romajiResult, japaneseResult] = await Promise.all([
+        this.lookupRomajiCode(normalized),
+        this.lookup(normalized)
+      ]);
+
+      // Check if at least one source succeeded
+      if (!romajiResult.success && !japaneseResult.success) {
+        return {
+          success: false,
+          error: `Postal code ${this.formatPostalCode(normalized)} not found. Please enter the address manually.`,
+          notFound: true
+        };
+      }
+
+      // Return combined result
+      return {
+        success: true,
+        postalCode: this.formatPostalCode(normalized),
+        japanese: japaneseResult.success ? japaneseResult.data : null,
+        romaji: romajiResult.success ? romajiResult.data : null,
+        sources: {
+          japanese: japaneseResult.success ? japaneseResult.source : 'Not found',
+          romaji: romajiResult.success ? romajiResult.source : 'Not found'
+        }
+      };
+
+    } catch (error) {
+      console.error('Dual postal code lookup error:', error);
+      return {
+        success: false,
+        error: 'Failed to lookup postal code. Please try again or enter the address manually.'
+      };
+    }
+  }
+
+  /**
    * Normalize postal code to 7 digits
    * @param {string} input - Input postal code
    * @returns {string|null} Normalized 7-digit code
    */
   normalizePostalCode(input) {
     if (!input) return null;
-    
+
     // Remove all non-numeric characters
     const cleaned = input.toString().replace(/[^0-9]/g, '');
-    
+
     // Must be exactly 7 digits
     return cleaned.length === 7 ? cleaned : null;
   }

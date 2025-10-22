@@ -1656,10 +1656,10 @@ async function setupPostalHandlers() {
       hidePostalResults();
       
       try {
-        const result = await postalService.lookup(postalCode);
-        
+        const result = await postalService.lookupDual(postalCode);
+
         if (result.success) {
-          displayPostalResults(result.data);
+          displayPostalResults(result);
           showStatus('Address found successfully', 'success');
         } else {
           showPostalError(result.error);
@@ -1706,15 +1706,44 @@ async function setupPostalHandlers() {
   });
   
   // Helper function to display results
-  function displayPostalResults(data) {
-    document.getElementById('full-address').textContent = data.fullAddress;
-    document.getElementById('prefecture').textContent = data.prefecture;
-    document.getElementById('city').textContent = data.city;
-    document.getElementById('street').textContent = data.street;
-    document.getElementById('formatted-postal').textContent = data.postalCode;
-    document.getElementById('address-line1').textContent = data.addressLine1;
-    document.getElementById('address-line2').textContent = data.addressLine2;
-    
+  function displayPostalResults(result) {
+    // Postal code (shared)
+    document.getElementById('formatted-postal').textContent = result.postalCode;
+
+    // Japanese column
+    if (result.japanese) {
+      document.getElementById('full-address-ja').textContent = result.japanese.fullAddress || 'N/A';
+      document.getElementById('prefecture-ja').textContent = result.japanese.prefecture || 'N/A';
+      document.getElementById('city-ja').textContent = result.japanese.city || 'N/A';
+      document.getElementById('street-ja').textContent = result.japanese.street || 'N/A';
+      document.getElementById('address-line1-ja').textContent = result.japanese.addressLine1 || 'N/A';
+      document.getElementById('address-line2-ja').textContent = result.japanese.addressLine2 || 'N/A';
+    } else {
+      document.getElementById('full-address-ja').textContent = 'Not found';
+      document.getElementById('prefecture-ja').textContent = 'Not found';
+      document.getElementById('city-ja').textContent = 'Not found';
+      document.getElementById('street-ja').textContent = 'Not found';
+      document.getElementById('address-line1-ja').textContent = 'Not found';
+      document.getElementById('address-line2-ja').textContent = 'Not found';
+    }
+
+    // Romaji column
+    if (result.romaji) {
+      document.getElementById('full-address-romaji').textContent = result.romaji.fullAddress || 'N/A';
+      document.getElementById('prefecture-romaji').textContent = result.romaji.prefecture || 'N/A';
+      document.getElementById('city-romaji').textContent = result.romaji.city || 'N/A';
+      document.getElementById('street-romaji').textContent = result.romaji.street || 'N/A';
+      document.getElementById('address-line1-romaji').textContent = result.romaji.addressLine1 || 'N/A';
+      document.getElementById('address-line2-romaji').textContent = result.romaji.addressLine2 || 'N/A';
+    } else {
+      document.getElementById('full-address-romaji').textContent = 'Not found';
+      document.getElementById('prefecture-romaji').textContent = 'Not found';
+      document.getElementById('city-romaji').textContent = 'Not found';
+      document.getElementById('street-romaji').textContent = 'Not found';
+      document.getElementById('address-line1-romaji').textContent = 'Not found';
+      document.getElementById('address-line2-romaji').textContent = 'Not found';
+    }
+
     resultsDiv.classList.remove('hidden');
   }
   

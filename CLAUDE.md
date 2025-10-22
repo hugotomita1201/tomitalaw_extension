@@ -943,6 +943,77 @@ const radioYes = document.getElementById('ctl00_SiteContentPlaceHolder_FormView1
 console.log('Radio Yes checked:', radioYes?.checked);
 ```
 
+### Character Limit Detection & Protection
+
+#### Automatic Protection (Built into Extension)
+**Status**: ✅ **ACTIVE** - The extension automatically protects against character limit crashes
+
+**How it works**:
+1. Before filling any text field, extension checks `maxlength` attribute
+2. If value exceeds limit → field gets red border + warning placeholder
+3. Field is left empty (not filled)
+4. User sees exactly which fields need shorter values
+
+**Visual Indicator**:
+```
+Normal field:  [New York_________________] ← Filled normally
+Over-limit:    [⚠️ TOO LONG: 45 chars (max 40)] ← Red border, empty, shows error
+               ^^^^^^^^^ pink background ^^^^^^^^^
+```
+
+**Console Output**:
+```
+⚠️ SKIPPED ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_STREET_LN1:
+   Value too long (45 > 40)
+   Value: "123 Very Long Street Name That Exceeds Limit"
+```
+
+**What happens**:
+- ✅ Site won't crash (over-limit fields skipped)
+- ✅ Red border highlights problem fields
+- ✅ Placeholder shows exact character counts
+- ✅ Console logs details for debugging
+- ❌ No data loss from silent truncation
+
+#### Character Limit Detector Script (Development Tool)
+**Purpose**: Discover character limits for all DS-160 form fields
+
+**Usage**:
+1. Navigate to any DS-160 form page
+2. Open browser console (F12)
+3. Copy and paste `scripts/character_limit_detector.js` into console
+4. Press Enter
+
+**Output**:
+- Console displays summary of all character limits
+- Highlights critical fields (20 characters or less)
+- Automatically copies complete JSON to clipboard
+- Shows fields currently over their limits
+
+**Key Features**:
+- Extracts `maxlength` attributes from all text inputs and textareas
+- Groups fields by limit (e.g., all 20-char fields, all 40-char fields)
+- Detects current field values that exceed limits
+- Skips help/tooltip elements automatically
+
+**Example Output**:
+```
+⚠️ CRITICAL: Fields with 20 or fewer characters:
+================================================
+20 chars: City of Birth ⚠️ OVER LIMIT!
+  ID: tbxAPP_POB_CITY
+  Current: 25/20
+
+20 chars: State/Province of Birth
+  ID: tbxAPP_POB_STATE
+  Current: 15/20
+```
+
+**Use Cases**:
+- Update ChatGPT prompts with field length constraints
+- Document DS-160 field specifications
+- Identify problem fields before testing
+
 ## Development Insights (Latest)
 
 ### Field Mapping Conflict Prevention

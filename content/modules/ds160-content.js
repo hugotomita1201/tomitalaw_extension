@@ -413,6 +413,34 @@ class TwoPassFiller {
     return fields;
   }
 
+  // Safely fill text field with character limit checking
+  fillFieldSafely(element, value, fieldId) {
+    if (!element || !value) return false;
+
+    const maxLength = element.getAttribute('maxlength');
+
+    // Check if value exceeds character limit
+    if (maxLength && value.length > parseInt(maxLength)) {
+      // Visual warning - RED BORDER + PLACEHOLDER
+      element.style.border = '3px solid #ff0000';
+      element.style.backgroundColor = '#ffe6e6';
+      element.placeholder = `⚠️ TOO LONG: ${value.length} chars (max ${maxLength})`;
+
+      // Console warning for debugging
+      console.warn(`⚠️ SKIPPED ${fieldId}: Value too long (${value.length} > ${maxLength})`);
+      console.warn(`   Value: "${value}"`);
+
+      // Don't fill the field
+      return false;
+    }
+
+    // Safe to fill
+    element.value = value;
+    element.dispatchEvent(new Event('change', { bubbles: true }));
+
+    return true;
+  }
+
   // Fill a field with matching data
   fillField(field, data) {
     const fieldId = field.id;
@@ -465,18 +493,18 @@ class TwoPassFiller {
         if (value === 'N/A' || value === 'n/a' || value === 'N/a') {
           value = '';  // Replace N/A with empty string
         }
-        
+
         // Don't log every field operation
-        
-        // Simple filling - just set the value
-        element.value = value;
-        
-        // Trigger change event for form validation
-        element.dispatchEvent(new Event('change', { bubbles: true }));
-        
-        // Add simple retry mechanism for fields that might get cleared
-        // Retry up to 3 times with 4-second delays (like Lollylaw)
-        this.scheduleRetry(element, value, fieldId, 1);
+
+        // Safe filling with character limit checking
+        const filled = this.fillFieldSafely(element, value, fieldId);
+
+        // Only schedule retry if field was successfully filled
+        if (filled) {
+          // Add simple retry mechanism for fields that might get cleared
+          // Retry up to 3 times with 4-second delays (like Lollylaw)
+          this.scheduleRetry(element, value, fieldId, 1);
+        }
       } else if (field.type === 'select' || field.type === 'select-one') {
         // Simple dropdown filling
         const options = Array.from(element.options);
@@ -632,16 +660,20 @@ class TwoPassFiller {
   scheduleRetry(element, expectedValue, fieldId, attemptNumber) {
     // Max 3 attempts with 4-second delays
     if (attemptNumber > 3) return;
-    
+
     setTimeout(() => {
       // Check if the value was cleared or changed
       if (element.value !== expectedValue) {
         console.log(`Retry ${attemptNumber}/3 for field ${fieldId}`);
-        element.value = expectedValue;
-        element.dispatchEvent(new Event('change', { bubbles: true }));
-        
-        // Schedule next retry if needed
-        this.scheduleRetry(element, expectedValue, fieldId, attemptNumber + 1);
+
+        // Use safe filling that respects character limits
+        const filled = this.fillFieldSafely(element, expectedValue, fieldId);
+
+        // Only schedule next retry if field was successfully filled
+        // (If over-limit, fillFieldSafely returns false and shows red border)
+        if (filled) {
+          this.scheduleRetry(element, expectedValue, fieldId, attemptNumber + 1);
+        }
       }
     }, 4000); // 4-second delay like Lollylaw
   }

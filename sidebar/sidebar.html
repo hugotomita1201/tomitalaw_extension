@@ -444,60 +444,121 @@ This will fill ONLY the sections included in this JSON.' rows="8"></textarea>
 
         <div id="postal-results" class="postal-results hidden">
           <h3>Address Information:</h3>
-          
-          <div class="address-field">
-            <label>Full Address:</label>
-            <div class="field-value">
-              <span id="full-address"></span>
-              <button class="copy-btn" data-copy="full-address" title="Copy to clipboard">📋</button>
+
+          <div class="postal-dual-container">
+            <!-- Japanese Column -->
+            <div class="postal-column">
+              <h4 class="column-header">日本語 (Japanese)</h4>
+
+              <div class="address-field">
+                <label>Full Address:</label>
+                <div class="field-value">
+                  <span id="full-address-ja"></span>
+                  <button class="copy-btn" data-copy="full-address-ja" title="Copy to clipboard">📋</button>
+                </div>
+              </div>
+
+              <div class="address-field">
+                <label>Prefecture (State):</label>
+                <div class="field-value">
+                  <span id="prefecture-ja"></span>
+                  <button class="copy-btn" data-copy="prefecture-ja" title="Copy to clipboard">📋</button>
+                </div>
+              </div>
+
+              <div class="address-field">
+                <label>City/Ward:</label>
+                <div class="field-value">
+                  <span id="city-ja"></span>
+                  <button class="copy-btn" data-copy="city-ja" title="Copy to clipboard">📋</button>
+                </div>
+              </div>
+
+              <div class="address-field">
+                <label>Area/Street:</label>
+                <div class="field-value">
+                  <span id="street-ja"></span>
+                  <button class="copy-btn" data-copy="street-ja" title="Copy to clipboard">📋</button>
+                </div>
+              </div>
+
+              <div class="address-field">
+                <label>Address Line 1:</label>
+                <div class="field-value">
+                  <span id="address-line1-ja"></span>
+                  <button class="copy-btn" data-copy="address-line1-ja" title="Copy to clipboard">📋</button>
+                </div>
+              </div>
+
+              <div class="address-field">
+                <label>Address Line 2:</label>
+                <div class="field-value">
+                  <span id="address-line2-ja"></span>
+                  <button class="copy-btn" data-copy="address-line2-ja" title="Copy to clipboard">📋</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Romaji Column -->
+            <div class="postal-column">
+              <h4 class="column-header">Romaji (Roman Alphabet)</h4>
+
+              <div class="address-field">
+                <label>Full Address:</label>
+                <div class="field-value">
+                  <span id="full-address-romaji"></span>
+                  <button class="copy-btn" data-copy="full-address-romaji" title="Copy to clipboard">📋</button>
+                </div>
+              </div>
+
+              <div class="address-field">
+                <label>Prefecture (State):</label>
+                <div class="field-value">
+                  <span id="prefecture-romaji"></span>
+                  <button class="copy-btn" data-copy="prefecture-romaji" title="Copy to clipboard">📋</button>
+                </div>
+              </div>
+
+              <div class="address-field">
+                <label>City/Ward:</label>
+                <div class="field-value">
+                  <span id="city-romaji"></span>
+                  <button class="copy-btn" data-copy="city-romaji" title="Copy to clipboard">📋</button>
+                </div>
+              </div>
+
+              <div class="address-field">
+                <label>Area/Street:</label>
+                <div class="field-value">
+                  <span id="street-romaji"></span>
+                  <button class="copy-btn" data-copy="street-romaji" title="Copy to clipboard">📋</button>
+                </div>
+              </div>
+
+              <div class="address-field">
+                <label>Address Line 1:</label>
+                <div class="field-value">
+                  <span id="address-line1-romaji"></span>
+                  <button class="copy-btn" data-copy="address-line1-romaji" title="Copy to clipboard">📋</button>
+                </div>
+              </div>
+
+              <div class="address-field">
+                <label>Address Line 2:</label>
+                <div class="field-value">
+                  <span id="address-line2-romaji"></span>
+                  <button class="copy-btn" data-copy="address-line2-romaji" title="Copy to clipboard">📋</button>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="address-field">
-            <label>Prefecture (State):</label>
-            <div class="field-value">
-              <span id="prefecture"></span>
-              <button class="copy-btn" data-copy="prefecture" title="Copy to clipboard">📋</button>
-            </div>
-          </div>
-
-          <div class="address-field">
-            <label>City/Ward:</label>
-            <div class="field-value">
-              <span id="city"></span>
-              <button class="copy-btn" data-copy="city" title="Copy to clipboard">📋</button>
-            </div>
-          </div>
-
-          <div class="address-field">
-            <label>Area/Street:</label>
-            <div class="field-value">
-              <span id="street"></span>
-              <button class="copy-btn" data-copy="street" title="Copy to clipboard">📋</button>
-            </div>
-          </div>
-
-          <div class="address-field">
+          <!-- Postal Code (shared) -->
+          <div class="address-field postal-code-shared">
             <label>Postal Code:</label>
             <div class="field-value">
               <span id="formatted-postal"></span>
               <button class="copy-btn" data-copy="formatted-postal" title="Copy to clipboard">📋</button>
-            </div>
-          </div>
-
-          <div class="address-field">
-            <label>Address Line 1:</label>
-            <div class="field-value">
-              <span id="address-line1"></span>
-              <button class="copy-btn" data-copy="address-line1" title="Copy to clipboard">📋</button>
-            </div>
-          </div>
-
-          <div class="address-field">
-            <label>Address Line 2:</label>
-            <div class="field-value">
-              <span id="address-line2"></span>
-              <button class="copy-btn" data-copy="address-line2" title="Copy to clipboard">📋</button>
             </div>
           </div>
         </div>

@@ -1,0 +1,38 @@
+{
+  "personal": {
+    "surname": "SMITH",
+    "givenName": "JOHN",
+    "cityOfBirth": "San Francisco",
+    "stateOfBirth": "CA"
+  },
+  "contact": {
+    "homeAddress": {
+      "street1": "123 Very Long Street Name That Definitely Exceeds The 40 Character Limit",
+      "street2": "APT 456",
+      "city": "Los Angeles Metropolitan Area",
+      "state": "California",
+      "postalCode": "90001",
+      "country": "USA"
+    }
+  },
+  "_test_notes": {
+    "purpose": "Test character limit protection in DS-160 extension",
+    "expected_behavior": {
+      "cityOfBirth": "SHOULD FILL - 'San Francisco' is 13 chars (under 20 limit)",
+      "street1": "SHOULD BE SKIPPED - 73 chars exceeds 40 char limit - RED BORDER",
+      "street2": "SHOULD FILL - 'APT 456' is 7 chars (under limit)",
+      "city": "SHOULD BE SKIPPED - 'Los Angeles Metropolitan Area' is 30 chars (likely exceeds 20 limit) - RED BORDER"
+    },
+    "visual_indicators": {
+      "skipped_fields": "Red border (3px solid red) + pink background (#ffe6e6)",
+      "placeholder_text": "⚠️ TOO LONG: X chars (max Y)",
+      "console_warnings": "Logs field ID, value length, and actual value"
+    },
+    "common_limits": {
+      "city_fields": "20 characters",
+      "address_line_1": "40 characters",
+      "address_line_2": "40 characters",
+      "state_province": "20 characters"
+    }
+  }
+}

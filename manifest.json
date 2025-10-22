@@ -71,7 +71,8 @@
     {
       "resources": [
         "data/photo/requirements.json",
-        "data/postal/business-codes.json"
+        "data/postal/business-codes.json",
+        "data/postal/romaji-codes.json"
       ],
       "matches": ["<all_urls>"]
     },
