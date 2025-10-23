@@ -60,15 +60,15 @@ async function setupRetrievalHandlers() {
           </div>
         </div>
         <div class="app-details">
-          📅 Year: ${app.yearOfBirth} | 👵 Mother's Mother: ${app.motherMotherName}
+          📅 Year: ${app.yearOfBirth} | Last accessed: ${app.expirationStatus.lastAccessedDate} (${app.expirationStatus.daysSinceAccess} days ago)
         </div>
         ${app.notes ? `<div class="app-notes">📝 ${app.notes}</div>` : ''}
-        <div class="app-details text-xs">
-          Last accessed: ${app.expirationStatus.lastAccessedDate} (${app.expirationStatus.daysSinceAccess} days ago)
-        </div>
         <div class="app-actions">
           <button class="btn btn-sm btn-primary auto-fill-btn" data-id="${app.id}">
             🚀 Auto-Fill
+          </button>
+          <button class="btn btn-sm btn-outline update-date-btn" data-id="${app.id}">
+            🔄 Update Date
           </button>
           <button class="btn btn-sm btn-outline edit-btn" data-id="${app.id}">
             ✏️ Edit
@@ -91,6 +91,16 @@ async function setupRetrievalHandlers() {
       btn.addEventListener('click', async (e) => {
         const id = e.target.dataset.id;
         await handleAutoFill(id);
+      });
+    });
+
+    // Update Date buttons
+    document.querySelectorAll('.update-date-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const id = e.target.dataset.id;
+        await window.ds160RetrievalService.updateLastAccessed(id);
+        showStatus('✅ Date updated - 30 days refreshed', 'success');
+        renderApplicationsList();
       });
     });
 
@@ -122,10 +132,6 @@ async function setupRetrievalHandlers() {
     }
 
     console.log('[RETRIEVAL-HANDLER] Application found:', app);
-
-    // Update last accessed timestamp
-    await window.ds160RetrievalService.updateLastAccessed(id);
-    console.log('[RETRIEVAL-HANDLER] Last accessed timestamp updated');
 
     // Send message to content script
     console.log('[RETRIEVAL-HANDLER] Querying active tab...');
@@ -466,15 +472,15 @@ async function setupRetrievalHandlers() {
           </div>
         </div>
         <div class="app-details">
-          📅 Year: ${app.yearOfBirth} | 👵 Mother's Mother: ${app.motherMotherName}
+          📅 Year: ${app.yearOfBirth} | Last accessed: ${app.expirationStatus.lastAccessedDate} (${app.expirationStatus.daysSinceAccess} days ago)
         </div>
         ${app.notes ? `<div class="app-notes">📝 ${app.notes}</div>` : ''}
-        <div class="app-details text-xs">
-          Last accessed: ${app.expirationStatus.lastAccessedDate} (${app.expirationStatus.daysSinceAccess} days ago)
-        </div>
         <div class="app-actions">
           <button class="btn btn-sm btn-primary auto-fill-btn" data-id="${app.id}">
             🚀 Auto-Fill
+          </button>
+          <button class="btn btn-sm btn-outline update-date-btn" data-id="${app.id}">
+            🔄 Update Date
           </button>
           <button class="btn btn-sm btn-outline edit-btn" data-id="${app.id}">
             ✏️ Edit
