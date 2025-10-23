@@ -60,7 +60,7 @@ async function setupRetrievalHandlers() {
           </div>
         </div>
         <div class="app-details">
-          📅 Year: ${app.yearOfBirth} | Last accessed: ${app.expirationStatus.lastAccessedDate} (${app.expirationStatus.daysSinceAccess} days ago)
+          📅 Year: ${app.yearOfBirth} | Last updated: ${app.expirationStatus.lastAccessedDate} (${app.expirationStatus.daysSinceAccess} days ago)
         </div>
         ${app.notes ? `<div class="app-notes">📝 ${app.notes}</div>` : ''}
         <div class="app-actions">
@@ -472,7 +472,7 @@ async function setupRetrievalHandlers() {
           </div>
         </div>
         <div class="app-details">
-          📅 Year: ${app.yearOfBirth} | Last accessed: ${app.expirationStatus.lastAccessedDate} (${app.expirationStatus.daysSinceAccess} days ago)
+          📅 Year: ${app.yearOfBirth} | Last updated: ${app.expirationStatus.lastAccessedDate} (${app.expirationStatus.daysSinceAccess} days ago)
         </div>
         ${app.notes ? `<div class="app-notes">📝 ${app.notes}</div>` : ''}
         <div class="app-actions">

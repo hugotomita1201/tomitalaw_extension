@@ -68,8 +68,8 @@ class DS160RetrievalService {
     const newApp = {
       ...application,
       id: this.generateId(),
-      dateAdded: new Date().toISOString(),
-      lastAccessed: null, // Will be set when form is filled
+      dateAdded: application.dateAdded || new Date().toISOString(),
+      lastAccessed: application.lastAccessed || null,
       notes: application.notes || ''
     };
 
