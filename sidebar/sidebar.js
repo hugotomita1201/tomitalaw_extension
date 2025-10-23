@@ -1011,8 +1011,8 @@ function setupDS160Handlers() {
   // Auto-Fill DS-160 Form button
   if (fillBtn) {
     fillBtn.addEventListener('click', async () => {
-      if (!mainLoadedData) {
-        showStatus('No main data loaded', 'error');
+      if (!currentData) {
+        showStatus('No data loaded', 'error');
         return;
       }
 
@@ -1025,8 +1025,8 @@ function setupDS160Handlers() {
           return;
         }
 
-        // Store main data in chrome storage
-        await chrome.storage.local.set({ ds160Data: mainLoadedData });
+        // Store data in chrome storage
+        await chrome.storage.local.set({ ds160Data: currentData });
         
         // Try to inject content script
         try {
@@ -1069,14 +1069,19 @@ function setupDS160Handlers() {
   }
 
   // Auto-Fill Partial Section button (for partial JSON field)
-  if (fillPartialBtn) {
+  if (fillPartialBtn && partialDataInput) {
     fillPartialBtn.addEventListener('click', async () => {
-      if (!partialLoadedData) {
-        showStatus('No partial data loaded', 'error');
+      const partialData = partialDataInput.value.trim();
+
+      if (!partialData) {
+        showStatus('Please paste partial JSON data', 'error');
         return;
       }
 
       try {
+        const cleanedData = preprocessChatGPTJson(partialData);
+        const parsedData = JSON.parse(cleanedData);
+
         // Get current tab
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
@@ -1085,8 +1090,8 @@ function setupDS160Handlers() {
           return;
         }
 
-        // Store partial data in chrome storage
-        await chrome.storage.local.set({ ds160Data: partialLoadedData });
+        // Store partial data in chrome storage temporarily
+        await chrome.storage.local.set({ ds160Data: parsedData });
 
         // Try to inject content script
         try {
