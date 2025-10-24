@@ -953,18 +953,33 @@ function setupDS160Handlers() {
   // Save Changes button
   if (saveChangesBtn) {
     saveChangesBtn.addEventListener('click', () => {
-      // Save the modified data
-      chrome.storage.local.set({ 
-        ds160Data: currentData,
-        lastDS160Data: JSON.stringify(currentData, null, 2)
-      });
-      
+      // Save the modified data to the correct storage field based on data type
+      if (currentDataType === 'main') {
+        chrome.storage.local.set({
+          ds160Data: currentData,
+          lastDS160CoreData: JSON.stringify(currentData, null, 2),
+          lastDS160DataType: 'main'
+        });
+      } else if (currentDataType === 'partial') {
+        chrome.storage.local.set({
+          ds160Data: currentData,
+          lastDS160EvisaData: JSON.stringify(currentData, null, 2),
+          lastDS160DataType: 'partial'
+        });
+      } else {
+        // Fallback if data type is unknown (shouldn't happen)
+        chrome.storage.local.set({
+          ds160Data: currentData,
+          lastDS160Data: JSON.stringify(currentData, null, 2)
+        });
+      }
+
       // Clear modified indicators
       modifiedFields.clear();
       document.querySelectorAll('.field-value.modified').forEach(field => {
         field.classList.remove('modified');
       });
-      
+
       saveChangesBtn.style.display = 'none';
       showStatus('Changes saved successfully!', 'success');
     });
