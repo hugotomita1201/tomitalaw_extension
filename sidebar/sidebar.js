@@ -290,19 +290,8 @@ function setupDS160Handlers() {
     },
     contact: {
       icon: '📧',
-      title: 'Contact Information',
-      fields: {
-        homeStreet: 'Home Street',
-        homeApt: 'Apartment',
-        homeCity: 'Home City',
-        homeState: 'Home State',
-        homePostalCode: 'Postal Code',
-        homeCountry: 'Home Country',
-        homePhone: 'Home Phone',
-        secondaryPhone: 'Secondary Phone',
-        workPhone: 'Work Phone',
-        email: 'Email Address'
-      }
+      title: 'Contact Information'
+      // No explicit fields - render all nested data including otherEmails/additionalEmails arrays
     },
     // 6. Passport (Page 7)
     passport: {
@@ -323,11 +312,8 @@ function setupDS160Handlers() {
     // 7. U.S. Contact (Page 8)
     usContact: {
       icon: '🏢',
-      title: 'U.S. Contact',
-      fields: {
-        organizationName: 'Organization',
-        relationship: 'Relationship'
-      }
+      title: 'U.S. Contact'
+      // No explicit fields - render all nested data including contactPerson
     },
     // 8. Family (Page 9)
     family: {
@@ -341,18 +327,13 @@ function setupDS160Handlers() {
     },
     education: {
       icon: '🎓',
-      title: 'Education',
-      fields: {
-        institutions: 'Educational Institutions'
-      }
+      title: 'Education'
+      // No explicit fields - render all nested data including institutions array
     },
     employment: {
       icon: '💼',
-      title: 'Employment',
-      fields: {
-        currentEmployer: 'Current Employer',
-        previousEmployers: 'Previous Employers'
-      }
+      title: 'Employment'
+      // No explicit fields - render all nested data including previousEmployers array
     },
     // 10. Security and Background (Page 11)
     security: {
