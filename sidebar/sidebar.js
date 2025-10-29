@@ -371,6 +371,28 @@ function setupDS160Handlers() {
     travelGroup: {
       icon: '👥',
       title: 'Travel Group'
+    },
+    // E-Visa sections (grouped)
+    evisa: {
+      icon: '🏢',
+      title: 'E-Visa Information'
+    },
+    // Other visa-specific sections
+    petition: {
+      icon: '💼',
+      title: 'Petition Information'
+    },
+    petitionerInfo: {
+      icon: '💼',
+      title: 'Petition Information'
+    },
+    temporaryWork: {
+      icon: '🔧',
+      title: 'Temporary Work'
+    },
+    spouse: {
+      icon: '💑',
+      title: 'Spouse Information'
     }
   };
   
@@ -654,13 +676,10 @@ function setupDS160Handlers() {
       header.classList.toggle('active');
       content.classList.toggle('expanded');
     });
-    
-    // Auto-expand sections with data
-    if (content.children.length > 0) {
-      header.classList.add('active');
-      content.classList.add('expanded');
-    }
-    
+
+    // Start collapsed by default - removed auto-expand code
+    // Users can click sections they want to view or use search to expand
+
     section.appendChild(header);
     section.appendChild(content);
     return section;
@@ -683,17 +702,33 @@ function setupDS160Handlers() {
     editableDataViewer.innerHTML = '';
     modifiedFields.clear();
 
+    // Collect all E-visa subsections for grouping
+    const evisaSubsections = {};
+    const evisaKeys = ['evisaBusiness', 'evisaForeignBusiness', 'evisaInvestment', 'evisaFinanceTrade',
+                       'evisaUSPersonnel', 'evisaEmployeeCounts', 'evisaApplicantPosition',
+                       'evisaApplicationContact', 'evisaApplicantUSPosition', 'evisaFinancial'];
+
+    evisaKeys.forEach(key => {
+      if (data[key]) {
+        evisaSubsections[key] = data[key];
+      }
+    });
+
     // Create sections based on data structure
     Object.entries(sectionConfig).forEach(([sectionKey, config]) => {
-      if (data[sectionKey]) {
+      // Special handling for E-visa: merge all subsections
+      if (sectionKey === 'evisa' && Object.keys(evisaSubsections).length > 0) {
+        const section = createSection('evisa', evisaSubsections, config);
+        editableDataViewer.appendChild(section);
+      } else if (data[sectionKey] && !evisaKeys.includes(sectionKey)) {
         const section = createSection(sectionKey, data[sectionKey], config);
         editableDataViewer.appendChild(section);
       }
     });
 
-    // Handle any additional sections not in config
+    // Handle any additional sections not in config (excluding E-visa subsections)
     Object.keys(data).forEach(key => {
-      if (!sectionConfig[key]) {
+      if (!sectionConfig[key] && !evisaKeys.includes(key)) {
         const section = createSection(key, data[key], {
           icon: '📋',
           title: key.charAt(0).toUpperCase() + key.slice(1)
@@ -930,10 +965,10 @@ function setupDS160Handlers() {
   if (expandAllBtn) {
     expandAllBtn.addEventListener('click', () => {
       const sections = editableDataViewer.querySelectorAll('.data-section');
-      const allExpanded = Array.from(sections).every(s => 
+      const allExpanded = Array.from(sections).every(s =>
         s.querySelector('.section-header').classList.contains('active')
       );
-      
+
       sections.forEach(section => {
         const header = section.querySelector('.section-header');
         const content = section.querySelector('.section-content');
@@ -949,7 +984,65 @@ function setupDS160Handlers() {
       });
     });
   }
-  
+
+  // Search functionality
+  const searchInput = document.getElementById('ds160-search-fields');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      const sections = editableDataViewer.querySelectorAll('.data-section');
+
+      if (!query) {
+        // No search query - show all sections, keep collapsed
+        sections.forEach(section => {
+          section.style.display = 'block';
+          const fields = section.querySelectorAll('.data-field, .nested-field-container');
+          fields.forEach(field => field.style.display = '');
+        });
+        return;
+      }
+
+      // Search through sections and fields
+      sections.forEach(section => {
+        const header = section.querySelector('.section-header');
+        const content = section.querySelector('.section-content');
+        const sectionTitle = header.textContent.toLowerCase();
+        const fields = content.querySelectorAll('.data-field');
+
+        let hasMatch = false;
+
+        // Check if section title matches
+        if (sectionTitle.includes(query)) {
+          hasMatch = true;
+          fields.forEach(field => field.style.display = 'flex');
+        } else {
+          // Check individual fields
+          fields.forEach(field => {
+            const label = field.querySelector('.field-label')?.textContent.toLowerCase() || '';
+            const value = field.querySelector('.field-value')?.textContent.toLowerCase() || '';
+
+            if (label.includes(query) || value.includes(query)) {
+              field.style.display = 'flex';
+              hasMatch = true;
+            } else {
+              field.style.display = 'none';
+            }
+          });
+        }
+
+        // Show/hide section based on matches
+        if (hasMatch) {
+          section.style.display = 'block';
+          // Auto-expand sections with matches
+          header.classList.add('active');
+          content.classList.add('expanded');
+        } else {
+          section.style.display = 'none';
+        }
+      });
+    });
+  }
+
   // Save Changes button
   if (saveChangesBtn) {
     saveChangesBtn.addEventListener('click', () => {

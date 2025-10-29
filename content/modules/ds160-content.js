@@ -2399,49 +2399,48 @@ class TwoPassFiller {
       
       // === U.S. POINT OF CONTACT INFORMATION PAGE ===
       // Contact Person
-      'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_SURNAME': 
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_SURNAME':
         data.usContact?.contactPerson?.surname,
-      'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_GIVEN_NAME': 
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_GIVEN_NAME':
         data.usContact?.contactPerson?.givenName,
-      'ctl00_SiteContentPlaceHolder_FormView1_cbxUS_POC_NAME_NA': 
-        !data.usContact?.contactPerson?.surname,
-      
+      // DISABLED: Do not auto-check "Do Not Know" - paralegals fill manually when client doesn't provide
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxUS_POC_NAME_NA':
+        false,
+
       // Organization
       'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ORGANIZATION': (() => {
         const org = data.usContact?.organizationName;
         // Don't fill the text field if it's N/A - the checkbox will be checked instead
         return (org && org !== 'N/A') ? org : null;
       })(),
-      'ctl00_SiteContentPlaceHolder_FormView1_cbxUS_POC_ORG_NA_IND': (() => {
-        const org = data.usContact?.organizationName;
-        // Check the "Do Not Know" checkbox if organization is N/A or missing
-        console.log('[US CONTACT] Organization value:', org, 'Will check Do Not Know:', !org || org === 'N/A');
-        return !org || org === 'N/A';
-      })(),
-      
+      // DISABLED: Do not auto-check "Do Not Know" - paralegals fill manually when client doesn't provide
+      'ctl00_SiteContentPlaceHolder_FormView1_cbxUS_POC_ORG_NA_IND':
+        false,
+
       // Relationship
-      'ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_REL_TO_APP': 
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_REL_TO_APP':
         this.mapRelationship(data.usContact?.relationship),
-      
+
       // Contact Address
-      'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_LN1': 
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_LN1':
         data.usContact?.address?.street1,
-      'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_LN2': 
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_LN2':
         data.usContact?.address?.street2,
-      'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_CITY': 
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_CITY':
         data.usContact?.address?.city,
-      'ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_ADDR_STATE': 
+      'ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_ADDR_STATE':
         data.usContact?.address?.state,
-      'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_POSTAL_CD': 
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_POSTAL_CD':
         data.usContact?.address?.zipCode,
-      
+
       // Contact Information
-      'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_HOME_TEL': 
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_HOME_TEL':
         data.usContact?.phone,
-      'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_EMAIL_ADDR': 
+      'ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_EMAIL_ADDR':
         data.usContact?.email,
-      'ctl00_SiteContentPlaceHolder_FormView1_cbexUS_POC_EMAIL_ADDR_NA': 
-        !data.usContact?.email,
+      // DISABLED: Do not auto-check "Do Not Know" - paralegals fill manually when client doesn't provide
+      'ctl00_SiteContentPlaceHolder_FormView1_cbexUS_POC_EMAIL_ADDR_NA':
+        false,
       
       // === PRESENT WORK/EDUCATION/TRAINING INFORMATION PAGE ===
       // Primary Occupation
