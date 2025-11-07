@@ -167,7 +167,15 @@ This will fill ONLY the sections included in this JSON.' rows="8"></textarea>
               
               <!-- Legacy text preview (hidden by default) -->
               <div id="ds160DataPreview" class="data-preview" style="display: none; background: #f8f9fa; border-radius: 6px; padding: 12px; font-family: 'Monaco', 'Menlo', monospace; font-size: 12px; max-height: 200px; overflow-y: auto; white-space: pre-wrap; margin-bottom: 15px;"></div>
-          
+
+              <!-- Replacement Mode Toggle -->
+              <div class="flex items-center gap-2 mt-3 p-3" style="background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px; display: none;" id="ds160-replacement-mode-container">
+                <input type="checkbox" id="ds160-replacement-mode" class="form-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
+                <label for="ds160-replacement-mode" style="cursor: pointer; user-select: none; font-size: 14px; margin: 0;">
+                  <strong>Replacement Mode:</strong> Replace existing filled fields (for renewal cases)
+                </label>
+              </div>
+
               <div class="flex flex-col gap-2 mt-4">
                 <button class="btn btn-primary w-full" id="ds160-fill" style="display: none;">
                   <span class="icon-sm" id="ds160-fill-icon"></span>

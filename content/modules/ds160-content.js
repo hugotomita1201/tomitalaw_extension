@@ -18,6 +18,7 @@ class TwoPassFiller {
   constructor() {
     this.filledFields = new Set();
     this.currentData = null;
+    this.replacementMode = false;  // Replacement mode for renewal cases
     this.debugLog = [];  // Store logs in memory
     this.startPersistentLogging();  // Start saving logs to localStorage
   }
@@ -372,34 +373,47 @@ class TwoPassFiller {
     
     elements.forEach(element => {
       if (element.id && element.offsetParent !== null && !element.disabled) {
-        if (this.filledFields.has(element.id)) {
+        if (this.filledFields.has(element.id) && !this.replacementMode) {
           return;
         }
-        
+
         // Skip already filled text inputs (but not selects, radio/checkboxes)
         // For dropdowns, we want to allow overwriting default values
+        // UNLESS replacement mode is enabled (for renewal cases)
         if (element.type === 'text' && element.value && element.value.trim() !== '') {
-          // Mark as filled so we don't try again
-          this.filledFields.add(element.id);
-          console.log(`[SKIP] Field ${element.id} already has value: ${element.value}`);
-          return;
+          if (!this.replacementMode) {
+            // Normal mode: skip filled fields
+            this.filledFields.add(element.id);
+            console.log(`[SKIP] Field ${element.id} already has value: ${element.value}`);
+            return;
+          } else {
+            // Replacement mode: replace existing values
+            console.log(`[REPLACE] Field ${element.id} existing value: "${element.value}" → will replace`);
+          }
         }
-        
+
         // For dropdowns, only skip if it has a meaningful value (not default placeholders)
+        // UNLESS replacement mode is enabled
         if (element.type === 'select-one' && element.value && element.value.trim() !== '') {
           // List of default/placeholder values that should be overwritten
           const defaultValues = ['', 'NONE', 'SONE', '- Select One -', '--'];
-          const isDefault = defaultValues.includes(element.value) || 
+          const isDefault = defaultValues.includes(element.value) ||
                           element.selectedIndex === 0; // First option is usually default
-          
+
           if (!isDefault) {
-            // Only skip if it's a meaningful value
-            this.filledFields.add(element.id);
-            console.log(`[SKIP] Dropdown ${element.id} already has meaningful value: ${element.value}`);
-            return;
+            if (!this.replacementMode) {
+              // Normal mode: skip meaningful values
+              this.filledFields.add(element.id);
+              console.log(`[SKIP] Dropdown ${element.id} already has meaningful value: ${element.value}`);
+              return;
+            } else {
+              // Replacement mode: replace existing values
+              console.log(`[REPLACE] Dropdown ${element.id} existing value: "${element.value}" → will replace`);
+            }
+          } else {
+            // Always replace default values regardless of mode
+            console.log(`[OVERRIDE] Dropdown ${element.id} has default value: ${element.value}, will fill`);
           }
-          // Allow overwriting default values
-          console.log(`[OVERRIDE] Dropdown ${element.id} has default value: ${element.value}, will fill`);
         }
         
         fields.push({
@@ -7088,6 +7102,8 @@ class DS160Extension {
       if (request.action === 'fillForm' && request.module === 'ds160') {
         console.log('DS-160 module received direct fill command from sidebar');
         this.data = request.data;
+        this.filler.replacementMode = request.replacementMode || false;
+        console.log(`Replacement mode: ${this.filler.replacementMode ? 'ENABLED' : 'DISABLED'}`);
         this.startFilling().then(result => {
           sendResponse({ success: true, filledCount: result });
         }).catch(error => {
@@ -7104,6 +7120,8 @@ class DS160Extension {
       if (event.data.source === 'tomitalaw-router' && event.data.action === 'fillForm' && event.data.module === 'ds160') {
         console.log('DS-160 module received fill command from router');
         this.data = event.data.data;
+        this.filler.replacementMode = event.data.replacementMode || false;
+        console.log(`Replacement mode: ${this.filler.replacementMode ? 'ENABLED' : 'DISABLED'}`);
         this.startFilling().then(result => {
           // Send success message back through router
           window.postMessage({

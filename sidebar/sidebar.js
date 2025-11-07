@@ -1132,10 +1132,12 @@ function setupDS160Handlers() {
         
         // Send message to content script
         setTimeout(() => {
-          chrome.tabs.sendMessage(tab.id, { 
-            action: 'fillForm', 
+          const replacementMode = document.getElementById('ds160-replacement-mode')?.checked || false;
+          chrome.tabs.sendMessage(tab.id, {
+            action: 'fillForm',
             module: 'ds160',
-            data: currentData 
+            data: currentData,
+            replacementMode: replacementMode
           }, (response) => {
             if (chrome.runtime.lastError) {
               console.error('Error sending message:', chrome.runtime.lastError);
@@ -1196,10 +1198,12 @@ function setupDS160Handlers() {
 
         // Send message to content script
         setTimeout(() => {
+          const replacementMode = document.getElementById('ds160-replacement-mode')?.checked || false;
           chrome.tabs.sendMessage(tab.id, {
             action: 'fillForm',
             module: 'ds160',
-            data: parsedData  // Send partial JSON independently
+            data: parsedData,  // Send partial JSON independently
+            replacementMode: replacementMode
           }, (response) => {
             if (chrome.runtime.lastError) {
               console.error('Error sending message:', chrome.runtime.lastError);
@@ -1288,6 +1292,12 @@ function setupDS160Handlers() {
     // Show partial button only if partial data is loaded
     if (fillPartialBtn) {
       fillPartialBtn.style.display = partialLoadedData ? 'flex' : 'none';
+    }
+
+    // Show replacement mode toggle when either main or partial data is loaded
+    const replacementModeContainer = document.getElementById('ds160-replacement-mode-container');
+    if (replacementModeContainer) {
+      replacementModeContainer.style.display = (mainLoadedData || partialLoadedData) ? 'flex' : 'none';
     }
 
     // Show switcher tabs only when BOTH datasets are loaded
