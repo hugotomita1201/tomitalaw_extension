@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Component Examples - TomitaLaw Extension</title>
+  <link rel="stylesheet" href="../sidebar/components.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .header {
+      background: white;
+      padding: 30px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .header h1 {
+      margin: 0 0 10px 0;
+      color: #1a202c;
+    }
+
+    .header p {
+      margin: 0;
+      color: #718096;
+    }
+
+    .section {
+      background: white;
+      padding: 30px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin: 0 0 20px 0;
+      color: #1a202c;
+    }
+
+    .example {
+      margin-bottom: 30px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .example:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .example-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 15px 0;
+      color: #2d3748;
+    }
+
+    .example-demo {
+      padding: 20px;
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+
+    .example-code {
+      background: #2d3748;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .copy-btn {
+      float: right;
+      background: #4a5568;
+      color: white;
+      border: none;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background: #2d3748;
+    }
+
+    /* Grid for examples */
+    .example-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .flex-demo {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Component Examples</h1>
+      <p>Live showcase of all TomitaLaw extension components with copy-paste code</p>
+    </div>
+
+    <!-- Buttons Section -->
+    <div class="section">
+      <h2 class="section-title">Buttons</h2>
+
+      <div class="example">
+        <h3 class="example-title">Button Variants</h3>
+        <div class="example-demo">
+          <div class="flex-demo">
+            <button class="btn btn-primary">Primary</button>
+            <button class="btn btn-secondary">Secondary</button>
+            <button class="btn btn-outline">Outline</button>
+            <button class="btn btn-ghost">Ghost</button>
+            <button class="btn btn-destructive">Destructive</button>
+            <button class="btn btn-orange">Orange</button>
+          </div>
+        </div>
+        <div class="example-code"><button class="copy-btn" onclick="copyCode(this)">Copy</button>&lt;button class="btn btn-primary">Primary&lt;/button>
+&lt;button class="btn btn-secondary">Secondary&lt;/button>
+&lt;button class="btn btn-outline">Outline&lt;/button>
+&lt;button class="btn btn-ghost">Ghost&lt;/button>
+&lt;button class="btn btn-destructive">Destructive&lt;/button>
+&lt;button class="btn btn-orange">Orange&lt;/button></div>
+      </div>
+
+      <div class="example">
+        <h3 class="example-title">Button Sizes</h3>
+        <div class="example-demo">
+          <div class="flex-demo">
+            <button class="btn btn-sm btn-outline">Small</button>
+            <button class="btn btn-outline">Default</button>
+            <button class="btn btn-lg btn-outline">Large</button>
+          </div>
+        </div>
+        <div class="example-code"><button class="copy-btn" onclick="copyCode(this)">Copy</button>&lt;button class="btn btn-sm btn-outline">Small&lt;/button>
+&lt;button class="btn btn-outline">Default&lt;/button>
+&lt;button class="btn btn-lg btn-outline">Large&lt;/button></div>
+      </div>
+
+      <div class="example">
+        <h3 class="example-title">Buttons with Icons</h3>
+        <div class="example-demo">
+          <div class="flex-demo">
+            <button class="btn btn-primary">
+              <span class="icon-sm">🚀</span>
+              Launch
+            </button>
+            <button class="btn btn-ghost">
+              <span class="icon-sm">📋</span>
+              Copy
+            </button>
+            <button class="btn btn-destructive">
+              <span class="icon-sm">🗑️</span>
+              Delete
+            </button>
+          </div>
+        </div>
+        <div class="example-code"><button class="copy-btn" onclick="copyCode(this)">Copy</button>&lt;button class="btn btn-primary">
+  &lt;span class="icon-sm">🚀&lt;/span>
+  Launch
+&lt;/button></div>
+      </div>
+    </div>
+
+    <!-- Cards Section -->
+    <div class="section">
+      <h2 class="section-title">Cards</h2>
+
+      <div class="example">
+        <h3 class="example-title">Basic Card</h3>
+        <div class="example-demo">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Card Title</h2>
+            </div>
+            <div class="card-content">
+              <p>This is the card content area. Add your content here.</p>
+            </div>
+          </div>
+        </div>
+        <div class="example-code"><button class="copy-btn" onclick="copyCode(this)">Copy</button>&lt;div class="card">
+  &lt;div class="card-header">
+    &lt;h2 class="card-title">Card Title&lt;/h2>
+  &lt;/div>
+  &lt;div class="card-content">
+    &lt;p>This is the card content area.&lt;/p>
+  &lt;/div>
+&lt;/div></div>
+      </div>
+
+      <div class="example">
+        <h3 class="example-title">Card with Description</h3>
+        <div class="example-demo">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Feature Card</h2>
+              <p class="card-description">This card includes a subtitle description</p>
+            </div>
+            <div class="card-content">
+              <p>Card content with additional details.</p>
+            </div>
+          </div>
+        </div>
+        <div class="example-code"><button class="copy-btn" onclick="copyCode(this)">Copy</button>&lt;div class="card">
+  &lt;div class="card-header">
+    &lt;h2 class="card-title">Feature Card&lt;/h2>
+    &lt;p class="card-description">This card includes a subtitle&lt;/p>
+  &lt;/div>
+  &lt;div class="card-content">
+    &lt;p>Card content here.&lt;/p>
+  &lt;/div>
+&lt;/div></div>
+      </div>
+    </div>
+
+    <!-- Forms Section -->
+    <div class="section">
+      <h2 class="section-title">Forms</h2>
+
+      <div class="example">
+        <h3 class="example-title">Text Input</h3>
+        <div class="example-demo">
+          <div style="max-width: 400px;">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" placeholder="you@example.com">
+          </div>
+        </div>
+        <div class="example-code"><button class="copy-btn" onclick="copyCode(this)">Copy</button>&lt;label class="form-label">Email Address&lt;/label>
+&lt;input type="email" class="form-input" placeholder="you@example.com"></div>
+      </div>
+
+      <div class="example">
+        <h3 class="example-title">Textarea</h3>
+        <div class="example-demo">
+          <div style="max-width: 400px;">
+            <label class="form-label">Message</label>
+            <textarea class="textarea" rows="4" placeholder="Your message here..."></textarea>
+          </div>
+        </div>
+        <div class="example-code"><button class="copy-btn" onclick="copyCode(this)">Copy</button>&lt;label class="form-label">Message&lt;/label>
+&lt;textarea class="textarea" rows="4" placeholder="Your message...">&lt;/textarea></div>
+      </div>
+
+      <div class="example">
+        <h3 class="example-title">Complete Form</h3>
+        <div class="example-demo">
+          <div class="card" style="max-width: 500px;">
+            <div class="card-header">
+              <h2 class="card-title">Contact Form</h2>
+            </div>
+            <div class="card-content">
+              <div style="margin-bottom: 15px;">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-input" placeholder="Your name">
+              </div>
+              <div style="margin-bottom: 15px;">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-input" placeholder="you@example.com">
+              </div>
+              <div style="margin-bottom: 15px;">
+                <label class="form-label">Message</label>
+                <textarea class="textarea" rows="4"></textarea>
+              </div>
+              <div class="flex gap-2">
+                <button class="btn btn-primary">Submit</button>
+                <button class="btn btn-outline">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="example-code"><button class="copy-btn" onclick="copyCode(this)">Copy</button>&lt;div class="card">
+  &lt;div class="card-content">
+    &lt;label class="form-label">Name&lt;/label>
+    &lt;input type="text" class="form-input">
+
+    &lt;div class="flex gap-2 mt-3">
+      &lt;button class="btn btn-primary">Submit&lt;/button>
+      &lt;button class="btn btn-outline">Cancel&lt;/button>
+    &lt;/div>
+  &lt;/div>
+&lt;/div></div>
+      </div>
+    </div>
+
+    <!-- Alerts & Badges Section -->
+    <div class="section">
+      <h2 class="section-title">Alerts & Badges</h2>
+
+      <div class="example">
+        <h3 class="example-title">Alert Variants</h3>
+        <div class="example-demo">
+          <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div class="alert alert-info">
+              <strong>Info:</strong> This is an informational message.
+            </div>
+            <div class="alert alert-success">
+              <strong>Success:</strong> Operation completed successfully!
+            </div>
+            <div class="alert alert-warning">
+              <strong>Warning:</strong> Please review before proceeding.
+            </div>
+            <div class="alert alert-error">
+              <strong>Error:</strong> Something went wrong.
+            </div>
+          </div>
+        </div>
+        <div class="example-code"><button class="copy-btn" onclick="copyCode(this)">Copy</button>&lt;div class="alert alert-info">
+  &lt;strong>Info:&lt;/strong> This is an informational message.
+&lt;/div>
+
+&lt;div class="alert alert-success">
+  &lt;strong>Success:&lt;/strong> Operation completed!
+&lt;/div>
+
+&lt;div class="alert alert-warning">
+  &lt;strong>Warning:&lt;/strong> Please review first.
+&lt;/div>
+
+&lt;div class="alert alert-error">
+  &lt;strong>Error:&lt;/strong> Something went wrong.
+&lt;/div></div>
+      </div>
+
+      <div class="example">
+        <h3 class="example-title">Badges</h3>
+        <div class="example-demo">
+          <div class="flex-demo">
+            <span class="section-badge required">Required</span>
+            <span class="section-badge optional">Optional</span>
+          </div>
+        </div>
+        <div class="example-code"><button class="copy-btn" onclick="copyCode(this)">Copy</button>&lt;span class="section-badge required">Required&lt;/span>
+&lt;span class="section-badge optional">Optional&lt;/span></div>
+      </div>
+    </div>
+
+    <!-- Layout Section -->
+    <div class="section">
+      <h2 class="section-title">Layout Utilities</h2>
+
+      <div class="example">
+        <h3 class="example-title">Flexbox with Gap</h3>
+        <div class="example-demo">
+          <div class="flex gap-2">
+            <button class="btn btn-outline">Item 1</button>
+            <button class="btn btn-outline">Item 2</button>
+            <button class="btn btn-outline">Item 3</button>
+          </div>
+        </div>
+        <div class="example-code"><button class="copy-btn" onclick="copyCode(this)">Copy</button>&lt;div class="flex gap-2">
+  &lt;button class="btn btn-outline">Item 1&lt;/button>
+  &lt;button class="btn btn-outline">Item 2&lt;/button>
+  &lt;button class="btn btn-outline">Item 3&lt;/button>
+&lt;/div></div>
+      </div>
+
+      <div class="example">
+        <h3 class="example-title">Space Between</h3>
+        <div class="example-demo">
+          <div class="flex items-center justify-between" style="padding: 15px; background: #f7fafc; border-radius: 6px;">
+            <span style="font-weight: 600;">Title</span>
+            <button class="btn btn-sm btn-outline">Action</button>
+          </div>
+        </div>
+        <div class="example-code"><button class="copy-btn" onclick="copyCode(this)">Copy</button>&lt;div class="flex items-center justify-between">
+  &lt;span>Title&lt;/span>
+  &lt;button class="btn btn-sm btn-outline">Action&lt;/button>
+&lt;/div></div>
+      </div>
+
+      <div class="example">
+        <h3 class="example-title">Separator</h3>
+        <div class="example-demo">
+          <p>Section 1</p>
+          <div class="separator-horizontal"></div>
+          <p>Section 2</p>
+        </div>
+        <div class="example-code"><button class="copy-btn" onclick="copyCode(this)">Copy</button>&lt;p>Section 1&lt;/p>
+&lt;div class="separator-horizontal">&lt;/div>
+&lt;p>Section 2&lt;/p></div>
+      </div>
+    </div>
+
+    <!-- Common Patterns Section -->
+    <div class="section">
+      <h2 class="section-title">Common Patterns</h2>
+
+      <div class="example">
+        <h3 class="example-title">Action Bar</h3>
+        <div class="example-demo">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="icon">📄</span>
+              <h3 style="margin: 0; font-size: 18px; font-weight: 600;">Document Title</h3>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn btn-sm btn-ghost">📋 Copy</button>
+              <button class="btn btn-sm btn-outline">Export</button>
+            </div>
+          </div>
+        </div>
+        <div class="example-code"><button class="copy-btn" onclick="copyCode(this)">Copy</button>&lt;div class="flex items-center justify-between">
+  &lt;div class="flex items-center gap-2">
+    &lt;span class="icon">📄&lt;/span>
+    &lt;h3>Document Title&lt;/h3>
+  &lt;/div>
+  &lt;div class="flex gap-2">
+    &lt;button class="btn btn-sm btn-ghost">Copy&lt;/button>
+    &lt;button class="btn btn-sm btn-outline">Export&lt;/button>
+  &lt;/div>
+&lt;/div></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function copyCode(button) {
+      const codeBlock = button.parentElement;
+      const code = codeBlock.textContent.replace('Copy', '').trim();
+
+      navigator.clipboard.writeText(code).then(() => {
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.style.background = '#48bb78';
+
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.style.background = '#4a5568';
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>

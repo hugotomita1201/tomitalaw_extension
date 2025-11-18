@@ -13,5 +13,8 @@
     "encrypt-key": "node setup/encrypt-api-key.js"
   },
   "author": "TomitaLaw",
-  "license": "Proprietary"
+  "license": "Proprietary",
+  "devDependencies": {
+    "shadcn": "^3.5.0"
+  }
 }
